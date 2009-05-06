@@ -1,0 +1,21 @@
+## -*- shell-script -*-
+
+# Don't run this inside X. That would be silly.
+if [[ ! $(tty) == *pts* ]]; then
+    if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/vc/2 ]] && [[ "`runlevel`" == *5* ]]; then
+        # Start X
+        while true; do
+            if [[ -f /var/run/daemons/hal ]]; then
+                echo "Starting X11 at `date`"
+                startx &> /dev/null
+                rm .serverauth.*
+            fi
+        done
+    elif [[ ! "$TERM" == "screen-256color" ]]; then
+        # Start screen
+        screen
+    fi
+    logout
+else
+    exit
+fi

@@ -1,0 +1,93 @@
+## -*- shell-script -*-
+# Short aliases
+alias !='sudo'
+alias @='opera'
+alias c='clear'
+alias e='exit'
+alias o='emacs'
+alias O='sudo emacs'
+
+# Basic commands
+alias ls='ls --color=auto'
+alias la='ls --color=auto -lA'
+alias laa='ls --color=auto -la'
+alias ll='ls --color=auto -l'
+alias cp='cp -rpv'
+alias mv='mv -v'
+alias free='free -mt'
+alias grep='grep --color=tty -d skip'
+alias top='htop'
+alias abs='sudo abs'
+alias updatedb='sudo updatedb'
+alias sync='sudo sync'
+alias su='su - '
+alias reboot='sudo reboot'
+alias shutdown='touch /tmp/killmpddp && sleep 2 && sudo shutdown -hP now'
+alias locate='locate -e -L'
+alias mkdir='mkdir -p'
+alias weechat='weechat-curses'
+alias wifi='sudo wifi-select wlan0'
+
+# Package management
+alias build='sudo pacbuilder -Sbkve'
+alias autobuild='sudo pacbuilder -Sbkve --noconfirm'
+alias fullupgrade='sudo abs && yaourt -Syu --aur --devel'
+alias upgrade='yaourt -Syu --aur'
+alias orphans='pacman-color -Qtdq'
+alias pacman='pacman-color'
+alias paclist='pacman-color -Ql'
+alias pacinfo='pacman-color -Qi'
+alias pacfile='pacman-color -Qo'
+alias syncinfo='pacman-color -Si'
+alias pacfind='yaourt -Ss'
+alias install='sudo pacman-color -S'
+alias remove='sudo pacman-color -Rscn'
+alias synchronise='sudo pacman-color -Syyuw && sudo abs'
+alias upgrades='pacman-color -Qu'
+alias deorphan='sudo pacman-color -Rscn $(pacman -Qtdq)'
+
+# Security
+alias sgpg='gpg -e -a -r 294CE438'
+alias gpgasc='gpg -a --detach-sign'
+alias xlock='xscreensaver-command -lock'
+
+# Maintenance
+alias fixopera=' rm -r ~/.opera/{mail,lock}'
+alias rssup='php /srv/http/rss/rssupdate.php'
+alias jargon='wget -m http://catb.org/~esr/jargon/html/ -nH --cut-dirs=2 -np -L -P /srv/http/jargon/'
+
+# Servers
+alias sql='mysql -p -u root'
+alias bssh='ssh barrucadu@nitti.dreamhost.com'
+alias ussh='ssh uzbl@nitti.dreamhost.com'
+alias pssh='ssh ofearcom@host181.hostmonster.com'
+alias bftp='ncftp barrucadu'
+alias uftp='ncftp uzbl'
+alias pftp='ncftp ofear'
+
+
+# Git
+alias grm='git rm'
+alias g-='git rm'
+alias g+='git add'
+alias gc='git commit'
+
+# Humour
+alias xkcdroulette='mirage "/home/barrucadu/archive/xkcd/`ls ~/archive/xkcd/ -c1 | sort -R | head -n1`"'
+alias broulette='mirage "/home/barrucadu/graphics/b/`ls ~/graphics/b/ -c1 | sort -R | head -n1`"'
+alias vi='echo "Heathen! May you see the light of Emacs before you use this machine again."; sleep 2; exit'
+alias vim='echo "Heathen! May you see the light of Emacs before you use this machine again."; sleep 2; exit'
+alias nano='echo "Use a /real/ editor."'
+
+# Miscellanious
+alias aliases='cat ~/.zsh_aliases'
+alias functions='cat ~/.zsh_functions'
+alias rmatrix='cmatrix -C red -l -b'
+alias mp3ogg='mp32ogg *.mp3 && rm *.mp3'
+alias parts='cat /proc/partitions'
+alias reload='source ~/.zshrc'
+alias xreload='xrdb -load ~/.Xdefaults'
+alias todo='emacs ~/docs/todo'
+alias zen='fortune /usr/share/fortune/zen'
+alias rfcdate='date --rfc-3339="seconds"'
+alias weechat-im='weechat-curses irc://localhost'

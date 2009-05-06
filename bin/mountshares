@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo mount -t cifs -o password=mason //masonlap/share /share/mason
+#sudo mount -t cifs -o password=dad   //dadlap/share   /share/dad

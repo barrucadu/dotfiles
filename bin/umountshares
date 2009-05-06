@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo umount /share/mason
+#sudo umount /share/dad

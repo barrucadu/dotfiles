@@ -1,0 +1,212 @@
+#!/bin/bash
+# GnuPG Editor
+# Written by Dr Small <drsmall@mycroftserver.homelinux.org>
+# Spring 2008
+#
+# Usage: ged
+# Usage: ged /path/to/file.gpg
+
+# DEPENDENCIES:
+# 		gnupg
+#		dialog
+#		mktemp	
+
+
+# Hello there, I write this to better help the end user
+# who undoubtedly must be a GPG user since you found 
+# this script. I wrote it to save myself the trouble
+# of editing encrypted files (encrypted with my public
+# key) and to be secure.
+# It was origininally designed to be a command line
+# password manager, but it turned out too good to
+# simply be used as that.
+# You should find the script well commented, so please
+# feel free to look over the code and edit it to your
+# likings. Most of all, have fun, and stay secure!
+# 	Dr Small
+
+
+
+
+# This if statement here is basically
+# the installer. It takes the input 
+# from the user and makes a .gedrc file
+# with the options that the user specified.
+
+if [ -f ~/.gedrc ]; then
+    . ~/.gedrc
+
+else
+
+echo ""
+echo "GnuPG Editor config file does not exist..."
+echo "Attempting to create."
+echo ""
+echo -n "Please enter your GPG Key: "
+read keyid
+echo ""
+echo -n "Please enter your favorite editor: (vim) "
+read editor
+
+echo -e '#This Variable must set when used\n#for encrypting the data.\ngpgkey="'$keyid'"\n\n#This is the path that will show\n# in the input box for $file.\ndefaultpath="'$HOME'"\n\n#Set your editor here.\nvisual="'$editor'"' > $HOME/.gedrc
+echo -n "Press ENTER to continue..."
+read enter
+
+$0
+exit 0
+
+fi
+
+
+# # # # # # # # # # # # # # # # # # # # # # #
+# Command line option:                      #
+# This Option allows you to input the file  #
+# address in the command line, and only be  #
+# prompted for the password.                #
+#                                           #
+# Usage: ged /path/to/file.gpg              #
+# # # # # # # # # # # # # # # # # # # # # # #
+if [[ $1 ]]; then
+
+	if [[ -a $1 ]]; then
+
+#Prompt for the password.
+password=$( dialog --stdout --backtitle "GPG Editor" --title "GPG Password" --clear  --insecure --passwordbox \ "Enter your GPG password to decrypt the file." 10 51 )
+
+return_value=$?
+case $return_value in
+
+1)
+
+#Clean up and abort.
+reset
+exit;;
+
+0)
+
+
+#Let's create a Temporary directory
+# and file.
+temp=$(mktemp -d /tmp/ged.XXXXXXXX)
+tempfile=$temp/output
+
+
+#Run the dialogs, decrypt the file and output it to the temp directory.
+echo $password | gpg -o $tempfile --decrypt --passphrase-fd 0 "$1"
+
+return_value=$?
+case $return_value in
+
+1)
+
+#Incase we want to abort.
+exit;;
+
+0)
+
+# Open the file with $visual
+$visual $tempfile 2> /dev/null; gpg -e -r "$gpgkey" -o "$1" $tempfile
+
+# Let's clean up the nasty effect
+# that dilog leaves on the screen
+# when we are finished.
+reset
+
+esac
+esac
+
+	else
+		# We use this statement here, to save alot
+		# of time. If the user enters an invalid filename
+		# ged will catch it before it takes him to the
+		# password prompt... Very useful. :)
+
+		echo ""
+		echo "File Does Not Exist!"
+		echo ""
+		exit 1
+	fi
+
+#Cleanup the temporary files.
+#This step is essential.
+rm -R $temp
+
+
+else
+
+#############################################
+# This begins the default ged prompt        #
+# which entails the prompt for the filename #
+# Usage: ged				    #
+#############################################
+
+
+#This is the dialog to prompt
+#us for the file's path.
+file=$(dialog --stdout --backtitle "GPG Editor" --title "Edit File" --inputbox "Enter the path to the file." 10 51 "$defaultpath/")
+
+return_value=$?
+case $return_value in
+
+1)
+
+# Cleanup the screen and abort.
+reset
+exit;;
+
+0)
+
+#Prompt for the password.
+password=$( dialog --stdout --backtitle "GPG Editor" --title "GPG Password" --clear  --insecure --passwordbox \ "Enter your GPG password to decrypt the file." 10 51 )
+
+return_value=$?
+case $return_value in
+
+1)
+
+# Clean up the screen and abort.
+reset
+exit;;
+
+0)
+
+
+#Let's create a Temporary directory
+# and file. We need this to store the
+# unencrypted file in. Don't worry,
+# it will get wiped in the end...
+temp=$(mktemp -d /tmp/ged.XXXXXXXX)
+tempfile=$temp/output
+
+
+#Run the dialogs, decrypt the file and output it to the temp directory.
+echo $file; echo $password | gpg -o $tempfile --decrypt --passphrase-fd 0 "$file"
+
+return_value=$?
+case $return_value in
+
+1)
+
+exit;;
+
+0)
+
+# Open the file with $visual (set in .gedrc)
+$visual $tempfile 2> /dev/null; gpg -e -r "$gpgkey" -o "$file" $tempfile
+
+#Clean up the screen when we are done.
+reset
+
+esac
+esac
+esac
+
+#Cleanup the temporary files.
+#We wouldn't want to keep those
+#unencrypted files in /temp.
+rm -R $temp
+
+
+fi
+
+exit 0

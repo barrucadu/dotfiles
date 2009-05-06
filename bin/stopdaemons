@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+sudo /etc/rc.d/mpd stop
+sudo /etc/rc.d/lastmp stop
+sudo /etc/rc.d/lastfmsubmitd stop
+sudo /etc/rc.d/openntpd stop
+sudo /etc/rc.d/bluetooth stop
+

@@ -1,0 +1,177 @@
+\documentclass[10pt,a4paper,oneside]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{ucs}
+
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
+
+\author{Michael Walker}
+\title{Laptop Cheat Sheet}
+
+\begin{document}
+
+\maketitle{}
+
+\tableofcontents
+
+\pagebreak
+
+\section{Window Manager - StumpWM}
+\subsection{Groups}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    C-z [1-0]    & Change to group [1-10]\\
+    C-z [F1-F10] & Change to group [1-10]\\
+    C-z ,        & Change to previous group\\
+    C-z $<$      & Move window to previous group\\
+    C-z .        & Change to next group\\
+    C-z $>$      & Move window to next group\\
+    C-z g c      & Create new group\\ 
+    C-z g g      & List groups\\
+    C-z g ``     & List groups\\
+    C-z g [1-0]  & Change to group [1-10]\\
+    C-z g n      & Change to next group\\
+    C-z g C-n    & Change to next group\\
+    C-z g SPC    & Change to next group\\
+    C-z g C-SPC  & Change to next group\\
+    C-z g N      & Move window to next group\\
+    C-z g p      & Change to previous group\\
+    C-z g C-p    & Change to previous group\\
+    C-z g P      & Move window to previous group\\
+    C-z g A      & Rename current group\\
+    C-z g r      & Rename current group\\
+    C-z g k      & Delete current group\\
+    \hline 
+  \end{tabular}
+\end{center}
+
+\subsection{Tiling}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    C-z S       & Split the current tile horizontally\\
+    C-z s       & Split the current tile vertically\\
+    C-z R       & Remove the current tile\\
+    C-z r       & Resize the current tile\\
+    C-z Up      & Move focus to the tile above\\
+    C-z Down    & Move focus to the tile below\\
+    C-z Left    & Move focus to the tile to the left\\
+    C-z Right   & Move focus to the tile to the right\\
+    C-z M-Up    & Move window to the tile above\\
+    C-z M-Down  & Move window to the tile below\\
+    C-z M-Left  & Move window to the tile to the left\\
+    C-z M-Right & Move window to the tile to the right\\
+    C-z TAB     & Move to the next tile\\
+    C-z o       & Move to the next tile\\
+    \hline 
+  \end{tabular}
+\end{center}
+
+\subsection{Windows}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    C-z w       & List windows\\
+    C-z C-w     & List windows\\
+    C-z ``      & List windows\\
+    C-z n       & Change focus to the next window\\
+    C-z p       & Change focus to the previous window\\
+    C-z k       & Close the current window\\
+    C-z F11     & Make the current window fullscreen\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Launchers}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    C-z c       & Launch urxvt\\
+    C-z C-c     & Launch urxvt\\
+    C-z e       & Launch emacs\\
+    C-z C-e     & Launch emacs\\
+    C-Super     & Launch urxvtc\\
+    M-Super     & Launch emacs\\
+    C-S-Super   & Launch urxvtc (without screen)\\
+    C-M-Super   & Launch guile\\
+    M-S-Super   & Launch IDLE\\
+    C-M-S-Super & Launch clisp\\
+    C-S-Left    & Open todo list in emacs\\
+    C-S-Up      & Launch ncmpcpp\\
+    C-S-Right   & Launch urxvtd\\
+    Web         & Launch Opera\\
+    C-Web       & Launch claws-mail\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Misc}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    Play       & Toggle MPD pause\\
+    Stop       & Toggle MPD stop\\
+    Previous   & Change to beginning of current song / previous song\\
+    Next       & Change to beginning of next song\\
+    Vol Down   & Decrease master volume 1\%\\
+    Vol Up     & Increase master volume 1\%\\
+    C-Vol Down & Decrease master volume 10\%\\
+    C-Vol Up   & Increase master volume 10\%\\
+    Print      & Save screenshot to ~/screenshot.png\\
+    C-z M      & Toggle the mode line\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\section{Terminal Multiplexer - Screen}
+
+\subsection{Tiles}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    C-a S   & Split tile vertically\\
+    C-a V   & Split tile horizontally\\
+    C-a X   & Remove current tile\\
+    C-a TAB & Move to next tile\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Terminals}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    C-a [0-9] & Change to terminal [0-9]\\
+    C-a n     & Change to next terminal\\
+    C-a p     & Change to previous terminal\\
+    C-a c     & Create new terminal\\
+    C-a A     & Rename current terminal\\
+    C-a k     & Kill current terminal\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Misc}
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    C-a D & Detach current session\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\section{Text Editor - Emacs}
+
+
+\section{Web Browser - Opera}
+
+
+\end{document}

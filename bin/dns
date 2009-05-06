@@ -1,0 +1,7 @@
+#!/usr/bin/php
+<?php
+
+$dns = dns_get_record($argv[1]);
+print_r($dns);
+
+?>

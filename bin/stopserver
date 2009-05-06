@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo /etc/rc.d/bftpd stop
+sudo /etc/rc.d/httpd stop
+sudo /etc/rc.d/mysqld stop
+sudo /etc/rc.d/samba stop
+sudo /etc/rc.d/icecast stop

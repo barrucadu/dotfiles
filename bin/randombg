@@ -1,0 +1,4 @@
+#!/bin/bash
+
+background="/usr/share/wallpapers/rotation/`ls ~/graphics/wallpapers/rotation/ -c1 | sort -R | head -n1`"
+feh --bg-scale "$background"

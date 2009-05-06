@@ -1,0 +1,74 @@
+#!/bin/zsh
+
+screenshotpath=/home/barrucadu/`date +%F`.png
+websitepath=/media/MHD/websites/barrucadu.co.uk/www
+dir=`pwd`
+
+echo "Taking screenshot \"`date +%F`.png\""
+
+import -window root $screenshotpath
+cp $screenshotpath $websitepath/screenshots/
+cp $screenshotpath $websitepath/screenshots/thumb/
+cp $screenshotpath $websitepath/screenshots/thumb-big/
+rm $screenshotpath
+
+cd $websitepath/screenshots/thumb/
+mogrify -scale 10% `date +%F`.png
+
+cd ../thumb-big/
+mogrify -scale 40% `date +%F`.png
+
+cd ../info/
+
+WM=`grep -E "[^#]exec" ~/.xinitrc`
+niceWM=""
+case "$WM" in
+        *stumpwm*)
+                niceWM=StumpWM
+                ;;
+        *scrotwm*)
+                niceWM=ScrotWM
+                ;;
+        *musca*)
+                niceWM=Musca
+                ;;
+        *xmonad*)
+                niceWM=Xmonad
+                ;;
+        *)
+                niceWM=`echo "$WM" | sed "s/.*exec//"`
+                ;;
+esac
+
+niceOS="Arch Linux `uname -m`"
+niceFont=`grep "gtk-font-name" ~/.gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
+niceIcons=`grep icon-theme-name ~/.gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
+
+echo "<li><strong>OS:</strong> $niceOS</li>" > `date +%F`.txt
+echo "<li><strong>GTK:</strong> </li>" >> `date +%F`.txt
+echo "<li><strong>Icons:</strong> $niceIcons</li>" >> `date +%F`.txt
+echo "<li><strong>Window Manager:</strong> $niceWM</li>" >> `date +%F`.txt
+echo "<li><strong>GTK Font:</strong> $niceFont</li>" >> `date +%F`.txt
+echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> `date +%F`.txt
+echo "<li><strong>Other:</strong> </li>" >> `date +%F`.txt
+emacs `date +%F`.txt
+
+ncftp barrucadu <<EOF
+cd /barrucadu.co.uk/screenshots/
+put $websitepath/screenshots/`date +%F`.png
+
+cd /barrucadu.co.uk/screenshots/thumb/
+put $websitepath/screenshots/thumb/`date +%F`.png
+
+cd /barrucadu.co.uk/screenshots/thumb-big/
+put $websitepath/screenshots/thumb-big/`date +%F`.png
+
+cd /barrucadu.co.uk/screenshots/info/
+put $websitepath/screenshots/info/`date +%F`.txt
+
+exit
+EOF
+
+echo "[url=\"http://www.barrucadu.co.uk/screenshot.php?s=`date +%F`\"][img]http://www.barrucadu.co.uk/screenshots/thumb-big/`date +%F`.png[/img][/url]" | xclip
+
+cd $dir

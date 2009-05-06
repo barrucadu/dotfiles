@@ -1,0 +1,14 @@
+#!/bin/bash
+#Deps: imagemagick, feh
+
+TEMPDIR=/tmp
+bgcolor="#000000"
+fgcolor="#242424"
+
+fortune /usr/share/fortune/{computers,discworld,jargon,kernelcookies,linux,matrix,riddles} | expand > $TEMPDIR/quote.txt 
+    
+convert -background $bgcolor -fill $fgcolor -font DejaVu-Sans-Book \
+    -pointsize 40 -size 1200x label:@$TEMPDIR/quote.txt \
+    $TEMPDIR/backgound.png
+
+feh --bg-center $TEMPDIR/backgound.png

@@ -1,0 +1,78 @@
+!! Fonts
+#define FONT           xft:Onuava:pixelsize=12:antialias=true
+#define FONT_BOLD      xft:Onuava:bold:pixelsize=12:antialias=true
+#define FONT_ITALIC    xft:Onuava:italic:pixelsize=12:antialias=true
+#define FONT_UNDERLINE xft:Onuava:underline:pixelsize=12:antialias=true
+
+!! Colours
+#include "/home/barrucadu/.Xdefaults.d/inferno"
+*color0:  COLOUR_THEME_BLACK
+*color8:  COLOUR_THEME_DARK_GREY
+*color1:  COLOUR_THEME_DARK_RED 
+*color9:  COLOUR_THEME_LIGHT_RED
+*color2:  COLOUR_THEME_DARK_GREEN 
+*color10: COLOUR_THEME_LIGHT_GREEN
+*color3:  COLOUR_THEME_DARK_YELLOW 
+*color11: COLOUR_THEME_LIGHT_YELLOW
+*color4:  COLOUR_THEME_DARK_BLUE
+*color12: COLOUR_THEME_LIGHT_BLUE
+*color5:  COLOUR_THEME_DARK_MAGENTA
+*color13: COLOUR_THEME_LIGHT_MAGENTA 
+*color6:  COLOUR_THEME_DARK_CYAN
+*color14: COLOUR_THEME_LIGHT_CYAN
+*color7:  COLOUR_THEME_LIGHT_GREY
+*color15: COLOUR_THEME_WHITE
+
+!! XFT
+Xft.dpi:       96
+Xft.antialias: true
+Xft.hinting:   full
+Xft.hintstyle: hintslight
+Xft.rgba:      rgb
+
+!! Terminal
+URxvt.urlLauncher:       uzbl -u
+URxvt.matcher.button:    1
+URxvt.matcher.pattern.1: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt*font:              FONT
+URxvt*boldFont:          FONT_BOLD
+URxvt*buffered:          true
+URxvt*background:        COLOUR_THEME_BG
+URxvt*foreground:        COLOUR_THEME_FG
+URxvt*cursorColor:       white
+URxvt*underlineColor:    yellow
+URxvt*perl-ext-common:   default
+URxvt*scrollBar:         false
+URxvt*saveLines:         1000
+URxvt*transparent:       true
+URxvt*inheritPixmap:     true
+URxvt*shading:           50
+URxvt*tintColor:         white
+URxvt*internalBorder:    0
+
+!! Mouse
+Xcursor*theme: aero
+
+!! Screensaver
+xscreensaver.Dialog.headingFont:            FONT_BOLD
+xscreensaver.Dialog.bodyFont:               FONT
+xscreensaver.Dialog.labelFont:              FONT
+xscreensaver.Dialog.unameFont:              FONT
+xscreensaver.Dialog.buttonFont:             FONT
+xscreensaver.Dialog.dateFont:               FONT
+xscreensaver.passwd.passwdFont:             FONT
+xscreensaver.Dialog.foreground:             COLOUR_THEME_FG
+xscreensaver.Dialog.background:             COLOUR_THEME_BG
+xscreensaver.Dialog.topShadowColor:         COLOUR_THEME_BG
+xscreensaver.Dialog.bottomShadowColor:      COLOUR_THEME_BG
+xscreensaver.Dialog.Button.foreground:      COLOUR_THEME_DARK_GREY
+xscreensaver.Dialog.Button.background:      COLOUR_THEME_FG
+xscreensaver.Dialog.text.foreground:        COLOUR_THEME_DARK_GREY
+xscreensaver.Dialog.text.background:        COLOUR_THEME_FG
+xscreensaver.Dialog.internalBorderWidth:    24
+xscreensaver.Dialog.borderWidth:            20
+xscreensaver.Dialog.shadowThickness:        2
+xscreensaver.passwd.thermometer.foreground: COLOUR_THEME_LIGHT_RED
+xscreensaver.passwd.thermometer.background: COLOUR_THEME_DARK_GREY
+xscreensaver.passwd.thermometer.width:      8
+xscreensaver.dateFormat:                    %I:%M%P %a %b %d, %Y

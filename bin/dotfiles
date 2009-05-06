@@ -1,0 +1,6 @@
+#!/bin/bash
+
+destpath="/media/MHD/websites/barrucadu.co.uk/www/dotfiles"
+
+echo "Copying configuration files..."
+cp -v ~/configs/* $destpath

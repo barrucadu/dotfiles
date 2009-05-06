@@ -1,0 +1,10 @@
+#!/bin/bash
+
+updates="`pacman-color -Qu`"
+noup="no upgrades found."
+
+if [[ "$updates" =~ "$noup" ]]; then
+	 echo "0"
+else
+	pacman-color -Qu | grep Targets | sed "s/.*(//" | sed "s/).*//"
+fi

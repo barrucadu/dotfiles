@@ -1,0 +1,61 @@
+## -*- shell-script -*-
+
+# Environmental Variables
+export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin"
+export BROWSER=/usr/bin/opera
+export EDITOR=emacs
+export VISUAL=emacs
+export PAGER=/usr/bin/most
+export HISTFILE=~/.zsh_history
+export HISTSIZE=1000
+export SAVEHIST=1000
+export XDG_CACHE_HOME=~/.cache
+export XDG_CONFIG_HOME=~/.config
+export XDG_DATA_HOME=~/.data
+export QT_XFT=1
+export GDK_USE_XFT=1
+export WEBKIT_IGNORE_SSL_ERRORS="1"
+# Framebuffer stuff
+if [ "$TERM" = "linux" ]; then
+    echo -en "\e]P0121212"
+    echo -en "\e]P8262626"
+    echo -en "\e]P1ff4500"
+    echo -en "\e]P9ff7f00"
+    echo -en "\e]P2698b69"
+    echo -en "\e]PA00ee76"
+    echo -en "\e]P3ffd700"
+    echo -en "\e]PBffff00"
+    echo -en "\e]P468838b"
+    echo -en "\e]PC00bfff"
+    echo -en "\e]P5c71585"
+    echo -en "\e]PDda70d6"
+    echo -en "\e]P67fffd4"
+    echo -en "\e]PEadd8e6"
+    echo -en "\e]P7fffff0"
+    echo -en "\e]PFf5fffa"
+    clear
+fi
+
+# Terminal colours
+autoload colors zsh/terminfo
+if [[ "$terminfo[colors]" -ge 8 ]]; then
+	colors
+fi
+
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+	eval PR_$color='$terminfo[bold]$fg[${(L)color}]'
+	eval PR_LIGHT_$color='$fg[${(L)color}]'
+
+	(( count = $count + 1 ))
+
+	export PR_$color
+	export PR_LIGHT_$color
+done
+
+export PR_NO_COLOR="$terminfo[sgr0]"
+
+# Shell prompt
+export PROMPT="${PR_LIGHT_GREEN}%* %d ${PR_GREEN}%%${PR_NO_COLOR} "
+
+# Emacs shell mode
+[[ $EMACS = t ]] && unsetopt zle

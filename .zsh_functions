@@ -1,0 +1,190 @@
+## -*- shell-script -*-
+
+# System
+function start()
+{
+	for arg in "${*[@]}"; do
+    sudo /etc/rc.d/$arg start
+  done
+}
+
+function stop()
+{
+  for arg in "${*[@]}"; do
+    sudo /etc/rc.d/$arg stop
+  done
+}
+
+function restart()
+{
+  for arg in "${*[@]}"; do
+	  sudo /etc/rc.d/$arg restart
+  done
+}
+
+function reprobe()
+{
+  for arg in "${*[@]}"; do
+	  sudo modprobe -r $arg
+    sudo modprobe $arg
+  done
+}
+
+# Running programs
+function r()
+{
+	$* &>/dev/null &
+	disown %%
+}
+
+function R()
+{
+	sudo -E $* &>/dev/null &
+	disown %%
+}
+
+function re()
+{
+	$* &>/dev/null &
+	disown %%
+	exit
+}
+
+function Re()
+{
+	sudo -E $* &>/dev/null &
+	disown %%
+	exit
+}
+
+# Maintenence
+function maintain()
+{
+    sudo pacman-optimize
+    sudo sync
+    sudo updatedb
+    sudo localepurge
+}
+
+function gith()
+{
+    cd ~
+    git add .
+
+    if [[ ! -z "$1" ]]; then
+        git commit -m "$1"
+    else
+        git commit
+    fi
+
+    git push origin master
+    cp .config/uzbl/config /srv/http/uzbl-config
+}
+
+function gituz()
+{
+    cd ~/uzbl
+    git add .
+
+    if [[ ! -z "$1" ]]; then
+        git commit -m "$1"
+    else
+        git commit
+    fi
+
+    git push uzbl experimental
+}
+
+function gituw()
+{
+    cd /media/MHD/websites/uzbl.org
+    git add .
+
+    if [[ ! -z "$1" ]]; then
+        git commit -m "$1"
+    else
+        git commit
+    fi
+
+    git push uzbl-website master
+}
+
+function git-dieter()
+{
+    cd ~/uzbl
+    git checkout dieter/experimental
+    git pull dieter experimental
+    git checkout experimental
+    git merge dieter/experimental
+    git status
+}
+
+function git-dusanx()
+{
+    cd ~/uzbl
+    git checkout dusanx/master
+    git pull dusanx master
+    git checkout experimental
+    git merge dusanx/master
+    git status
+}
+
+function git-anydot()
+{
+    cd ~/uzbl
+    git checkout anydot/master
+    git pull anydot master
+    git checkout experimental
+    git merge anydot/master
+    git status
+}
+
+function git-robm()
+{
+    cd ~/uzbl
+    git checkout robm/master
+    git pull robm master
+    git checkout experimental
+    git merge robm/master
+    git status
+}
+
+# FTP
+function upload()
+{
+    ncftp barrucadu <<EOF
+cd $2
+put $1
+exit
+EOF
+}
+
+function download()
+{
+    dir=`pwd`
+    cd /tmp
+    ncftp barrucadu <<EOF
+get $1
+exit
+EOF
+    mv $(basename $1) $2
+    cd $dir
+}
+
+function ou()
+{
+    emacs $1
+    ncftp barrucadu <<EOF
+cd $2
+put $1
+exit
+EOF
+}
+
+# Misc
+function mkd()
+{
+	mkdir -p "$1"
+	cd "$1"
+}
+

@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+sudo umount /media/MHD
+sudo umount /media/M2HD
+pmount /media/MHD
+pmount /media/M2HD

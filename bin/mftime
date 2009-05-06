@@ -1,0 +1,16 @@
+#!/usr/bin/python
+
+import time
+
+offset = 0
+if time.daylight:
+   offset = time.altzone
+else:
+	offset = time.timezone
+
+epoch = time.time() + offset
+fortnight = epoch % (2 * 7 * 24 * 60 * 60)
+fortnights = int(epoch / (2 * 7 * 24 * 60 * 60))
+mfs = int(fortnight / 1.2096)
+
+print str(mfs) + ":" + str(fortnights)

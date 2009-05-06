@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo cpufreq-set -g performance
+sudo /etc/rc.d/bluetooth start

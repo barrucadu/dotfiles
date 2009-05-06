@@ -1,0 +1,27 @@
+#!/bin/zsh
+
+dir=`pwd`
+
+cd /media/MHD/websites/barrucadu.co.uk/www/screenshots/
+
+rm thumb/*.png
+rm thumb-big/*.png
+
+cp *.png thumb/
+cp *.png thumb-big/
+
+cd thumb
+mogrify -scale 10% *.png
+
+cd ../thumb-big
+mogrify -scale 40% *.png
+
+ncftp barrucadu <<EOF
+cd /barrucadu.co.uk/screenshots/thumb
+put /media/MHD/websites/barrucadu.co.uk/www/screenshots/thumb/*.png
+
+cd ../thumb-big
+put /media/MHD/websites/barrucadu.co.uk/www/screenshots/thumb-big/*.png
+
+exit
+EOF

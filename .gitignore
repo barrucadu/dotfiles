@@ -1,0 +1,40 @@
+# -*- conf -*-
+
+# Ignore everything
+*
+
+# Unignore some directories
+!bin/
+!code/
+!cron/
+!docs/
+
+# GIT stuff
+!.gitignore
+
+# X stuff
+!.xinitrc
+!.Xdefaults
+!.Xdefaults.d/
+!.XCompose
+!.XCompose.d/
+
+# ZSH stuff
+!.zsh_aliases
+!.zsh_functions
+!.zsh_login
+!.zsh_profile
+!.zshrc
+
+# Other configs
+!.emacs
+!.mostrc
+!.ncmpcpp/
+!.rtorrent.rc
+!.screenrc
+!.stumpwmrc
+!.weechat/
+!.config/uzbl/
+
+# And other stuff
+!kernelconfig

@@ -1,0 +1,13 @@
+#!/usr/bin/gnuplot
+
+set terminal png interlace transparent
+
+set xzeroaxis
+set yzeroaxis
+set xrange[0:]
+set yrange[0:]
+
+set xlabel "t"
+set ylabel "v"
+
+plot x

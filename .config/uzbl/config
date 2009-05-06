@@ -1,0 +1,79 @@
+# -*- conf -*-
+
+[behavior]
+history_handler    = /home/barrucadu/.config/uzbl/handlers/history.sh
+download_handler   = /home/barrucadu/.config/uzbl/handlers/download.sh
+#fifo_dir           = /home/barrucadu/tmp/uzbl
+socket_dir         = /home/barrucadu/tmp/uzbl
+cookie_handler     = /home/barrucadu/.config/uzbl/handlers/cookies.sh
+always_insert_mode = 0
+modkey             = Mod1
+show_status        = 0
+status_top         = 1
+
+[bindings]
+# Browser Control
+b = back
+m = forward
+S = stop
+r = reload
++ = zoom_in
+- = zoom_out
+t = toggle_status
+k = exit
+i = insert_mode
+
+# Page Navigation
+w  = scroll_vert  -50
+a  = scroll_horiz -50
+s  = scroll_vert   50
+d  = scroll_horiz  50
+._ = search %s
+/  = search
+
+# Link Following
+f_ = script window.location = document.links[%s].href;
+F_ = script window.open (document.links[%s].href);
+T  = script for (var i=0; i < document.links.length; i++) {var uzblid = 'uzbl_link_hint_';var li = document.links[i];var pre = document.getElementById(uzblid+i);if (pre) {li.removeChild(pre);} else {var hint = document.createElement('div');hint.setAttribute('id',uzblid+i);hint.innerHTML = i;hint.style.display='inline';hint.style.lineHeight='90%';hint.style.backgroundColor='red';hint.style.color='white';hint.style.fontSize='small-xx';hint.style.fontWeight='light';hint.style.margin='0px';hint.style.padding='2px';hint.style.position='absolute';hint.style.textDecoration='none';hint.style.left=li.style.left;hint.style.top=li.style.top;li.insertAdjacentElement('afterBegin',hint);}}
+
+
+# Goto Bindings
+gg = uri http://www.google.com/
+gl = uri http://localhost/
+gu = uri http://www.uzbl.org/
+,_ = uri %s
+?  = uri http://localhost/uzbl-bindings.php
+
+# Search bindings
+     # Search Engines
+\g_ = uri http://www.google.com/search?q=%s
+     # Wikis / References
+\w_ = uri http://en.wikipedia.org/wiki/Special:Search?search=%s
+\a_ = uri http://wiki.archlinux.org/index.php/Special:Search?search=%s&go=Go
+\p_ = uri http://www.php.net/search.php?pattern=%s&show=quickref&x=0&y=0
+\d_ = uri http://dictionary.reference.com/search?q=%s&x=0&y=0
+\t_ = uri http://thesaurus.reference.com/search?q=%s&x=0&y=0
+\u_ = uri http://uncyclopedia.org/wiki/Special:Search?search=%s&go=Go
+\e_ = uri http://www.encyclopediadramatica.com/Special:Search?search=%s&go=Go
+\b_ = uri http://www.biblegateway.com/keyword/?search=%s
+\h_ = uri http://www.wikihow.com/Special:LSearch?fulltext=Search&search=%s
+\U_ = uri http://www.urbandictionary.com/define.php?term=%s
+\H_ = uri http://dothack.wikia.com/wiki/Special:Search?search=%s&go=1
+     # Torrents
+\P_ = uri http://thepiratebay.org/s/?q=%s&page=0&orderby=99
+\M_ = uri http://www.mininova.org/search/?search=%s
+\i_ = uri http://isohunt.com/torrents/?ihq=%s
+     # Entertainment / Books
+\m_ = uri http://www.imdb.com/find?s=all&q=%s&x=0&y=0
+\A_ = uri http://www.amazon.co.uk/s/field-keywords=%s
+\W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleSearchString=%s&searchType=0&Image1.x=0&Image1.y=0
+
+# External Bindings
+u = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
+
+[network]
+#proxy_server = 
+http_debug = 0
+user-agent = Uzbl [ Webkit %webkit-major%.%webkit-minor%.%webkit-micro% ] [ Arch Linux %kernrel% x86_64 ] [ Barrucadu/experimental: %commit% ]
+#max_conns =
+#max_conns_per_host =
