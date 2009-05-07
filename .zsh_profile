@@ -55,7 +55,7 @@ done
 export PR_NO_COLOR="$terminfo[sgr0]"
 
 # Shell prompt
-export PROMPT="${PR_LIGHT_GREEN}%* %d ${PR_GREEN}%%${PR_NO_COLOR} "
+export PROMPT="${PR_LIGHT_GREEN}%* ${PR_GREEN}%%${PR_NO_COLOR} "
 
 # Emacs shell mode
 [[ $EMACS = t ]] && unsetopt zle
