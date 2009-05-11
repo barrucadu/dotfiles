@@ -9,6 +9,7 @@ if [[ ! $(tty) == *pts* ]]; then
                 echo "Starting X11 at `date`"
                 startx &> /dev/null
                 rm .serverauth.*
+                rm -rf /tmp/audacity*
             fi
         done
     elif [[ ! "$TERM" == "screen-256color" ]]; then
