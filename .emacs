@@ -46,6 +46,7 @@
 ; Key Bindings
 (global-set-key [?\C-n]       'setnu-mode)
 (global-set-key [?\C-x ?n]    'setnu-mode)
+(global-set-key [?\C-x ?t]    'toggle-truncate-lines)
 (global-set-key [?\C-x ?w]    'w3m)
 (global-set-key [?\C-x ?g]    'goto-line)
 (global-set-key [?\C-x ?i]    'indent-according-to-mode)
