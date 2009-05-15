@@ -143,10 +143,10 @@ function git-anydot()
 function git-robm()
 {
     cd ~/uzbl
-    git checkout robm/config-refactor
-    git pull robm config-refactor
+    git checkout robm/master
+    git pull robm master
     git checkout experimental
-    git merge robm/config-refactor
+    git merge robm/master
     git status
 }
 
