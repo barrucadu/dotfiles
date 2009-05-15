@@ -111,11 +111,12 @@ function gituw()
 
 function git-dieter()
 {
+    # Change back when config-refactor becomes experimental.
     cd ~/uzbl
-    git checkout dieter/experimental
-    git pull dieter experimental
+    git checkout dieter/config-refactor
+    git pull dieter config-refactor
     git checkout experimental
-    git merge dieter/experimental
+    git merge dieter/config-refactor
     git status
 }
 
