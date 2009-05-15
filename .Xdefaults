@@ -31,7 +31,7 @@ Xft.hintstyle: hintslight
 Xft.rgba:      rgb
 
 !! Terminal
-URxvt.urlLauncher:       /home/barrucadu/bin/uzblurl
+URxvt.urlLauncher:       /home/barrucadu/bin/uzbl --uri
 URxvt.matcher.button:    1
 URxvt.matcher.pattern.1: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
 URxvt*font:              FONT
