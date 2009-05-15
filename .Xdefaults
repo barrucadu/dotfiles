@@ -5,7 +5,7 @@
 #define FONT_UNDERLINE xft:Onuava:underline:pixelsize=12:antialias=true
 
 !! Colours
-#include "/home/barrucadu/.Xdefaults.d/inferno"
+#include "/home/barrucadu/.Xdefaults.d/phrak-theme-eight"
 *color0:  COLOUR_THEME_BLACK
 *color8:  COLOUR_THEME_DARK_GREY
 *color1:  COLOUR_THEME_DARK_RED 

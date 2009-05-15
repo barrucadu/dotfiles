@@ -5,7 +5,7 @@
 (column-number-mode t)
 (display-time-mode  t)
 (global-hl-line-mode 1)
-(set-face-background 'hl-line "#171D28")
+(set-face-background 'hl-line "#111111")
 
 ; UTF-8
 (set-keyboard-coding-system 'utf-8)
