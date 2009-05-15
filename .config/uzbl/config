@@ -6,7 +6,7 @@ set cookie_handler     = /home/barrucadu/.config/uzbl/handlers/cookies.sh
 set always_insert_mode = 0
 set modkey             = Mod1
 set show_status        = 1
-set status_format      = <span font_family="monospace"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] <span foreground="#606060"> LOAD_PROGRESSBAR </span><span foreground="#99FF66">URI</span> <span foreground="khaki">NAME</span></span>
+set status_format      = <span font="DejaVu Sans Mono 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] <span foreground="#606060"> LOAD_PROGRESSBAR </span><span foreground="#99FF66">URI</span></span>
 set status_background  = #303030
 
 # Browser Control
@@ -70,6 +70,6 @@ bind u = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
 # Netwok
 #set proxy_server 
 set http_debug = 0
-set user-agent    = Uzbl [ Webkit %webkit-major%.%webkit-minor%.%webkit-micro% ] [ Arch Linux %kernrel% x86_64 ] [ Barrucadu/experimental: %commit% ]
+set useragent  = Uzbl [ Webkit WEBKIT_MAJOR.WEBKIT_MINOR.WEBKIT_MICRO ] [ Arch Linux KERNREL x86_64 ] [ Barrucadu/experimental: COMMIT ]
 #set max_conns 
 #set max_conns_per_host 
