@@ -10,15 +10,17 @@ set status_format      = <span font="DejaVu Sans Mono 10"><span background="khak
 set status_background  = #303030
 
 # Browser Control
-bind b = back
-bind m = forward
-bind S = stop
-bind r = reload
-bind + = zoom_in
-bind - = zoom_out
-bind t = toggle_status
-bind k = exit
-bind i = insert_mode
+bind b  = back
+bind m  = forward
+bind S  = stop
+bind r  = reload
+bind +  = zoom_in
+bind -  = zoom_out
+bind t  = toggle_status
+bind k  = exit
+bind i  = insert_mode
+bind ;_ = runcmd bind %s
+bind :_ = runcmd %s
 
 # Page Navigation
 bind w  = scroll_vert  -50
