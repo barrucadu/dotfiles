@@ -1,8 +1,8 @@
 !! Fonts
-#define FONT           xft:Onuava:pixelsize=12:antialias=true
-#define FONT_BOLD      xft:Onuava:bold:pixelsize=12:antialias=true
-#define FONT_ITALIC    xft:Onuava:italic:pixelsize=12:antialias=true
-#define FONT_UNDERLINE xft:Onuava:underline:pixelsize=12:antialias=true
+#define FONT           xft:DejaVu Sans Mono:pixelsize=11:antialias=false:autohinting=true
+#define FONT_BOLD      xft:DejaVu Sans Mono:bold:pixelsize=11:antialias=false:autohinting=true
+#define FONT_ITALIC    xft:DejaVu Sans Mono:italic:pixelsize=11:antialias=false:autohinting=true
+#define FONT_UNDERLINE xft:DejaVu Sans Mono:underline:pixelsize=11:antialias=false:autohinting=true
 
 !! Colours
 #include "/home/barrucadu/.Xdefaults.d/phrak-theme-eight"
