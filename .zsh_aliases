@@ -1,7 +1,7 @@
 ## -*- shell-script -*-
 # Short aliases
 alias !='sudo'
-alias @='uzbl < ~/.config/uzbl/config --uri'
+alias @='uzbl --uri'
 alias c='clear'
 alias e='exit'
 alias o='emacs'
@@ -27,7 +27,6 @@ alias locate='locate -e -L'
 alias mkdir='mkdir -p'
 alias weechat='weechat-curses'
 alias wifi='sudo wifi-select wlan0'
-alias uzbl='uzbl < ~/.config/uzbl/config'
 
 # Package management
 alias build='sudo pacbuilder -Sbkve'
