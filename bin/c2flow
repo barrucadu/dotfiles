@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+if [[ "$1" == "-h" ]];
+then
+    echo "Usage: c2flow /path/to/source/file.c /path/to/header/file.h"
+    echo "     Prints out a flowchart using cflow, and strips out all functions not defined in the header file."
+    exit
+fi
+
+cflow --omit-arguments --omit-symbol-names $1 | awk '{print "." $0}'> /tmp/cflow
+header="`cat $2`"
+touch /tmp/c2flow
+
+echo "main()"
+while read line;
+do
+    cleanline="`echo $line | sed \"s/^\. *//\" | sed \"s/(.*/(/\"`"
+    cleanlin2="`echo $line | sed \"s/^\. *//\" | sed \"s/(.*/ (/\"`"
+
+    if echo $header | grep $cleanline &>/dev/null &>/dev/null;
+    then
+        echo $line | sed "s/(.*/()/" | sed "s/^\.//"
+    fi
+
+    if echo $header | grep $cleanlin2 &>/dev/null &>/dev/null;
+    then
+        echo $line | sed "s/(.*/()/" | sed "s/^\.//"
+    fi
+done < /tmp/cflow
+
+rm /tmp/cflow
