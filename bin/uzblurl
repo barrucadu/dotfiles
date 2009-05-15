@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+uzbl --uri $1 < ~/.config/uzbl/config
+disown %%
+exit
