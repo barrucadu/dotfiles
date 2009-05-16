@@ -93,6 +93,7 @@ function gituz()
     fi
 
     git push uzbl experimental
+    cp uzbl.c /srv/http/
 }
 
 function gituw()

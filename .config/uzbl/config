@@ -41,6 +41,7 @@ bind gl = uri http://localhost/
 bind gu = uri http://www.uzbl.org/
 bind ,_ = uri %s
 bind ?  = uri http://localhost/uzbl-bindings.php
+bind !  = uri http://localhost/uzbl-code.php
 
 # Search bindings
      # Search Engines
