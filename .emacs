@@ -55,6 +55,8 @@
 (global-set-key [?\C-x ?\C-u] 'undo)
 (global-set-key [?\C-x ?m]    'hide-mode-line)
 (global-set-key [?\C-x ?\C-m] 'hide-mode-line)
+(global-set-key [?\M-O ?a]    'backward-paragraph)
+(global-set-key [?\M-O ?b]    'forward-paragraph)
 (global-set-key [?\M-O ?c]    'forward-word)
 (global-set-key [?\M-O ?d]    'backward-word)
 (global-set-key [?\M-[ ?3 ?^] 'backward-kill-word)
