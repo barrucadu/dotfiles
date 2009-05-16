@@ -1,5 +1,5 @@
 #
-# WeeChat configuration file, created by WeeChat v0.2.6.1 on Fri May 15 18:20:00 2009
+# WeeChat configuration file, created by WeeChat v0.2.6.1 on Sat May 16 09:16:45 2009
 # WARNING! Be careful when editing this file, WeeChat writes this file when exiting.
 #
 
@@ -51,7 +51,7 @@ look_paste_max_lines = 3
 [colors]
 col_real_white = off
 col_separator = cyan
-col_title = default
+col_title = black
 col_title_more = lightmagenta
 col_title_bg = blue
 col_chat = default
