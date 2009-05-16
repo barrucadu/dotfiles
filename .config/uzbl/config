@@ -4,7 +4,7 @@ set download_handler   = /home/barrucadu/.config/uzbl/handlers/download.sh
 set cookie_handler     = /home/barrucadu/.config/uzbl/handlers/cookies.sh
 
 # Interface
-set fifo_dir           =  /home/barrucadu/tmp/uzbl
+set fifo_dir           = /home/barrucadu/tmp/uzbl
 set socket_dir         = /home/barrucadu/tmp/uzbl
 
 # Behaviour
