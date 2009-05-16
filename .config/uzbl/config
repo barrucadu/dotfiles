@@ -10,9 +10,9 @@ set socket_dir         = /home/barrucadu/tmp/uzbl
 # Behaviour
 set always_insert_mode = 0
 set modkey             = Mod1
-set minimum_font_size = 6
-set default_font_size = 12
-set shell_cmd         = zsh -c %s ''
+set minimum_font_size  = 6
+set default_font_size  = 12
+set shell_cmd          = zsh -c %s ''
 
 # Appearence
 set show_status        = 1
