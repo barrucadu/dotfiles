@@ -92,7 +92,7 @@ function gituz()
         git commit
     fi
 
-    git push uzbl experimental
+    git push origin experimental
     cp uzbl.c /srv/http/
 }
 
@@ -122,7 +122,7 @@ function git-browser()
 
 function git-website()
 {
-    cd /media/MHD/websites/uzbl/
+    cd /media/MHD/websites/uzbl.org
     git checkout dieter/master
     git pull dieter master
     git checkout master

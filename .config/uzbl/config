@@ -1,10 +1,20 @@
+# Handlers
 set history_handler    = /home/barrucadu/.config/uzbl/handlers/history.sh
 set download_handler   = /home/barrucadu/.config/uzbl/handlers/download.sh
+set cookie_handler     = /home/barrucadu/.config/uzbl/handlers/cookies.sh
+
+# Interface
 #set fifo_dir           =  /home/barrucadu/tmp/uzbl
 set socket_dir         = /home/barrucadu/tmp/uzbl
-set cookie_handler     = /home/barrucadu/.config/uzbl/handlers/cookies.sh
+
+# Behaviour
 set always_insert_mode = 0
 set modkey             = Mod1
+set minimum_font_size = 6
+set default_font_size = 12
+set shell_cmd         = zsh -c %s ''
+
+# Appearence
 set show_status        = 1
 set status_format      = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] <span foreground="#606060"> LOAD_PROGRESSBAR </span><span foreground="#99FF66">URI</span></span>
 set status_background  = #303030
@@ -28,8 +38,10 @@ bind w  = scroll_vert  -50
 bind a  = scroll_horiz -50
 bind s  = scroll_vert   50
 bind d  = scroll_horiz  50
-bind ._ = search %s
+bind .* = search %s
 bind /  = search
+bind >  = scroll_end
+bind <  = scroll_begin
 
 # Link Following
 bind f_ = script window.location = document.links[%s].href;
@@ -72,8 +84,5 @@ bind \W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleS
 bind u = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
 
 # Netwok
-#set proxy_server 
 set http_debug = 0
 set useragent  = Uzbl [ Webkit WEBKIT_MAJOR.WEBKIT_MINOR.WEBKIT_MICRO ] [ Arch Linux KERNREL x86_64 ] [ Barrucadu/experimental: COMMIT ]
-#set max_conns 
-#set max_conns_per_host 
