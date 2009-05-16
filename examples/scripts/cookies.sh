@@ -1,9 +1,40 @@
-#!/bin/zsh
+#!/bin/bash
+# this is an example script of how you could manage your cookies..
+# we use the cookies.txt format (See http://kb.mozillazine.org/Cookies.txt)
+# This is one textfile with entries like this:
+# kb.mozillazine.org	FALSE	/	FALSE	1146030396	wikiUserID	16993
+# domain alow-read-other-subdomains path http-required expiration name value  
+# you probably want your cookies config file in your $XDG_CONFIG_HOME ( eg $HOME/.config/uzbl/cookies)
+# Note. in uzbl there is no strict definition on what a session is.  it's YOUR job to clear cookies marked as end_session if you want to keep cookies only valid during a "session"
+# MAYBE TODO: allow user to edit cookie before saving. this cannot be done with zenity :(
+# TODO: different cookie paths per config (eg per group of uzbl instances)
 
-file=$XDG_CONFIG_HOME/uzbl/cookies
-cookie_file=$XDG_DATA_HOME/uzbl/cookies
+# TODO: correct implementation.
+# see http://curl.haxx.se/rfc/cookie_spec.html
+# http://en.wikipedia.org/wiki/HTTP_cookie
+
+# TODO : check expires= before sending.
+# write sample script that cleans up cookies dir based on expires attribute.
+# TODO: check uri against domain attribute. and path also.
+# implement secure attribute.
+# support blocking or not for 3rd parties
+# http://kb.mozillazine.org/Cookies.txt
+# don't always append cookies, sometimes we need to overwrite
+
+if [ -f /usr/share/uzbl/examples/configs/cookies ]
+then
+	file=/usr/share/uzbl/examples/configs/cookies
+else
+	file=./examples/configs/cookies #useful when developing
+fi
+
+#cookie_file=$XDG_DATA_HOME/uzbl/cookies.txt
+cookie_file=./examples/data/cookies.txt
 
 which zenity &>/dev/null || exit 2
+
+# Example cookie:
+# test_cookie=CheckForPermission; expires=Thu, 07-May-2009 19:17:55 GMT; path=/; domain=.doubleclick.net
 
 # uri=$6
 # uri=${uri/http:\/\/} # strip 'http://' part

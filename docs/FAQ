@@ -1,0 +1,72 @@
+FAQ
+---
+
+### I just installed uzbl but it doesn't do much.  I can load one uri and quit the program but that's it.
+You did not load a configuration.  Uzbl does not create a default config file on startup like some other programs do.
+Because we want to give you the freedom to place your config where you want, and to use a config or not.
+Have a look in /usr/share/uzbl/examples/configs.
+Use the --config parameter or save your config as $XDG\_CONFIG\_HOME/uzbl/config to have it auto-loaded.
+
+### Where is the location bar? How do I change the URL ?
+Uzbl has no location bar.  All changes to the uri (editing of current uri, typing new uri, loading of uri from bookmarks/history/...) happens *outside* of uzbl.
+Have a look at the sample scripts in /usr/share/uzbl/examples.  Most of our examples use dmenu which is a nifty little tool to pick an item from a list of items (very
+useful with history/bookmarks) with a limited set of keystrokes.  see man dmenu.
+You can also use it to make edits to a uri (press tab to load it into the
+search field) or type a url from scratch, though dmenu
+is not the most suitable editor. We're looking into a better way to make edits.
+Zenity is also an option, if you want copy-paste support.
+
+### Where are the widgets (forward, back,.. button etc)
+Uzbl's layout only contains what you really need to see.  we only have a statusbar, which even can also be disabled.  There are no buttons, but we do
+have lots of keybinding possibilities.
+
+### What?  No support for bookmarks/history/downloads/cookies/... ? Your project sucks!
+We do not support *management* of those things, because we believe a browser should only do browsing.  We are firm believers in the unix philosophy.
+You have to look at the bigger picture.  In fact, we do support all these things.  Take bookmarks as an example:
+
+ * we support keybinding and spawning external programs, so you can bind a key to spawn any script you want
+ * Your script receives properties such as the current url, window title etc.
+ * You can then call a tool such as zenity to prompt for any more information you may want to specify (tags,...)
+ * You have the freedom to store the bookmarks in whichever format you want. (plaintext, sqlite, any database, on a remote system, in version control, ...)
+ * To load a bookmark, you trigger another script which invokes a tool such as dmenu to let you pick a bookmark.  Your script can send the command to load the url to uzbl very easily by using the socket or fifo interface.
+ * To manage your bookmarks, you can use whatever you want, depending on how you store them (simple text editor, database interface, ... )
+
+These ideas are something we want to consistently apply throughout the entire application.  (Even more, throughout our entire desktop environment)
+In fact, we actually ship various sample scripts and some sample configs that make it easy for you to implement your workflow.
+
+### Why can't I type anything in forms?  How does the keybinding work?
+You are in command mode, not in insert mode.
+
+* command mode: you can trigger actions inside uzbl with minimum amount of keypresses (eg 'b' to go back, 'ZZ' to quit etc)  (see config examples), but not to type actual text into forms, because all your keypresses are interpreted.
+* insert mode: after going into insert mode (by default this is the 'i' binding from inside command mode), your keypresses are not interpreted but passed on, so you can enter text into forms.  Press Esc to go out of insert mode.
+
+The above method is called "modal" as inspired on VI.  If you don't like
+this you can easily change this:
+
+* enable always\_insert\_mode in your config.  You will always be in insert mode.
+* configure a modkey.  Since your keypresses are not interpreted anymore to trigger actions, you need a modkey to do things (eg alt+'b' to go back instead of just 'b' from command mode)
+
+This method is how many applications work.
+
+Both have their pro's and cons.  We don't want to force anyone in using
+either, so by tuning the modkey and always\_insert\_mode settings you can pick
+whichever method you like, or both at the same time (command mode, insert mode, and the modkey to perform actions while in insert mode)
+
+### Why do you depend on gtk?
+Uzbl itself doesn't use much gtk stuff (only the statusbar) so we could do without gtk.  But Webkit needs a widget toolkit to create widgets (think javascript popups, html forms etc).
+Officially, it also supports QT and wxwigdets.  There are also some unofficial patchsets floating on the interwebs for the EFL and FLTK toolkits.  One could argue we don't need no popups or fancy form widgets and you could have a point, but
+we prefer being reasonably assured that things work as they are supposed to rather then using some obscure patchset which may be incomplete, broken and/or badly designed, or wasting time ourselves in what is not our core objective.
+Note that we do *not* depend on any Gnome libraries such as gconf.  _That_ would be something worth complaining about :)
+
+### Do you support flash? javascript? Ajax?  Recent html/css/.. standards?
+Yes, Webkit takes care of all of that.  Not that we like all of these, but you can use them if you want.
+
+### Does the world really need another browser?
+We did try a lot of browsers, and we do not suffer [NIH](http://en.wikipedia.org/wiki/Not_Invented_Here).
+We believe that the approach taken by way too many browsers is wrong.  We do not want browsers that try to do everything,
+instead we prefer a system where different applications work together, which gives plenty of advantages.
+We also like open source.  We take a lot of things from other projects and we also try to contribute to other projects.
+
+
+### What? You call all of this user-friendly?
+Yes.  If you don't agree, don't use it :)

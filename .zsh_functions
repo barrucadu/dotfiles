@@ -110,7 +110,7 @@ function gituw()
     git push uzbl-website master
 }
 
-function git-dieter()
+function git-browser()
 {
     cd ~/uzbl
     git checkout dieter/experimental
@@ -120,33 +120,13 @@ function git-dieter()
     git status
 }
 
-function git-dusanx()
+function git-website()
 {
-    cd ~/uzbl
-    git checkout dusanx/master
-    git pull dusanx master
-    git checkout experimental
-    git merge dusanx/master
-    git status
-}
-
-function git-anydot()
-{
-    cd ~/uzbl
-    git checkout anydot/master
-    git pull anydot master
-    git checkout experimental
-    git merge anydot/master
-    git status
-}
-
-function git-robm()
-{
-    cd ~/uzbl
-    git checkout robm/master
-    git pull robm master
-    git checkout experimental
-    git merge robm/master
+    cd /media/MHD/websites/uzbl/
+    git checkout dieter/master
+    git pull dieter master
+    git checkout master
+    git merge dieter/master
     git status
 }
 

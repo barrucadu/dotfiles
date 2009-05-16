@@ -1,0 +1,19 @@
+
+Developers:
+    Dieter Plaetinck (Dieter@be) <email is dieter AT plaetinck.be>
+    Dusan Popovic (dusanx)
+    Michael Walker (Barrucadu) <email is mike AT barrucadu.co.uk>
+    Přemysl Hrubý, (anydot) <email is dfenze AT gmail.com>
+    Robert Manea (robm)
+
+Contributors:
+    (DuClare) - Various improvements
+    Zane Ashby (HashBox) - Rewrote FIFO interface. Fixed various bugs.
+    (sentientswitch) - Cleaned up code. Added some commands.
+    Jan Kolkmeier (jouz) - scrolling, link following
+    Evgeny Grablyk - libsoup settings
+
+Originaly based on http://trac.webkit.org/browser/trunk/WebKitTools/GtkLauncher/main.c
+Which is  copyrighted:
+2006, 2007 Apple Inc
+2007 Alp Toker <alp@atoker.com>
