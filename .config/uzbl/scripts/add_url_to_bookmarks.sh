@@ -7,7 +7,7 @@ OPTIONS=" -i -xs -rs -l 10"
 
 tag=`< $bookmarks_tags dmenu $OPTIONS $COLORS`
 
-if [[ -n $tag ]];
+if [[ -n $tag ]] && [[ -n $7 ]] && [[ -n $6 ]];
 then
     if grep $tag $bookmarks_tags &>/dev/null;
     then
