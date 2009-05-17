@@ -9,5 +9,15 @@ tag=`< $bookmarks_tags dmenu $OPTIONS $COLORS`
 
 if [[ -n $tag ]];
 then
+    if grep $tag $bookmarks_tags &>/dev/null;
+    then
+        echo "Tag found in $bookmarks_tags" > /dev/null # NOP :)
+    else
+        # Add tag
+        echo $tag >> $bookmarks_tags
+        sort $bookmarks_tags > /tmp/tags
+        mv /tmp/tags $bookmarks_tags
+    fi
+
     echo "[$tag] $7: $6" >> $bookmarks_file
 fi
