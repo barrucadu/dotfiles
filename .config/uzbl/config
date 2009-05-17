@@ -93,3 +93,4 @@ bind U = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
 bind B = spawn /home/barrucadu/.config/uzbl/scripts/add_url_to_bookmarks.sh
 bind y = spawn /home/barrucadu/.config/uzbl/scripts/yank.sh
 bind Y = spawn /home/barrucadu/.config/uzbl/scripts/yank-clip.sh
+binc C = spawn /home/barrucadu/.config/uzbl/scripts/config.sh
