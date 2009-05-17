@@ -87,10 +87,14 @@ bind \m_ = uri http://www.imdb.com/find?s=all&q=%s&x=0&y=0
 bind \A_ = uri http://www.amazon.co.uk/s/field-keywords=%s
 bind \W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleSearchString=%s&searchType=0&Image1.x=0&Image1.y=0
 
+# Script Bindings
+bind y  = sh "echo -ne $6 | xclip"
+bind Y  = sh "echo -ne $6 | xclip -selection clipboard"
+bind C  = sh "cat $1 > $4"
+bind gc = sh "echo set uri = `xclip -o` > $4"
+bind gC = sh "echo set uri = `xclip -o -selection clipboard` > $4"
+
 # External Bindings
-bind u = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_bookmarks.sh
-bind U = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
-bind B = spawn /home/barrucadu/.config/uzbl/scripts/add_url_to_bookmarks.sh
-bind y = sh "echo -ne $6 | xclip"
-bind Y = sh "echo -ne $6 | xclip -selection clipboard"
-bind C = sh "cat $1 > $4"
+bind u  = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_bookmarks.sh
+bind U  = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
+bind B  = spawn /home/barrucadu/.config/uzbl/scripts/add_url_to_bookmarks.sh
