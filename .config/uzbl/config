@@ -91,6 +91,3 @@ bind \W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleS
 bind u = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_bookmarks.sh
 bind U = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
 bind B = spawn /home/barrucadu/.config/uzbl/scripts/add_url_to_bookmarks.sh
-
-############### STARTUP COMMANDS ###############
-set uri = http://localhost/
