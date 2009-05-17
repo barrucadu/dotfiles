@@ -81,8 +81,9 @@ bind \A_ = uri http://www.amazon.co.uk/s/field-keywords=%s
 bind \W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleSearchString=%s&searchType=0&Image1.x=0&Image1.y=0
 
 # External Bindings
-bind u = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
+bind u = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_bookmarks.sh
+bind U = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
+bind B = spawn /home/barrucadu/.config/uzbl/scripts/add_url_to_bookmarks.sh
 
 # Netwok
-set http_debug = 0
 set useragent  = Uzbl [ Webkit WEBKIT_MAJOR.WEBKIT_MINOR.WEBKIT_MICRO ] [ Arch Linux KERNREL x86_64 ] [ Barrucadu/experimental: COMMIT ]
