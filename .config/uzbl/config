@@ -47,6 +47,7 @@ bind s  = scroll_vert   50
 bind d  = scroll_horiz  50
 bind .* = search %s
 bind /  = search
+bind \  = search_reverse
 bind >  = scroll_end
 bind <  = scroll_begin
 
