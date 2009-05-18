@@ -14,9 +14,9 @@ set default_font_size  = 12
 set shell_cmd          = zsh -c %s ''
 
 # Handlers
-set history_handler    = /home/barrucadu/.config/uzbl/handlers/history.sh
-set download_handler   = /home/barrucadu/.config/uzbl/handlers/download.sh
-set cookie_handler     = /home/barrucadu/.config/uzbl/handlers/cookies.sh
+set history_handler    = $XDG_CONFIG_HOME/uzbl/handlers/history.sh
+set download_handler   = $XDG_CONFIG_HOME/uzbl/handlers/download.sh
+set cookie_handler     = $XDG_CONFIG_HOME/uzbl/handlers/cookies.sh
 
 # Interface
 set fifo_dir           = /home/barrucadu/tmp/uzbl
@@ -95,6 +95,6 @@ bind gc = sh "echo set uri = `xclip -o` > $4"
 bind gC = sh "echo set uri = `xclip -o -selection clipboard` > $4"
 
 # External Bindings
-bind u  = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_bookmarks.sh
-bind U  = spawn /home/barrucadu/.config/uzbl/scripts/load_url_from_history.sh
-bind B  = spawn /home/barrucadu/.config/uzbl/scripts/add_url_to_bookmarks.sh
+bind u  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_bookmarks.sh
+bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
+bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh

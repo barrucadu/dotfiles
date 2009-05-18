@@ -50,7 +50,7 @@
 
 ; Media keys
 (define-key *top-map* (kbd "XF86HomePage")    "exec opera")
-(define-key *top-map* (kbd "M-XF86HomePage")  "exec uzbl < ~/.config/uzbl/config")
+(define-key *top-map* (kbd "M-XF86HomePage")  "exec uzbl")
 (define-key *top-map* (kbd "C-XF86HomePage")  "exec claws-mail")
 (define-key *top-map* (kbd "XF86AudioPlay")   "exec mpc toggle")
 (define-key *top-map* (kbd "XF86AudioStop")   "exec mpc stop")
