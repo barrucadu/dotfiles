@@ -21,7 +21,7 @@
 # http://kb.mozillazine.org/Cookies.txt
 # don't always append cookies, sometimes we need to overwrite
 
-file=$XDG_CONFIG_HOME/uzbl/cookies
+file=$XDG_CONFIG_HOME/uzbl/cookiedeny
 cookie_file=$XDG_DATA_HOME/uzbl/cookies
 
 # Example cookie:
@@ -87,12 +87,8 @@ function get_cookie () {
 
 exit
 
-
-# TODO: implement this later.
-# $1 = section (TRUSTED or DENY)
-# $2 =url
 function match () {
-	sed -n "/$1/,/^\$/p" $file 2>/dev/null | grep -q "^$host"
+	grep -q "^$host" $file
 }
 
 function fetch_cookie () {
@@ -103,7 +99,7 @@ function store_cookie () {
 	echo $cookie > $cookie_file/$host.cookie
 }
 
-if ! match DENY $host
+if ! match $host
 then
 	[ $action == PUT ] && store_cookie $host
 	[ $action == GET ] && fetch_cookie && echo "$cookie"
