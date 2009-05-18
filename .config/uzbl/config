@@ -99,5 +99,4 @@ bind F_ = js window.open (document.links[%s].href);
 bind u  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_bookmarks.sh
 bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
 bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
-#bind T  = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js
-bind T_ = script $XDG_CONFIG_HOME/uzbl/scripts/test.js %s
+bind T  = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js
