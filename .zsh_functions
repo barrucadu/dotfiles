@@ -113,19 +113,13 @@ function gituw()
 function git-browser()
 {
     cd ~/uzbl
-    git checkout dieter/experimental
     git pull dieter experimental
-    git checkout experimental
-    git merge dieter/experimental
 }
 
 function git-website()
 {
     cd /media/MHD/websites/uzbl.org
-    git checkout dieter/master
     git pull dieter master
-    git checkout master
-    git merge dieter/master
 }
 
 # FTP
