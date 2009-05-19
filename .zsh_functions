@@ -117,7 +117,6 @@ function git-browser()
     git pull dieter experimental
     git checkout experimental
     git merge dieter/experimental
-    git status
 }
 
 function git-website()
@@ -127,7 +126,6 @@ function git-website()
     git pull dieter master
     git checkout master
     git merge dieter/master
-    git status
 }
 
 # FTP
