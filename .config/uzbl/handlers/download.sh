@@ -1,3 +1,4 @@
 #!/bin/zsh
+
 cd ~/tmp/downloads
-wget $6
+wget $8

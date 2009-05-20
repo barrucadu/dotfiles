@@ -15,8 +15,8 @@ set shell_cmd          = zsh -c %s ''
 set reset_command_mode = 0
 
 # Handlers
-set history_handler    = $XDG_CONFIG_HOME/uzbl/handlers/history.sh
-set download_handler   = $XDG_CONFIG_HOME/uzbl/handlers/download.sh
+set history_handler    = spawn $XDG_CONFIG_HOME/uzbl/handlers/history.sh
+set download_handler   = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
 set cookie_handler     = $XDG_CONFIG_HOME/uzbl/handlers/cookies.sh
 
 # Interface
