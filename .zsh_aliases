@@ -65,12 +65,14 @@ alias bftp='ncftp barrucadu'
 alias uftp='ncftp uzbl'
 alias pftp='ncftp ofear'
 
-
 # Git
 alias grm='git rm'
 alias g-='git rm'
 alias g+='git add'
 alias gc='git commit'
+
+# Coding
+alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 
 # Humour
 alias xkcdroulette='mirage "/home/barrucadu/archive/xkcd/`ls ~/archive/xkcd/ -c1 | sort -R | head -n1`"'
