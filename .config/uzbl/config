@@ -1,10 +1,13 @@
 ############### SETTINGS ###############
 
 # Appearence
-set show_status        = 0
-set status_format      = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] <span foreground="#606060"> LOAD_PROGRESSBAR </span><span foreground="#99FF66">URI</span></span>
-set status_background  = #101010
-set status_top         = 0
+set show_status         = 0
+set status_format       = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] <span foreground="#606060"> LOAD_PROGRESSBAR </span><span foreground="#99FF66">URI</span></span>
+set status_background   = #101010
+set status_top          = 0
+set status_pbar_done    = :
+set status_pbar_pending = .
+set status_pbar_width   = 20
 
 # Behaviour
 set always_insert_mode = 0
@@ -72,7 +75,7 @@ bind \a_ = uri http://wiki.archlinux.org/index.php/Special:Search?search=%s&go=G
 bind \p_ = uri http://www.php.net/search.php?pattern=%s&show=quickref&x=0&y=0
 bind \d_ = uri http://dictionary.reference.com/search?q=%s&x=0&y=0
 bind \t_ = uri http://thesaurus.reference.com/search?q=%s&x=0&y=0
-bind \u_ = uri http://uncyclopedia.org/wiki/Special:Search?search=%s&go=Go
+bind \u_ = uri http://uncyclopedia.org/wiki/Special:Search?search=~%s&go=Go
 bind \e_ = uri http://www.encyclopediadramatica.com/Special:Search?search=%s&go=Go
 bind \b_ = uri http://www.biblegateway.com/keyword/?search=%s
 bind \h_ = uri http://www.wikihow.com/Special:LSearch?fulltext=Search&search=%s
@@ -93,11 +96,9 @@ bind Y  = sh "echo -ne $6 | xclip -selection clipboard"
 bind C  = sh "cat $1 > $4"
 bind gc = sh "echo set uri = `xclip -o` > $4"
 bind gC = sh "echo set uri = `xclip -o -selection clipboard` > $4"
-bind f_ = js window.location = document.links[%s].href;
-bind F_ = js window.open (document.links[%s].href);
 
 # External Bindings
 bind u  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_bookmarks.sh
 bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
 bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
-bind T  = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js
+bind f* = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js %s
