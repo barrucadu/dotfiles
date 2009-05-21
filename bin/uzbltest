@@ -1,44 +1,58 @@
 #!/bin/zsh
 
 quietmode=0
+failed=0
 
 if [[ "$1" == "-q" ]] || [[ "$1" == "--quiet" ]];
 then
     quietmode=1
+    rm ~/tmp/uzbl/testoutput
 fi
 
 cd ~/uzbl
-rm ~/tmp/uzbl/testoutput
 
 function runcmd ()
 {
-    if [[ quietmode == 0 ]];
-    then
-        $*
-    else
-        echo $* >> ~/tmp/uzbl/testoutput
-        $*     &>> ~/tmp/uzbl/testoutput
-        echo    >> ~/tmp/uzbl/testoutput
-    fi
+    output=0
+
+    echo $*
+
+    $* 2>&1
+    output=$?
+  
+    echo
+    
+    return $output
 }
 
 function runtest ()
 {
-    echo -ne "$1 (y/n): "
+    echo -ne "Run test '$1' (y/n): "
     read input
 
     if [[ "$input" == "y" ]];
     then
         shift
-        runcmd $*
+        if [[ $quietmode == 0 ]];
+        then
+            runcmd $*
+        else
+            runcmd $* &>> ~/tmp/uzbl/testoutput
+        fi
         
         if [[ $? == 0 ]];
         then
             echo "Test succeeded."
             echo ""
         else
-            echo "Test failed. Exiting..."
-            exit $?
+            echo -ne "Test failed. Continue (y/n): "
+            read input
+            if [[ "$input" == "n" ]];
+            then
+                exit $?
+            else
+                failed=1
+            fi
         fi
     fi
 }
@@ -47,3 +61,15 @@ runtest "test"             make test
 runtest "test-config"      make test-config
 runtest "test-config-real" make test-config-real
 runtest "valgrind"         valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./uzbl
+
+if [[ $failed == 1 ]];
+then
+    echo -ne "One or more tests failed, run gdb (y/n): "
+    read input
+
+    if [[ "$input" == "y" ]];
+    then
+        gdb -ex run -ex backtrace ./uzbl
+        exit
+    fi
+fi
