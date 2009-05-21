@@ -17,12 +17,14 @@ function stoptests ()
     then
         echo -ne "One or more tests failed. Run gdb (y/n): "
         read input
-        
+
         if [[ "$input" == "y" ]];
         then
             gdb -ex run -ex backtrace ./uzbl
             exit
         fi
+    else
+        echo "All tests completed successfully."
     fi
 }
 
@@ -35,14 +37,12 @@ function runcmd ()
     $* 2>&1
     output=$?
   
-    echo
-    
     return $output
 }
 
 function runtest ()
 {
-    echo -ne "Run test '$1' (y/n): "
+    echo -ne "$1 (y/n): "
     read input
 
     if [[ "$input" == "y" ]];
@@ -52,19 +52,18 @@ function runtest ()
         then
             runcmd $*
         else
+            echo       >> ~/tmp/uzbl/testoutput
             runcmd $* &>> ~/tmp/uzbl/testoutput
         fi
         
         if [[ $? == 0 ]];
         then
             echo "Test succeeded."
-            echo ""
         else
             failed=1
 
             echo -ne "Test failed. Continue (y/n): "
             read input
-            echo ""
 
             if [[ "$input" == "n" ]];
             then
