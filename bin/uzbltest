@@ -11,6 +11,21 @@ fi
 
 cd ~/uzbl
 
+function stoptests ()
+{
+    if [[ $failed == 1 ]];
+    then
+        echo -ne "One or more tests failed. Run gdb (y/n): "
+        read input
+        
+        if [[ "$input" == "y" ]];
+        then
+            gdb -ex run -ex backtrace ./uzbl
+            exit
+        fi
+    fi
+}
+
 function runcmd ()
 {
     output=0
@@ -45,13 +60,15 @@ function runtest ()
             echo "Test succeeded."
             echo ""
         else
+            failed=1
+
             echo -ne "Test failed. Continue (y/n): "
             read input
+            echo ""
+
             if [[ "$input" == "n" ]];
             then
-                exit $?
-            else
-                failed=1
+                stoptests
             fi
         fi
     fi
@@ -62,14 +79,4 @@ runtest "test-config"      make test-config
 runtest "test-config-real" make test-config-real
 runtest "valgrind"         valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./uzbl
 
-if [[ $failed == 1 ]];
-then
-    echo -ne "One or more tests failed. Run gdb (y/n): "
-    read input
-
-    if [[ "$input" == "y" ]];
-    then
-        gdb -ex run -ex backtrace ./uzbl
-        exit
-    fi
-fi
+stoptests
