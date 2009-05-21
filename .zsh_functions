@@ -110,18 +110,6 @@ function gituw()
     git push uzbl-website master
 }
 
-function git-browser()
-{
-    cd ~/uzbl
-    git pull dieter experimental
-}
-
-function git-website()
-{
-    cd /media/MHD/websites/uzbl.org
-    git pull dieter master
-}
-
 # FTP
 function upload()
 {
