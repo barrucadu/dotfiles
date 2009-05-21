@@ -21,8 +21,9 @@ function stoptests ()
         if [[ "$input" == "y" ]];
         then
             gdb -ex run -ex backtrace ./uzbl
-            exit
         fi
+
+        exit
     else
         echo "All tests completed successfully."
     fi
@@ -30,14 +31,9 @@ function stoptests ()
 
 function runcmd ()
 {
-    output=0
-
     echo $*
 
     $* 2>&1
-    output=$?
-  
-    return $output
 }
 
 function runtest ()
