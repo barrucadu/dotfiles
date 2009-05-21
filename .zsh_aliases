@@ -73,7 +73,7 @@ alias gc='git commit'
 
 # Coding
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
-alias gdb='gdb -ex run -ex backtrace'
+alias gdb='gdb -ex run -ex backtrace -ex quit --args'
 
 # Humour
 alias xkcdroulette='mirage "/home/barrucadu/archive/xkcd/`ls ~/archive/xkcd/ -c1 | sort -R | head -n1`"'
