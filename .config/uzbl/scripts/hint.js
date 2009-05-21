@@ -17,6 +17,7 @@ var doc = document;
 var win = window;
 var links = document.links;
 var forms = document.forms;
+
 //Make onlick-links "clickable"
 try {
     HTMLElement.prototype.click = function() {
@@ -27,6 +28,7 @@ try {
         }
     };
 } catch(e) {}
+
 //Catch the ESC keypress to stop linkfollowing
 function keyPressHandler(e) {
     var kC = window.event ? event.keyCode: e.keyCode;
@@ -35,6 +37,7 @@ function keyPressHandler(e) {
         removeAllHints();
     }
 }
+
 //Calculate element position to draw the hint
 //Pretty accurate but on fails in some very fancy cases
 function elementPosition(el) {
@@ -49,6 +52,7 @@ function elementPosition(el) {
     }
     return [up, left, width, height];
 }
+
 //Calculate if an element is visible
 function isVisible(el) {
     if (el == doc) {
@@ -70,6 +74,7 @@ function isVisible(el) {
     }
     return isVisible(el.parentNode);
 }
+
 //Calculate if an element is on the viewport.
 function elementInViewport(el) {
     offset = elementPosition(el);
@@ -79,6 +84,7 @@ function elementInViewport(el) {
     var height = offset[3];
     return up < window.pageYOffset + window.innerHeight && left < window.pageXOffset + window.innerWidth && (up + height) > window.pageYOffset && (left + width) > window.pageXOffset;
 }
+
 //Removes all hints/leftovers that might be generated
 //by this script.
 function removeAllHints() {
@@ -87,6 +93,7 @@ function removeAllHints() {
         elements.parentNode.removeChild(elements);
     }
 }
+
 //Generate a hint for an element with the given label
 //Here you can play around with the style of the hints!
 function generateHint(el, label) {
@@ -118,6 +125,7 @@ function generateHint(el, label) {
     hint.style.webkitTransform = 'scale(1) rotate(0deg) translate(-6px,-5px)';
     return hint;
 }
+
 //Here we choose what to do with an element if we
 //want to "follow" it. On form elements we "select"
 //or pass the focus, on links we try to perform a click,
@@ -146,6 +154,7 @@ function clickElem(item) {
         }
     }
 }
+
 //Returns a list of all links (in this version
 //just the elements itself, but in other versions, we
 //add the label here.
@@ -159,6 +168,7 @@ function addLinks() {
     }
     return res;
 }
+
 //Same as above, just for the form elements
 function addFormElems() {
     res = [[], []];
@@ -172,6 +182,7 @@ function addFormElems() {
     }
     return res;
 }
+
 //Draw all hints for all elements passed. "len" is for
 //the number of chars we should use to avoid collisions
 function reDrawHints(elems, chars) {
@@ -189,6 +200,7 @@ function reDrawHints(elems, chars) {
         document.body.appendChild(hintdiv);
     }
 }
+
 //Put it all together
 function followLinks(follow) {
     var s = follow.split('');
@@ -221,4 +233,5 @@ function followLinks(follow) {
         reDrawHints(leftover, s.length);
     }
 }
+
 followLinks('%s');
