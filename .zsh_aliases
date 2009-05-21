@@ -75,7 +75,7 @@ alias gc='git commit'
 
 # Coding
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
-alias gdb='gdb -ex run -ex backtrace -ex quit --args'
+alias gdb='gdb -ex run -ex backtrace --args'
 alias uzt='uzbltest'
 
 # Miscellanious
