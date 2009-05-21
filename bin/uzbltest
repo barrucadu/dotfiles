@@ -13,8 +13,10 @@ cd ~/uzbl
 
 function stoptests ()
 {
-    if [[ $failed == 1 ]];
+    if [[ $failed == 0 ]];
     then
+        echo "All tests completed successfully."
+    else
         echo -ne "One or more tests failed. Run gdb (y/n): "
         read input
 
@@ -23,10 +25,9 @@ function stoptests ()
             gdb -ex run -ex backtrace ./uzbl
         fi
 
-        exit
-    else
-        echo "All tests completed successfully."
     fi
+
+    exit
 }
 
 function runcmd ()

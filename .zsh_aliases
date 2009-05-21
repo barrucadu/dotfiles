@@ -74,10 +74,11 @@ alias gc='git commit'
 # Coding
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 alias gdb='gdb -ex run -ex backtrace -ex quit --args'
+alias uzt='uzbltest'
 
 # Humour
-alias xkcdroulette='mirage "/home/barrucadu/archive/xkcd/`ls ~/archive/xkcd/ -c1 | sort -R | head -n1`"'
-alias broulette='mirage "/home/barrucadu/graphics/b/`ls ~/graphics/b/ -c1 | sort -R | head -n1`"'
+alias xkcdroulette='mirage "~/archive/xkcd/`ls ~/archive/xkcd/ -c1 | sort -R | head -n1`"'
+alias broulette='mirage "~/graphics/b/`ls ~/graphics/b/ -c1 | sort -R | head -n1`"'
 alias vi='echo "Heathen! May you see the light of Emacs before you use this machine again."; sleep 2; exit'
 alias vim='echo "Heathen! May you see the light of Emacs before you use this machine again."; sleep 2; exit'
 alias nano='echo "Use a /real/ editor."'
