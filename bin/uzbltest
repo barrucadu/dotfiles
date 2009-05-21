@@ -64,7 +64,7 @@ runtest "valgrind"         valgrind --tool=memcheck --leak-check=full --show-rea
 
 if [[ $failed == 1 ]];
 then
-    echo -ne "One or more tests failed, run gdb (y/n): "
+    echo -ne "One or more tests failed. Run gdb (y/n): "
     read input
 
     if [[ "$input" == "y" ]];
