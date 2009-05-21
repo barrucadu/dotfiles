@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+quietmode=0
+
+if [[ "$1" == "-q" ]] || [[ "$1" == "--quiet" ]];
+then
+    quietmode=1
+fi
+
+cd ~/uzbl
+rm ~/tmp/uzbl/testoutput
+
+function runcmd ()
+{
+    if [[ quietmode == 0 ]];
+    then
+        $*
+    else
+        echo $* >> ~/tmp/uzbl/testoutput
+        $*     &>> ~/tmp/uzbl/testoutput
+        echo    >> ~/tmp/uzbl/testoutput
+    fi
+}
+
+function runtest ()
+{
+    echo -ne "$1 (y/n): "
+    read input
+
+    if [[ "$input" == "y" ]];
+    then
+        shift
+        runcmd $*
+        
+        if [[ $? == 0 ]];
+        then
+            echo "Test succeeded."
+            echo ""
+        else
+            echo "Test failed. Exiting..."
+            exit $?
+        fi
+    fi
+}
+
+runtest "test"             make test
+runtest "test-config"      make test-config
+runtest "test-config-real" make test-config-real
+runtest "valgrind"         valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./uzbl
