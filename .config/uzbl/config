@@ -17,6 +17,7 @@ set default_font_size      = 12
 set default_monospace_size = 12
 set shell_cmd              = zsh -c %s ''
 set reset_command_mode     = 0
+set disable_plugins        = 0
 
 # Handlers
 set history_handler        = spawn $XDG_CONFIG_HOME/uzbl/handlers/history.sh
