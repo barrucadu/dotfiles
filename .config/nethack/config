@@ -5,7 +5,7 @@ OPTIONS=color,eight_bit_tty,hilite_pet,showexp,showscore,standout,time
 OPTIONS=!autopickup,disclose:yi ya +v +g +c,!legacy,pickup_burden:B,pushweapon
 
 # Character:
-OPTIONS=align:chaotic,character:Barbarian,gender:male,name:Barrucadu,race:human
+OPTIONS=gender:male,name:Barrucadu
 
 # Pets (and fruit):
 OPTIONS=catname:Morris,dogname:Shaggy,fruit:Coconut,horsename:Epona
