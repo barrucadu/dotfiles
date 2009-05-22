@@ -1,33 +1,34 @@
 ############### SETTINGS ###############
 
 # Appearence
-set show_status         = 0
-set status_format       = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] <span foreground="#606060"> LOAD_PROGRESSBAR </span><span foreground="#99FF66">URI</span></span>
-set status_background   = #101010
-set status_top          = 0
-set status_pbar_done    = :
-set status_pbar_pending = .
-set status_pbar_width   = 20
+set show_status            = 0
+set status_format          = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] <span foreground="#606060"> LOAD_PROGRESSBAR </span><span foreground="#99FF66">URI</span></span>
+set status_background      = #101010
+set status_top             = 0
+set status_pbar_done       = :
+set status_pbar_pending    = .
+set status_pbar_width      = 20
 
 # Behaviour
-set always_insert_mode = 0
-set modkey             = Mod1
-set minimum_font_size  = 6
-set default_font_size  = 12
-set shell_cmd          = zsh -c %s ''
-set reset_command_mode = 0
+set always_insert_mode     = 0
+set modkey                 = Mod1
+set minimum_font_size      = 6
+set default_font_size      = 12
+set default_monospace_size = 12
+set shell_cmd              = zsh -c %s ''
+set reset_command_mode     = 0
 
 # Handlers
-set history_handler    = spawn $XDG_CONFIG_HOME/uzbl/handlers/history.sh
-set download_handler   = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
-set cookie_handler     = $XDG_CONFIG_HOME/uzbl/handlers/cookies.sh
+set history_handler        = spawn $XDG_CONFIG_HOME/uzbl/handlers/history.sh
+set download_handler       = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
+set cookie_handler         = $XDG_CONFIG_HOME/uzbl/handlers/cookies.sh
 
 # Interface
-set fifo_dir           = /home/barrucadu/tmp/uzbl
-set socket_dir         = /home/barrucadu/tmp/uzbl
+set fifo_dir               = /home/barrucadu/tmp/uzbl
+set socket_dir             = /home/barrucadu/tmp/uzbl
 
 # Network
-set useragent          = Uzbl [ Webkit WEBKIT_MAJOR.WEBKIT_MINOR.WEBKIT_MICRO ] [ Arch Linux KERNREL x86_64 ] [ Barrucadu/experimental: COMMIT ]
+set useragent              = Uzbl [ Webkit WEBKIT_MAJOR.WEBKIT_MINOR.WEBKIT_MICRO ] [ Arch Linux KERNREL x86_64 ] [ Barrucadu/experimental: COMMIT ]
 
 ############### BINDINGS ###############
 
@@ -102,3 +103,4 @@ bind u  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_bookmarks.sh
 bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
 bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
 bind f* = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js %s
+bind F  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.sh
