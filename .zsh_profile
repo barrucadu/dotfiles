@@ -15,6 +15,8 @@ export XDG_DATA_HOME=~/.data
 export QT_XFT=1
 export GDK_USE_XFT=1
 export WEBKIT_IGNORE_SSL_ERRORS="1"
+export NETHACKOPTIONS="@/home/barrucadu/.config/nethack/config"
+
 # Framebuffer stuff
 if [ "$TERM" = "linux" ]; then
     echo -en "\e]P0121212"
