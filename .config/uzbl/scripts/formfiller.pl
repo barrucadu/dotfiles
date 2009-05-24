@@ -37,7 +37,7 @@ $command{load} = sub {
 					switch ($type) {
 						case ""					{}
 						case "checkbox"	{ printf FIFO 'act js document.getElementsByName("%s")[0].checked = %s;',	$name, $value}
-						case "submit"		{ printf FIFO 'act js function fs (n) {try{n.submit()} catch (e){fs(n.parentNode)}}; fs(document.getElementsByName("%s")[0]);', $name }
+						#case "submit"		{ printf FIFO 'act js function fs (n) {try{n.submit()} catch (e){fs(n.parentNode)}}; fs(document.getElementsByName("%s")[0]);', $name }
 						else 						{ printf FIFO 'act js document.getElementsByName("%s")[0].value = "%s";',	$name, $value}
 					}
 
