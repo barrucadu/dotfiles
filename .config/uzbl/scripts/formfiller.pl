@@ -75,6 +75,5 @@ $command{new} = sub {
 	print FILE "#------------------------------\n";
 	$p->parse(join(" ",`$downloader $url`));
 	close(FILE);
-    system ($terminal, "-e", $editor, $file);
 };
 $command{$cmd}->(domain($url));
