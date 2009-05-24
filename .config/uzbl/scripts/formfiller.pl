@@ -70,9 +70,6 @@ $command{new} = sub {
 	}
 	my $p = HTML::Parser->new(api_version => 3, start_h => [\&start, "tagname,attr"]);
 	open(FILE,">>$file");
-	print FILE "# make sure that there are no extra submits, since it may trigger the wrong one";
-	printf FILE "#%-10s | %-10s | %-10s\n", @fields;
-	print FILE "#------------------------------\n";
 	$p->parse(join(" ",`$downloader $url`));
 	close(FILE);
 };

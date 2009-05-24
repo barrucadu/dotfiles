@@ -14,6 +14,7 @@ set always_insert_mode     = 0
 set modkey                 = Mod1
 set shell_cmd              = zsh -c %s ''
 set reset_command_mode     = 0
+set http_debug             = 3
 
 # Pages
 set autoload_images        = 1
@@ -112,4 +113,4 @@ bind u  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_bookmarks.sh
 bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
 bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
 bind f* = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js %s
-bind F  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.pl load
+bind F  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.sh
