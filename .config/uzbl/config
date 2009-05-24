@@ -14,19 +14,21 @@ set always_insert_mode     = 0
 set modkey                 = Mod1
 set shell_cmd              = zsh -c %s ''
 set reset_command_mode     = 0
-#set http_debug            = 3
 
-# Pages
+# Webkit
 set autoload_images        = 1
 set autoshrink_images      = 0
 set minimum_font_size      = 6
 set font_size              = 12
 set monospace_size         = 12
+set default_encoding       = iso-8859-1
+set enforce_96_dpi         = 0
 set disable_plugins        = 0
 set disable_scripts        = 0
 set enable_spellchecker    = 1
 set enable_private         = 0
-#set stylesheet_uri        = 
+set resizeable_text_areas  = 1
+set print_background       = 0
 
 # Handlers
 set history_handler        = spawn $XDG_CONFIG_HOME/uzbl/handlers/history.sh
