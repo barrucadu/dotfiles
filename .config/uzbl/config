@@ -113,4 +113,3 @@ bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
 bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
 bind f* = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js %s
 bind F  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.pl load
-bind G  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.pl new
