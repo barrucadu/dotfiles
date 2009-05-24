@@ -17,7 +17,7 @@ sub domain {
 
 my $terminal = "urxvt";
 my $editor = "emacs";
-my $downloader = "curl -s";
+my $downloader = "curl -s -A 'Uzbl'";
 my @fields = ("type","name","value");
 
 my %command;

@@ -14,7 +14,7 @@ set always_insert_mode     = 0
 set modkey                 = Mod1
 set shell_cmd              = zsh -c %s ''
 set reset_command_mode     = 0
-set http_debug             = 3
+#set http_debug            = 3
 
 # Pages
 set autoload_images        = 1
@@ -56,14 +56,10 @@ bind ;_ = runcmd bind %s
 bind :_ = runcmd %s
 
 # Page Navigation
-bind w  = scroll_vert -50
-bind a  = scroll_horz -50
-bind s  = scroll_vert 50
-bind d  = scroll_horz 50
-bind W  = scroll_vert -150
-bind A  = scroll_horz -150
-bind S  = scroll_vert 150
-bind D  = scroll_horz 150
+bind w  = scroll_vert -150
+bind a  = scroll_horz -150
+bind s  = scroll_vert 150
+bind d  = scroll_horz 150
 bind .* = search %s
 bind /  = search
 bind >  = scroll_end
@@ -114,3 +110,4 @@ bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
 bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
 bind f* = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js %s
 bind F  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.pl load
+bind D  = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
