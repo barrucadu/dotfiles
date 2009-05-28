@@ -20,7 +20,6 @@ if [[ -f /var/run/daemons/hal ]]; then
     # X
     setxkbmap -option compose:menu
     xrdb -load ~/.Xdefaults
-    xmodmap -e "keycode 135 = r"
 
     # Services
     pcmanfm -d &

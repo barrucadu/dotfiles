@@ -349,7 +349,12 @@ def populateLists(redoing): # Parse the configuration file, and grab the tracks 
 		for track in tracks:
 			if not track in alltracks:
 				remaining.append(track)
-				alltracks.append(track)
+
+        alltracks = tracks
+
+        for track in remaining:
+            if not track in alltracks:
+                remaining.remove(track)
 
 	client.connect(host, port)	
 	if clearinitially == 'yes' and redoing == False:

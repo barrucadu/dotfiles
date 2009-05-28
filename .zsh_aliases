@@ -29,6 +29,7 @@ alias updatedb='sudo updatedb'
 alias sync='sudo sync'
 alias reboot='sudo reboot'
 alias shutdown='sudo shutdown -hP now'
+alias lshw='sudo lshw'
 
 # Package management
 alias build='sudo pacbuilder -Sbkve'
