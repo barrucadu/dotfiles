@@ -67,9 +67,8 @@ function maintain()
 }
 
 # Git
-function gith()
+function commit()
 {
-    cd ~
     git add .
 
     if [[ ! -z "$1" ]]; then
@@ -77,22 +76,20 @@ function gith()
     else
         git commit
     fi
+}
 
+function gith()
+{
+    cd ~
+    commit $1
     git push origin master
     cp .config/uzbl/config /srv/http/uzbl-config
 }
 
 function gituz()
 {
-    cd ~/uzbl
-    git add .
-
-    if [[ ! -z "$1" ]]; then
-        git commit -m "$1"
-    else
-        git commit
-    fi
-
+    cd ~/uzblc
+    commit $1
     git push uzbl experimental
     cp uzbl.c /srv/http/
 }
@@ -100,29 +97,22 @@ function gituz()
 function gituw()
 {
     cd /media/MHD/websites/uzbl.org
-    git add .
-
-    if [[ ! -z "$1" ]]; then
-        git commit -m "$1"
-    else
-        git commit
-    fi
-
+    commit $1
     git push uzbl-website master
 }
 
 function gitwii()
 {
     cd ~/wiipen
-    git add .
-
-    if [[ ! -z "$1" ]]; then
-        git commit -m "$1"
-    else
-        git commit
-    fi
-
+    commit $1
     git push wiipen master
+}
+
+function gitbar()
+{
+    cd /media/MHD/websites/barrucadu.co.uk/www
+    commit $1
+    git push github master
 }
 
 # FTP
