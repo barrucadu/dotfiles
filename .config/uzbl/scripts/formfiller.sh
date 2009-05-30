@@ -24,7 +24,7 @@ domain=$(echo $url | sed -re 's|(http\|https)+://(www\.\|)([A-Za-z0-9\.]+)/.*|\3
 echo $keydir/$domain
 
 if [[ -e $keydir/$domain ]]; then
-	gawk -F': ' '{ print "act js document.getElementsByName(\"" $1 "\")[0].value = \"" $2 "\";"}' $keydir/$domain >> $fifo
+	gawk -F': ' '{ print "js document.getElementsByName(\"" $1 "\")[0].value = \"" $2 "\";"}' $keydir/$domain >> $fifo
 else
 	curl "$url" | grep '<input' | sed -nre 's|.*<input.*?name="([[:graph:]]+)".*?/>.*|\1: |p' > $keydir/$domain
 	$editor $keydir/$domain
