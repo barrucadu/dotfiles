@@ -9,7 +9,7 @@ fi
 
 if [[ $download =~ .*(.torrent) ]] || [[ $download == *mininova* ]];
 then
-    pushd ~/tmp/torrents
+    pushd /srv/torrents
 else
     pushd ~/tmp/downloads
 fi
