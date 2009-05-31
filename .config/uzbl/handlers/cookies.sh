@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# THIS IS EXPERIMENTAL AND COULD BE INSECURE !!!!!!
+
 # this is an example script of how you could manage your cookies..
 # we use the cookies.txt format (See http://kb.mozillazine.org/Cookies.txt)
 # This is one textfile with entries like this:
@@ -24,6 +27,15 @@
 file=$XDG_CONFIG_HOME/uzbl/cookiedeny
 cookie_file=$XDG_DATA_HOME/uzbl/cookies
 
+# if this variable is set, we will use it to inform you when and which cookies we store, and when/which we send.
+#notifier=
+#notifier=notify-send
+notify_wrapper () {
+	echo "$@" >> $HOME/cookielog
+}
+notifier=notify_wrapper
+which zenity &>/dev/null || exit 2
+
 # Example cookie:
 # test_cookie=CheckForPermission; expires=Thu, 07-May-2009 19:17:55 GMT; path=/; domain=.doubleclick.net
 
@@ -42,6 +54,10 @@ field_path=$path
 field_name=
 field_value=
 field_exp='end_session'
+
+function notify () {
+	[ -n "$notifier" ] && $notifier "$@"
+}
 
 
 # FOR NOW LETS KEEP IT SIMPLE AND JUST ALWAYS PUT AND ALWAYS GET
@@ -70,25 +86,42 @@ function parse_cookie () {
 # match cookies in cookies.txt againsh hostname and path
 function get_cookie () {
 	path_esc=${path//\//\\/}
-	cookie=`awk "/^[^\t]*$host\t[^\t]*\t$path_esc/" $cookie_file 2>/dev/null | tail -n 1`
+	search="^[^\t]*$host\t[^\t]*\t$path_esc"
+	cookie=`awk "/$search/" $cookie_file 2>/dev/null | tail -n 1`
 	if [ -z "$cookie" ]
 	then
+		notify "Get_cookie: search: $search in $cookie_file -> no result"
 		false
 	else
+		notify "Get_cookie: search: $search in $cookie_file -> result: $cookie"
 		read domain alow_read_other_subdomains path http_required expiration name value <<< "$cookie"
 		cookie="$name=$value" 
-		#echo "COOKIE $cookie" >> $HOME/cookielog
 		true
 	fi
 }
 
-[ $action == PUT ] && parse_cookie && echo -e "$field_domain\tFALSE\t$field_path\tFALSE\t$field_exp\t$field_name\t$field_value" >> $cookie_file
+function save_cookie () {
+	if parse_cookie
+	then
+		data="$field_domain\tFALSE\t$field_path\tFALSE\t$field_exp\t$field_name\t$field_value"
+		notify "save_cookie: adding $data to $cookie_file"
+		echo -e "$data" >> $cookie_file
+	else
+		notify "not saving a cookie. since we don't have policies yet, parse_cookie must have returned false. this is a bug"
+	fi
+}
+
+[ $action == PUT ] && save_cookie
 [ $action == GET ] && get_cookie && echo "$cookie"
 
 exit
 
+
+# TODO: implement this later.
+# $1 = section (TRUSTED or DENY)
+# $2 =url
 function match () {
-	grep -q "^$host" $file
+	grep -q $file "^$host"
 }
 
 function fetch_cookie () {
@@ -99,7 +132,7 @@ function store_cookie () {
 	echo $cookie > $cookie_file/$host.cookie
 }
 
-if ! match $host
+if match $host
 then
 	[ $action == PUT ] && store_cookie $host
 	[ $action == GET ] && fetch_cookie && echo "$cookie"
