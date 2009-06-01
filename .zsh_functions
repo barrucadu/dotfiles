@@ -88,7 +88,7 @@ function gith()
 
 function gituz()
 {
-    cd ~/uzblc
+    cd ~/uzbl
     commit $1
     git push uzbl experimental
     cp uzbl.c /srv/http/
