@@ -54,3 +54,8 @@ setopt extended_history
 if [[ ! $(tty) == *pts* ]]; then
 	. ~/.zsh_login
 fi
+
+# Welcome message
+clear
+ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
+echo
