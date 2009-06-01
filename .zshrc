@@ -50,12 +50,12 @@ setopt extendedglob
 setopt correct
 setopt extended_history
 
-# Do some stuff if in a TTY.
 if [[ ! $(tty) == *pts* ]]; then
+    # Start screen or X
 	. ~/.zsh_login
+else
+    # Welcome message
+    clear
+    ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
+    echo
 fi
-
-# Welcome message
-clear
-ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
-echo
