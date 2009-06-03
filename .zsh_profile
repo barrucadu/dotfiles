@@ -6,6 +6,7 @@ export BROWSER=/usr/bin/opera
 export EDITOR=emacs
 export VISUAL=emacs
 export PAGER=/usr/bin/most
+export ACK_PAGER=$PAGER
 export HISTFILE=~/.zsh_history
 export HISTSIZE=1000
 export SAVEHIST=1000
