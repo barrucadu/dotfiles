@@ -15,12 +15,13 @@ function convertdir ()
 {
     pushd "$1"
 
-    mp32ogg *
+    eyeD3 --remove-comments --remove-lyrics --remove-images *.mp3 &>/dev/null
+    mp32ogg *.mp3 &>/dev/null
 
     if [[ $remove > 0 ]];
     then
-        [[ $remove = 1 ]] && rm *.mp3
-        [[ $remove = 2 ]] && rm -v *.mp3
+        [[ $remove = 1 ]] && rm *.mp3    &>/dev/null
+        [[ $remove = 2 ]] && rm -v *.mp3 &>/dev/null
     fi
 
     for thing in *;
@@ -28,7 +29,7 @@ function convertdir ()
         if [[ -d "$thing" ]];
         then
             echo "Descending into $thing…"
-            convertdir "$1/$thing"
+            convertdir "$thing"
         fi
     done
     
