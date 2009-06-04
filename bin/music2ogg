@@ -1,0 +1,39 @@
+#!/bin/zsh
+
+# $1 = start directory
+# $2 = nothing, -k, or -R
+#      nothing => delete mp3 files silently
+#      -k      => keep mp3 files
+#      -R      => remove mp3 files verbosely.
+
+remove=1
+
+[[ "$2" == "-k" ]] && remove=0
+[[ "$2" == "-R" ]] && remove=2
+
+function convertdir ()
+{
+    pushd "$1"
+
+    mp32ogg *
+
+    if [[ $remove > 0 ]];
+    then
+        [[ $remove = 1 ]] && rm *.mp3
+        [[ $remove = 2 ]] && rm -v *.mp3
+    fi
+
+    for thing in *;
+    do
+        if [[ -d "$thing" ]];
+        then
+            echo "Descending into $thing…"
+            convertdir "$1/$thing"
+        fi
+    done
+    
+    popd
+}
+
+convertdir "$1"
+
