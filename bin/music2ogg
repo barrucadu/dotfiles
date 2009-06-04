@@ -20,8 +20,8 @@ function convertdir ()
 
     if [[ $remove > 0 ]];
     then
-        [[ $remove = 1 ]] && rm *.mp3    &>/dev/null
-        [[ $remove = 2 ]] && rm -v *.mp3 &>/dev/null
+        [[ $remove = 1 ]] && rm *.mp3
+        [[ $remove = 2 ]] && rm -v *.mp3
     fi
 
     for thing in *;
