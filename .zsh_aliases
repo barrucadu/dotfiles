@@ -48,6 +48,7 @@ alias remove='sudo pacman-color -Rscn'
 alias synchronise='sudo pacman-color -Syyuw && sudo abs'
 alias upgrades='pacman-color -Qu'
 alias deorphan='sudo pacman-color -Rscn $(pacman -Qtdq)'
+alias pacgraph='pacgraph -b \#111111 -l \#ffffff -t \#eeeeee -d \#aaaaaa'
 
 # Security
 alias sgpg='gpg -e -a -r 294CE438'
