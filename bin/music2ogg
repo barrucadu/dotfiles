@@ -15,8 +15,8 @@ function convertdir ()
 {
     pushd "$1"
 
-    eyeD3 --remove-comments --remove-lyrics --remove-images *.mp3 &>/dev/null
-    mp32ogg *.mp3 &>/dev/null
+    eyeD3 --remove-comments --remove-lyrics --remove-images *.mp3
+    mp32ogg *.mp3
 
     if [[ $remove > 0 ]];
     then

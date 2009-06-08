@@ -13,6 +13,8 @@ alias free='free -mt'
 alias grep='grep --color=tty -d skip'
 alias top='htop'
 alias weechat='weechat-curses irc://localhost'
+alias cat='zcat -f'
+alias zcat='zcat -f'
       # File management
 alias ls='ls --color=auto'
 alias la='ls --color=auto -lA'
