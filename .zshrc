@@ -43,12 +43,11 @@ autoload -Uz compinit
 compinit
 
 # Misc Settings
-setopt hist_ignore_all_dups
-setopt hist_ignore_space
+setopt hist_ignore_all_dups hist_ignore_space extended_history
 setopt autocd
 setopt extendedglob
-setopt correct
-setopt extended_history
+setopt correct correctall
+setopt autopushd pushdminus pushdsilent pushdtohome
 
 if [[ ! $(tty) == *pts* ]]; then
     # Start screen or X

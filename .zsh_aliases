@@ -1,4 +1,9 @@
 ## -*- shell-script -*-
+# Global (in-line) aliases
+alias -g G='| grep'
+alias -g M='| most'
+alias -g C='zcat -f'
+
 # Short aliases
 alias !='sudo'
 alias @='uzbl --uri'

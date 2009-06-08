@@ -10,6 +10,7 @@ export ACK_PAGER=$PAGER
 export HISTFILE=~/.zsh_history
 export HISTSIZE=1000
 export SAVEHIST=1000
+export DIRSTACKSIZE=16
 export XDG_CACHE_HOME=~/.cache
 export XDG_CONFIG_HOME=~/.config
 export XDG_DATA_HOME=~/.data
