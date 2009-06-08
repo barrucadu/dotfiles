@@ -17,6 +17,7 @@ export QT_XFT=1
 export GDK_USE_XFT=1
 export WEBKIT_IGNORE_SSL_ERRORS="1"
 export NETHACKOPTIONS="@/home/barrucadu/.config/nethack/config"
+export SCHEME_LIBRARY_PATH=/usr/lib/slib/
 
 # Framebuffer stuff
 if [ "$TERM" = "linux" ]; then
