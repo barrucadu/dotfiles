@@ -3,6 +3,7 @@
 alias -g G='| grep'
 alias -g M='| most'
 alias -g C='zcat -f'
+alias -g X='| xargs'
 
 # Short aliases
 alias !='sudo'
