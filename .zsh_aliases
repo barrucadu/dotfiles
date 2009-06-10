@@ -2,8 +2,9 @@
 # Global (in-line) aliases
 alias -g G='| grep'
 alias -g M='| most'
-alias -g C='zcat -f'
 alias -g X='| xargs'
+alias -g H='| head'
+alias -g T='| tail'
 
 # Short aliases
 alias !='sudo'
