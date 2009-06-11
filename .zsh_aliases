@@ -5,6 +5,7 @@ alias -g M='| most'
 alias -g X='| xargs'
 alias -g H='| head'
 alias -g T='| tail'
+alias -g F='for file in *; do'
 
 # Short aliases
 alias !='sudo'
@@ -63,7 +64,7 @@ alias pacgraph='pacgraph -b \#111111 -l \#ffffff -t \#eeeeee -d \#aaaaaa'
 alias sgpg='gpg -e -a -r 294CE438'
 alias gpgasc='gpg -a --detach-sign'
 alias xlock='xscreensaver-command -lock'
-alias pw='echo `cat /dev/urandom | tr -cd "[:graph:]" | head -c8`'
+alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Maintenance
 alias fixopera=' rm -r ~/.opera/{mail,lock}'
