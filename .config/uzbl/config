@@ -3,7 +3,7 @@
 # Appearence
 set show_status            = 0
 set status_format          = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] [<span weight="bold">MSG</span>] <span foreground="#606060">LOAD_PROGRESSBAR</span> <span foreground="#99FF66">URI</span></span>
-set status_message         = <span foreground="#aaaaaa">-</span>
+set status_message         = 
 set status_background      = #101010
 set status_top             = 0
 set status_pbar_done       = :
@@ -30,7 +30,7 @@ set download_handler       = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
 set cookie_handler         = spawn $XDG_CONFIG_HOME/uzbl/handlers/cookies.sh
 set load_start_handler     = set status_message = <span foreground="red">S</span>
 set load_commit_handler    = set status_message = <span foreground="yellow">C</span>
-set load_finish_handler    = set status_message = <span foreground="green">F</span>
+set load_finish_handler    = set status_message = 
 
 # Interface
 set fifo_dir               = /home/barrucadu/tmp/uzbl

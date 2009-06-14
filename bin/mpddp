@@ -20,417 +20,356 @@ update         = '' # Whether to periodically check the config file / filesystem
 confdir = '/etc/mpddp.conf' # The path of the main MPDDP config file.
 savedir = ''                # The folder where MPDDP saves and loads files.
 
-current   = [] # The current X tracks, in the playlist.
-remaining = [] # The tracks that are currently not in the playlist.
 alltracks = [] # All the tracks that can be played.
 oldconfig = [] # The configuration as it was last loaded.
 
-def pickNewTrack(): # Pick and remove a track from the remaining list, append it to the current list, and return the name.
-	global remaining
-	global current
-	global client
-	global alltracks
+def pickNewTrack(): # Pick and remove a track from the list, append it to the current list, and return the name.
+    global client
+    global alltracks
 
-	index = random.randint(0, len(remaining) - 1)
-	track = remaining[index]
-	
-	remaining.remove(track)
-	current.append(track)
-  
-	return track
+    index = random.randint(0, len(alltracks) - 1)
+    track = alltracks[index]
 
-def removeLastTrack(): # Remove the oldest track from the current list, append it to the remaining list, and return the name.
-	global remaining
-	global current
-	
-	track = current[0]
-	
-	print "Removing", track
-	current.remove(track)
-	remaining.append(track)
-		
-	return track
+    return track
 
 def addNewTrackToPlaylist(): # Pick a new track, update the lists, and add it to the playlist.
-	global client
-	global host
-	global port
-	global playlistlen
-	
-	client.connect(host, port)
-	playlist = client.playlistinfo()
-	client.disconnect()
+    global client
+    global host
+    global port
+    global playlistlen
+    
+    client.connect(host, port)
+    playlist = client.playlistinfo()
+    client.disconnect()
 
-	if len(playlist) < playlistlen:
-		track = pickNewTrack()
+    if len(playlist) < playlistlen:
+        track = pickNewTrack()
 
-		print "Adding", track
-		
-		client.connect(host, port)
-		client.add(track)
-		client.disconnect()
+        print "Adding", track
+        
+        client.connect(host, port)
+        client.add(track)
+        client.disconnect()
 
 def removeLastTrackFromPlaylist(): # Delete the oldest track from the playlist.
-	global client
-	global host
-	global port
-	global current
-	
-	client.connect(host, port)
-	playlist = client.playlistinfo()
-	client.delete(0)
-	client.disconnect()
+    global client
+    global host
+    global port
+    
+    client.connect(host, port)
+    playlist = client.playlistinfo()
+    client.delete(0)
+    client.disconnect()
 
-	if playlist[0]['file'] == current[0]:
-		removeLastTrack()
-
-def rebuildCurrent(): # Rebuild the internal representation of MPDs playlist.
-	global client
-	global host
-	global port
-	global current
-
-	client.connect(host, port)
-	playlist = client.playlistinfo()
-	client.disconnect()
-
-	newcurrent = []
-
-	for track in playlist:
-		newcurrent.append(track['file'])
-
-	if not newcurrent == current:
-		current = newcurrent
+    print "Removing", playlist[0]['file']
 
 def checkMPDPlaylist(): # Add enough tracks to the MPD playlist to repopulate it if it is almost empty.
-	global client
-	global host
-	global port
-	global playlistlen
-	global alltracks
-	global current
-	global remaining
-	
-	client.connect(host, port)
-	playlist = client.playlistinfo()
-	client.disconnect()
+    global client
+    global host
+    global port
+    global playlistlen
+    global alltracks
+    
+    client.connect(host, port)
+    playlist = client.playlistinfo()
+    client.disconnect()
 
-	if len(playlist) < playlistlen:
-		while len(playlist) < playlistlen:
-			addNewTrackToPlaylist()
-
-	rebuildCurrent()
-
-	for track in alltracks:
-		if not track in current and not track in remaining:
-			remaining.append(track)
-	
+    if len(playlist) < playlistlen:
+        while len(playlist) < playlistlen:
+            addNewTrackToPlaylist()
+    
 def updatePlaylist(): # Update the MPD playlist, and the internal representation of it if necessary.
-	checkMPDPlaylist()
-	removeLastTrackFromPlaylist()
-	addNewTrackToPlaylist()
+    checkMPDPlaylist()
+    removeLastTrackFromPlaylist()
+    addNewTrackToPlaylist()
 
 def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which match the specified rules.
-	global remaining
-	global client
-	global host
-	global port
+    global client
+    global host
+    global port
 
-	paths     = []
-	playlists = []
-	boths     = []
-	nevers    = []
-	tracks    = []
-	
-	for rule in rules:
-		if rule[0] == 'path' and not rule[1] in paths:
-			paths.append(rule[1])
-		elif rule[0] == 'playlist' and not rule[1] in playlists:
-			playlists.append(rule[1])
-		elif rule[0] == 'both' and not rule[1] in boths:
-			boths.append(rule[1])
-		elif rule[0] == 'never' and not rule[1] in nevers:
-			nevers.append(rule[1])
-	
-	client.connect(host, port)
-	
-	for path in paths:
-		temptracks = client.search("file", path)
-		for track in temptracks:
-			if isinstance(track, dict):
-				track = track['file']
-			dontadd = False
-			for never in nevers:
-				if never in track:
-					dontadd = True
-			if dontadd == False and not track in tracks:
-				tracks.append(track)
+    paths     = []
+    playlists = []
+    boths     = []
+    nevers    = []
+    tracks    = []
+    
+    for rule in rules:
+        if rule[0] == 'path' and not rule[1] in paths:
+            paths.append(rule[1])
+        elif rule[0] == 'playlist' and not rule[1] in playlists:
+            playlists.append(rule[1])
+        elif rule[0] == 'both' and not rule[1] in boths:
+            boths.append(rule[1])
+        elif rule[0] == 'never' and not rule[1] in nevers:
+            nevers.append(rule[1])
+    
+    client.connect(host, port)
+    
+    for path in paths:
+        temptracks = client.search("file", path)
+        for track in temptracks:
+            if isinstance(track, dict):
+                track = track['file']
+            dontadd = False
+            for never in nevers:
+                if never in track:
+                    dontadd = True
+            if dontadd == False and not track in tracks:
+                tracks.append(track)
 
-	for playlist in playlists:
-		temptracks = client.listplaylist(playlist)
-		for track in temptracks:
-			if isinstance(track, dict):
-				track = track['file']
-			dontadd = False
-			for never in nevers:
-				if never in track:
-					dontadd = True
-			if dontadd == False and not track in tracks:
-				tracks.append(track)
+    for playlist in playlists:
+        temptracks = client.listplaylist(playlist)
+        for track in temptracks:
+            if isinstance(track, dict):
+                track = track['file']
+            dontadd = False
+            for never in nevers:
+                if never in track:
+                    dontadd = True
+            if dontadd == False and not track in tracks:
+                tracks.append(track)
 
-	for both in boths:
-		temptracks = client.listplaylist(both)
-		for track in temptracks:
-			if isinstance(track, dict):
-				track = track['file']
-			dontadd = False
-			for never in nevers:
-				if never in track:
-					dontadd = True
-			if dontadd == False and not track in tracks and both in track:
-				tracks.append(track)
+    for both in boths:
+        temptracks = client.listplaylist(both)
+        for track in temptracks:
+            if isinstance(track, dict):
+                track = track['file']
+            dontadd = False
+            for never in nevers:
+                if never in track:
+                    dontadd = True
+            if dontadd == False and not track in tracks and both in track:
+                tracks.append(track)
 
-	client.disconnect()
-	return tracks
+    client.disconnect()
+    return tracks
 
 def parseConfigIncludes(conf, path): # Parse a config file
-	outconf = ""
-	paths = path
-	
-	for line in conf:
-		line = line.split("#")
-		line = line[0]
-		line = line.strip()
-		
-		if len(line) > 0:
-			if line[0:7] == 'include':
-				toinclude = line[8:].strip()
-				toinclude = string.replace(toinclude, "~", os.path.expanduser("~"))
-				if not toinclude in paths:
-					paths.append(toinclude)
-					filehandler = open(toinclude)
-					newconf = parseConfigIncludes(filehandler, paths)
-					outconf = outconf + newconf
-					filehandler.close()
-			else:
-				outconf = outconf + line + "\r\n"
-				
-	return outconf
+    outconf = ""
+    paths = path
+    
+    for line in conf:
+        line = line.split("#")
+        line = line[0]
+        line = line.strip()
+        
+        if len(line) > 0:
+            if line[0:7] == 'include':
+                toinclude = line[8:].strip()
+                toinclude = toinclude.replace("~", os.path.expanduser("~"))
+                if not toinclude in paths:
+                    paths.append(toinclude)
+                    filehandler = open(toinclude)
+                    newconf = parseConfigIncludes(filehandler, paths)
+                    outconf = outconf + newconf
+                    filehandler.close()
+            else:
+                outconf = outconf + line + "\r\n"
+                
+    return outconf
 
 def parseConfigLine(line): # Parse a line from the configuration file and return what it means.
-	line = line.split("#")
-	line = line[0]
-	line = line.strip()
+    line = line.split("#")
+    line = line[0]
+    line = line.strip()
 
-	if len(line) > 0:
-		if ("=" in line) and (not ":" in line):
-			pline = line.split("=")
-			parsed = {'type'  : pline[0].strip(),
-					  'value' : pline[1].strip()}
-			return parsed
-		elif ":" in line:
-			pline = line.split(":")
-			parsed = {'type'  : 'rule',
-					  'value' : [pline[0].strip(), pline[1].strip()]}
-			return parsed
-		else:
-			return {'type' : 'unrecognised'}
-	else:
-		return {'type' : 'blankline'}
+    if len(line) > 0:
+        if ("=" in line) and (not ":" in line):
+            pline = line.split("=")
+            parsed = {'type'  : pline[0].strip(),
+                      'value' : pline[1].strip()}
+            return parsed
+        elif ":" in line:
+            pline = line.split(":")
+            parsed = {'type'  : 'rule',
+                      'value' : [pline[0].strip(), pline[1].strip()]}
+            return parsed
+        else:
+            return {'type' : 'unrecognised'}
+    else:
+        return {'type' : 'blankline'}
 
 def parseConfigFile(): # Open the configuration file and parse the rules.
-	global confdir
-	
-	filehandler = open(confdir)
-	conf = parseConfigIncludes(filehandler, [confdir])
-	output = {'rules'          : [],
-			  'server'         : 'localhost',
-			  'port'           : 6600,
-			  'playlistlen'    : 15,
-			  'changeafter'    : 8,
-			  'clearinitially' : 'yes',
-			  'saveonquit'     : 'no',
-			  'savedir'        : '/var/lib/mpddp/',
-			  'update'         : 'no'}
-	
-	for line in conf.splitlines():
-		result = parseConfigLine(line)
-		if result['type'] == 'rule':
-			output['rules'].append(result['value'])
-		elif result['type'] == 'clearinitially' or result['type'] == 'saveonquit':
-			if result['value'] == 'yes' or result['value'] == 'no':
-				output[result['type']] = result['value']
-			else:
-				print "Invalid value specified for", result['type']
-		elif result['type'] == 'port' or result['type'] == 'playlistlen' or result['type'] == 'changeafter':
-			try:
-				if (result['type'] == 'port' and int(result['value']) > 0 and int(result['value']) <= 65536) or not result['type'] == 'port':
-					output[result['type']] = int(result['value'])
-				else:
-					print "Invalid value specified for", result['type']
-			except TypeError:
-				print "Invalid value specified for", result['type']
-		elif result['type'] == 'server' or result['type'] == 'savedir' or result['type'] == 'update':
-			output[result['type']] = result['value']
+    global confdir
+    
+    filehandler = open(confdir)
+    conf = parseConfigIncludes(filehandler, [confdir])
+    output = {'rules'          : [],
+              'server'         : 'localhost',
+              'port'           : 6600,
+              'playlistlen'    : 15,
+              'changeafter'    : 8,
+              'clearinitially' : 'yes',
+              'saveonquit'     : 'no',
+              'savedir'        : '/var/lib/mpddp/',
+              'update'         : 'no'}
+    
+    for line in conf.splitlines():
+        result = parseConfigLine(line)
+        if result['type'] == 'rule':
+            output['rules'].append(result['value'])
+        elif result['type'] == 'clearinitially' or result['type'] == 'saveonquit':
+            if result['value'] == 'yes' or result['value'] == 'no':
+                output[result['type']] = result['value']
+            else:
+                print "Invalid value specified for", result['type']
+        elif result['type'] == 'port' or result['type'] == 'playlistlen' or result['type'] == 'changeafter':
+            try:
+                if (result['type'] == 'port' and int(result['value']) > 0 and int(result['value']) <= 65536) or not result['type'] == 'port':
+                    output[result['type']] = int(result['value'])
+                else:
+                    print "Invalid value specified for", result['type']
+            except TypeError:
+                print "Invalid value specified for", result['type']
+        elif result['type'] == 'server' or result['type'] == 'savedir' or result['type'] == 'update':
+            output[result['type']] = result['value']
 
-	filehandler.close()
+    filehandler.close()
 
-	return output
+    return output
 
 def loadPlaylistFromSaved(): # Load the previously saved playlist, if it exists. Then fill any space remaining with newly-added tracks.
-	global playlistlen
-	global client
-	global host
-	global port
-	global current
-	global savedir
-	
-	try:
-		filehandler = open(savedir + 'playlist')
-		for line in filehandler:
-			current.append(line)
-		filehandler.close()
+    global playlistlen
+    global client
+    global host
+    global port
+    global savedir
 
-		client.connect(host, port)
-		for track in current:
-			track = track.strip()
-			if len(track) > 0:
-				try:
-					client.add(track)
-					print "Loading", track
-				except mpd.CommandError:
-					print "Error loading", track
-		client.disconnect()
+    loaded = []
+    
+    try:
+        filehandler = open(savedir + 'playlist')
+        for line in filehandler:
+            loaded.append(line)
+        filehandler.close()
 
-		for i in range(len(current), playlistlen):
-			addNewTrackToPlaylist()
-	except IOError:
-		for i in range(0, playlistlen):
-			addNewTrackToPlaylist()
+        client.connect(host, port)
+        for track in loaded:
+            track = track.strip()
+            if len(track) > 0:
+                try:
+                    client.add(track)
+                    print "Loading", track
+                except mpd.CommandError:
+                    print "Error loading", track
+        client.disconnect()
+
+        for i in range(len(loaded), playlistlen):
+            addNewTrackToPlaylist()
+    except IOError:
+        for i in range(0, playlistlen):
+            addNewTrackToPlaylist()
 
 def populateLists(redoing): # Parse the configuration file, and grab the tracks from MPD to populate the lists.
-	global remaining
-	global current
-	global playlistlen
-	global changeafter
-	global clearinitially
-	global client
-	global host
-	global port
-	global alltracks
-	global saveonquit
-	global savedir
-	global update
-	global oldconfig
-	
-	config = parseConfigFile()
-	rules  = config['rules']
-	if redoing == False or (redoing == True and not oldconfig == config):
-		host           = config['server']
-		port           = config['port']
-		playlistlen    = config['playlistlen']
-		changeafter    = config['changeafter']
-		clearinitially = config['clearinitially']
-		saveonquit     = config['saveonquit']
-		savedir        = config['savedir']
-		update         = config['update']
-		oldconfig      = config
-		
-		print 'Configuration updated'
-		print config
-	
-	tracks = getFilenamesFromMPD(rules)
-	
-	if redoing == True:
-		alltracks = []
-		remaining = []
-		
-	if redoing == False or not alltracks == tracks:
-		for track in tracks:
-			if not track in alltracks:
-				remaining.append(track)
-
+    global playlistlen
+    global changeafter
+    global clearinitially
+    global client
+    global host
+    global port
+    global alltracks
+    global saveonquit
+    global savedir
+    global update
+    global oldconfig
+    
+    config = parseConfigFile()
+    rules  = config['rules']
+    if redoing == False or (redoing == True and not oldconfig == config):
+        host           = config['server']
+        port           = config['port']
+        playlistlen    = config['playlistlen']
+        changeafter    = config['changeafter']
+        clearinitially = config['clearinitially']
+        saveonquit     = config['saveonquit']
+        savedir        = config['savedir']
+        update         = config['update']
+        oldconfig      = config
+        
+        print "Configuration updated:", config
+    
+    tracks = getFilenamesFromMPD(rules)
+    
+    if redoing == True:
+        alltracks = []
+        
+    if redoing == False or not alltracks == tracks:
         alltracks = tracks
 
-        for track in remaining:
-            if not track in alltracks:
-                remaining.remove(track)
+    client.connect(host, port)    
+    if clearinitially == 'yes' and redoing == False:
+        client.clear()
+    client.random(0)
+    client.disconnect()
 
-	client.connect(host, port)	
-	if clearinitially == 'yes' and redoing == False:
-		client.clear()
-	client.random(0)
-	client.disconnect()
+    if redoing == False:
+        if saveonquit == 'no':
+            for i in range(0, playlistlen):
+                addNewTrackToPlaylist()
+        else:
+            loadPlaylistFromSaved()
 
-	if redoing == False:
-		if saveonquit == 'no':
-			for i in range(0, playlistlen):
-				addNewTrackToPlaylist()
-		else:
-			loadPlaylistFromSaved()
-
-		client.connect(host, port)	
-		client.play()
-		client.disconnect()
+        client.connect(host, port)    
+        client.play()
+        client.disconnect()
 
 def dieGracefully():
-	global saveonquit
-	global current
-	
-	if saveonquit == 'yes':
-		rebuildCurrent()
-		
-		try:
-			os.remove('/var/lib/mpddp/playlist')
-			print "Removed old playlist..."
-		except OSError:
-			print "No old playlist to remove."
+    global saveonquit
+    
+    if saveonquit == 'yes':
+        try:
+            os.remove('/var/lib/mpddp/playlist')
+            print "Removed old playlist..."
+        except OSError:
+            print "No old playlist to remove."
 
-		try:
-			os.remove('/tmp/killmpddp')
-			print "Removed kill file..."
-		except OSError:
-			print "No kill file to remove."
+        try:
+            os.remove('/tmp/killmpddp')
+            print "Removed kill file..."
+        except OSError:
+            print "No kill file to remove."
 
-		print "Saving playlist to", savedir + " playlist"
-		filehandler = open(savedir + 'playlist', 'w')
-		for track in current:
-			print "Writing", track
-			filehandler.write(track + '\n')
-		filehandler.close()
+        print "Saving playlist to", savedir, "playlist"
+        filehandler = open(savedir + 'playlist', 'w')
+        playlist = client.playlistinfo()
+        for track in playlist:
+            print "Writing", track['file']
+            filehandler.write(track['file'] + '\n')
+        filehandler.close()
 
-	print "Quitting..."
-	sys.exit()
+    print "Quitting..."
+    sys.exit()
 
 # Execute the program main loop
 populateLists(False)
 loops = 0
 try:
-	while True:
-		if os.path.exists('/tmp/killmpddp'):
-			dieGracefully()
-		
-		client.connect(host, port)
-		info = client.currentsong()
-		status = client.status()
-		playlist = client.playlistinfo()
-		client.disconnect()
-		
-		if len(info) > 0:
-			if int(status['song']) >= changeafter:
-				for i in range(changeafter - 1, int(status['song'])):
-					updatePlaylist()
-		if len(playlist) < playlistlen:
-			for i in range(len(playlist), playlistlen):
-				addNewTrackToPlaylist()
-		
-		if loops == 59:
-			if update == 'yes':
-				populateLists(True)
-			loops = 0
-		else:
-			loops = loops + 1
-		
-		time.sleep(1)
+    while True:
+        if os.path.exists('/tmp/killmpddp'):
+            dieGracefully()
+        
+        client.connect(host, port)
+        info = client.currentsong()
+        status = client.status()
+        playlist = client.playlistinfo()
+        client.disconnect()
+        
+        if len(info) > 0:
+            if int(status['song']) >= changeafter:
+                for i in range(changeafter - 1, int(status['song'])):
+                    updatePlaylist()
+        if len(playlist) < playlistlen:
+            for i in range(len(playlist), playlistlen):
+                addNewTrackToPlaylist()
+        
+        if loops == 59:
+            if update == 'yes':
+                populateLists(True)
+            loops = 0
+        else:
+            loops = loops + 1
+        
+        time.sleep(1)
 except KeyboardInterrupt:
-	dieGracefully()
+    dieGracefully()
