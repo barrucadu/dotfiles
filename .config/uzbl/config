@@ -108,3 +108,4 @@ bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
 bind f* = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js %s
 bind F  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.pl load
 bind D  = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
+bind :  = js %s
