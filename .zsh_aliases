@@ -5,6 +5,7 @@ alias -g M='| most'
 alias -g X='| xargs'
 alias -g H='| head'
 alias -g T='| tail'
+alias -g S='| sed'
 alias -g F='for file in *; do'
 
 # Short aliases
@@ -103,3 +104,4 @@ alias todo='emacs ~/docs/todo'
 alias zen='fortune /usr/share/fortune/zen'
 alias rfcdate='date --rfc-3339="seconds"'
 alias rtorrent='sudo su rtorrent -c "screen -x;exit"'
+alias screenx='screen -r `screen -ls | grep Detached | sed "s/(.*//"`'

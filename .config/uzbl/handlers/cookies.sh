@@ -2,7 +2,7 @@
 
 # THIS IS EXPERIMENTAL AND COULD BE INSECURE !!!!!!
 
-# this is an example script of how you could manage your cookies..
+# this is an example bash script of how you could manage your cookies. it is very raw and basic and not as good as cookies.py
 # we use the cookies.txt format (See http://kb.mozillazine.org/Cookies.txt)
 # This is one textfile with entries like this:
 # kb.mozillazine.org	FALSE	/	FALSE	1146030396	wikiUserID	16993
@@ -24,8 +24,9 @@
 # http://kb.mozillazine.org/Cookies.txt
 # don't always append cookies, sometimes we need to overwrite
 
-cookie_config=$XDG_CONFIG_HOME/uzbl/cookiedeny
-cookie_data=$XDG_DATA_HOME/uzbl/cookies
+cookie_config=${XDG_CONFIG_HOME:-$HOME/.config}/uzbl/cookiedeny
+[ -z "$cookie_config" ] && exit 1
+[ -d ${XDG_DATA_HOME:-$HOME/.local/share}/uzbl/ ] && cookie_data=${XDG_DATA_HOME:-$home/.local/share}/uzbl/cookies.txt || exit 1
 
 
 notifier=
@@ -125,7 +126,7 @@ exit
 # $1 = section (TRUSTED or DENY)
 # $2 =url
 function match () {
-	grep -q "^$host" $cookie_config
+	sed -n "/$1/,/^\$/p" $cookie_config 2>/dev/null | grep -q "^$host"
 }
 
 function fetch_cookie () {
@@ -136,7 +137,7 @@ function store_cookie () {
 	echo $cookie > $cookie_data
 }
 
-if ! match $host
+if ! match DENY $host
 then
 	[ $action == PUT ] && store_cookie $host
 	[ $action == GET ] && fetch_cookie && echo "$cookie"
