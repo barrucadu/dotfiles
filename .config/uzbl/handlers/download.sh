@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 download=$6
 
@@ -7,12 +7,6 @@ then
     download=$8
 fi
 
-if [[ $download =~ .*(.torrent) ]] || [[ $download == *mininova* ]];
-then
-    pushd /srv/torrents
-else
-    pushd ~/tmp/downloads
-fi
-
+pushd ~/tmp/downloads
 wget --user-agent=Uzbl $download
 popd
