@@ -70,9 +70,9 @@ function runtest ()
     fi
 }
 
-runtest "test"             make test
-runtest "test-config"      make test-config
-runtest "test-config-real" make test-config-real
-runtest "valgrind"         valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./uzbl
+runtest "test"       make test
+runtest "test-dev"   make test-dev
+runtest "test-share" make test-share
+runtest "valgrind"   valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./uzbl
 
 stoptests
