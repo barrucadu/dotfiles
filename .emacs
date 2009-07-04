@@ -40,6 +40,7 @@
                                 ("/*..py$"         . python-mode)
                                 ("/*..tex$"        . latex-mode)
                                 ("/*..sh$"         . shell-script-mode)
+                                ("/*..red$"        . asm-mode)
                                 ("/*..todo$"       . org-mode))
                               auto-mode-alist))
 

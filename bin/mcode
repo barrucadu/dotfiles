@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+output=""
+
+if [[ $1 == "e" ]]; then
+    morse -s $2 |
+    while read line;
+    do
+        output="$output$line / "
+    done
+fi
+
+if [[ $1 == "d" ]]; then
+    echo $2 | sed "s/ \//\n/g" | morse -d
+fi
+
+echo $output
