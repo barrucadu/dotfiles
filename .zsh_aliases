@@ -33,6 +33,7 @@ alias cp='cp -rpv'
 alias mv='mv -v'
 alias locate='locate -e -L'
 alias mkdir='mkdir -p'
+alias tree='tree -L 2 -d -l'
       # Root
 alias wifi='sudo wifi-select wlan0'
 alias abs='sudo abs'
