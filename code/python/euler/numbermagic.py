@@ -154,3 +154,5 @@ def ispandigital(num):
 		for i in range(1, len(nums)):
 			if not nums.count(str(i)) == 1: return False
 		return True
+
+
