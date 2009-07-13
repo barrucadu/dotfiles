@@ -31,9 +31,10 @@ Xft.hintstyle: hintslight
 Xft.rgba:      rgb
 
 !! Terminal
-URxvt.urlLauncher:       /home/barrucadu/bin/uzbl --uri
+URxvt.urlLauncher:       uzbl
 URxvt.matcher.button:    1
-URxvt.matcher.pattern.1: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt.perl-ext-common:   default,matcher
+URxvt.colorUL:           #86a2be
 URxvt*font:              FONT
 URxvt*boldFont:          FONT_BOLD
 URxvt*buffered:          true
