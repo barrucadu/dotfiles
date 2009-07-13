@@ -1,0 +1,101 @@
+#!/bin/zsh
+
+flag=$1
+arg1=$2
+arg2=$3
+todofile="/home/barrucadu/docs/main.todo"
+
+function append()
+{
+    tags=`echo $arg2 | sed "s/ /: :/"`
+    echo "* TODO $arg1 :$tags:" >> $todofile
+}
+
+function delete()
+{
+    sed -i "$arg1 d" $todofile
+}
+
+function finish()
+{
+    sed -i "$arg1 s/^\* TODO/\* ODOT/" $todofile
+    sed -i "$arg1 s/^\* DONE/\* ENODE/" $todofile
+    sed -i "$arg1 s/^\* ENODE/\* TODO/" $todofile
+    sed -i "$arg1 s/^\* ODOT/\* DONE/" $todofile
+}
+
+function clean()
+{
+    sed -i "/^\* DONE .*$/d" $todofile
+}
+
+function listall()
+{
+    grep -n -e "^\* \(TODO\|DONE\)" $todofile
+}
+
+function listtodo()
+{
+    grep -n "^\* TODO" $todofile
+}
+
+function listfinished()
+{
+    grep -n "^\* DONE" $todofile
+}
+
+function help()
+{
+    echo "Usage: todo [flag] [arg1] [arg2]"
+    echo
+    echo "---"
+    echo
+    echo "A simple todo-file manager, which manipulates todo files in a subset of the Emacs Org-mode format."
+    echo
+    echo "---"
+    echo
+    echo "Flags:"
+    echo "    a  - Append new entry."
+    echo "         arg1 = Description"
+    echo "         arg2 = Tags"
+    echo
+    echo "    d  - Delete existing entry."
+    echo "         arg1 = Number"
+    echo
+    echo "    f  - Mark entry as finished."
+    echo "         arg1 = Number"
+    echo
+    echo "    c  - Clean finished entries from list."
+    echo "    la - List all entries."
+    echo "    lt - List entries marked as to do."
+    echo "    lf - List entries marked as finished."
+    echo "    h  - Display this text."
+    echo
+}
+
+case "$flag" in
+    a)
+        append
+        ;;
+    d)
+        delete
+        ;;
+    f)
+        finish
+        ;;
+    c)
+        clean
+        ;;
+    la)
+        listall
+        ;;
+    lt)
+        listtodo
+        ;;
+    lf)
+        listfinished
+        ;;
+    h)
+        help
+        ;;
+esac
