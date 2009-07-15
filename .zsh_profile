@@ -1,7 +1,7 @@
 ## -*- shell-script -*-
 
 # Environmental Variables
-export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin"
+export PATH=$PATH:/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin
 export BROWSER=/usr/bin/opera
 export EDITOR=emacs
 export VISUAL=emacs
@@ -16,11 +16,14 @@ export XDG_CONFIG_HOME=~/.config
 export XDG_DATA_HOME=~/.data
 export QT_XFT=1
 export GDK_USE_XFT=1
-export WEBKIT_IGNORE_SSL_ERRORS="1"
-export NETHACKOPTIONS="@/home/barrucadu/.config/nethack/config"
+export WEBKIT_IGNORE_SSL_ERRORS=1
+export NETHACKOPTIONS=@/home/barrucadu/.config/nethack/config
 export SCHEME_LIBRARY_PATH=/usr/lib/slib/
+export LANG=en_GB.UTF-8
+export LC_ALL=en_GB.UTF-8
+export LC_CTYPE=C
 
-# Framebuffer stuff
+# Framebuffer colours
 if [ "$TERM" = "linux" ]; then
     echo -en "\e]P0121212"
     echo -en "\e]P8262626"

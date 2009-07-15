@@ -20,6 +20,7 @@ if [[ -f /var/run/daemons/hal ]]; then
     # X
     setxkbmap -option compose:menu
     setxkbmap -option terminate:ctrl_alt_bksp
+    xsetroot -cursor_name left_ptr
     xmodmap -e "clear Mod4"
     xrdb -load ~/.Xdefaults
 
