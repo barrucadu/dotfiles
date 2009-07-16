@@ -14,6 +14,11 @@ function delete()
     sed -i "$arg d" $todofile
 }
 
+function deleteregex()
+{
+    sed -i "/$arg/ d" $todofile
+}
+
 function toggle()
 {
     sed -i "$arg s/^\* TODO/\* ODOT/" $todofile
@@ -59,6 +64,9 @@ function help()
     echo "    d  - Delete existing entry."
     echo "         arg = Line number"
     echo
+    echo "    dr - Delete existing entries by regex."
+    echo "         arg = Sed-compatible regular expression."
+    echo
     echo "    t  - Toggle an entry's todo/done state.."
     echo "         arg = Line number"
     echo
@@ -76,6 +84,9 @@ case "$flag" in
         ;;
     "d")
         delete
+        ;;
+    "dr")
+        deleteregex
         ;;
     "t")
         toggle
