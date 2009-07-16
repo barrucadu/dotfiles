@@ -33,9 +33,9 @@ if [[ -f /var/run/daemons/hal ]]; then
         background syndaemon
         synclient MinSpeed=0.10
         synclient MaxSpeed=0.80
-        synclient AccelFactor=5
-        synclient VertEdgeScroll=true
-        synclient HorizEdgeScroll=true
+        synclient AccelFactor=1
+        synclient VertEdgeScroll=1
+        synclient HorizEdgeScroll=1
 
         # Other
         xsetroot -cursor_name left_ptr
