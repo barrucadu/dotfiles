@@ -14,7 +14,7 @@ function delete()
     sed -i "$arg d" $todofile
 }
 
-function finish()
+function toggle()
 {
     sed -i "$arg s/^\* TODO/\* ODOT/" $todofile
     sed -i "$arg s/^\* DONE/\* ENODE/" $todofile
@@ -59,7 +59,7 @@ function help()
     echo "    d  - Delete existing entry."
     echo "         arg = Line number"
     echo
-    echo "    f  - Mark entry as finished."
+    echo "    t  - Toggle an entry's todo/done state.."
     echo "         arg = Line number"
     echo
     echo "    c  - Clean finished entries from list."
@@ -77,8 +77,8 @@ case "$flag" in
     "d")
         delete
         ;;
-    "f")
-        finish
+    "t")
+        toggle
         ;;
     "c")
         clean
