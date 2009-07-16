@@ -57,7 +57,7 @@ function help()
     echo "         arg = Description"
     echo
     echo "    d  - Delete existing entry."
-    echo "         arg = Number"
+    echo "         arg = Line number"
     echo
     echo "    f  - Mark entry as finished."
     echo "         arg = Number"
