@@ -1,27 +1,25 @@
 #!/bin/zsh
 
 flag=$1
-arg1=$2
-arg2=$3
+arg=$2
 todofile="/home/barrucadu/docs/main.todo"
 
 function append()
 {
-    tags=`echo $arg2 | sed "s/ /: :/"`
-    echo "* TODO $arg1 :$tags:" >> $todofile
+    echo "* TODO $arg" >> $todofile
 }
 
 function delete()
 {
-    sed -i "$arg1 d" $todofile
+    sed -i "$arg d" $todofile
 }
 
 function finish()
 {
-    sed -i "$arg1 s/^\* TODO/\* ODOT/" $todofile
-    sed -i "$arg1 s/^\* DONE/\* ENODE/" $todofile
-    sed -i "$arg1 s/^\* ENODE/\* TODO/" $todofile
-    sed -i "$arg1 s/^\* ODOT/\* DONE/" $todofile
+    sed -i "$arg s/^\* TODO/\* ODOT/" $todofile
+    sed -i "$arg s/^\* DONE/\* ENODE/" $todofile
+    sed -i "$arg s/^\* ENODE/\* TODO/" $todofile
+    sed -i "$arg s/^\* ODOT/\* DONE/" $todofile
 }
 
 function clean()
@@ -46,7 +44,7 @@ function listfinished()
 
 function help()
 {
-    echo "Usage: todo [flag] [arg1] [arg2]"
+    echo "Usage: todo [flag] [arg]"
     echo
     echo "---"
     echo
@@ -56,17 +54,16 @@ function help()
     echo
     echo "Flags:"
     echo "    a  - Append new entry."
-    echo "         arg1 = Description"
-    echo "         arg2 = Tags"
+    echo "         arg = Description"
     echo
     echo "    d  - Delete existing entry."
-    echo "         arg1 = Number"
+    echo "         arg = Number"
     echo
     echo "    f  - Mark entry as finished."
-    echo "         arg1 = Number"
+    echo "         arg = Number"
     echo
     echo "    c  - Clean finished entries from list."
-    echo "    la - List all entries."
+    echo "    l  - List entries."
     echo "    lt - List entries marked as to do."
     echo "    lf - List entries marked as finished."
     echo "    h  - Display this text."
@@ -74,28 +71,37 @@ function help()
 }
 
 case "$flag" in
-    a)
+    "a")
         append
         ;;
-    d)
+    "d")
         delete
         ;;
-    f)
+    "f")
         finish
         ;;
-    c)
+    "c")
         clean
         ;;
-    la)
+    "l")
         listall
         ;;
-    lt)
+    "lt")
         listtodo
         ;;
-    lf)
+    "lf")
         listfinished
         ;;
-    h)
+    "h")
         help
         ;;
+    "")
+        help
+        ;;
+    *)
+        echo "Error: unknown flag '$flag'."
+        return 1
+        ;;
 esac
+
+return 0

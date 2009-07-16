@@ -57,4 +57,6 @@ else
     clear
     ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
     echo
+    todo lt | sed "s/^.* TODO /To Do: /" | sort -R | head -n1
+    echo
 fi
