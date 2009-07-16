@@ -43,9 +43,10 @@ esac
 niceOS="Arch Linux `uname -m`"
 niceFont=`grep "gtk-font-name" ~/.gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
 niceIcons=`grep icon-theme-name ~/.gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
+niceGtk="Shiki Wise" # Yes, I do change my GTK theme so little I decided it'd be easier to just hardcode it…
 
 echo "<li><strong>OS:</strong> $niceOS</li>" > `date +%F`.txt
-echo "<li><strong>GTK:</strong> </li>" >> `date +%F`.txt
+echo "<li><strong>GTK:</strong> $niceGtk</li>" >> `date +%F`.txt
 echo "<li><strong>Icons:</strong> $niceIcons</li>" >> `date +%F`.txt
 echo "<li><strong>Window Manager:</strong> $niceWM</li>" >> `date +%F`.txt
 echo "<li><strong>GTK Font:</strong> $niceFont</li>" >> `date +%F`.txt
