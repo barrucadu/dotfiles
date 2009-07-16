@@ -60,7 +60,7 @@ function help()
     echo "         arg = Line number"
     echo
     echo "    f  - Mark entry as finished."
-    echo "         arg = Number"
+    echo "         arg = Line number"
     echo
     echo "    c  - Clean finished entries from list."
     echo "    l  - List entries."
