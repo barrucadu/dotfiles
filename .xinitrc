@@ -42,7 +42,6 @@ if [[ -f /var/run/daemons/hal ]]; then
     # /X
 
     # Services
-    pcmanfm -d &
     urxvtd -q -f -o
     notinschool xscreensaver -no-splash
     notinschool mpddp
