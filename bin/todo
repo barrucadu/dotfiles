@@ -4,35 +4,37 @@ flag=$1
 arg=$2
 todofile="/home/barrucadu/docs/main.todo"
 
-function append()
+function add()
 {
-    echo "* TODO $arg" >> $todofile
+    echo "* TODO [#B] $arg" >> $todofile
 }
 
 function delete()
 {
-    sed -i "$arg d" $todofile
-}
-
-function deleteregex()
-{
-    sed -i "/$arg/ d" $todofile
+    sed -i "${arg}d" $todofile
 }
 
 function toggle()
 {
-    sed -i "$arg s/^\* TODO/\* ODOT/" $todofile
-    sed -i "$arg s/^\* DONE/\* ENODE/" $todofile
+    sed -i "$arg s/^\* TODO/\* ODOT/"  $todofile
+    sed -i "$arg s/^\* TODO/\* DONE/"  $todofile
     sed -i "$arg s/^\* ENODE/\* TODO/" $todofile
-    sed -i "$arg s/^\* ODOT/\* DONE/" $todofile
 }
 
-function clean()
+function priority()
+{
+    sed -i "$arg s/^\* TODO \[\#A\]/\* TODO [#D]/" $todofile
+    sed -i "$arg s/^\* TODO \[\#B\]/\* TODO [#A]/" $todofile
+    sed -i "$arg s/^\* TODO \[\#C\]/\* TODO [#B]/" $todofile
+    sed -i "$arg s/^\* TODO \[\#D\]/\* TODO [#C]/" $todofile
+}
+
+function clear()
 {
     sed -i "/^\* DONE .*$/d" $todofile
 }
 
-function listall()
+function list()
 {
     grep -n -e "^\* \(TODO\|DONE\)" $todofile
 }
@@ -42,7 +44,7 @@ function listtodo()
     grep -n "^\* TODO" $todofile
 }
 
-function listfinished()
+function listdone()
 {
     grep -n "^\* DONE" $todofile
 }
@@ -58,52 +60,71 @@ function help()
     echo "---"
     echo
     echo "Flags:"
-    echo "    a  - Append new entry."
-    echo "         arg = Description"
-    echo
-    echo "    d  - Delete existing entry."
-    echo "         arg = Line number"
-    echo
-    echo "    dr - Delete existing entries by regex."
-    echo "         arg = Sed-compatible regular expression."
-    echo
-    echo "    t  - Toggle an entry's todo/done state.."
-    echo "         arg = Line number"
-    echo
-    echo "    c  - Clean finished entries from list."
-    echo "    l  - List entries."
-    echo "    lt - List entries marked as to do."
-    echo "    lf - List entries marked as finished."
-    echo "    h  - Display this text."
+    echo "    a,   add      - Add new entry.                       arg = description."
+    echo "    d,   delete   - Delete existing entries by regex.    arg = sed-compatible regular expression (including slashes)."
+    echo "    t,   toggle   - Toggle entries' todo/done state.     arg = line number."
+    echo "    p,   priority - Increment priority of entry.         arg = line number."
+    echo "    c,   clear    - Clear finished entries from list."
+    echo "    ls,  list     - List entries."
+    echo "    lt, listtodo  - List entries marked as to do."
+    echo "    ld, listdone  - List entries marked as done."
+    echo "    h,   help     - Display this text."
     echo
 }
 
 case "$flag" in
     "a")
-        append
+        add
+        ;;
+    "add")
+        add
         ;;
     "d")
         delete
         ;;
-    "dr")
-        deleteregex
+    "delete")
+        delete
         ;;
     "t")
         toggle
         ;;
-    "c")
-        clean
+    "toggle")
+        toggle
         ;;
-    "l")
-        listall
+    "p")
+        priority
+        ;;
+    "priority")
+        priority
+        ;;
+    "c")
+        clear
+        ;;
+    "clear")
+        clear
+        ;;
+    "ls")
+        list
+        ;;
+    "list")
+        list
         ;;
     "lt")
         listtodo
         ;;
-    "lf")
-        listfinished
+    "listtodo")
+        listtodo
+        ;;
+    "ld")
+        listdone
+        ;;
+    "listdone")
+        listdone
         ;;
     "h")
+        help
+        ;;
+    "help")
         help
         ;;
     "")

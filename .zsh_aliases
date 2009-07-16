@@ -15,6 +15,7 @@ alias c='clear'
 alias e='exit'
 alias o='emacs'
 alias O='sudo emacs'
+alias t='todo'
 
 # Basic commands
 alias su='su - '
