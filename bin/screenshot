@@ -4,6 +4,8 @@ screenshotpath=/home/barrucadu/`date +%F`.png
 websitepath=/media/MHD/websites/barrucadu.co.uk/www
 dir=`pwd`
 
+echo "Taking screenshot in 5 seconds."
+sleep 5
 echo "Taking screenshot \"`date +%F`.png\""
 
 import -window root $screenshotpath
