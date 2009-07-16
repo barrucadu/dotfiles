@@ -30,10 +30,9 @@ if [[ -f /var/run/daemons/hal ]]; then
         xmodmap -e "clear Mod4"
 
         # Touchpad
-        background syndaemon
         synclient MinSpeed=0.10
         synclient MaxSpeed=0.80
-        synclient AccelFactor=1
+        synclient AccelFactor=0.50
         synclient VertEdgeScroll=1
         synclient HorizEdgeScroll=1
 
@@ -51,7 +50,6 @@ if [[ -f /var/run/daemons/hal ]]; then
     
     # Appearence
     notinschool /home/barrucadu/bin/randombg
-    #notinschool /home/barrucadu/bin/fortunepaper
     inschool feh --bg-scale /usr/share/wallpapers/Anime/rozen29.jpg
     
     # Window Manager
