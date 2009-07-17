@@ -39,6 +39,11 @@ function list()
     grep -n -e "^\* \(TODO\|DONE\)" $todofile
 }
 
+function listregex()
+{
+    sed "${arg}!d" $todofile | grep -n -e "^\* \(TODO\|DONE\)"
+}
+
 function listtodo()
 {
     grep -n "^\* TODO" $todofile
@@ -62,6 +67,7 @@ function help()
     echo "    p,  priority - Increment priority of entry.         arg = regular expression."
     echo "    c,  clear    - Clear finished entries from list."
     echo "    ls, list     - List entries."
+    echo "    lr, listregex- List entries by filter.              arg = regular expression."
     echo "    lt, listtodo - List entries marked as to do."
     echo "    ld, listdone - List entries marked as done."
     echo "    h,  help     - Display this text."
@@ -81,6 +87,7 @@ function help()
 ([[ "$flag" == "p" ]]  || [[ "$flag" == "priority" ]])                    && priority
 ([[ "$flag" == "c" ]]  || [[ "$flag" == "clear" ]])                       && clear
 ([[ "$flag" == "ls" ]] || [[ "$flag" == "list" ]])                        && list
+([[ "$flag" == "lr" ]] || [[ "$flag" == "listregex" ]])                   && listregex
 ([[ "$flag" == "lt" ]] || [[ "$flag" == "listtodo" ]])                    && listtodo
 ([[ "$flag" == "ld" ]] || [[ "$flag" == "listdone" ]])                    && listdone
 ([[ "$flag" == "h" ]]  || [[ "$flag" == "help" ]] || [[ "$flag" == "" ]]) && help
