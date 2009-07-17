@@ -51,89 +51,36 @@ function listdone()
 
 function help()
 {
-    echo "Usage: todo [flag] [arg]"
-    echo
-    echo "---"
+    echo "USAGE: todo [flag] [arg]"
     echo
     echo "A simple todo-file manager, which manipulates todo files in a subset of the Emacs Org-mode format."
     echo
-    echo "---"
+    echo "FLAGS:"
+    echo "    a,  add      - Add new entry.                       arg = description."
+    echo "    d,  delete   - Delete existing entries.             arg = regular expression."
+    echo "    t,  toggle   - Toggle entries' todo/done state.     arg = regular expression."
+    echo "    p,  priority - Increment priority of entry.         arg = regular expression."
+    echo "    c,  clear    - Clear finished entries from list."
+    echo "    ls, list     - List entries."
+    echo "    lt, listtodo - List entries marked as to do."
+    echo "    ld, listdone - List entries marked as done."
+    echo "    h,  help     - Display this text."
     echo
-    echo "Flags:"
-    echo "    a,   add      - Add new entry.                       arg = description."
-    echo "    d,   delete   - Delete existing entries by regex.    arg = sed-compatible regular expression (including slashes)."
-    echo "    t,   toggle   - Toggle entries' todo/done state.     arg = line number."
-    echo "    p,   priority - Increment priority of entry.         arg = line number."
-    echo "    c,   clear    - Clear finished entries from list."
-    echo "    ls,  list     - List entries."
-    echo "    lt, listtodo  - List entries marked as to do."
-    echo "    ld, listdone  - List entries marked as done."
-    echo "    h,   help     - Display this text."
+    echo "REGULAR EXPRESSIONS:"
+    echo "    Regular expressions take the format used by \`sed\`, check \`man sed\` for more details. A few very simple examples follow:"
+    echo "        x          - Act on line number x."
+    echo "        /x/        - Act on lines containing the string x."
+    echo "        /\(x\|y\)/ - Act on lines containing the string x or y."
+    echo "        /x.*y/     - Act on lines containing the strings x and y (in that order)."
     echo
 }
 
-case "$flag" in
-    "a")
-        add
-        ;;
-    "add")
-        add
-        ;;
-    "d")
-        delete
-        ;;
-    "delete")
-        delete
-        ;;
-    "t")
-        toggle
-        ;;
-    "toggle")
-        toggle
-        ;;
-    "p")
-        priority
-        ;;
-    "priority")
-        priority
-        ;;
-    "c")
-        clear
-        ;;
-    "clear")
-        clear
-        ;;
-    "ls")
-        list
-        ;;
-    "list")
-        list
-        ;;
-    "lt")
-        listtodo
-        ;;
-    "listtodo")
-        listtodo
-        ;;
-    "ld")
-        listdone
-        ;;
-    "listdone")
-        listdone
-        ;;
-    "h")
-        help
-        ;;
-    "help")
-        help
-        ;;
-    "")
-        help
-        ;;
-    *)
-        echo "Error: unknown flag '$flag'."
-        return 1
-        ;;
-esac
-
-return 0
+([[ "$flag" == "a" ]]  || [[ "$flag" == "add" ]])                         && add
+([[ "$flag" == "d" ]]  || [[ "$flag" == "delete" ]])                      && delete
+([[ "$flag" == "t" ]]  || [[ "$flag" == "toggle" ]])                      && toggle
+([[ "$flag" == "p" ]]  || [[ "$flag" == "priority" ]])                    && priority
+([[ "$flag" == "c" ]]  || [[ "$flag" == "clear" ]])                       && clear
+([[ "$flag" == "ls" ]] || [[ "$flag" == "list" ]])                        && list
+([[ "$flag" == "lt" ]] || [[ "$flag" == "listtodo" ]])                    && listtodo
+([[ "$flag" == "ld" ]] || [[ "$flag" == "listdone" ]])                    && listdone
+([[ "$flag" == "h" ]]  || [[ "$flag" == "help" ]] || [[ "$flag" == "" ]]) && help
