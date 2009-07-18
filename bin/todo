@@ -17,8 +17,8 @@ function delete()
 function toggle()
 {
     sed -i "$arg s/^\* TODO/\* ODOT/"  $todofile
-    sed -i "$arg s/^\* TODO/\* DONE/"  $todofile
-    sed -i "$arg s/^\* ENODE/\* TODO/" $todofile
+    sed -i "$arg s/^\* DONE/\* TODO/" $todofile
+    sed -i "$arg s/^\* ODOT/\* DONE/"  $todofile
 }
 
 function priority()
@@ -29,29 +29,9 @@ function priority()
     sed -i "$arg s/^\* TODO \[\#D\]/\* TODO [#C]/" $todofile
 }
 
-function clear()
-{
-    sed -i "/^\* DONE .*$/d" $todofile
-}
-
 function list()
 {
-    grep -n -e "^\* \(TODO\|DONE\)" $todofile
-}
-
-function listregex()
-{
     sed "${arg}!d" $todofile | grep -n -e "^\* \(TODO\|DONE\)"
-}
-
-function listtodo()
-{
-    grep -n "^\* TODO" $todofile
-}
-
-function listdone()
-{
-    grep -n "^\* DONE" $todofile
 }
 
 function help()
@@ -61,16 +41,15 @@ function help()
     echo "A simple todo-file manager, which manipulates todo files in a subset of the Emacs Org-mode format."
     echo
     echo "FLAGS:"
-    echo "    a,  add      - Add new entry.                       arg = description."
-    echo "    d,  delete   - Delete existing entries.             arg = regular expression."
-    echo "    t,  toggle   - Toggle entries' todo/done state.     arg = regular expression."
-    echo "    p,  priority - Increment priority of entry.         arg = regular expression."
-    echo "    c,  clear    - Clear finished entries from list."
-    echo "    ls, list     - List entries."
-    echo "    lr, listregex- List entries by filter.              arg = regular expression."
-    echo "    lt, listtodo - List entries marked as to do."
-    echo "    ld, listdone - List entries marked as done."
-    echo "    h,  help     - Display this text."
+    echo "    a,  add       - Add new entry.                       arg = description."
+    echo "    d,  delete    - Delete existing entries.             arg = regular expression."
+    echo "    t,  toggle    - Toggle entries' todo/done state.     arg = regular expression."
+    echo "    p,  priority  - Increment priority of entry.         arg = regular expression."
+    echo "    c,  clear     - Clear finished entries from list."
+    echo "    ls, list      - List entries.                        arg = regular expression."
+    echo "    lt, listtodo  - List entries marked as to do."
+    echo "    ld, listdone  - List entries marked as done."
+    echo "    h,  help      - Display this text."
     echo
     echo "REGULAR EXPRESSIONS:"
     echo "    Regular expressions take the format used by \`sed\`, check \`man sed\` for more details. A few very simple examples follow:"
@@ -85,9 +64,8 @@ function help()
 ([[ "$flag" == "d" ]]  || [[ "$flag" == "delete" ]])                      && delete
 ([[ "$flag" == "t" ]]  || [[ "$flag" == "toggle" ]])                      && toggle
 ([[ "$flag" == "p" ]]  || [[ "$flag" == "priority" ]])                    && priority
-([[ "$flag" == "c" ]]  || [[ "$flag" == "clear" ]])                       && clear
+([[ "$flag" == "c" ]]  || [[ "$flag" == "clear" ]])                       && (arg="/\* DONE /"; delete)
 ([[ "$flag" == "ls" ]] || [[ "$flag" == "list" ]])                        && list
-([[ "$flag" == "lr" ]] || [[ "$flag" == "listregex" ]])                   && listregex
-([[ "$flag" == "lt" ]] || [[ "$flag" == "listtodo" ]])                    && listtodo
-([[ "$flag" == "ld" ]] || [[ "$flag" == "listdone" ]])                    && listdone
+([[ "$flag" == "lt" ]] || [[ "$flag" == "listtodo" ]])                    && (arg="/\* TODO /"; list)
+([[ "$flag" == "ld" ]] || [[ "$flag" == "listdone" ]])                    && (arg="/\* DONE /"; list)
 ([[ "$flag" == "h" ]]  || [[ "$flag" == "help" ]] || [[ "$flag" == "" ]]) && help
