@@ -1,16 +1,17 @@
 ############### SETTINGS ###############
 
 # Appearence
-set show_status            = 1
-set status_format          = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">MODE</span> [<span weight="bold" foreground="red">KEYCMD</span>] [<span weight="bold">MSG</span>] <span foreground="#606060">LOAD_PROGRESSBAR</span> <span foreground="#99FF66">URI</span> <span foreground="orange">MSG</span></span>
-set status_message         = 
+set show_status       = 1
+set status_format          = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">[\@MODE:\@keycmd]</span> <span weight="bold">\@status_message</span> <span foreground="#606060">[\@LOAD_PROGRESSBAR]</span> <span foreground="#99FF66">\@uri</span> </span>
+set status_message         = <span color="darkred">W</span>
 set status_background      = #101010
 set status_top             = 0
 set status_pbar_done       = :
 set status_pbar_pending    = .
 set status_pbar_width      = 20
-set insert_indicator       = [Ins]
-set command_indicator      = [Cmd]
+set insert_indicator       = Ins
+set command_indicator      = Cmd
+toggle_status
 
 # Behaviour
 set always_insert_mode     = 0
@@ -29,15 +30,15 @@ set history_handler        = spawn $XDG_CONFIG_HOME/uzbl/handlers/history.sh
 set download_handler       = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
 set cookie_handler         = spawn $XDG_CONFIG_HOME/uzbl/handlers/cookies.sh
 set load_start_handler     = set status_message = <span foreground="red">S</span>
-set load_commit_handler    = chain 'set status_message = <span foreground="yellow">C</span>' 'script $XDG_CONFIG_HOME/uzbl/scripts/middleclick.js' 'script $XDG_CONFIG_HOME/uzbl/scripts/scroll.js'
-set load_finish_handler    = set status_message = 
+set load_commit_handler    = set status_message = <span foreground="yellow">C</span>
+set load_finish_handler    = set status_message = <span foreground="green">D</span>
 
 # Interface
 set fifo_dir               = /home/barrucadu/tmp/uzbl
 set socket_dir             = /home/barrucadu/tmp/uzbl
 
 # Network
-set useragent              = Uzbl [ Webkit WEBKIT_MAJOR.WEBKIT_MINOR.WEBKIT_MICRO ] [ Arch Linux KERNREL x86_64 ] [ Barrucadu/experimental: COMMIT ]
+set useragent              = Uzbl [ Webkit @WEBKIT_MAJOR.@WEBKIT_MINOR.@WEBKIT_MICRO ] [ Arch Linux @(uname -r)@ x86_64 ] [ Barrucadu/experimental: @COMMIT ]
 
 ############### BINDINGS ###############
 
@@ -98,7 +99,6 @@ bind \W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleS
 # Script Bindings
 bind y  = sh "echo -ne $6 | xclip"
 bind Y  = sh "echo -ne $6 | xclip -selection clipboard"
-bind C  = sh "cat $1 > $4"
 bind gc = sh "echo set uri = `xclip -o` > $4"
 bind gC = sh "echo set uri = `xclip -o -selection clipboard` > $4"
 
