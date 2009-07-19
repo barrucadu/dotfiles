@@ -7,6 +7,7 @@ alias -g H='| head'
 alias -g T='| tail'
 alias -g S='| sed'
 alias -g F='for file in *; do'
+alias -g W='| wc -l'
 
 # Short aliases
 alias !='sudo'
