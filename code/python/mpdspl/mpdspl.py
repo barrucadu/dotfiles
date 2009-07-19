@@ -27,7 +27,7 @@ def showhelp():
     print "        le = Length (seconds)"
     print "        fp = File Path (relative to MPD root dir, including filename)"
     print "        fn = File Name\n"
-    print "    Regular expressions are specified within slashes (/regex/), and if the first slash is preceeded by an 'i', the regular expression is interpreted as case-insensetive. If the final slash is succeeded by a 'n', the result of the match is negated.\n"
+    print "    Regular expressions are specified within slashes (/regex/), and if the first slash is preceeded by an 'i', the regular expression is interpreted as case-insensitive. If the final slash is succeeded by a 'n', the result of the match is negated.\n"
     print "    For example, a rule for all tracks by 'Fred' or 'George', which have a title containing (case insensitive) 'The' and 'and', but not 'when' would be:"
     print "        ar=/(Fred|George)/ ti=i/(the.*and|and.*the)/ ti=i/when/n"
     sys.exit()
@@ -72,7 +72,7 @@ def parserules(rulestr):
     for rule in rules:
         regex = None
         if rule["inverse"]:
-            # If case insensetive, compile it as such.
+            # If case insensitive, compile it as such.
             regex = re.compile(rule["regex"], re.IGNORECASE)
         else:
             regex = re.compile(rule["regex"])
@@ -105,8 +105,9 @@ def parseargs():
                 # If a "-f" or "--force" parameter is sent, force the cache to be updated even if it doesn't look like it needs to be.
                 forceupdate = True
             elif argument[:2] == "-d" or argument[:9] == "--dbpath=":
+                # Looks like their db is somewhere other than /var/lib/mpd/mpd.db...
                 if argument[:2] == "-d":
-                    # However, Python can't work with ~, which has a reasonable chance of being used (eg: ~/.mpd/mpd.db"), so it needs to be expanded.
+                    # Python can't work with ~, which has a reasonable chance of being used (eg: ~/.mpd/mpd.db"), so it needs to be expanded.
                     dbpath = os.path.expanduser(argument[2:])
                 elif argument[:9] == "--dbpath=":
                     dbpath = os.path.expanduser(argument[9:])
@@ -133,7 +134,7 @@ if cachehome == "":
     cachehome = os.environ['HOME'] + "/.cache/"
 cachepath = cachehome + "/mpdspl/mpddb.cache"
 
-# $XDG_DATA_HOME which specifies where to save data files. Like a record of playlists which have been created. If unset a default of ~/.local/share should be used. This is currently unused as there is no actual creation of playlists yet :p
+# $XDG_DATA_HOME specifies where to save data files. Like a record of playlists which have been created. If unset a default of ~/.local/share should be used. This is currently unused as there is no actual creation of playlists yet :p
 datahome = os.path.expanduser(os.environ['XDG_DATA_HOME'])
 if datahome == "":
     datahome = os.environ['HOME'] + "/.local/share/"
