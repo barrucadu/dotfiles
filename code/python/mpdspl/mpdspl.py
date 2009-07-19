@@ -3,6 +3,9 @@
 # A script to parse the MPD database into a list of dictionaries.
 # Now with patronising comments which assume almost no Python knowledge!
 
+# cPickle is a faster version of the pickle library. It is used to save data structures to a file. Like lists and dictionaries. os is needed for file stuff, sys for arguments.
+import cPickle, os, sys
+
 # A nice little help function. Read on to see how it is called...
 def showhelp():
     print "Usage: mpdspl [options]\n"
@@ -35,9 +38,6 @@ def parseargs():
             # Ooh, stderr. I never actually knew how to send stuff through stderr in python.
             print >> sys.stderr, "Unrecognised parameter '" + argument + "'"
             sys.exit(1)
-
-# cPickle is a faster version of the pickle library. It is used to save data structures to a file. Like lists and dictionaries. os is needed for file stuff, sys for arguments.
-import cPickle, os, sys
 
 # Default place to look for MPD database. If a -d option is specified, look there instead.
 dbpath    = "/var/lib/mpd/mpd.db"
