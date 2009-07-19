@@ -3,41 +3,126 @@
 # A script to parse the MPD database into a list of dictionaries.
 # Now with patronising comments which assume almost no Python knowledge!
 
-# cPickle is a faster version of the pickle library. It is used to save data structures to a file. Like lists and dictionaries. os is needed for file stuff, sys for arguments.
-import cPickle, os, sys
+# cPickle is a faster version of the pickle library. It is used to save data structures to a file. Like lists and dictionaries. os is needed for file stuff, sys for arguments, and re for regex.
+import cPickle, os, sys, re
 
 # A nice little help function. Read on to see how it is called...
 def showhelp():
     print "Usage: mpdspl [options]\n"
     print "A script to generate smart playlists for MPD. Currently does nothing of use :p\n"
     print "Options:"
-    print "    -f, --force           - Force an update of the cache file."
-    print "    -dFILE, --dbpath=FILE - Location of the database file."
-    print "    -h, --help            - Display this text and exit."
+    print "    -f, --force              - Force an update of the cache file."
+    print "    -dFILE, --dbpath=FILE    - Location of the database file."
+    print "    -h, --help               - Display this text and exit."
+    print "    -n, --new [name] [rules] - Create a new playlist.\n"
+    print "Playlist rules:"
+    print "    These are specified as a string of Python-compatible regular expressions separated by keywords, spaces, and slashes. They are matched by re.search, not re.match, and no special flags are passed, other than re.IGNORECASE when requested."
+    print "    These keywords are:"
+    print "        ar = Artist"
+    print "        al = Album"
+    print "        ti = Title"
+    print "        tr = Track Number"
+    print "        ge = Genre"
+    print "        ye = Year"
+    print "        le = Length (seconds)"
+    print "        fp = File Path (relative to MPD root dir, including filename)"
+    print "        fn = File Name\n"
+    print "    Regular expressions are specified within slashes (/regex/), and if the first slash is preceeded by an 'i', the regular expression is interpreted as case-insensetive. If the final slash is succeeded by a 'n', the result of the match is negated.\n"
+    print "    For example, a rule for all tracks by 'Fred' or 'George', which have a title containing (case insensitive) 'The' and 'and', but not 'when' would be:"
+    print "        ar=/(Fred|George)/ ti=i/(the.*and|and.*the)/ ti=i/when/n"
     sys.exit()
+
+# Parse the rules regex
+def parserules(rulestr):
+    # rules will be our list of rules, bufferstr will be the buffer for our parser, and i will be a counter
+    rules     = []
+    bufferstr = ""
+    i         = 0
+
+    # We want to use the same identifiers as the track dictionaries:
+    keywords = {"ar" : "Artist", "al" : "Album", "ti" : "Title", "tr" : "Track", "ge" : "Genre", "ye" : "Date", "le" : "Time", "fp" : "key", "fn" : "file"}
+
+    # For every character in rulestr (we do it characterwise, hence needing a buffer)
+    for c in rulestr:
+        # Add the character to the buffer
+        bufferstr += c
+
+        # If the buffer matches one of our keywords, we have hit a new rule, and so create a blank dictionary, and clear the buffer.
+        if bufferstr.strip() in ["ar", "al", "ti", "tr", "ge", "ye", "le", "fp", "fn"]:
+            rules.append({"type" : keywords[bufferstr.strip()], "regex" : "", "compiled" : None, "inverse" : False, "negate" : False})
+            bufferstr = ""
+        # If we're at the start of a blank case-insensitive regex, record that, and clear the buffer.
+        elif bufferstr == "=i/":
+            rules[i]["i"] = True
+            bufferstr = ""
+        # If not, just clear the buffer for the coming regex.
+        elif bufferstr == "=/":
+            bufferstr = ""
+        # If at the end of a regex, stick it all (sans the trailing slash, they're just a nice separater for our parser) to the dictionary, increment the counter, and clear the buffer ready for the next rule.
+        elif bufferstr[-1] == "/":
+            rules[i]["regex"] = bufferstr[:-1]
+            bufferstr = ""
+            i += 1
+        # If set to 'n' and the regex has been set, negate it.
+        elif bufferstr == "n" and not rules[i - 1]["regex"] == "":
+            bufferstr = ""
+            rules[i - 1]["negate"] = True
+
+    # This isn't needed. But it makes things faster and allows us to have case insensetivity.
+    for rule in rules:
+        regex = None
+        if rule["inverse"]:
+            # If case insensetive, compile it as such.
+            regex = re.compile(rule["regex"], re.IGNORECASE)
+        else:
+            regex = re.compile(rule["regex"])
+
+        # Overwrite the regex string with the compiled object
+        rule["compiled"] = regex
+
+    return rules
 
 # Splitting things up into functions is good :D
 def parseargs():
     # global lets us access variables specified outside our function.
     global forceupdate
     global dbpath
+    global newname
+    global newrules
+
+    newarg = 0
     
     for argument in sys.argv:
-        if argument == "-f" or argument == "--force":
-            # If a "-f" or "--force" parameter is sent, force the cache to be updated even if it doesn't look like it needs to be.
-            forceupdate = True
-        elif argument[:2] == "-d" or argument[:9] == "--dbpath=":
-            if argument[:2] == "-d":
-                # However, Python can't work with ~, which has a reasonable chance of being used (eg: ~/.mpd/mpd.db"), so it needs to be expanded.
-                dbpath = os.path.expanduser(argument[2:])
-            elif argument[:9] == "--dbpath=":
-                dbpath = os.path.expanduser(argument[9:])
-        elif argument == "-h" or argument == "--help":
-            showhelp()
-        elif not argument == sys.argv[0]: # The first argument is the filename. Don't complain about not understanding it...
-            # Ooh, stderr. I never actually knew how to send stuff through stderr in python.
-            print >> sys.stderr, "Unrecognised parameter '" + argument + "'"
-            sys.exit(1)
+        if not newarg == 0:
+            # We're making a new playlist. If we're only on the first option after -n, that's the name. If the second, that's the description.
+            if newarg == 2:
+                newname = argument
+            elif newarg == 1:
+                newrules = parserules(argument)
+            newarg -= 1
+        else:
+            if argument == "-f" or argument == "--force":
+                # If a "-f" or "--force" parameter is sent, force the cache to be updated even if it doesn't look like it needs to be.
+                forceupdate = True
+            elif argument[:2] == "-d" or argument[:9] == "--dbpath=":
+                if argument[:2] == "-d":
+                    # However, Python can't work with ~, which has a reasonable chance of being used (eg: ~/.mpd/mpd.db"), so it needs to be expanded.
+                    dbpath = os.path.expanduser(argument[2:])
+                elif argument[:9] == "--dbpath=":
+                    dbpath = os.path.expanduser(argument[9:])
+            elif argument == "-n" or argument == "--new":
+                # Do special treatment to the next 2 arguments
+                newarg = 2
+            elif argument == "-h" or argument == "--help":
+                showhelp()
+            elif not argument == sys.argv[0]: # The first argument is the filename. Don't complain about not understanding it...
+                # Ooh, stderr. I never actually knew how to send stuff through stderr in python.
+                print >> sys.stderr, "Unrecognised parameter '" + argument + "'"
+                sys.exit(1)
+
+# Info about new playlists
+newname  = ""
+newrules = []
 
 # Default place to look for MPD database. If a -d option is specified, look there instead.
 dbpath    = "/var/lib/mpd/mpd.db"
@@ -114,3 +199,34 @@ else:
     cachefile = open(cachepath, "rb")
     tracks = cPickle.load(cachefile)
     cachefile.close()
+
+# See if we're making a new playlist or not
+if not newname == "":
+    # matchingtracks will hold all tracks which match all of the criteria.
+    matchingtracks = []
+    
+    for track in tracks:
+        # Initially assume a track *will* be added.
+        addtrack = True
+        
+        for rule in newrules:
+            # For every track, check it with every rule
+            if rule["negate"]:
+                if re.search(rule["compiled"], track[rule["type"]]):
+                    # If the regular expression matches the track, do not add it to the matchingtracks list.
+                    addtrack = False
+            else:
+                if not re.search(rule["compiled"], track[rule["type"]]):
+                    # If the regular expression does not match the track, do not add it to the matchingtracks list.
+                    addtrack = False
+        
+        if addtrack:
+            # Add the track if appropriate
+            matchingtracks.append(track)
+
+print "To do list:"
+print "    Actually create a playlist, don't just find matching tracks."
+print "    Save rules and suchlike to somewhere in datapath. I'm unsure if you can save compiled regular expressions, so experiment."
+print "    Split database parsing and cache loading into two separate functions."
+print "    Add an update flag to update all generated playlists."
+print "    Anything else you can think of."
