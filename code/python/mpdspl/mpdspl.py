@@ -8,16 +8,41 @@ def showhelp():
     print "Usage: mpdspl [options]\n"
     print "A script to generate smart playlists for MPD. Currently does nothing of use :p\n"
     print "Options:"
-    print "    -f, --force - Force an update of the cache file."
-    print "    -h, --help  - Display this text and exit."
+    print "    -f, --force           - Force an update of the cache file."
+    print "    -dFILE, --dbpath=FILE - Location of the database file."
+    print "    -h, --help            - Display this text and exit."
     sys.exit()
+
+# Splitting things up into functions is good :D
+def parseargs():
+    # global lets us access variables specified outside our function.
+    global forceupdate
+    global dbpath
+    
+    for argument in sys.argv:
+        if argument == "-f" or argument == "--force":
+            # If a "-f" or "--force" parameter is sent, force the cache to be updated even if it doesn't look like it needs to be.
+            forceupdate = True
+        elif argument[:2] == "-d" or argument[:9] == "--dbpath=":
+            if argument[:2] == "-d":
+                # However, Python can't work with ~, which has a reasonable chance of being used (eg: ~/.mpd/mpd.db"), so it needs to be expanded.
+                dbpath = os.path.expanduser(argument[2:])
+            elif argument[:9] == "--dbpath=":
+                dbpath = os.path.expanduser(argument[9:])
+        elif argument == "-h" or argument == "--help":
+            showhelp()
+        elif not argument == sys.argv[0]: # The first argument is the filename. Don't complain about not understanding it...
+            # Ooh, stderr. I never actually knew how to send stuff through stderr in python.
+            print >> sys.stderr, "Unrecognised parameter '" + argument + "'"
+            sys.exit(1)
 
 # cPickle is a faster version of the pickle library. It is used to save data structures to a file. Like lists and dictionaries. os is needed for file stuff, sys for arguments.
 import cPickle, os, sys
 
+# Default place to look for MPD database. If a -d option is specified, look there instead.
 dbpath    = "/var/lib/mpd/mpd.db"
 
-# There is an environmental variable XDG_CACHE_HOME which specifies where to save cache files. However, if not set, a default of ~/.cache should be used. However, python can't work with ~, so it needs to be expanded.
+# There is an environmental variable XDG_CACHE_HOME which specifies where to save cache files. However, if not set, a default of ~/.cache should be used.
 cachehome = os.path.expanduser(os.environ['XDG_CACHE_HOME'])
 if cachehome == "":
     cachehome = os.environ['HOME'] + "/.cache/"
@@ -34,18 +59,15 @@ if not os.path.isdir(datapath):
 
 tracks    = []
 
-# If a "-f" or "--force" parameter is sent, force the cache to be updated even if oit doesn't look like it needs to be.
 forceupdate = False
-for argument in sys.argv:
-    if argument == "-f" or argument == "--force":
-        forceupdate = True
-    elif argument == "-h" or argument == "--help":
-        showhelp()
-    elif not argument == sys.argv[0]: # The first argument is the filename. Don't complain about not understanding it...
-        # Ooh, stderr. I never actually knew how to send stuff through stderr in python.
-        print >> sys.stderr, "Unrecognised parameter '" + argument + "'"
-        sys.exit(1)
-        
+
+parseargs()
+
+# Check that the database is actually there before attempting to do stuff with it.
+if not os.path.exists(dbpath):
+    print >> sys.stderr, "The database file '" + dbpath + "' could not be found."
+    sys.exit(1)
+
 # If the cache file does not exist OR the database has been modified since the cache file has this has the side-effect of being able to touch the cache file to stop it from being updated. Good thing we have the -f option for any accidental touches (or if you copy the cache to a new location).
 if not os.path.exists(cachepath) or os.path.getmtime(dbpath) > os.path.getmtime(cachepath) or forceupdate:
     print "Updating database cache..."
