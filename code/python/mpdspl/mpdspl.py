@@ -212,11 +212,11 @@ if not newname == "":
         for rule in newrules:
             # For every track, check it with every rule
             if rule["negate"]:
-                if re.search(rule["compiled"], track[rule["type"]]):
+                if not re.search(rule["compiled"], track[rule["type"]]) == None:
                     # If the regular expression matches the track, do not add it to the matchingtracks list.
                     addtrack = False
             else:
-                if not re.search(rule["compiled"], track[rule["type"]]):
+                if re.search(rule["compiled"], track[rule["type"]]) == None:
                     # If the regular expression does not match the track, do not add it to the matchingtracks list.
                     addtrack = False
         
