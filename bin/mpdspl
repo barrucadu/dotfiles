@@ -3,8 +3,8 @@
 # A script to parse the MPD database into a list of dictionaries (or at least, it was going to be before I decided to finish it).
 # Now with patronising comments which assume almost no Python knowledge!
 
-# cPickle is a faster version of the pickle library. It is used to save data structures to a file. Like lists and dictionaries. os is needed for file stuff, sys for arguments, re for regex, and pwd gor getting user info.
-import cPickle, os, sys, re, pwd
+# cPickle is a faster version of the pickle library. It is used to save data structures to a file. Like lists and dictionaries. os is needed for file stuff, sys for arguments, and re for regex.
+import cPickle, os, sys, re
 
 # Info about new playlists
 newname  = ""
