@@ -2,7 +2,7 @@
 
 # Don't run this inside X. That would be silly.
 if [[ ! $(tty) == *pts* ]]; then
-    if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/vc/2 ]] && [[ "`runlevel`" == *5* ]]; then
+    if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
         # Start X
         while true; do
             if [[ -f /var/run/daemons/hal ]]; then

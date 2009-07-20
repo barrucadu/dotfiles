@@ -83,6 +83,15 @@ def updatePlaylist(): # Update the MPD playlist, and the internal representation
     removeLastTrackFromPlaylist()
     addNewTrackToPlaylist()
 
+def getFilenamesFromMPDSPL(expression):
+    os.system('mpdspl -s -n misc "' + expression + '" >/tmp/mpddp-mpdspl-temp.txt')
+    a = open('/tmp/mpddp-mpdspl-temp.txt')
+    ot = a.read()
+    ot = ot.splitlines()
+    a.close()
+    os.remove('/tmp/mpddp-mpdspl-temp.txt')
+    return ot
+
 def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which match the specified rules.
     global client
     global host
@@ -90,7 +99,7 @@ def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which
 
     paths     = []
     playlists = []
-    boths     = []
+    smarts    = []
     nevers    = []
     tracks    = []
     
@@ -99,8 +108,8 @@ def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which
             paths.append(rule[1])
         elif rule[0] == 'playlist' and not rule[1] in playlists:
             playlists.append(rule[1])
-        elif rule[0] == 'both' and not rule[1] in boths:
-            boths.append(rule[1])
+        elif rule[0] == 'smart' and not rule[1] in smarts:
+            smarts.append(rule[1])
         elif rule[0] == 'never' and not rule[1] in nevers:
             nevers.append(rule[1])
     
@@ -130,16 +139,14 @@ def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which
             if dontadd == False and not track in tracks:
                 tracks.append(track)
 
-    for both in boths:
-        temptracks = client.listplaylist(both)
+    for smart in smarts:
+        temptracks = getFilenamesFromMPDSPL(smart)
         for track in temptracks:
-            if isinstance(track, dict):
-                track = track['file']
             dontadd = False
             for never in nevers:
                 if never in track:
                     dontadd = True
-            if dontadd == False and not track in tracks and both in track:
+            if dontadd == False and not track in tracks:
                 tracks.append(track)
 
     client.disconnect()
@@ -176,12 +183,12 @@ def parseConfigLine(line): # Parse a line from the configuration file and return
 
     if len(line) > 0:
         if ("=" in line) and (not ":" in line):
-            pline = line.split("=")
+            pline = line.split("=", 1)
             parsed = {'type'  : pline[0].strip(),
                       'value' : pline[1].strip()}
             return parsed
         elif ":" in line:
-            pline = line.split(":")
+            pline = line.split(":", 1)
             parsed = {'type'  : 'rule',
                       'value' : [pline[0].strip(), pline[1].strip()]}
             return parsed
