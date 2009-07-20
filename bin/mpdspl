@@ -11,9 +11,8 @@ newname  = ""
 newrules = []
 
 # Place to look for the MPD database and config files, and the loaded MPD config (well, only the values useful to us).
-dbpath   = "/var/lib/mpd/mpd.db"
 confpath = "/etc/mpd.conf"
-mpd      = {"music_directory" : "", "playlist_directory" : "", "user" : ""}
+mpd      = {"music_directory" : "", "playlist_directory" : "", "db_file" : "", "user" : ""}
 
 # There is an environmental variable XDG_CACHE_HOME which specifies where to save cache files. However, if not set, a default of ~/.cache should be used.
 cachehome = os.path.expanduser(os.environ['XDG_CACHE_HOME'])
@@ -128,7 +127,7 @@ def parserules(rulestr):
 def parseargs():
     # global lets us access variables specified outside our function.
     global forceupdate
-    global dbpath
+    global mpd
     global confpath
     global cachepath
     global newname
@@ -153,15 +152,15 @@ def parseargs():
                 # Looks like their db is somewhere other than /var/lib/mpd/mpd.db...
                 if argument[:2] == "-d":
                     # Python can't work with ~, which has a reasonable chance of being used (eg: ~/.mpd/mpd.db"), so it needs to be expanded.
-                    dbpath = os.path.expanduser(argument[2:])
+                    mpd["db_file"] = os.path.expanduser(argument[2:])
                 elif argument[:9] == "--dbpath=":
-                    dbpath = os.path.expanduser(argument[9:])
+                    mpd["db_file"] = os.path.expanduser(argument[9:])
             elif argument[:2] == "-c" or argument[:12] == "--cachepath=":
                 # Silly person, not keeping their cache where XDG says it should be...
                 if argument[:2] == "-c":
-                    dbpath = os.path.expanduser(argument[2:])
+                    cachepath = os.path.expanduser(argument[2:])
                 elif argument[:12] == "--cachepath=":
-                    dbpath = os.path.expanduser(argument[12:])
+                    cachepath = os.path.expanduser(argument[12:])
             elif argument[:2] == "-C" or argument[:11] == "--confpath=":
                 # Now any person which this code applies to is just awkward.
                 if argument[:2] == "-C":
@@ -221,8 +220,9 @@ def parsempdconf():
     global mpd
     
     config   = open(confpath, "r")
-    # Don't load the user value if it's already been told to us
+    # Don't load the user or db_file values if they've already been told to us
     holduser = not mpd["user"] == ""
+    holddb   = not mpd["db_file"] == ""
 
     for line in config:
         line = line.strip()
@@ -232,6 +232,9 @@ def parsempdconf():
         elif line[:18] == "playlist_directory":
             rest = line[18:].strip()
             mpd["playlist_directory"] = rest[1:-1]
+        elif line[:7] == "db_file" and not holddb:
+            rest = line[7:].strip()
+            mpd["db_file"] = rest[1:-1]
         # The rest of the code in this function wouldn't be needed if I could assume nobody would use "~" in their MPD config...
         elif line[:4] == "user" and not holduser:
             rest = line[4:].strip()
@@ -248,6 +251,8 @@ def parsempdconf():
         mpd["music_directory"] = mpd["music_directory"].replace("~", homedir)
     if "~" in mpd["playlist_directory"]:
         mpd["playlist_directory"] = mpd["playlist_directory"].replace("~", homedir)
+    if "~" in mpd["db_file"]:
+        mpd["db_file"] = mpd["db_file"].replace("~", homedir)
 
 def findtracks():
     global tracks
@@ -339,12 +344,12 @@ parseargs()
 parsempdconf()
 
 # Check that the database is actually there before attempting to do stuff with it.
-if not os.path.exists(dbpath):
-    print >> sys.stderr, "The database file '" + dbpath + "' could not be found."
+if not os.path.exists(mpd["db_file"]):
+    print >> sys.stderr, "The database file '" + mpd["db_file"] + "' could not be found."
     sys.exit(1)
 
 # If the cache file does not exist OR the database has been modified since the cache file has this has the side-effect of being able to touch the cache file to stop it from being updated. Good thing we have the -f option for any accidental touches (or if you copy the cache to a new location).
-if not os.path.exists(cachepath) or os.path.getmtime(dbpath) > os.path.getmtime(cachepath) or forceupdate:
+if not os.path.exists(cachepath) or os.path.getmtime(mpd["db_file"]) > os.path.getmtime(cachepath) or forceupdate:
     if not simpleoutput:
         print "Updating database cache..."
 
@@ -352,7 +357,7 @@ if not os.path.exists(cachepath) or os.path.getmtime(dbpath) > os.path.getmtime(
     if not os.path.isdir(os.path.dirname(cachepath)):
         os.mkdir(os.path.dirname(cachepath))
 
-    database = open(dbpath, "r")
+    database = open(mpd["db_file"], "r")
 
     # Now, parse that database!
     parsedatabase(database)

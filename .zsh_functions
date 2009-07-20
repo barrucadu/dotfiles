@@ -110,7 +110,7 @@ function gitwii()
 
 function gitbar()
 {
-    cd /media/MHD/websites/barrucadu.co.uk/www
+    cd /media/MHD/websites/barrucadu.co.uk
     commit $1
     git push github master
 }
