@@ -89,8 +89,12 @@ def parserules(rulestr):
         # Add the character to the buffer
         bufferstr += c
 
+        # If set to 'n' and the previous regex has been set, negate it.
+        if bufferstr == "n" and not rules[i - 1]["regex"] == "" and not inregex:
+            bufferstr = ""
+            rules[i - 1]["negate"] = True
         # If the buffer matches one of our keywords, we have hit a new rule, and so create a blank dictionary, and clear the buffer.
-        if bufferstr.strip().lower() in ["ar", "al", "ti", "tn", "ge", "ye", "le", "fp", "fn"] and not inregex:
+        elif bufferstr.strip().lower() in ["ar", "al", "ti", "tn", "ge", "ye", "le", "fp", "fn"] and not inregex:
             rules.append({"type" : keywords[bufferstr.strip()], "regex" : "", "compiled" : None, "inverse" : False, "negate" : False})
             bufferstr = ""
         # If we're at the start of a blank case-insensitive regex, record that, and clear the buffer.
@@ -111,10 +115,6 @@ def parserules(rulestr):
         # Get rid of the escape backslash if a forward slash has been used.
         elif bufferstr[-1] == "/" and not bufferstr[-2] == "\\":
             bufferstr[-2] = ""
-        # If set to 'n' and the regex has been set, negate it.
-        elif bufferstr == "n" and not rules[i - 1]["regex"] == "" and not inregex:
-            bufferstr = ""
-            rules[i - 1]["negate"] = True
 
     # This isn't needed. But it makes things faster and allows us to have case insensetivity.
     for rule in rules:
