@@ -70,7 +70,7 @@ def showhelp():
     print "Notes:"
     print "    Paths specified in the MPD config file containing a '~' will have the '~'s replaced by the user MPD runs as."
     print "    If the user is not specified in the MPD config file, or by the -u parameter, it is assumed the user is root."
-    print "    Forward slashes must be escaped in playlist rules.\n"
+    print "    Back and forward slashes must be escaped in playlist rules (except things like \d, obviously).\n"
     sys.exit()
 
 # Parse the rules regex
