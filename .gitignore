@@ -36,13 +36,3 @@
 !.stumpwmrc
 !.weechat/
 !.config/uzbl/
-
-# And other stuff
-!kernelconfig
-=======
-uzbl
-uzblctrl
-*~
-tags
-examples/data
->>>>>>> f1e6b7dab56c3a8cfe22835b0668eb92fb200e24:.gitignore
