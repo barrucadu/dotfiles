@@ -4,7 +4,7 @@
 # Call this and run it in the background (eg mpddp &>/dev/null &)
 # Configured in /etc/mpddp.conf, See /etc/mpddp.conf.example.
 
-import mpd, random, os, time, sys, string
+import mpd, random, os, time, sys, string, subprocess
 
 client = mpd.MPDClient()
 
@@ -84,13 +84,12 @@ def updatePlaylist(): # Update the MPD playlist, and the internal representation
     addNewTrackToPlaylist()
 
 def getFilenamesFromMPDSPL(expression):
-    os.system('mpdspl -s -n misc "' + expression + '" >/tmp/mpddp-mpdspl-temp.txt')
-    a = open('/tmp/mpddp-mpdspl-temp.txt')
-    ot = a.read()
-    ot = ot.splitlines()
-    a.close()
-    os.remove('/tmp/mpddp-mpdspl-temp.txt')
-    return ot
+    argvector = ["mpdspl", "-s", "-n", "mpddp-smart", expression]
+    process   = subprocess.Popen(argvector, stdout=subprocess.PIPE)
+    output    = process.communicate()[0]
+    tracks    = output.splitlines()
+    
+    return tracks
 
 def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which match the specified rules.
     global client
