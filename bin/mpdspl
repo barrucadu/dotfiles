@@ -53,7 +53,7 @@ def showhelp():
     print "        ar = Artist"
     print "        al = Album"
     print "        ti = Title"
-    print "        tr = Track Number"
+    print "        tn = Track Number"
     print "        ge = Genre"
     print "        ye = Year"
     print "        le = Length (seconds)"
@@ -78,7 +78,7 @@ def parserules(rulestr):
     i         = 0
 
     # We want to use the same identifiers as the track dictionaries:
-    keywords = {"ar" : "Artist", "al" : "Album", "ti" : "Title", "tr" : "Track", "ge" : "Genre", "ye" : "Date", "le" : "Time", "fp" : "file", "fn" : "key"}
+    keywords = {"ar" : "Artist", "al" : "Album", "ti" : "Title", "tn" : "Track", "ge" : "Genre", "ye" : "Date", "le" : "Time", "fp" : "file", "fn" : "key"}
 
     # For every character in rulestr (we do it characterwise, hence needing a buffer)
     for c in rulestr:
@@ -86,7 +86,7 @@ def parserules(rulestr):
         bufferstr += c
 
         # If the buffer matches one of our keywords, we have hit a new rule, and so create a blank dictionary, and clear the buffer.
-        if bufferstr.strip() in ["ar", "al", "ti", "tr", "ge", "ye", "le", "fp", "fn"]:
+        if bufferstr.strip().lower() in ["ar", "al", "ti", "tn", "ge", "ye", "le", "fp", "fn"]:
             rules.append({"type" : keywords[bufferstr.strip()], "regex" : "", "compiled" : None, "inverse" : False, "negate" : False})
             bufferstr = ""
         # If we're at the start of a blank case-insensitive regex, record that, and clear the buffer.
