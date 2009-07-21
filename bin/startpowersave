@@ -1,4 +1,0 @@
-#!/bin/bash
-
-sudo cpufreq-set -g powersave
-sudo /etc/rc.d/bluetooth stop

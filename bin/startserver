@@ -1,7 +1,0 @@
-#!/bin/bash
-
-sudo /etc/rc.d/bftpd start
-sudo /etc/rc.d/httpd start
-sudo /etc/rc.d/mysqld start
-sudo /etc/rc.d/samba start
-sudo /etc/rc.s/icecast start
