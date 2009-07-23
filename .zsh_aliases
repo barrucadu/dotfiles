@@ -72,14 +72,13 @@ alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Maintenance
 alias fixopera=' rm -r ~/.opera/{mail,lock}'
-alias rssup='php /srv/http/rss/rssupdate.php'
-alias jargon='wget -m http://catb.org/~esr/jargon/html/ -nH --cut-dirs=2 -np -L -P /srv/http/jargon/'
 
 # Servers
 alias sql='mysql -p -u root'
 alias bssh='ssh barrucadu@nitti.dreamhost.com'
 alias ussh='ssh uzbl@nitti.dreamhost.com'
 alias pssh='ssh ofearcom@host181.hostmonster.com'
+alias essh='ssh barrucadu@eihort'
 alias bftp='ncftp barrucadu'
 alias uftp='ncftp uzbl'
 alias pftp='ncftp ofear'
@@ -105,5 +104,4 @@ alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/.Xdefaults'
 alias zen='fortune /usr/share/fortune/zen'
 alias rfcdate='date --rfc-3339="seconds"'
-alias rtorrent='sudo su rtorrent -c "screen -x;exit"'
 alias screenx='screen -r `screen -ls | grep Detached | sed "s/(.*//"`'

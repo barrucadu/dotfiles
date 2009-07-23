@@ -25,14 +25,12 @@
 
 (autoload 'php-mode       "php-mode.el"      "PHP Mode."          t)
 (autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."     t)
-(autoload 'css-mode       "css-mode.el"      "CSS Mode"           t)
 (autoload 'python-mode    "python-mode.el"   "Python Mode."       t)
 (autoload 'hide-mode-line "hide-mode-line"                    nil t)
 
 ; File Associations
 (setq auto-mode-alist (append '(("/*.\.php[345]?$" . php-mode)
                                 ("/PKGBUILD$"      . pkgbuild-mode)
-                                ("/*..css$"        . css-mode)
                                 ("/*..rdf$"        . xml-mode)
                                 ("/*..xsl$"        . xml-mode)
                                 ("/*..xrdf$"       . xml-mode)

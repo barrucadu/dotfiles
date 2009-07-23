@@ -1,12 +1,14 @@
 #!/bin/bash
 
-last1="`cat /proc/loadavg | cut -d' ' -f1`"
-last5="`cat /proc/loadavg | cut -d' ' -f2`"
-last10="`cat /proc/loadavg | cut -d' ' -f3`"
-last10="`cat /proc/loadavg | cut -d' ' -f3`"
-running="`cat /proc/loadavg | cut -d' ' -f4 | cut -d'/' -f1`"
-total="`cat /proc/loadavg | cut -d' ' -f4 | cut -d'/' -f2`"
-lastpid="`cat /proc/loadavg | cut -d' ' -f5`"
+load=`cat /proc/loadavg`
+
+last1=`echo $load | cut -d' ' -f1`
+last5=`echo $load | cut -d' ' -f2`
+last10=`echo $load | cut -d' ' -f3`
+last10=`echo $load | cut -d' ' -f3`
+running=`echo $load | cut -d' ' -f4 | cut -d'/' -f1`
+total=`echo $load | cut -d' ' -f4 | cut -d'/' -f2`
+lastpid=`echo $load | cut -d' ' -f5`
 
 echo "Load averages: $last1 $last5 $last10"
 echo "Running processes: $running of $total"
