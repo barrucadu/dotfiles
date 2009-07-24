@@ -23,7 +23,7 @@ alias su='su - '
 alias free='free -mt'
 alias grep='grep --color=tty -d skip'
 alias top='htop'
-alias weechat='weechat-curses irc://localhost'
+alias weechat='weechat-curses irc://eihort'
 alias cat='zcat -f'
 alias zcat='zcat -f'
       # File management

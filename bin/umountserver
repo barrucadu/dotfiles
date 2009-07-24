@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+umount /share/eihort
+umount /share/eihort-media
+umount /share/eihort-torrents
+umount /share/eihort-www

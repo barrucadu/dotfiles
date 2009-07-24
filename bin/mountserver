@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
+mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
+mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
+mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
