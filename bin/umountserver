@@ -4,3 +4,15 @@ umount /share/eihort
 umount /share/eihort-media
 umount /share/eihort-torrents
 umount /share/eihort-www
+
+rm /media/MHD
+rm /media/M2HD
+
+mkdir /media/MHD
+mkdir /media/M2HD
+
+chmod 777 /media/MHD
+chmod 777 /media/M2HD
+
+sudo -u barrucadu pmount /media/MHD
+sudo -u barrucadu pmount /media/M2HD

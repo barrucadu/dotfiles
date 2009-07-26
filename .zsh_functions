@@ -154,3 +154,9 @@ function mkd()
 	cd "$1"
 }
 
+function timer()
+{
+    echo "Start: `date +"%H:%M:%S"`"
+    $* &>/dev/null
+    echo "Stop:  `date +"%H:%M:%S"`"
+}

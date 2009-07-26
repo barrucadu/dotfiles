@@ -1,6 +1,15 @@
 #!/bin/zsh
 
+pumount /media/MHD
+pumount /media/M2HD
+
+rmdir /media/MHD
+rmdir /media/M2HD
+
 mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
 mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
 mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
 mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
+
+ln -s /share/eihort-media/MHD /media/MHD
+ln -s /share/eihort-media/M2HD /media/M2HD
