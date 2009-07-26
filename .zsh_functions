@@ -156,7 +156,10 @@ function mkd()
 
 function timer()
 {
-    echo "Start: `date +"%H:%M:%S"`"
+    start=`date +%s`
     $* &>/dev/null
-    echo "Stop:  `date +"%H:%M:%S"`"
+    stop=`date +%s`
+    
+    duration=$[$stop - $start]
+    echo "Duration: $duration s"
 }
