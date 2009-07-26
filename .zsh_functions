@@ -157,7 +157,7 @@ function mkd()
 function timer()
 {
     start=`date +%s`
-    $* &>/dev/null
+    $*
     stop=`date +%s`
     
     duration=$[$stop - $start]
