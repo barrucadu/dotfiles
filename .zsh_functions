@@ -83,7 +83,6 @@ function gith()
     cd ~
     commit $1
     git push origin master
-    cp .config/uzbl/config /srv/http/uzbl-config
 }
 
 function gituz()
@@ -91,7 +90,6 @@ function gituz()
     cd ~/uzbl
     commit $1
     git push uzbl experimental
-    cp uzbl.c /srv/http/
 }
 
 function gituw()
