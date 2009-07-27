@@ -38,7 +38,7 @@ set fifo_dir               = /home/barrucadu/tmp/uzbl
 set socket_dir             = /home/barrucadu/tmp/uzbl
 
 # Network
-set useragent              = Uzbl [ Webkit @WEBKIT_MAJOR.@WEBKIT_MINOR.@WEBKIT_MICRO ] [ Arch Linux @(uname -r)@ x86_64 ] [ Barrucadu/experimental: @COMMIT ]
+set useragent              = Uzbl (X11; U; Arch Linux @(uname -r)@ x86_64; en-GB) Webkit/@WEBKIT_MAJOR.@WEBKIT_MINOR.@WEBKIT_MICRO
 
 ############### BINDINGS ###############
 
@@ -66,7 +66,7 @@ bind <  = scroll_begin
 
 # Goto Bindings
 bind gg = uri http://www.google.com/
-bind gl = uri http://localhost/
+bind ge = uri http://eihort/
 bind gu = uri http://www.uzbl.org/
 bind ,_ = uri %s
 bind ?  = uri http://localhost/uzbl-bindings.php
