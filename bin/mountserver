@@ -1,15 +1,46 @@
 #!/bin/zsh
 
-pumount /media/MHD
-pumount /media/M2HD
+nomhd=0
+nom2hd=0
+noshare=0
+nomedia=0
+notorrents=0
+nowww=0
 
-rmdir /media/MHD
-rmdir /media/M2HD
+function parsearg()
+{
+    case $1 in
+        "nomhd")
+            nomhd=1;;
+        "nom2hd")
+            nom2hd=1;;
+        "noshare")
+            noshare=1;;
+        "nomedia")
+            nomedia=1
+            nomhd=1
+            nom2hd=1;;
+        "notorrents")
+            notorrents=1;;
+        "nowww")
+            nowww=1;;
+    esac
+}
 
-mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
-mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
-mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
-mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
+for arg in "${*[@]}"; do
+    parsearg $arg
+done
 
-ln -s /share/eihort-media/MHD /media/MHD
-ln -s /share/eihort-media/M2HD /media/M2HD
+[[ $nomhd      == 0 ]] && pumount /media/MHD
+[[ $nom2hd     == 0 ]] && pumount /media/M2HD
+
+[[ $nomhd      == 0 ]] && rmdir /media/MHD
+[[ $nom2hd     == 0 ]] && rmdir /media/M2HD
+
+[[ $noshare    == 0 ]] && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
+[[ $nomedia    == 0 ]] && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
+[[ $notorrents == 0 ]] && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
+[[ $nowww      == 0 ]] && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
+
+[[ $nomhd      == 0 ]] && ln -s /share/eihort-media/MHD /media/MHD
+[[ $nom2hd     == 0 ]] && ln -s /share/eihort-media/M2HD /media/M2HD

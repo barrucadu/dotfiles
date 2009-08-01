@@ -66,6 +66,7 @@ bind <  = scroll_begin
 
 # Goto Bindings
 bind gg = uri http://www.google.com/
+bind gh = uri http://eihort/home/
 bind ge = uri http://eihort/
 bind gu = uri http://www.uzbl.org/
 bind ,_ = uri %s
