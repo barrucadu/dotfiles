@@ -113,6 +113,13 @@ function gitbar()
     git push github master
 }
 
+function gitei()
+{
+    cd /share/eihort-www
+    commit $1
+    git push github master
+}
+
 # FTP
 function upload()
 {
