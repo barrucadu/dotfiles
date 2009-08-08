@@ -51,7 +51,9 @@
 (define-key *top-map* (kbd "XF86HomePage")    "exec uzbl")
 (define-key *top-map* (kbd "M-XF86HomePage")  "exec opera")
 (define-key *top-map* (kbd "C-XF86HomePage")  "exec claws-mail")
+
 (define-key *top-map* (kbd "XF86AudioPlay")   "exec mpc toggle")
+(define-key *top-map* (kbd "C-XF86AudioPlay") "exec /home/barrucadu/bin/mpddp")
 (define-key *top-map* (kbd "XF86AudioStop")   "exec mpc stop")
 (define-key *top-map* (kbd "XF86AudioPrev")   "exec mpc prev")
 (define-key *top-map* (kbd "XF86AudioNext")   "exec mpc next")
