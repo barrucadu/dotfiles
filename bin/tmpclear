@@ -1,7 +1,0 @@
-#!/bin/bash
-
-rm -r ~/tmp/downloads/*
-rm -r ~/tmp/emesene/*
-rm -r ~/tmp/misc/*
-rm -r ~/tmp/torrents/*
-rm -r ~/tmp/vlc/*
