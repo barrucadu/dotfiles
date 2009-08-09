@@ -1,3 +1,0 @@
-#!/usr/bin/env scm
-(display "Arch is the best!\n")
-(exit)
