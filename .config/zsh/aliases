@@ -94,8 +94,8 @@ alias gdb='gdb -ex run -ex backtrace --args'
 alias uzt='uzbltest'
 
 # Miscellanious
-alias aliases='cat ~/.zsh_aliases'
-alias functions='cat ~/.zsh_functions'
+alias aliases='cat ~/.config/zsh/aliases'
+alias functions='cat ~/.config/zsh/functions'
 alias rmatrix='cmatrix -C red -l -b'
 alias mp3ogg='mp32ogg *.mp3 && rm *.mp3'
 alias parts='cat /proc/partitions'

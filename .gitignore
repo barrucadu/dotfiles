@@ -20,13 +20,6 @@
 !.XCompose
 !.XCompose.d/
 
-# ZSH stuff
-!.zsh_aliases
-!.zsh_functions
-!.zsh_login
-!.zsh_profile
-!.zshrc
-
 # Other configs
 !.emacs
 !.mostrc
@@ -35,4 +28,4 @@
 !.screenrc
 !.stumpwmrc
 !.weechat/
-!.config/uzbl/
+!.zshrc
