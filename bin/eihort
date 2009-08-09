@@ -1,0 +1,69 @@
+#!/bin/zsh
+
+mhd=true
+m2hd=true
+share=true
+media=true
+torrents=true
+www=true
+up=true
+
+function parsearg()
+{
+    case $1 in
+        "nomhd")
+            mhd=false;;
+        "nom2hd")
+            m2hd=false;;
+        "noshare")
+            share=false;;
+        "nomedia")
+            media=false
+            mhd=false
+            m2hd=false;;
+        "notorrents")
+            torrents=false;;
+        "nowww")
+            www=false;;
+        "down")
+            up=false;;
+    esac
+}
+
+for arg in "${*[@]}"; do
+    parsearg $arg
+done
+
+if $up; then
+    if $mhd; then
+        rmdir /media/MHD
+        ln -s /share/eihort-media/MHD /media/MHD
+    fi
+
+    if $m2hd; then
+        rmdir /media/M2HD
+        ln -s /share/eihort-media/M2HD /media/M2HD
+    fi
+
+    $share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
+    $media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
+    $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
+    $www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
+else
+    $share    && umount /share/eihort
+    $media    && umount /share/eihort-media
+    $torrents && umount /share/eihort-torrents
+    $www      && umount /share/eihort-www
+
+    if $mhd; then
+        rm /media/MHD
+        mkdir /media/MHD
+        chmod 777 /media/MHD
+    fi
+
+    if $m2hd; then
+        rm /media/M2HD
+        mkdir /media/M2HD
+        chmod 777 /media/M2HD
+    fi
+fi
