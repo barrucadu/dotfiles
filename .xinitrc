@@ -49,7 +49,7 @@ if [[ -f /var/run/daemons/hal ]]; then
     
     # Appearence
     notinschool /home/barrucadu/bin/randombg
-    inschool feh --bg-scale /usr/share/wallpapers/Anime/rozen29.jpg
+    inschool feh --bg-scale /usr/share/wallpapers/Anime/flcl04.png
     
     # Window Manager
     exec stumpwm
