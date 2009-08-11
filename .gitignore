@@ -9,23 +9,7 @@
 !code/
 !cron/
 !docs/
+!.config/
 
 # GIT stuff
 !.gitignore
-
-# X stuff
-!.xinitrc
-!.Xdefaults
-!.Xdefaults.d/
-!.XCompose
-!.XCompose.d/
-
-# Other configs
-!.emacs
-!.mostrc
-!.ncmpcpp/
-!.rtorrent.rc
-!.screenrc
-!.stumpwmrc
-!.weechat/
-!.zshrc

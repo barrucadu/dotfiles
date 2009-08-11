@@ -1,5 +1,5 @@
 #
-# WeeChat configuration file, created by WeeChat v0.2.6.3 on Mon Aug 10 00:32:59 2009
+# WeeChat configuration file, created by WeeChat v0.2.6.3 on Tue Aug 11 17:35:47 2009
 # WARNING! Be careful when editing this file, WeeChat writes this file when exiting.
 #
 
@@ -20,7 +20,7 @@ look_nicklist_position = right
 look_nicklist_min_size = 0
 look_nicklist_max_size = 0
 look_nicklist_separator = on
-look_no_nickname = "~no-nick~"
+look_no_nickname = "-cmd-"
 look_nickmode = on
 look_nickmode_empty = off
 look_nick_prefix = ""
@@ -50,8 +50,8 @@ look_paste_max_lines = 3
 
 [colors]
 col_real_white = off
-col_separator = cyan
-col_title = black
+col_separator = blue
+col_title = default
 col_title_more = lightmagenta
 col_title_bg = blue
 col_chat = default
@@ -78,17 +78,17 @@ col_status_private = lightmagenta
 col_status_highlight = lightred
 col_status_data_other = default
 col_status_more = white
-col_status_bg = black
+col_status_bg = blue
 col_infobar = black
-col_infobar_delimiters = cyan
+col_infobar_delimiters = blue
 col_infobar_highlight = white
-col_infobar_bg = black
+col_infobar_bg = cyan
 col_input = default
 col_input_server = brown
 col_input_channel = white
 col_input_nick = lightcyan
 col_input_delimiters = cyan
-col_input_text_not_found = cyan
+col_input_text_not_found = red
 col_input_actions = lightgreen
 col_input_bg = default
 col_nick = default
@@ -98,9 +98,9 @@ col_nick_chanadmin = lightgreen
 col_nick_op = lightgreen
 col_nick_halfop = lightmagenta
 col_nick_voice = yellow
-col_nick_user = cyan
+col_nick_user = blue
 col_nick_more = lightmagenta
-col_nick_sep = cyan
+col_nick_sep = blue
 col_nick_self = white
 col_nick_color1 = cyan
 col_nick_color2 = magenta
@@ -111,7 +111,7 @@ col_nick_color6 = default
 col_nick_color7 = lightcyan
 col_nick_color8 = lightmagenta
 col_nick_color9 = lightgreen
-col_nick_color10 = cyan
+col_nick_color10 = blue
 col_nick_private = default
 col_nick_bg = default
 col_chat_dcc_selected = white
@@ -162,7 +162,7 @@ dcc_blocksize = 65536
 dcc_fast_send = on
 dcc_port_range = ""
 dcc_own_ip = ""
-dcc_download_path = "/home/barrucadu/tmp/dcc"
+dcc_download_path = "%h/dcc"
 dcc_upload_path = "~"
 dcc_convert_spaces = on
 dcc_auto_rename = on
@@ -420,50 +420,6 @@ server_realname = "Michael S. Walker"
 server_hostname = ""
 server_command = ""
 server_command_delay = 0
-server_autojoin = ""
-server_autorejoin = on
-server_notify_levels = ""
-
-[server]
-server_name = "im"
-server_autoconnect = off
-server_autoreconnect = on
-server_autoreconnect_delay = 30
-server_address = "localhost"
-server_port = 6667
-server_ipv6 = off
-server_ssl = off
-server_password = ""
-server_nick1 = "weechat_user"
-server_nick2 = "weechat2"
-server_nick3 = "weechat3"
-server_username = "weechat"
-server_realname = "realname"
-server_hostname = ""
-server_command = ""
-server_command_delay = 1
-server_autojoin = ""
-server_autorejoin = on
-server_notify_levels = ""
-
-[server]
-server_name = "irc.freenode.net"
-server_autoconnect = off
-server_autoreconnect = on
-server_autoreconnect_delay = 30
-server_address = "freenode"
-server_port = 6667
-server_ipv6 = off
-server_ssl = off
-server_password = ""
-server_nick1 = "weechat_user"
-server_nick2 = "weechat2"
-server_nick3 = "weechat3"
-server_username = "weechat"
-server_realname = "realname"
-server_hostname = ""
-server_command = ""
-server_command_delay = 1
 server_autojoin = ""
 server_autorejoin = on
 server_notify_levels = ""

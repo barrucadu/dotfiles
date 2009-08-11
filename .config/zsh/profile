@@ -1,7 +1,7 @@
 ## -*- shell-script -*-
 
 # Environmental Variables
-export PATH=$PATH:/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin
+export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin"
 export BROWSER=/usr/bin/opera
 export EDITOR=emacs
 export VISUAL=emacs
@@ -22,6 +22,10 @@ export SCHEME_LIBRARY_PATH=/usr/lib/slib/
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 export LC_CTYPE=C
+export LD_PRELOAD=libetc.so
+export LIBETC_BLACKLIST="/bin/ls:/bin/mv:/bin/cp:/bin/ln:/usr/bin/find:/bin/rm:/bin/cat:/bin/ln:/usr/bin/file:/usr/bin/most:/bin/zcat:/bin/grep:/usr/bin/git"
+export LIBETC_DATA="/home/barrucadu/.gtk-bookmarks"
+export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barrucadu/.signature:/home/barrucadu/.git"
 
 # Framebuffer colours
 if [ "$TERM" = "linux" ]; then
