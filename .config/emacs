@@ -19,7 +19,6 @@
 (load "latex.el"    nil t t)
 (load "phpxhtml.el" nil t t)
 
-(require 'color-theme)
 (require 'setnu+)
 (require 'w3m-load)
 

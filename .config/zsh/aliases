@@ -60,6 +60,8 @@ alias synchronise='sudo pacman -Syyuw && sudo abs'
 alias upgrades='pacman -Qu'
 alias deorphan='sudo pacman -Rsc $(pacman -Qtdq)'
 alias pacgraph='pacgraph -b \#111111 -l \#ffffff -t \#eeeeee -d \#aaaaaa'
+alias pacgroup='pacman -Qg'
+alias pacgroups='pacman -Qg | sed "s/ .*//" | sort | uniq'
 
 # Security
 alias sgpg='gpg -e -a -r 294CE438'
@@ -68,7 +70,7 @@ alias xlock='xscreensaver-command -lock'
 alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Maintenance
-alias fixopera=' rm -r ~/.opera/{mail,lock}'
+alias fixopera=' rm -r ~/.config/opera/{mail,lock}'
 
 # Servers
 alias sql='mysql -p -u root'
@@ -89,7 +91,6 @@ alias gc='git commit'
 # Coding
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 alias gdb='gdb -ex run -ex backtrace --args'
-alias uzt='uzbltest'
 
 # Miscellanious
 alias aliases='cat ~/.config/zsh/aliases'
@@ -98,7 +99,7 @@ alias rmatrix='cmatrix -C red -l -b'
 alias mp3ogg='mp32ogg *.mp3 && rm *.mp3'
 alias parts='cat /proc/partitions'
 alias reload='source ~/.zshrc'
-alias xreload='xrdb -load ~/.Xdefaults'
+alias xreload='xrdb -load ~/.config/Xdefaults'
 alias zen='fortune /usr/share/fortune/zen'
 alias rfcdate='date --rfc-3339="seconds"'
 alias screenx='screen -r `screen -ls | grep Detached | sed "s/(.*//"`'
