@@ -198,3 +198,8 @@ function extract ()
             echo "don't know how to extract '$1'...";;
     esac
 }
+
+function files ()
+{
+    ls -Al $1 | wc -l
+}

@@ -25,7 +25,7 @@ export LC_CTYPE=C
 export LD_PRELOAD=libetc.so
 export LIBETC_BLACKLIST="/bin/ls:/bin/mv:/bin/cp:/bin/ln:/usr/bin/find:/bin/rm:/bin/cat:/bin/ln:/usr/bin/file:/usr/bin/most:/bin/zcat:/bin/grep:/usr/bin/git:/usr/bin/git-cvsserver:/usr/bin/git-receive-pack:/usr/bin/git-shell:/usr/bin/git-upload-archive:/usr/bin/git-upload-pack:/usr/bin/gitk"
 export LIBETC_DATA="/home/barrucadu/.gtk-bookmarks"
-export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barrucadu/.signature:/home/barrucadu/.git"
+export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barrucadu/.signature:/home/barrucadu/.git:/home/barrucadu/.gitignore:/home/barrucadu/.gitconfig"
 
 # Framebuffer colours
 if [ "$TERM" = "linux" ]; then
