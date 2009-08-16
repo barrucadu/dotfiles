@@ -1,0 +1,67 @@
+#!/bin/zsh
+
+MPDSERVER="localhost"
+MPDPORT="6600"
+
+function help()
+{
+    echo "nmpc - a simple netcat-powered MPD client."
+    echo
+    echo "Usage: ncmpc [command] <args>"
+    echo
+    echo "Commands:"
+    echo "     clear"
+    echo "     next"
+    echo "     previous"
+    echo "     play"
+    echo "     pause"
+    echo "     stop"
+    echo "     status"
+    echo "     stats"
+    echo "     update"
+    echo "     find <string type> <string what>"
+    echo "     list <metadata arg1> [<metadata arg2> <search term>]"
+    echo "     listall [<string path>]"
+    echo "     listallinfo [<string path>]"
+    echo "     lsinfo  [<string directory>]"
+    echo "     search <string type> <string what>"
+    echo "     count <str scope specifier> <str query>"
+}
+
+function mpdfunc()
+{
+    arglist=$1
+    [ "$2" != "" ] &&                   arglist="$arglist $2"
+    [ "$3" != "" ] && [ "$4" = "" ]  && arglist="$arglist \"$3\""
+    [ "$3" != "" ] && [ "$4" != "" ] && arglist="$arglist $3 \"$4\""
+
+    echo "$arglist\nclose" | netcat $MPDSERVER $MPDPORT | sed "/^OK.*$/d"
+}
+
+function error()
+{
+    echo "Unknown command: $*"
+}
+
+case $1 in
+    "")            help;;
+    "-h")          help;;
+    "--help")      help;;
+    "clear")       mpdfunc $*;;
+    "next")        mpdfunc $*;;
+    "previous")    mpdfunc $*;;
+    "play")        mpdfunc $*;;
+    "pause")       mpdfunc $*;;
+    "stop")        mpdfunc $*;;
+    "status")      mpdfunc $*;;
+    "stats")       mpdfunc $*;;
+    "update")      mpdfunc $*;;
+    "find")        mpdfunc $*;;
+    "list")        mpdfunc $*;;
+    "listall")     mpdfunc $*;;
+    "listallinfo") mpdfunc $*;;
+    "lsinfo")      mpdfunc $*;;
+    "search")      mpdfunc $*;;
+    "count")       mpdfunc $*;;
+    *)             error   $*;;
+esac
