@@ -64,7 +64,6 @@ alias pacgroup='pacman -Qg'
 alias pacgroups='pacman -Qg | sed "s/ .*//" | sort | uniq'
 
 # Security
-alias sgpg='gpg -e -a -r 294CE438'
 alias gpgasc='gpg -a --detach-sign'
 alias xlock='xscreensaver-command -lock'
 alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'

@@ -203,3 +203,10 @@ function files ()
 {
     ls -Al $1 | wc -l
 }
+
+function define ()
+{
+    dictionary="english"
+    [[ "$2" != "" ]] && dictionary=$2
+    echo "DEFINE $dictionary $1\nQUIT" | netcat dict.org 2628
+}
