@@ -1,4 +1,10 @@
 #!/bin/zsh
 
 kill `pgrep -f mpddp-bin`
-mpddp-bin &>/dev/null &
+
+if [[ "$1" != "kill" ]]; then
+    echo "Starting MPDDP..."
+    mpddp-bin &>/dev/null &
+else
+    echo "MPDDP killed."
+fi
