@@ -80,37 +80,44 @@ function commit()
 
 function gith()
 {
-    cd ~
+    pushd ~
     commit $1
+    pushd .git
     git push origin master
+    popd
+    popd
 }
 
 function gituz()
 {
-    cd ~/uzbl
+    pushd ~/uzbl
     commit $1
     git push uzbl experimental
+    popd
 }
 
 function gituw()
 {
-    cd /media/MHD/websites/uzbl.org
+    pushd /media/MHD/websites/uzbl.org
     commit $1
     git push uzbl-website master
+    popd
 }
 
 function gitwii()
 {
-    cd ~/wiipen
+    pushd ~/wiipen
     commit $1
     git push wiipen master
+    popd
 }
 
 function gitbar()
 {
-    cd /media/MHD/websites/barrucadu.co.uk
+    pushd /media/MHD/websites/barrucadu.co.uk
     commit $1
     git push github master
+    popd
 }
 
 function gitei()
@@ -132,14 +139,13 @@ EOF
 
 function download()
 {
-    dir=`pwd`
-    cd /tmp
+    pushd /tmp
     ncftp barrucadu <<EOF
 get $1
 exit
 EOF
     mv $(basename $1) $2
-    cd $dir
+    popd $dir
 }
 
 function ou()
