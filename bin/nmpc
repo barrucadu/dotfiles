@@ -9,7 +9,8 @@ function help()
     echo
     echo "Usage: ncmpc [command] <args>"
     echo
-    echo "Commands:"
+    echo "MPD Commands:"
+    echo "  These are just sent on to MPD as-is."
     echo "     clear"
     echo "     next"
     echo "     previous"
@@ -26,6 +27,10 @@ function help()
     echo "     lsinfo  [<string directory>]"
     echo "     search <string type> <string what>"
     echo "     count <str scope specifier> <str query>"
+    echo
+    echo "NMPC Commands:"
+    echo "  These are more advanced commands handled by nmpc"
+    echo "     toggle"
 }
 
 function mpdfunc()
@@ -38,6 +43,18 @@ function mpdfunc()
     echo "$arglist\nclose" | netcat $MPDSERVER $MPDPORT | sed "/^OK.*$/d"
 }
 
+function nmpcfunc()
+{
+    case $1 in
+        "toggle")
+            if mpdfunc status | grep -q "state: play"; then
+                mpdfunc pause
+            else
+                mpdfunc play
+            fi;;
+        esac
+}
+
 function error()
 {
     echo "Unknown command: $*"
@@ -47,21 +64,22 @@ case $1 in
     "")            help;;
     "-h")          help;;
     "--help")      help;;
-    "clear")       mpdfunc $*;;
-    "next")        mpdfunc $*;;
-    "previous")    mpdfunc $*;;
-    "play")        mpdfunc $*;;
-    "pause")       mpdfunc $*;;
-    "stop")        mpdfunc $*;;
-    "status")      mpdfunc $*;;
-    "stats")       mpdfunc $*;;
-    "update")      mpdfunc $*;;
-    "find")        mpdfunc $*;;
-    "list")        mpdfunc $*;;
-    "listall")     mpdfunc $*;;
-    "listallinfo") mpdfunc $*;;
-    "lsinfo")      mpdfunc $*;;
-    "search")      mpdfunc $*;;
-    "count")       mpdfunc $*;;
-    *)             error   $*;;
+    "clear")       mpdfunc  $*;;
+    "next")        mpdfunc  $*;;
+    "previous")    mpdfunc  $*;;
+    "play")        mpdfunc  $*;;
+    "pause")       mpdfunc  $*;;
+    "stop")        mpdfunc  $*;;
+    "status")      mpdfunc  $*;;
+    "stats")       mpdfunc  $*;;
+    "update")      mpdfunc  $*;;
+    "find")        mpdfunc  $*;;
+    "list")        mpdfunc  $*;;
+    "listall")     mpdfunc  $*;;
+    "listallinfo") mpdfunc  $*;;
+    "lsinfo")      mpdfunc  $*;;
+    "search")      mpdfunc  $*;;
+    "count")       mpdfunc  $*;;
+    "toggle")      nmpcfunc $*;;
+    *)             error    $*;;
 esac

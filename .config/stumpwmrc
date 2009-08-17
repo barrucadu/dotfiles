@@ -52,7 +52,7 @@
 (define-key *top-map* (kbd "M-XF86HomePage")  "exec opera")
 (define-key *top-map* (kbd "C-XF86HomePage")  "exec claws-mail")
 
-(define-key *top-map* (kbd "XF86AudioPlay")   "exec mpc toggle")
+(define-key *top-map* (kbd "XF86AudioPlay")   "exec nmpc toggle")
 (define-key *top-map* (kbd "C-XF86AudioPlay") "exec mpddp")
 (define-key *top-map* (kbd "XF86AudioStop")   "exec nmpc stop")
 (define-key *top-map* (kbd "XF86AudioPrev")   "exec nmpc previous")
