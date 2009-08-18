@@ -3,6 +3,8 @@
 MPDSERVER="localhost"
 MPDPORT="6600"
 
+alias -g clean='sed "/^OK.*$/d"'
+
 function help()
 {
     echo "nmpc - a simple netcat-powered MPD client."
@@ -11,22 +13,30 @@ function help()
     echo
     echo "MPD Commands:"
     echo "  These are just sent on to MPD as-is."
-    echo "     clear"
-    echo "     next"
-    echo "     previous"
-    echo "     play"
-    echo "     pause"
-    echo "     stop"
-    echo "     update"
-    echo "     find <string type> <string what>"
-    echo "     list <metadata arg1> [<metadata arg2> <search term>]"
-    echo "     add <string>"
-    echo "     delete <int song>"
-    echo "     save <string playlist name>"
-    echo "     rm <string playlist name>"
-    echo "     shuffle"
-    echo "     crossfade"
-    echo "     setvol <int vol>"
+    echo
+    echo "     Playback Commands"
+    echo "         clear"
+    echo "         next"
+    echo "         previous"
+    echo "         play"
+    echo "         pause"
+    echo "         stop"
+    echo "         shuffle"
+    echo "         crossfade"
+    echo "         setvol <int vol>"
+    echo
+    echo "     Track Commands"
+    echo "         find <string type> <string what>"
+    echo "         list <metadata arg1> [<metadata arg2> <search term>]"
+    echo
+    echo "     Playlist Commands"
+    echo "         add <string>"
+    echo "         delete <int song>"
+    echo "         save <string playlist name>"
+    echo "         rm <string playlist name>"
+    echo
+    echo "     Database Commands"
+    echo "         update"
     echo
     echo "NMPC Commands:"
     echo "  These are more advanced commands handled by nmpc"
@@ -58,7 +68,7 @@ function mpdfunc()
 
     [ "$1" = "add" ] || [ "$1" = "save" ] || [ "$1" = "rm" ] && arglist="$1 \"$2\""
 
-    rawcmd "$arglist" | sed "/^OK.*$/d"
+    rawcmd "$arglist" | clean
 }
 
 function nmpcfunc()
@@ -73,7 +83,7 @@ function nmpcfunc()
         "raw")
             rawcmd "$2";;
         "info")
-            info=`rawcmd stats | sed "/^OK.*$/d"`
+            info=`rawcmd stats | clean`
 
             playtime=`line $info db_playtime`
             artists=`line $info artists`
@@ -83,8 +93,8 @@ function nmpcfunc()
             runtime=`printf "%02d:%02d:%02d\n" $[$playtime / 3600 ] $[$playtime / 60 % 60] $[$playtime % 60]`
             echo "$artists artists, $albums albums, $songs songs, $runtime play time.";;
         "playing")
-            info=`rawcmd status | sed "/^OK.*$/d"`
-            sinfo=`rawcmd currentsong | sed "/^OK.*$/d"`
+            info=`rawcmd status | clean`
+            sinfo=`rawcmd currentsong | clean`
 
             track=`line $sinfo title`
             artist=`line $sinfo artist`
@@ -99,10 +109,10 @@ function nmpcfunc()
             echo "$track, by $artist in $album [$state]"
             echo "$volume% volume, repeat $repeat, random $random, crossfade $crossfade";;
         "playlist")
-            rawcmd clear | sed "/^OK.*$/d"
-            rawcmd "playlist \"$2\"" | sed "/^OK.*$/d";;
+            rawcmd clear | clean
+            rawcmd "playlist \"$2\"" | clean;;
         "playlists")
-            info=`rawcmd lsinfo | sed "/^OK.*$/d"`
+            info=`rawcmd lsinfo | clean`
             echo $info | grep "playlist: " | sed "s/playlist: //";;
         esac
 }
