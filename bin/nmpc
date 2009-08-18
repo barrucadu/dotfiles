@@ -17,30 +17,36 @@ function help()
     echo "     play"
     echo "     pause"
     echo "     stop"
-    echo "     status"
-    echo "     stats"
     echo "     update"
     echo "     find <string type> <string what>"
     echo "     list <metadata arg1> [<metadata arg2> <search term>]"
-    echo "     listall [<string path>]"
-    echo "     listallinfo [<string path>]"
-    echo "     lsinfo  [<string directory>]"
-    echo "     search <string type> <string what>"
-    echo "     count <str scope specifier> <str query>"
     echo
     echo "NMPC Commands:"
     echo "  These are more advanced commands handled by nmpc"
-    echo "     toggle"
+    echo "     toggle  - toggle the play/pauses state"
+    echo "     raw     - send \$2 as a command to MPD"
+    echo "     info    - information about MPD."
+}
+
+function line()
+{
+    echo "$1" | head -n $[$2 + 1] | tail -n 1
+}
+
+function rawcmd()
+{
+    echo "$1\nclose" | netcat $MPDSERVER $MPDPORT | sed "/^OK.*$/d"
 }
 
 function mpdfunc()
 {
     arglist=$1
+
     [ "$2" != "" ] &&                   arglist="$arglist $2"
     [ "$3" != "" ] && [ "$4" = "" ]  && arglist="$arglist \"$3\""
     [ "$3" != "" ] && [ "$4" != "" ] && arglist="$arglist $3 \"$4\""
 
-    echo "$arglist\nclose" | netcat $MPDSERVER $MPDPORT | sed "/^OK.*$/d"
+    rawcmd "$arglist"
 }
 
 function nmpcfunc()
@@ -48,10 +54,16 @@ function nmpcfunc()
     case $1 in
         "toggle")
             if mpdfunc status | grep -q "state: play"; then
-                mpdfunc pause
+                rawcmd pause
             else
-                mpdfunc play
+                rawcmd play
             fi;;
+        "raw")
+            rawcmd "$2";;
+        "info")
+            stats=`rawcmd stats | sed "s/.*: //"`
+            runtime=`printf "%02d:%02d:%02d\n" $[\`line $stats 5\` / 3600 ] $[\`line $stats 5\` / 60 % 60] $[\`line $stats 5\` % 60]`
+            echo "`line $stats 0` artists, `line $stats 1` albums, `line $stats 2` songs, $runtime play time."
         esac
 }
 
@@ -61,25 +73,15 @@ function error()
 }
 
 case $1 in
-    "")            help;;
-    "-h")          help;;
-    "--help")      help;;
-    "clear")       mpdfunc  $*;;
-    "next")        mpdfunc  $*;;
-    "previous")    mpdfunc  $*;;
-    "play")        mpdfunc  $*;;
-    "pause")       mpdfunc  $*;;
-    "stop")        mpdfunc  $*;;
-    "status")      mpdfunc  $*;;
-    "stats")       mpdfunc  $*;;
-    "update")      mpdfunc  $*;;
-    "find")        mpdfunc  $*;;
-    "list")        mpdfunc  $*;;
-    "listall")     mpdfunc  $*;;
-    "listallinfo") mpdfunc  $*;;
-    "lsinfo")      mpdfunc  $*;;
-    "search")      mpdfunc  $*;;
-    "count")       mpdfunc  $*;;
-    "toggle")      nmpcfunc $*;;
-    *)             error    $*;;
+    "" | "-h" | "--help")
+        help;;
+
+    "clear" | "next" | "previous" | "play" | "pause" | "stop" | "update" | "find" | "list")
+        mpdfunc $*;;
+
+    "toggle" | "raw" | "info")
+        nmpcfunc $*;;
+
+    *)
+        error $*;;
 esac
