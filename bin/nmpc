@@ -15,13 +15,11 @@ function help()
     echo "  These are just sent on to MPD as-is."
     echo
     echo "     Playback Commands"
-    echo "         clear"
     echo "         next"
     echo "         previous"
     echo "         play"
     echo "         pause"
     echo "         stop"
-    echo "         shuffle"
     echo "         crossfade"
     echo "         setvol <int vol>"
     echo
@@ -30,6 +28,8 @@ function help()
     echo "         list <metadata arg1> [<metadata arg2> <search term>]"
     echo
     echo "     Playlist Commands"
+    echo "         clear"
+    echo "         shuffle"
     echo "         add <string>"
     echo "         delete <int song>"
     echo "         save <string playlist name>"
