@@ -20,13 +20,22 @@ function help()
     echo "     update"
     echo "     find <string type> <string what>"
     echo "     list <metadata arg1> [<metadata arg2> <search term>]"
+    echo "     add <string>"
+    echo "     delete <int song>"
+    echo "     save <string playlist name>"
+    echo "     rm <string playlist name>"
+    echo "     shuffle"
+    echo "     crossfade"
+    echo "     setvol <int vol>"
     echo
     echo "NMPC Commands:"
     echo "  These are more advanced commands handled by nmpc"
-    echo "     toggle  - toggle the play/pauses state"
-    echo "     raw     - send \$2 as a command to MPD"
-    echo "     info    - information about MPD."
-    echo "     playing - information about the current playlist."
+    echo "     toggle              - toggle the play/pause state"
+    echo "     raw                 - send \$2 as a command to MPD"
+    echo "     info                - information about MPD."
+    echo "     playing             - information about the current playlist."
+    echo "     playlist <playlist> - clear the playlist and load the specified playlist."
+    echo "     playlists           - list the playlists."
 }
 
 function line()
@@ -36,7 +45,7 @@ function line()
 
 function rawcmd()
 {
-    echo "$1\nclose" | netcat $MPDSERVER $MPDPORT | sed "/^OK.*$/d"
+    echo "$1\nclose" | netcat $MPDSERVER $MPDPORT
 }
 
 function mpdfunc()
@@ -47,7 +56,9 @@ function mpdfunc()
     [ "$3" != "" ] && [ "$4" = "" ]  && arglist="$arglist \"$3\""
     [ "$3" != "" ] && [ "$4" != "" ] && arglist="$arglist $3 \"$4\""
 
-    rawcmd "$arglist"
+    [ "$1" = "add" ] || [ "$1" = "save" ] || [ "$1" = "rm" ] && arglist="$1 \"$2\""
+
+    rawcmd "$arglist" | sed "/^OK.*$/d"
 }
 
 function nmpcfunc()
@@ -62,7 +73,7 @@ function nmpcfunc()
         "raw")
             rawcmd "$2";;
         "info")
-            info=`rawcmd stats`
+            info=`rawcmd stats | sed "/^OK.*$/d"`
 
             playtime=`line $info db_playtime`
             artists=`line $info artists`
@@ -72,8 +83,8 @@ function nmpcfunc()
             runtime=`printf "%02d:%02d:%02d\n" $[$playtime / 3600 ] $[$playtime / 60 % 60] $[$playtime % 60]`
             echo "$artists artists, $albums albums, $songs songs, $runtime play time.";;
         "playing")
-            info=`rawcmd status`
-            sinfo=`rawcmd "playlistinfo \`line $info songid\`"`
+            info=`rawcmd status | sed "/^OK.*$/d"`
+            sinfo=`rawcmd currentsong | sed "/^OK.*$/d"`
 
             track=`line $sinfo title`
             artist=`line $sinfo artist`
@@ -87,6 +98,12 @@ function nmpcfunc()
             
             echo "$track, by $artist in $album [$state]"
             echo "$volume% volume, repeat $repeat, random $random, crossfade $crossfade";;
+        "playlist")
+            rawcmd clear | sed "/^OK.*$/d"
+            rawcmd "playlist \"$2\"" | sed "/^OK.*$/d";;
+        "playlists")
+            info=`rawcmd lsinfo | sed "/^OK.*$/d"`
+            echo $info | grep "playlist: " | sed "s/playlist: //";;
         esac
 }
 
@@ -99,10 +116,10 @@ case $1 in
     "-h" | "--help")
         help;;
 
-    "clear" | "next" | "previous" | "play" | "pause" | "stop" | "update" | "find" | "list")
+    "clear" | "next" | "previous" | "play" | "pause" | "stop" | "update" | "find" | "list" | "add" | "delete" | "save" | "rm" | "shuffle" | "crossfade" | "setvol")
         mpdfunc $*;;
 
-    "toggle" | "raw" | "info" | "playing")
+    "toggle" | "raw" | "info" | "playing" | "playlist" | "playlists")
         nmpcfunc $*;;
 
     "")
