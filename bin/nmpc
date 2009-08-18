@@ -9,7 +9,7 @@ function help()
 {
     echo "nmpc - a simple netcat-powered MPD client."
     echo
-    echo "Usage: nmpc [command] <args>"
+    echo "Usage: nmpc <command> [<arg1> ... <argn>]"
     echo
     echo "MPD Commands:"
     echo "  These are just sent on to MPD as-is."
