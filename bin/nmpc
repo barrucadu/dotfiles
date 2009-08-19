@@ -20,7 +20,6 @@ function help()
     echo "         play"
     echo "         pause"
     echo "         stop"
-    echo "         crossfade"
     echo "         setvol <int vol>"
     echo
     echo "     Track Commands"
@@ -41,6 +40,9 @@ function help()
     echo "NMPC Commands:"
     echo "  These are more advanced commands handled by nmpc"
     echo "     toggle              - toggle the play/pause state"
+    echo "     crossfade           - toggle the crossfade state"
+    echo "     repeat              - toggle the repeat state"
+    echo "     random              - toggle the random state"
     echo "     raw                 - send \$2 as a command to MPD"
     echo "     info                - information about MPD."
     echo "     playing             - information about the current playlist."
@@ -76,9 +78,27 @@ function nmpcfunc()
     case $1 in
         "toggle")
             if mpdfunc status | grep -q "state: play"; then
-                rawcmd pause
+                rawcmd pause &>/dev/null
             else
-                rawcmd play
+                rawcmd play &>/dev/null
+            fi;;
+        "crossfade")
+            if mpdfunc status | grep -q "xfade: 0"; then
+                rawcmd "crossfade 5" &>/dev/null
+            else
+                rawcmd "crossfade 0" &>/dev/null
+            fi;;
+        "repeat")
+            if mpdfunc status | grep -q "repeat: 0"; then
+                rawcmd "repeat 1" &>/dev/null
+            else
+                rawcmd "repeat 0" &>/dev/null
+            fi;;
+        "random")
+            if mpdfunc status | grep -q "random: 0"; then
+                rawcmd "random 1" &>/dev/null
+            else
+                rawcmd "random 0" &>/dev/null
             fi;;
         "raw")
             rawcmd "$2";;
@@ -126,10 +146,10 @@ case $1 in
     "-h" | "--help")
         help;;
 
-    "clear" | "next" | "previous" | "play" | "pause" | "stop" | "update" | "find" | "list" | "add" | "delete" | "save" | "rm" | "shuffle" | "crossfade" | "setvol")
+    "clear" | "next" | "previous" | "play" | "pause" | "stop" | "update" | "find" | "list" | "add" | "delete" | "save" | "rm" | "shuffle" | "setvol")
         mpdfunc $*;;
 
-    "toggle" | "raw" | "info" | "playing" | "playlist" | "playlists")
+    "toggle" | "crossfade" | "repeat" | "random" | "raw" | "info" | "playing" | "playlist" | "playlists")
         nmpcfunc $*;;
 
     "")
