@@ -45,6 +45,7 @@
 ; Right Hand
 (define-key *top-map* (kbd "C-S-Left")  "exec urxvtc -e emacs ~/docs/main.todo")
 (define-key *top-map* (kbd "C-S-Up")    "exec urxvtc -e ncmpcpp")
+(define-key *top-map* (kbd "C-S-Down")  "exec vlc")
 (define-key *top-map* (kbd "C-S-Right") "exec urxvtd -q -f -o")
 
 ; Media keys
