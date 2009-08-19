@@ -3,6 +3,8 @@
 MPDSERVER="localhost"
 MPDPORT="6600"
 
+DEFCMD="playing"
+
 alias -g clean='sed "/^OK.*$/d"'
 
 function help()
@@ -64,6 +66,11 @@ function toggle()
     fi
 }
 
+function nicetime()
+{
+    printf "%02d days %02d:%02d:%02d\n" $[$1 / 3600 / 24 ] $[$1 / 3600 % 24 ] $[$1 / 60 % 60] $[$1 % 60]
+}
+
 function rawcmd()
 {
     echo "$1\nclose" | netcat $MPDSERVER $MPDPORT
@@ -103,13 +110,23 @@ function nmpcfunc()
         "info")
             info=`rawcmd stats | clean`
 
-            playtime=`line $info db_playtime`
             artists=`line $info artists`
             albums=`line $info albums`
             songs=`line $info songs`
 
-            runtime=`printf "%02d days %02d:%02d:%02d\n" $[$playtime / 3600 / 24 ] $[$playtime / 3600 % 24 ] $[$playtime / 60 % 60] $[$playtime % 60]`
-            echo "$artists artists, $albums albums, $songs songs, $runtime play time.";;
+            uptime=`nicetime \`line $info uptime\``
+            playtime=`nicetime \`line $info playtime\``
+
+            dbupdate=`date -d \`line $info updated\` -R`
+            dbplaytime=`nicetime \`line $info db_playtime\``
+
+            echo "$artists artists, $albums albums, $songs songs."
+            echo
+            echo "Uptime:    $uptime"
+            echo "Play time: $playtime"
+            echo
+            echo "Database Updated:  $dbupdate"
+            echo "Database Playtime: $dbplaytime";;
 
         "playing")
             info=`rawcmd status | clean`
@@ -154,7 +171,7 @@ case $1 in
         nmpcfunc $*;;
 
     "")
-        nmpcfunc playing;;
+        nmpcfunc $DEFCMD;;
 
     *)
         error $*;;
