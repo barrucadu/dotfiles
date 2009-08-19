@@ -3,7 +3,7 @@
 MPDSERVER="localhost"
 MPDPORT="6600"
 
-DEFCMD="playing"
+DEFCMD="nmpcfunc playing"
 
 alias -g clean='sed "/^OK.*$/d"'
 
@@ -171,7 +171,7 @@ case $1 in
         nmpcfunc $*;;
 
     "")
-        nmpcfunc $DEFCMD;;
+        $DEFCMD[(w)1] $DEFCMD[(w)2] $DEFCMD[(w)3] $DEFCMD[(w)4] $DEFCMD[(w)5];;
 
     *)
         error $*;;
