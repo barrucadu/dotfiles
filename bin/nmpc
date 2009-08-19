@@ -55,6 +55,15 @@ function line()
     echo "$1" | grep -i "$2: " | sed "s/$2: //i"
 }
 
+function toggle()
+{
+    if mpdfunc "$1" | grep -q "$2"; then
+        rawcmd "$3" &>/dev/null
+    else
+        rawcmd "$4" &>/dev/null
+    fi
+}
+
 function rawcmd()
 {
     echo "$1\nclose" | netcat $MPDSERVER $MPDPORT
@@ -77,31 +86,20 @@ function nmpcfunc()
 {
     case $1 in
         "toggle")
-            if mpdfunc status | grep -q "state: play"; then
-                rawcmd pause &>/dev/null
-            else
-                rawcmd play &>/dev/null
-            fi;;
+            toggle status "state: play" pause play;;
+
         "crossfade")
-            if mpdfunc status | grep -q "xfade: 0"; then
-                rawcmd "crossfade 5" &>/dev/null
-            else
-                rawcmd "crossfade 0" &>/dev/null
-            fi;;
+            toggle status "xfade: 0" "crossfade 5" "crossfade 0";;
+
         "repeat")
-            if mpdfunc status | grep -q "repeat: 0"; then
-                rawcmd "repeat 1" &>/dev/null
-            else
-                rawcmd "repeat 0" &>/dev/null
-            fi;;
+            toggle status "repeat: 0" "repeat 1" "repeat 0";;
+
         "random")
-            if mpdfunc status | grep -q "random: 0"; then
-                rawcmd "random 1" &>/dev/null
-            else
-                rawcmd "random 0" &>/dev/null
-            fi;;
+            toggle status "random: 0" "random 1" "random 0";;
+
         "raw")
             rawcmd "$2";;
+
         "info")
             info=`rawcmd stats | clean`
 
@@ -110,8 +108,9 @@ function nmpcfunc()
             albums=`line $info albums`
             songs=`line $info songs`
 
-            runtime=`printf "%02d:%02d:%02d\n" $[$playtime / 3600 ] $[$playtime / 60 % 60] $[$playtime % 60]`
+            runtime=`printf "%02d days %02d:%02d:%02d\n" $[$playtime / 3600 / 24 ] $[$playtime / 3600 % 24 ] $[$playtime / 60 % 60] $[$playtime % 60]`
             echo "$artists artists, $albums albums, $songs songs, $runtime play time.";;
+
         "playing")
             info=`rawcmd status | clean`
             sinfo=`rawcmd currentsong | clean`
@@ -128,9 +127,11 @@ function nmpcfunc()
             
             echo "$track, by $artist in $album [$state]"
             echo "$volume% volume, repeat $repeat, random $random, crossfade $crossfade";;
+
         "playlist")
             rawcmd clear | clean
             rawcmd "playlist \"$2\"" | clean;;
+
         "playlists")
             info=`rawcmd lsinfo | clean`
             echo $info | grep "playlist: " | sed "s/playlist: //";;
