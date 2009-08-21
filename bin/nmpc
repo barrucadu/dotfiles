@@ -100,11 +100,8 @@ function toggle()
     var=`echo $1 | sed "s/:.*$//"`
     oncmd=`thisorthat $2 "$var 1"`
     offcmd=`thisorthat $3 "$var 0"`
-    if mpdfunc status | grep -q $1; then
-        rawcmd "$oncmd" &>/dev/null
-    else
-        rawcmd "$offcmd" &>/dev/null
-    fi
+
+    mpdfunc status | grep -q "$1" && rawcmd "$oncmd" &>/dev/null || rawcmd "$offcmd" &>/dev/null
 }
 
 function nicetime()
