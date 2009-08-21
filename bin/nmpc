@@ -111,7 +111,10 @@ function nicetime()
 
 function rawcmd()
 {
-    echo "$1\nclose" | netcat $MPDSERVER $MPDPORT
+    output=`echo "$1\nclose" | netcat $MPDSERVER $MPDPORT`
+    echo $output
+    echo $output | grep "^ACK " -q
+    return 1
 }
 
 function mpdfunc()
@@ -124,7 +127,11 @@ function mpdfunc()
 
     [ "$1" = "add" ] || [ "$1" = "save" ] || [ "$1" = "rm" ] && arglist="$1 \"$2\""
 
-    rawcmd "$arglist" | clean
+    output=`rawcmd "$arglist"`
+    retval=$?
+
+    echo $output | clean
+    return $retval
 }
 
 function nmpcfunc()
@@ -147,7 +154,9 @@ function nmpcfunc()
             toggle "random: 0";;
 
         "raw")
-            rawcmd "$2";;
+            output=`rawcmd "$2"`
+            echo $output
+            return $?;;
 
         "info")
             artists=`line $mpd_info artists`
@@ -200,8 +209,7 @@ function nmpcfunc()
             rawcmd "playlist \"$2\"" | clean;;
 
         "playlists")
-            info=`rawcmd lsinfo | clean`
-            echo $playlist_info | grep "playlist: " | sed "s/playlist: //";;
+            rawcmd lsinfo | grep "playlist: " | sed "s/playlist: //" | clean;;
         esac
 }
 
@@ -224,11 +232,14 @@ case $1 in
         help $*;;
 
     "clear" | "next" | "previous" | "play" | "pause" | "stop" | "update" | "find" | "list" | "add" | "delete" | "save" | "rm" | "shuffle" | "setvol")
-        mpdfunc $*;;
+        mpdfunc $*
+        return $?;;
 
     "toggle" | "crossfade" | "repeat" | "random" | "raw" | "info" | "playing" | "status" | "playlist" | "playlists")
-        nmpcfunc $*;;
+        nmpcfunc $*
+        return $?;;
 
     *)
-        error $*;;
+        error $*
+        return 1;;
 esac
