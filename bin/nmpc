@@ -3,53 +3,93 @@
 MPDSERVER="localhost"
 MPDPORT="6600"
 
-DEFCMD="nmpcfunc playing"
+DEFCMD=`[ "$NMPC_DEFCMD" = "" ] && echo "nmpcfunc playing" || echo $NMPC_DEFCMD`
+
+VERSION=9.8.21
 
 alias -g clean='sed "/^OK.*$/d"'
 
 function help()
 {
-    echo "nmpc - a simple netcat-powered MPD client."
-    echo
-    echo "Usage: nmpc <command> [<arg1> ... <argn>]"
-    echo
-    echo "MPD Commands:"
-    echo "  These are just sent on to MPD as-is."
-    echo
-    echo "     Playback Commands"
-    echo "         next"
-    echo "         previous"
-    echo "         play"
-    echo "         pause"
-    echo "         stop"
-    echo "         setvol <int vol>"
-    echo
-    echo "     Track Commands"
-    echo "         find <string type> <string what>"
-    echo "         list <metadata arg1> [<metadata arg2> <search term>]"
-    echo
-    echo "     Playlist Commands"
-    echo "         clear"
-    echo "         shuffle"
-    echo "         add <string>"
-    echo "         delete <int song>"
-    echo "         save <string playlist name>"
-    echo "         rm <string playlist name>"
-    echo
-    echo "     Database Commands"
-    echo "         update"
-    echo
-    echo "NMPC Commands:"
-    echo "  These are more advanced commands handled by nmpc"
-    echo "     toggle              - toggle the play/pause state"
-    echo "     crossfade           - toggle the crossfade state"
-    echo "     repeat              - toggle the repeat state"
-    echo "     random              - toggle the random state"
-    echo "     raw                 - send \$2 as a command to MPD"
-    echo "     info                - information about MPD."
-    echo "     playing             - information about the current playlist."
-    echo "     playlist <playlist> - clear the playlist and load the specified playlist."
-    echo "     playlists           - list the playlists."
+    if [[ "$1" != " " ]]; then
+        echo "nmpc $VERSION - a simple netcat-powered MPD client."
+        echo
+        echo "Usage: nmpc <command> [<arg1> ... <argn>]"
+        echo
+    fi
+
+    case $2 in
+        "")
+            if [[ "$NMPC_DEFHELP" = "" ]]; then
+                echo "To view more in-depth help use the commands:"
+                echo "nmpc --help all"
+                echo "nmpc --help mpd"
+                echo "nmpc --help nmpc"
+                echo
+                echo "You can edit the default help option by setting the environmental variable \$NMPC_DEFHELP."
+            else
+                help " " $NMPC_DEFHELP
+            fi;;
+
+        "mpd")
+            echo "If nmpc cannot connect to your MPD server, you may need to edit the"
+            echo "\$MPDSERVER and \$MPDPORT variables in the source code."
+            echo 
+            echo "MPD Commands:"
+            echo "  These are just sent on to MPD as-is."
+            echo
+            echo "     Playback Commands"
+            echo "         next"
+            echo "         previous"
+            echo "         play"
+            echo "         pause"
+            echo "         stop"
+            echo "         setvol <int vol>"
+            echo
+            echo "     Track Commands"
+            echo "         find <string type> <string what>"
+            echo "         list <metadata arg1> [<metadata arg2> <search term>]"
+            echo
+            echo "     Playlist Commands"
+            echo "         clear"
+            echo "         shuffle"
+            echo "         add <string>"
+            echo "         delete <int song>"
+            echo "         save <string playlist name>"
+            echo "         rm <string playlist name>"
+            echo
+            echo "     Database Commands"
+            echo "         update";;
+
+        "nmpc")
+            echo "NMPC Commands:"
+            echo "  These are more advanced commands handled by nmpc"
+            echo "     toggle              - toggle the play/pause state"
+            echo "     crossfade           - toggle the crossfade state"
+            echo "     repeat              - toggle the repeat state"
+            echo "     random              - toggle the random state"
+            echo "     raw                 - send \$2 as a command to MPD"
+            echo "     info                - information about MPD."
+            echo "     playing <spread>    - information about the current playlist. If spread is not blank, use more than two lines."
+            echo "     status              - information about MPD and the current playlist."
+            echo "     playlist <playlist> - clear the playlist and load the specified playlist."
+            echo "     playlists           - list the playlists."
+            echo
+            echo "You can change the value of the nmpc default command by editing the environmental variable \$NMPC_DEFCMD"
+            echo
+            echo "Versions:"
+            echo "    nmpc versions are named using the last date I made a significant change, so you can easily see"
+            echo "    how active current nmpc development is by looking at the last major change date."
+            echo
+            echo "Author:"
+            echo "    nmpc is written and maintained by Michael Walker (Barrucadu)"
+            echo "    Contact information and my public key can be found on my website, http://www.barrucadu.co.uk";;
+
+        "all")
+            help " " "mpd"
+            echo
+            help " " "nmpc";;
+    esac
 }
 
 function line()
@@ -91,6 +131,10 @@ function mpdfunc()
 
 function nmpcfunc()
 {
+    playlist_info=`rawcmd status | clean`
+    song_info=`rawcmd currentsong | clean`
+    mpd_info=`rawcmd stats | clean`
+
     case $1 in
         "toggle")
             toggle status "state: play" pause play;;
@@ -108,17 +152,15 @@ function nmpcfunc()
             rawcmd "$2";;
 
         "info")
-            info=`rawcmd stats | clean`
+            artists=`line $mpd_info artists`
+            albums=`line $mpd_info albums`
+            songs=`line $mpd_info songs`
 
-            artists=`line $info artists`
-            albums=`line $info albums`
-            songs=`line $info songs`
+            uptime=`nicetime \`line $mpd_info uptime\``
+            playtime=`nicetime \`line $mpd_info playtime\``
 
-            uptime=`nicetime \`line $info uptime\``
-            playtime=`nicetime \`line $info playtime\``
-
-            dbupdate=`date -d \`line $info updated\` -R`
-            dbplaytime=`nicetime \`line $info db_playtime\``
+            dbupdate=`date -d \`line $mpd_info db_updated\` -R`
+            dbplaytime=`nicetime \`line $mpd_info db_playtime\``
 
             echo "$artists artists, $albums albums, $songs songs."
             echo
@@ -129,21 +171,31 @@ function nmpcfunc()
             echo "Database Playtime: $dbplaytime";;
 
         "playing")
-            info=`rawcmd status | clean`
-            sinfo=`rawcmd currentsong | clean`
+            track=`line $song_info title`
+            artist=`line $song_info artist`
+            album=`line $song_info album`
+            state=`line $playlist_info state`
 
-            track=`line $sinfo title`
-            artist=`line $sinfo artist`
-            album=`line $sinfo album`
-            state=`line $info state`
+            volume=`line $playlist_info volume`
+            repeat="on";    [ "`line $playlist_info repeat`" = "0" ] && repeat="off"
+            random="on";    [ "`line $playlist_info random`" = "0" ] && random="off"
+            crossfade="on"; [ "`line $playlist_info xfade`"  = "0" ] && crossfade="off"
 
-            volume=`line $info volume`
-            repeat="on";    [ "`line $info repeat`" = "0" ] && repeat="off"
-            random="on";    [ "`line $info random`" = "0" ] && random="off"
-            crossfade="on"; [ "`line $info xfade`"  = "0" ] && crossfade="off"
-            
             echo "$track, by $artist in $album [$state]"
-            echo "$volume% volume, repeat $repeat, random $random, crossfade $crossfade";;
+            if [[ "$2" = "" ]]; then
+                echo "$volume% volume, repeat $repeat, random $random, crossfade $crossfade"
+            else
+                echo
+                echo "Volume:    $volume%"
+                echo "Repeat:    $repeat"
+                echo "Random:    $random"
+                echo "Crossfade: $crossfade"
+            fi;;
+
+        "status")
+            nmpcfunc playing
+            echo
+            nmpcfunc info;;
 
         "playlist")
             rawcmd clear | clean
@@ -151,7 +203,7 @@ function nmpcfunc()
 
         "playlists")
             info=`rawcmd lsinfo | clean`
-            echo $info | grep "playlist: " | sed "s/playlist: //";;
+            echo $playlist_info | grep "playlist: " | sed "s/playlist: //";;
         esac
 }
 
@@ -162,12 +214,12 @@ function error()
 
 case $1 in
     "-h" | "--help")
-        help;;
+        help $*;;
 
     "clear" | "next" | "previous" | "play" | "pause" | "stop" | "update" | "find" | "list" | "add" | "delete" | "save" | "rm" | "shuffle" | "setvol")
         mpdfunc $*;;
 
-    "toggle" | "crossfade" | "repeat" | "random" | "raw" | "info" | "playing" | "playlist" | "playlists")
+    "toggle" | "crossfade" | "repeat" | "random" | "raw" | "info" | "playing" | "status" | "playlist" | "playlists")
         nmpcfunc $*;;
 
     "")
