@@ -1,18 +1,11 @@
 #!/bin/zsh
 
-MPDSERVER="localhost"
-MPDPORT="6600"
-
-DEFCMD=`[ "$NMPC_DEFCMD" = "" ] && echo "nmpcfunc playing" || echo $NMPC_DEFCMD`
-
-VERSION=9.8.21
-
 alias -g clean='sed "/^OK.*$/d"'
 
 function help()
 {
     if [[ "$1" != " " ]]; then
-        echo "nmpc $VERSION - a simple netcat-powered MPD client."
+        echo "nmpc $NMPC_VERSION - a simple netcat-powered MPD client."
         echo
         echo "Usage: nmpc <command> [<arg1> ... <argn>]"
         echo
@@ -97,12 +90,20 @@ function line()
     echo "$1" | grep -i "$2: " | sed "s/$2: //i"
 }
 
+function thisorthat()
+{
+    [ "$1" != "" ] && echo $1 || echo $2
+}
+
 function toggle()
 {
-    if mpdfunc "$1" | grep -q "$2"; then
-        rawcmd "$3" &>/dev/null
+    var=`echo $1 | sed "s/:.*$//"`
+    oncmd=`thisorthat $2 "$var 1"`
+    offcmd=`thisorthat $3 "$var 0"`
+    if mpdfunc status | grep -q $1; then
+        rawcmd "$oncmd" &>/dev/null
     else
-        rawcmd "$4" &>/dev/null
+        rawcmd "$offcmd" &>/dev/null
     fi
 }
 
@@ -137,16 +138,16 @@ function nmpcfunc()
 
     case $1 in
         "toggle")
-            toggle status "state: play" pause play;;
+            toggle "state: play" pause play;;
 
         "crossfade")
-            toggle status "xfade: 0" "crossfade 5" "crossfade 0";;
+            toggle "xfade: 0" "crossfade 5" "crossfade 0";;
 
         "repeat")
-            toggle status "repeat: 0" "repeat 1" "repeat 0";;
+            toggle "repeat: 0";;
 
         "random")
-            toggle status "random: 0" "random 1" "random 0";;
+            toggle "random: 0";;
 
         "raw")
             rawcmd "$2";;
@@ -212,6 +213,13 @@ function error()
     echo "Unknown command: $*"
 }
 
+
+MPDSERVER="localhost"
+MPDPORT="6600"
+
+NMPC_DEFCMD=`thisorthat $NMPC_DEFCMD "nmpcfunc_playing"`
+NMPC_VERSION=9.8.21
+
 case $1 in
     "-h" | "--help")
         help $*;;
@@ -223,7 +231,7 @@ case $1 in
         nmpcfunc $*;;
 
     "")
-        $DEFCMD[(w)1] $DEFCMD[(w)2] $DEFCMD[(w)3] $DEFCMD[(w)4] $DEFCMD[(w)5];;
+        $NMPC_DEFCMD[(w)1] $NMPC_DEFCMD[(w)2] $NMPC_DEFCMD[(w)3] $NMPC_DEFCMD[(w)4] $NMPC_DEFCMD[(w)5];;
 
     *)
         error $*;;
