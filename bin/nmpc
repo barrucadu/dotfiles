@@ -214,8 +214,10 @@ function error()
 MPDSERVER="localhost"
 MPDPORT="6600"
 
-NMPC_DEFCMD=`thisorthat $NMPC_DEFCMD "nmpcfunc_playing"`
+NMPC_DEFCMD=`thisorthat $NMPC_DEFCMD "playing"`
 NMPC_VERSION=9.8.21
+
+1=`thisorthat $1 $NMPC_DEFCMD`
 
 case $1 in
     "-h" | "--help")
@@ -226,9 +228,6 @@ case $1 in
 
     "toggle" | "crossfade" | "repeat" | "random" | "raw" | "info" | "playing" | "status" | "playlist" | "playlists")
         nmpcfunc $*;;
-
-    "")
-        $NMPC_DEFCMD[(w)1] $NMPC_DEFCMD[(w)2] $NMPC_DEFCMD[(w)3] $NMPC_DEFCMD[(w)4] $NMPC_DEFCMD[(w)5];;
 
     *)
         error $*;;
