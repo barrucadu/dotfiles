@@ -188,14 +188,15 @@ function nmpcfunc()
             echo "Database Playtime: $dbplaytime";;
 
         "playing")
-            track=`line $song_info title`
-            artist=`line $song_info artist`
-            album=`line $song_info album`
             state=`line $playlist_info state`
 
             if [[ "$state" = "stop" ]]; then
                 echo "No track currently playing."
             else
+                track=`line $song_info title`
+                artist=`line $song_info artist`
+                album=`line $song_info album`
+
                 volume=`line $playlist_info volume`
                 repeat="on";    [ "`line $playlist_info repeat`" = "0" ] && repeat="off"
                 random="on";    [ "`line $playlist_info random`" = "0" ] && random="off"
