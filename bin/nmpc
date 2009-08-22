@@ -65,11 +65,13 @@ function help()
             echo "     raw                 - send \$2 as a command to MPD"
             echo "     info                - information about MPD."
             echo "     playing <spread>    - information about the current playlist. If spread is not blank, use more than two lines."
-            echo "     status              - information about MPD and the current playlist."
+            echo "     status <spread>     - information about MPD and the current playlist."
             echo "     playlist <playlist> - clear the playlist and load the specified playlist."
             echo "     playlists           - list the playlists."
             echo
-            echo "You can change the value of the nmpc default command by editing the environmental variable \$NMPC_DEFCMD"
+            echo "You can change the value of the nmpc default command by editing the environmental variables"
+            echo "\$NMPC_DEFCMD and \$NMPC_DEFARG1 to \$NMPC_DEFARG3. Note that the DEFARG variables will only be used"
+            echo "if no command is given."
             echo
             echo "Error Codes:"
             echo "    1 = nmpc error (command not found, missing argument, etc)"
@@ -215,7 +217,7 @@ function nmpcfunc()
             fi;;
 
         "status")
-            nmpcfunc playing
+            nmpcfunc playing $2
             echo
             nmpcfunc info;;
 
@@ -246,6 +248,12 @@ MPDPORT="6600"
 
 NMPC_DEFCMD=`thisorthat $NMPC_DEFCMD "playing"`
 NMPC_VERSION=9.8.21
+
+if [[ "$1" = "" ]]; then
+    2=$NMPC_DEFARG1
+    3=$NMPC_DEFARG2
+    4=$NMPC_DEFARG3
+fi
 
 1=`thisorthat $1 $NMPC_DEFCMD`
 
