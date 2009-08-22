@@ -14,7 +14,7 @@ function help()
     case $2 in
         "" | "brief")
             if [[ "$NMPC_DEFHELP" = "" || $2 = "brief" ]]; then
-                echo "To view more help use the commands:"
+                echo "To view specific help use the commands:"
                 echo "nmpc --help all"
                 echo "nmpc --help brief"
                 echo "nmpc --help mpd"
@@ -86,9 +86,11 @@ function help()
             echo "    Contact information and my public key can be found on my website, http://www.barrucadu.co.uk";;
 
         "all")
-            help " " "mpd"
+            help " " brief
             echo
-            help " " "nmpc";;
+            help " " mpd
+            echo
+            help " " nmpc ;;
     esac
 }
 
