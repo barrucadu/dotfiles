@@ -27,7 +27,7 @@ function help()
 
         "mpd")
             echo "If nmpc cannot connect to your MPD server, you may need to edit the"
-            echo "\$MPDSERVER and \$MPDPORT variables in the source code."
+            echo "\$MPD_SERVER, \$MPD_PORT and \$MPD_PASSWORD variables in the source code."
             echo 
             echo "MPD Commands:"
             echo "  These are just sent on to MPD as-is."
@@ -118,7 +118,9 @@ function nicetime()
 
 function rawcmd()
 {
-    output=`echo "$1\nclose" | netcat $MPDSERVER $MPDPORT`
+    password="" ; [ "$MPD_PASSWORD" != "" ] && password="password $MPD_PASSWORD\n"
+    output=`echo "$password$1\nclose" | netcat $MPD_SERVER $MPD_PORT`
+
     echo $output
     echo $output | grep "^ACK " -q && return 2 || return 0
 }
@@ -243,8 +245,9 @@ function error()
     echo "Unknown command: $*"
 }
 
-MPDSERVER="localhost"
-MPDPORT="6600"
+MPD_SERVER="localhost"
+MPD_PORT="6600"
+MPD_PASSWORD=""
 
 NMPC_DEFCMD=`thisorthat $NMPC_DEFCMD "playing"`
 NMPC_VERSION=9.8.21
