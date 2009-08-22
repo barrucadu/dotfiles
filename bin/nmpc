@@ -70,6 +70,10 @@ function help()
             echo
             echo "You can change the value of the nmpc default command by editing the environmental variable \$NMPC_DEFCMD"
             echo
+            echo "Error Codes:"
+            echo "    1 = nmpc error (command not found, missing argument, etc)"
+            echo "    2 = mpd error (missing playlist, missing track, etc)"
+            echo
             echo "Versions:"
             echo "    nmpc versions are named using the last date I made a significant change, so you can easily see"
             echo "    how active current nmpc development is by looking at the last major change date."
@@ -114,7 +118,7 @@ function rawcmd()
     output=`echo "$1\nclose" | netcat $MPDSERVER $MPDPORT`
     echo $output
     echo $output | grep "^ACK " -q
-    return 1
+    return 2
 }
 
 function mpdfunc()
@@ -154,9 +158,15 @@ function nmpcfunc()
             toggle "random: 0";;
 
         "raw")
-            output=`rawcmd "$2"`
-            echo $output
-            return $?;;
+            if [[ "$2" = "" ]]; then
+                echo "Missing argument."
+                return 1
+            else
+                output=`rawcmd "$2"`
+                retval=$?
+                echo $output
+                return $retval
+            fi;;
 
         "info")
             artists=`line $mpd_info artists`
@@ -183,20 +193,24 @@ function nmpcfunc()
             album=`line $song_info album`
             state=`line $playlist_info state`
 
-            volume=`line $playlist_info volume`
-            repeat="on";    [ "`line $playlist_info repeat`" = "0" ] && repeat="off"
-            random="on";    [ "`line $playlist_info random`" = "0" ] && random="off"
-            crossfade="on"; [ "`line $playlist_info xfade`"  = "0" ] && crossfade="off"
-
-            echo "$track, by $artist in $album [$state]"
-            if [[ "$2" = "" ]]; then
-                echo "$volume% volume, repeat $repeat, random $random, crossfade $crossfade"
+            if [[ "$state" = "stop" ]]; then
+                echo "No track currently playing."
             else
-                echo
-                echo "Volume:    $volume%"
-                echo "Repeat:    $repeat"
-                echo "Random:    $random"
-                echo "Crossfade: $crossfade"
+                volume=`line $playlist_info volume`
+                repeat="on";    [ "`line $playlist_info repeat`" = "0" ] && repeat="off"
+                random="on";    [ "`line $playlist_info random`" = "0" ] && random="off"
+                crossfade="on"; [ "`line $playlist_info xfade`"  = "0" ] && crossfade="off"
+                
+                echo "$track, by $artist in $album [$state]"
+                if [[ "$2" = "" ]]; then
+                    echo "$volume% volume, repeat $repeat, random $random, crossfade $crossfade"
+                else
+                    echo
+                    echo "Volume:    $volume%"
+                    echo "Repeat:    $repeat"
+                    echo "Random:    $random"
+                    echo "Crossfade: $crossfade"
+                fi
             fi;;
 
         "status")
@@ -205,8 +219,16 @@ function nmpcfunc()
             nmpcfunc info;;
 
         "playlist")
-            rawcmd clear | clean
-            rawcmd "playlist \"$2\"" | clean;;
+            if [[ "$2" = "" ]]; then
+                echo "Missing argument."
+                return 1
+            else
+                rawcmd clear | clean
+                output=`rawcmd "load \"$2\""`
+                retval=$?
+                echo $output | clean
+                return $retval
+            fi;;
 
         "playlists")
             rawcmd lsinfo | grep "playlist: " | sed "s/playlist: //" | clean;;
