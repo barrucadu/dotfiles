@@ -12,10 +12,11 @@ function help()
     fi
 
     case $2 in
-        "")
-            if [[ "$NMPC_DEFHELP" = "" ]]; then
-                echo "To view more in-depth help use the commands:"
+        "" | "brief")
+            if [[ "$NMPC_DEFHELP" = "" || $2 = "brief" ]]; then
+                echo "To view more help use the commands:"
                 echo "nmpc --help all"
+                echo "nmpc --help brief"
                 echo "nmpc --help mpd"
                 echo "nmpc --help nmpc"
                 echo
@@ -117,8 +118,7 @@ function rawcmd()
 {
     output=`echo "$1\nclose" | netcat $MPDSERVER $MPDPORT`
     echo $output
-    echo $output | grep "^ACK " -q
-    return 2
+    echo $output | grep "^ACK " -q && return 2 || return 0
 }
 
 function mpdfunc()
@@ -240,7 +240,6 @@ function error()
 {
     echo "Unknown command: $*"
 }
-
 
 MPDSERVER="localhost"
 MPDPORT="6600"
