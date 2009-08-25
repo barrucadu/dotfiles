@@ -216,3 +216,22 @@ function define ()
     [[ "$2" != "" ]] && dictionary=$2
     echo "DEFINE $dictionary $1\nQUIT" | netcat dict.org 2628
 }
+
+function director ()
+{
+    fuzzy="^"
+    [ $1 = "-f" ] && fuzzy="" && shift
+
+    [ $1 = "-h" ] && echo "-f = fuzzy matching.\n   Eg: 'Matrix' would match 'Animatrix' with -f, but not without."
+   
+    movie=$1
+    while [[ $2 != "" ]]; do
+        shift
+        movie="$movie $1"
+    done
+
+    ls /media/M2HD/movies/* | \
+        grep "$fuzzy$movie" -B 1 -m 1 -i | \
+        head -n1 | \
+        sed "s/.*\/\(.*\):/\\1/"
+}
