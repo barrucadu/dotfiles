@@ -28,6 +28,7 @@ export LIBETC_DATA="/home/barrucadu/.gtk-bookmarks"
 export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barrucadu/.signature:/home/barrucadu/.git:/home/barrucadu/.gitignore:/home/barrucadu/.gitconfig"
 export NMPC_DEFCMD="status"
 export NMPC_DEFHELP="all"
+export TODOFILE="$HOME/docs/main.todo"
 
 # Framebuffer colours
 if [ "$TERM" = "linux" ]; then

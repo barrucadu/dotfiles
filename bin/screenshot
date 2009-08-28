@@ -43,8 +43,8 @@ case "$WM" in
 esac
 
 niceOS="Arch Linux `uname -m`"
-niceFont=`grep "gtk-font-name" ~/.gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
-niceIcons=`grep icon-theme-name ~/.gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
+niceFont=`grep "gtk-font-name" ~/.config/gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
+niceIcons=`grep icon-theme-name ~/.config/gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
 niceGtk="Shiki Wise" # Yes, I do change my GTK theme so little I decided it'd be easier to just hardcode it…
 
 echo "<li><strong>OS:</strong> $niceOS</li>" > `date +%F`.txt

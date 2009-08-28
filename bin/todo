@@ -2,7 +2,9 @@
 
 flag=$1
 arg=$2
-todofile="/home/barrucadu/docs/main.todo"
+todofile="$HOME/todo"
+
+[[ "$TODOFILE" != "" ]] && todofile=$TODOFILE
 
 function add()
 {
