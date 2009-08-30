@@ -11,7 +11,7 @@ alias -g W='| wc -l'
 
 # Short aliases
 alias !='sudo'
-alias @='uzbl --uri'
+alias @='opera'
 alias c='clear'
 alias e='exit'
 alias o='emacs'
@@ -82,7 +82,6 @@ alias uftp='ncftp uzbl'
 alias pftp='ncftp ofear'
 
 # Git
-alias grm='git rm'
 alias g-='git rm'
 alias g+='git add'
 alias gc='git commit'
@@ -102,3 +101,4 @@ alias xreload='xrdb -load ~/.config/Xdefaults'
 alias zen='fortune /usr/share/fortune/zen'
 alias rfcdate='date --rfc-3339="seconds"'
 alias screenx='screen -r `screen -ls | grep Detached | sed "s/(.*//"`'
+alias movies='ls /media/M2HD/movies/* | sed "/^\(\s*\|.*\/.*\|.*\.\(srt\|idx\|sub\)\)$/d" | sed "s/^\(.*\)\..*$/\\1/" | sort | most'

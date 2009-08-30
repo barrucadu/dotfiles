@@ -68,7 +68,7 @@
 ; Hooks
 (defun startmode ()
   (interactive)
-  (indent-according-to-mode)
+  ;(indent-according-to-mode)
   (hide-mode-line)
   (turn-on-setnu-mode))
 
