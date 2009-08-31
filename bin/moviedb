@@ -31,15 +31,10 @@ function moviematch ()
 
 function director ()
 {
-    fuzzy=0
-    [ $1 = "-f" ] && fuzzy=1 && shift
-
-    movie=`args2str $*`
-
     returncode=2
 
     for name in $MOVIEPATH/by-director/*; do
-        ls $name | moviematch $movie $fuzzy -q && echo $name | sed "s/^.*\///" && returncode=0
+        ls $name | moviematch $1 $fuzzy -q && echo $name | sed "s/^.*\///" && returncode=0
     done
     
     return $returncode
@@ -47,15 +42,7 @@ function director ()
 
 function file ()
 {
-    fuzzy=0
-    f=""
-    [ $1 = "-f" ] && fuzzy=1 && f="-f" && shift
-    vlc=0
-    [ $1 = "-v" ] && vlc=1 && shift
-
-    movie=`args2str $*`
-
-    name=`director $f "$movie"`
+    name=`director $f "$1"`
     file=`ls "$MOVIEPATH/by-director/$name" | moviematch $movie $fuzzy`
     filepath="$MOVIEPATH/by-director/$name/$file"
 
@@ -90,20 +77,31 @@ function help ()
 }
 
 if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
-    case $1 in
+    if [[ "$1" != "" ]]; then
+        cmd=$1
+        shift
+    fi
+
+    fuzzy=0
+    vlc=0
+    f=""
+
+    [ "$1" = "-f" ] && fuzzy=1 && f="-f" && shift
+    [ "$1" = "-v" ] && vlc=1 && shift
+
+    movie=`args2str $*`
+
+    case $cmd in
         "director")
-            shift
-            director $*;;
+            director $movie;;
         "file")
-            shift
-            file $*;;
+            file $movie;;
         "genre")
-            shift
-            genre $*;;
+            genre $movie;;
         "" | "help")
             help;;
         *)
-            echo "Unknown command $1"
+            echo "Unknown command $cmd"
             return 1;;
     esac
 else
