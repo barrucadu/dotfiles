@@ -1,0 +1,91 @@
+#!/bin/zsh
+
+function args2str ()
+{  
+    string=$1
+    while [[ $2 != "" ]]; do
+        shift
+        string="$string $1"
+    done
+    echo $string
+}
+
+function match ()
+{
+    grep $1 -m 1 -i $2
+}
+
+function moviematch ()
+{
+    string=$1
+
+    prefix="^"
+    suffix="\(, The\|\)\..*$"
+
+    [ "$2" = "1" ] && prefix="" && suffix=""
+
+    match "$prefix$string$suffix" $3
+}
+
+function director ()
+{
+    fuzzy=0
+    [ $1 = "-f" ] && fuzzy=1 && shift
+
+    movie=`args2str $*`
+
+    for name in /media/M2HD/movies/*; do
+        ls $name | moviematch $movie $fuzzy -q && echo $name | sed "s/^.*\///"
+    done
+}
+
+function movie ()
+{
+    fuzzy=0
+    f=""
+    [ $1 = "-f" ] && fuzzy=1 && f="-f" && shift
+    vlc=0
+    [ $1 = "-v" ] && vlc=1 && shift
+
+    movie=`args2str $*`
+
+    name=`director $f "$movie"`
+    file=`ls "/media/M2HD/movies/$name" | moviematch $movie $fuzzy`
+    filepath="/media/M2HD/movies/$name/$file"
+
+    [ $vlc = 0 ] && echo $filepath || vlc $filepath
+}
+
+function help ()
+{
+    echo "moviedb: A tool to query the filesystem movie database when the web database is unavailable."
+    echo
+    echo "Usage: moviedb <command> [-f] <arg1> <arg2> <arg3> ... <argn>"
+    echo
+    echo "Commands:"
+    echo "    director      <movie>: Find the director of a movie."
+    echo "    movie    [-v] <movie>: Find the file path of a movie."
+    echo "    genre         <movie>: Find the genres of a movie."
+    echo
+    echo "Arguments:"
+    echo "    -f = fuzzy matching. Less accurate."
+    echo "    -v = play in VLC. Must be specified after -f (if using fuzzy)."
+    echo
+    echo "Maintainer: Michael Walker"
+}
+
+case $1 in
+     "director")
+        shift
+        director $*;;
+     "movie")
+        shift
+        movie $*;;
+     "genre")
+        shift
+        genre $*;;
+    "" | "help")
+        help;;
+     *)
+        echo "Unknown command $1";;
+esac
