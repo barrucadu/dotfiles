@@ -36,9 +36,13 @@ function director ()
 
     movie=`args2str $*`
 
+    returncode=2
+
     for name in $MOVIEPATH/by-director/*; do
-        ls $name | moviematch $movie $fuzzy -q && echo $name | sed "s/^.*\///"
+        ls $name | moviematch $movie $fuzzy -q && echo $name | sed "s/^.*\///" && returncode=0
     done
+    
+    return $returncode
 }
 
 function file ()
@@ -55,7 +59,11 @@ function file ()
     file=`ls "$MOVIEPATH/by-director/$name" | moviematch $movie $fuzzy`
     filepath="$MOVIEPATH/by-director/$name/$file"
 
-    [ $vlc = 0 ] && echo $filepath || vlc $filepath
+    if [[ -f $filepath ]]; then
+        [ $vlc = 0 ] && echo $filepath || vlc $filepath
+    else
+        return 2
+    fi
 }
 
 function help ()
@@ -72,6 +80,11 @@ function help ()
     echo "Arguments:"
     echo "    -f = fuzzy matching. Less accurate."
     echo "    -v = play in VLC. Must be specified after -f (if using fuzzy)."
+    echo
+    echo "Return codes:"
+    echo "    1 = Unknown command."
+    echo "    2 = Nonexistant movie."
+    echo "    3 = Missing movie folder(s)."
     echo
     echo "Maintainer: Michael Walker"
 }
@@ -90,10 +103,11 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
         "" | "help")
             help;;
         *)
-            echo "Unknown command $1";;
+            echo "Unknown command $1"
+            return 1;;
     esac
 else
     echo "\$MOVIEPATH = $MOVIEPATH"
     echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
-    return 1
+    return 3
 fi
