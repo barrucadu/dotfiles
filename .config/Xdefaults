@@ -47,7 +47,7 @@ URxvt*scrollBar:         false
 URxvt*saveLines:         1000
 URxvt*transparent:       true
 URxvt*inheritPixmap:     true
-URxvt*shading:           33
+URxvt*shading:           10
 URxvt*tintColor:         white
 URxvt*internalBorder:    0
 

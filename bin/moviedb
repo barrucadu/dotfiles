@@ -77,17 +77,13 @@ function help ()
 }
 
 if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
-    if [[ "$1" != "" ]]; then
-        cmd=$1
-        shift
-    fi
-
     fuzzy=0
     vlc=0
     f=""
 
+    [ "$1" != "" ]  && cmd=$1            && shift
     [ "$1" = "-f" ] && fuzzy=1 && f="-f" && shift
-    [ "$1" = "-v" ] && vlc=1 && shift
+    [ "$1" = "-v" ] && vlc=1             && shift
 
     movie=`args2str $*`
 
