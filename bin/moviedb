@@ -48,6 +48,26 @@ function file ()
     fi
 }
 
+function genre ()
+{
+    returncode=2
+
+    for name in $MOVIEPATH/by-genre/*; do
+        ls $name | match $1 $fuzzy -q && echo $name | sed "s/^.*\///" && returncode=0
+    done
+    
+    return $returncode
+}
+
+function list ()
+{
+    ls $MOVIEPATH/by-director/* | \
+        sed "/^\(\s*\|.*\/.*\|.*\.\(srt\|idx\|sub\)\)$/d" | \
+        sed "s/^\(.*\)\..*$/\\1/" | \
+        sort | \
+        $PAGER
+}
+
 function help ()
 {
     echo "moviedb: A tool to query the filesystem movie database when the web database is unavailable."
@@ -58,6 +78,7 @@ function help ()
     echo "    director      <movie>: Find the director of a movie."
     echo "    file     [-v] <movie>: Find the file path of a movie."
     echo "    genre         <movie>: Find the genres of a movie."
+    echo "    list                 : List all movies."
     echo
     echo "Arguments:"
     echo "    -f = fuzzy matching. Less accurate."
@@ -89,6 +110,8 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
             file $movie;;
         "genre")
             genre $movie;;
+        "list")
+            list;;
         "" | "help")
             help;;
         *)
