@@ -68,6 +68,19 @@ function list ()
         $PAGER
 }
 
+function random ()
+{
+    if [[ "$1" != "" ]]; then
+        genre=`ls $MOVIEPATH/by-genre/ | grep -i $1`
+        ls $MOVIEPATH/by-genre/$genre | \
+            shuf -n1 | \
+            sed "s/^\(.*\)\..*$/\\1/"
+    else
+        list | \
+            shuf -n1
+    fi
+}
+
 function help ()
 {
     echo "moviedb: A tool to query the filesystem movie database when the web database is unavailable."
@@ -79,6 +92,7 @@ function help ()
     echo "    file     [-v] <movie>: Find the file path of a movie."
     echo "    genre         <movie>: Find the genres of a movie."
     echo "    list                 : List all movies."
+    echo "    random        <genre>: Select a random movie of the (optional) specified genre."
     echo
     echo "Arguments:"
     echo "    -f = fuzzy matching. Less accurate."
@@ -101,17 +115,19 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
     [ "$1" = "-f" ] && fuzzy=1 && f="-f" && shift
     [ "$1" = "-v" ] && vlc=1             && shift
 
-    movie=`args2str $*`
+    args=`args2str $*`
 
     case $cmd in
         "director")
-            director $movie;;
+            director $args;;
         "file")
-            file $movie;;
+            file $args;;
         "genre")
-            genre $movie;;
+            genre $args;;
         "list")
             list;;
+        "random")
+            random $args;;
         "" | "help")
             help;;
         *)
