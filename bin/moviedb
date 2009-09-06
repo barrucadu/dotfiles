@@ -38,14 +38,15 @@ function director ()
 function file ()
 {
     name=`director $f "$1"`
-    file=`ls "$MOVIEPATH/by-director/$name" | match $movie $fuzzy`
+    file=`ls "$MOVIEPATH/by-director/$name" | match $args $fuzzy`
     filepath="$MOVIEPATH/by-director/$name/$file"
 
-    if [[ -f $filepath ]]; then
-        [ $vlc = 0 ] && echo $filepath || vlc $filepath
-    else
-        return 2
-    fi
+    [[ -f $filepath ]] && echo $filepath || return 2
+}
+
+function play ()
+{
+    vlc "`file $1`" &>/dev/null &
 }
 
 function genre ()
@@ -71,10 +72,19 @@ function list ()
 function random ()
 {
     if [[ "$1" != "" ]]; then
-        genre=`ls $MOVIEPATH/by-genre/ | grep -i $1`
-        ls $MOVIEPATH/by-genre/$genre | \
-            shuf -n1 | \
-            sed "s/^\(.*\)\..*$/\\1/"
+        if ls $MOVIEPATH/by-genre/ | grep -q -i $1; then
+            genre=`ls $MOVIEPATH/by-genre/ | grep -i $1`
+            ls $MOVIEPATH/by-genre/$genre | \
+                shuf -n1 | \
+                sed "s/^\(.*\)\..*$/\\1/"
+        elif ls $MOVIEPATH/by-director/ | grep -q -i $1; then
+            director=`ls $MOVIEPATH/by-director/ | grep -i $1`
+            ls $MOVIEPATH/by-director/$director | \
+                shuf -n1 | \
+                sed "s/^\(.*\)\..*$/\\1/"
+        else
+            return 2
+        fi
     else
         list | \
             shuf -n1
@@ -88,19 +98,19 @@ function help ()
     echo "Usage: moviedb <command> [-f] <arg1> <arg2> <arg3> ... <argn>"
     echo
     echo "Commands:"
-    echo "    director      <movie>: Find the director of a movie."
-    echo "    file     [-v] <movie>: Find the file path of a movie."
-    echo "    genre         <movie>: Find the genres of a movie."
-    echo "    list                 : List all movies."
-    echo "    random        <genre>: Select a random movie of the (optional) specified genre."
+    echo "    director <movie>: Find the director of a movie."
+    echo "    file     <movie>: Find the file path of a movie."
+    echo "    play     <movie>: Play a movie in VLC."
+    echo "    genre    <movie>: Find the genres of a movie."
+    echo "    random   <query>: Select a random movie of the (optional) specified genre / director."
+    echo "    list            : List all movies."
     echo
     echo "Arguments:"
     echo "    -f = fuzzy matching. Less accurate."
-    echo "    -v = play in VLC. Must be specified after -f (if using fuzzy)."
     echo
     echo "Return codes:"
     echo "    1 = Unknown command."
-    echo "    2 = Nonexistant movie."
+    echo "    2 = Nonexistant movie/genre/director."
     echo "    3 = Missing movie folder(s)."
     echo
     echo "Maintainer: Michael Walker"
@@ -113,7 +123,6 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
 
     [ "$1" != "" ]  && cmd=$1            && shift
     [ "$1" = "-f" ] && fuzzy=1 && f="-f" && shift
-    [ "$1" = "-v" ] && vlc=1             && shift
 
     args=`args2str $*`
 
@@ -122,6 +131,8 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
             director $args;;
         "file")
             file $args;;
+        "play")
+            play $args;;
         "genre")
             genre $args;;
         "list")
