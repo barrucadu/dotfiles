@@ -5,7 +5,7 @@
 #define FONT_UNDERLINE xft:Consolas:underline:pixelsize=12:antialias=true:autohinting=true
 
 !! Colours
-#include "/home/barrucadu/.config/xorg/Xdefaults.d/zenburn"
+#include "/home/barrucadu/.config/xorg/Xdefaults.d/taters"
 *color0:  COLOUR_THEME_BLACK
 *color8:  COLOUR_THEME_DARK_GREY
 *color1:  COLOUR_THEME_DARK_RED 
@@ -31,7 +31,7 @@ Xft.hintstyle: hintslight
 Xft.rgba:      rgb
 
 !! Terminal
-URxvt.urlLauncher:       uzbl
+URxvt.urlLauncher:       opera
 URxvt.matcher.button:    1
 URxvt.perl-ext-common:   default,matcher
 URxvt.colorUL:           #86a2be
@@ -47,7 +47,7 @@ URxvt*scrollBar:         false
 URxvt*saveLines:         1000
 URxvt*transparent:       true
 URxvt*inheritPixmap:     true
-URxvt*shading:           10
+URxvt*shading:           50
 URxvt*tintColor:         white
 URxvt*internalBorder:    0
 

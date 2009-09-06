@@ -29,6 +29,7 @@ export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barru
 export NMPC_DEFCMD="status"
 export NMPC_DEFHELP="all"
 export TODOFILE="$HOME/docs/main.todo"
+export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 
 # Framebuffer colours
 if [ "$TERM" = "linux" ]; then
@@ -114,8 +115,13 @@ autoload -Uz compinit
 compinit
 
 # Misc Settings
-setopt hist_ignore_all_dups hist_ignore_space extended_history
-setopt autocd
-setopt extendedglob
-setopt correct correctall
-setopt autopushd pushdminus pushdsilent pushdtohome
+setopt auto_cd              # automatically cd to paths
+setopt correct              # spell check for commands only
+setopt hash_list_all        # search all paths before command completion
+setopt hist_ignore_dups     # when I run a command several times, only store one
+setopt hist_no_functions    # don't show function definitions in history
+setopt hist_reduce_blanks   # reduce whitespace in history
+setopt hist_verify          # ask me before running a command line with history sub
+setopt interactive_comments # allow comments in interactive shells
+setopt extended_glob        # treat #, ^, and ~ specially in filename generation
+setopt chase_links          # treat '..' relative to the target of a symlink

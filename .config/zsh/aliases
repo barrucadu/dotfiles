@@ -1,13 +1,18 @@
 ## -*- shell-script -*-
+
 # Global (in-line) aliases
+#
 alias -g G='| grep'
 alias -g M='| most'
 alias -g X='| xargs'
 alias -g H='| head'
 alias -g T='| tail'
 alias -g S='| sed'
-alias -g F='for file in *; do'
 alias -g W='| wc -l'
+    # Output redirection
+alias -g N='&>/dev/null'
+alias -g 1N='1>/dev/null'
+alias -g 2N='2>/dev/null'
 
 # Short aliases
 alias !='sudo'
