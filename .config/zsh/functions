@@ -216,3 +216,13 @@ function define ()
     [[ "$2" != "" ]] && dictionary=$2
     echo "DEFINE $dictionary $1\nQUIT" | netcat dict.org 2628
 }
+
+function pkgroot ()
+{
+    pkginfo=`pacman -Qi $1`
+    echo $pkginfo \
+        | grep -q "Explicitly installed" \
+            && echo $1 \
+            || pkgroot "`echo $pkginfo | sed "/Required By.*/!d" | sed "s/.*: \([a-z\-\+\.0-9]*\).*/\\1/"`"
+
+}
