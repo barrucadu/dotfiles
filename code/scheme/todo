@@ -1,0 +1,11 @@
+#!/usr/bin/env mzscheme
+
+#lang scheme
+
+(define (add string filename)
+  (with-output-to-file filename #:exists 'append
+    (lambda () (printf "* TODO [#B] ~s\n" string))))
+
+
+
+;(add "test" "/home/barrucadu/docs/main.todo")
