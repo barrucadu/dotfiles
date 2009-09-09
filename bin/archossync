@@ -1,0 +1,40 @@
+#!/bin/zsh
+
+archos=/media/ARCHOS5
+
+[ "$1" = "verbose" ] && \
+    alias -g :o="" || \
+    alias -g :o="&>/dev/null"
+
+echo "Synchronising music..."
+for artist in ~/music/all-files/*; do
+    artistname=$(basename $artist)
+
+    [ ! -d $archos/Music/$artistname/ ] && \
+        cp -urv $artist $archos/Music/ :o
+done
+
+echo "\nSynchronising playlists..."
+for file in ~/.data/mpd/playlists/*; do
+    playlist=$archos/Playlists/$(basename $file)
+
+    if [[ ! -f $playlist ]] || [[ $file -nt $playlist ]]; then
+        echo $file :o
+        cat $file | sed "s/home\/barrucadu\/music\/all-files/Music/" > $archos/Playlists/$(basename $file)
+    fi
+done
+
+echo "\nRetrieving Downloads..."
+mv $archos/Downloads/* ~/archos/Downloads :o
+
+echo "\nSynchronising Flash videos..."
+cp -urv ~/archos/Flash/* $archos/Flash/ :o
+cp -urv $archos/Flash/* ~/archos/Flash/ :o
+
+echo "\nSynchronising PDFs..."
+cp -urv ~/archos/PDF/* $archos/pdf/ :o
+cp -urv $archos/PDF/* ~/archos/PDF/ :o
+
+echo "\nSynchronising Pictures..."
+cp -urv ~/archos/Pictures/* $archos/Pictures/ :o
+cp -urv $archos/Pictures/* ~/archos/Pictures/ :o
