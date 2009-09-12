@@ -37,22 +37,9 @@ function r()
 	disown %%
 }
 
-function R()
-{
-	sudo -E $* &>/dev/null &
-	disown %%
-}
-
 function re()
 {
 	$* &>/dev/null &
-	disown %%
-	exit
-}
-
-function Re()
-{
-	sudo -E $* &>/dev/null &
 	disown %%
 	exit
 }
