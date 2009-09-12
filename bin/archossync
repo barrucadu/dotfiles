@@ -4,17 +4,53 @@ setopt extended_glob
 
 archos=/media/ARCHOS5
 
+function syncfile ()
+{
+    file=$1
+    from=$2
+    to=$3
+
+    file=$(basename $file $from)
+
+    [ -d $from/$file ] && [ ! -d $to/$file ] && mkdir $to/$file -v
+    [ -f $from/$file ] && [ ! -f $to/$file ] && cp $from/$file $to/$file -v
+}
+
+function copy ()
+{
+    from=$1
+    to=$2
+    ignorepattern=$3
+
+    [ "$ignorepattern" = "" ] && ignorepattern="_arcthumb"
+
+    find $from | grep -v -E $ignorepattern > /tmp/archos
+    while read line; do
+        syncfile $line $from $to
+    done < /tmp/archos
+    rm /tmp/archos
+}
+
 function synchronise ()
 {
-    if [[ "$1" = "$archos/Pictures" ]]; then
-        cp -urvn $1/^(Manga|Webcomics) $2
-    elif [[ "$1" = "$archos/Video" ]]; then
-        cp -urvn $1/^(anime|movies) $2
+    one="$archos/$1"
+    two="$HOME/archos/$2"
+
+    [ "$two" = "$HOME/archos/" ] && \
+        two="$HOME/archos/$1"
+
+    if [[ "$1" = "Pictures" ]]; then
+        copy $one $two "(Manga|Webcomics|_arcthumb)"
+        copy $two $one "(Manga|Webcomics|_arcthumb)"
+    elif [[ "$1" = "Video" ]]; then
+        copy $one $two "(anime|movies|_arcthumb)"
+        copy $two $one "(anime|movies|_arcthumb)"
     else
-        cp -urvn $1/* $2
+        copy $one $two
+        copy $two $one
     fi
 
-    cp -urvn $2/* $1
+    find ~/archos -iname "_arcthumb" | xargs -I file rm "file" -rv
 }
 
 [ "$1" = "verbose" ] && \
@@ -26,7 +62,7 @@ for artist in ~/music/all-files/*; do
     artistname=$(basename $artist)
 
     [ ! -d $archos/Music/$artistname/ ] && \
-        cp -urv $artist $archos/Music/ :o
+        cp -rvn $artist $archos/Music/ :o
 done
 
 echo "\nSynchronising playlists..."
@@ -43,19 +79,19 @@ echo "\nRetrieving Downloads..."
 mv $archos/Downloads/* ~/archos/Downloads :o
 
 echo "\nSynchronising Flash videos..."
-synchronise $archos/Flash ~/archos/Flash :o
+synchronise Flash :o
 
 echo "\nSynchronising PDFs..."
-synchronise $archos/pdf ~/archos/PDF :o
+synchronise pdf PDF :o
 
 echo "\nSynchronising Pictures..."
-synchronise $archos/Pictures ~/archos/Pictures :o
+synchronise Pictures :o
 
 echo "\nSynchronising Video..."
-synchronise $archos/Video ~/archos/Video :o
+synchronise Video :o
 
 echo "\nSynchronising Data..."
-synchronise $archos/Data ~/archos/Data :o
+synchronise Data :o
 
 echo "\nSynchronising Widgets..."
-synchronise $archos/Widgets ~/archos/Widgets :o
+synchronise Widgets :o
