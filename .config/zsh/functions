@@ -98,7 +98,7 @@ function gituz()
 
 function gituw()
 {
-    pushd /media/MHD/websites/uzbl.org
+    pushd ~/websites/uzbl.org
     commit $1
     git push uzbl-website master
     popd
@@ -114,7 +114,7 @@ function gitwii()
 
 function gitbar()
 {
-    pushd /media/MHD/websites/barrucadu.co.uk
+    pushd ~/websites/barrucadu.co.uk
     commit $1
     git push github master
     popd

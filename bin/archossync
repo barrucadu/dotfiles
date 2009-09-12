@@ -1,10 +1,25 @@
 #!/bin/zsh
 
+setopt extended_glob
+
 archos=/media/ARCHOS5
 
+function synchronise ()
+{
+    if [[ "$1" = "$archos/Pictures" ]]; then
+        cp -urvn $1/^(Manga|Webcomics) $2
+    elif [[ "$1" = "$archos/Video" ]]; then
+        cp -urvn $1/^(anime|movies) $2
+    else
+        cp -urvn $1/* $2
+    fi
+
+    cp -urvn $2/* $1
+}
+
 [ "$1" = "verbose" ] && \
-    alias -g :o="" || \
-    alias -g :o="&>/dev/null"
+    alias -g :o='' || \
+    alias -g :o='&>/dev/null' 
 
 echo "Synchronising music..."
 for artist in ~/music/all-files/*; do
@@ -28,13 +43,19 @@ echo "\nRetrieving Downloads..."
 mv $archos/Downloads/* ~/archos/Downloads :o
 
 echo "\nSynchronising Flash videos..."
-cp -urv ~/archos/Flash/* $archos/Flash/ :o
-cp -urv $archos/Flash/* ~/archos/Flash/ :o
+synchronise $archos/Flash ~/archos/Flash :o
 
 echo "\nSynchronising PDFs..."
-cp -urv ~/archos/PDF/* $archos/pdf/ :o
-cp -urv $archos/PDF/* ~/archos/PDF/ :o
+synchronise $archos/pdf ~/archos/PDF :o
 
 echo "\nSynchronising Pictures..."
-cp -urv ~/archos/Pictures/* $archos/Pictures/ :o
-cp -urv $archos/Pictures/* ~/archos/Pictures/ :o
+synchronise $archos/Pictures ~/archos/Pictures :o
+
+echo "\nSynchronising Video..."
+synchronise $archos/Video ~/archos/Video :o
+
+echo "\nSynchronising Data..."
+synchronise $archos/Data ~/archos/Data :o
+
+echo "\nSynchronising Widgets..."
+synchronise $archos/Widgets ~/archos/Widgets :o

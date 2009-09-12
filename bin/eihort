@@ -1,9 +1,10 @@
 #!/bin/zsh
 
 mhd=true
-m2hd=true
-share=true
+m2hd=false
+archos5=false
 media=true
+share=true
 torrents=true
 www=true
 up=true
@@ -13,14 +14,17 @@ function parsearg()
     case $1 in
         "nomhd")
             mhd=false;;
-        "nom2hd")
-            m2hd=false;;
+        "m2hd")
+            m2hd=true;;
+        "archos5")
+            archos5=true;;
+        "nomedia")
+            mhd=false
+            m2hd=false
+            archos5=false
+            media=false;;
         "noshare")
             share=false;;
-        "nomedia")
-            media=false
-            mhd=false
-            m2hd=false;;
         "notorrents")
             torrents=false;;
         "nowww")
@@ -45,6 +49,11 @@ if $up; then
         ln -s /share/eihort-media/M2HD /media/M2HD
     fi
 
+    if $archos5; then
+        rmdir /media/ARCHOS5
+        ln -s /share/eihort-media/ARCHOS5 /media/ARCHOS5
+    fi
+
     $share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
     $media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
     $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
@@ -65,5 +74,11 @@ else
         rm /media/M2HD
         mkdir /media/M2HD
         chmod 777 /media/M2HD
+    fi
+
+    if $archos5; then
+        rm /media/ARCHOS5
+        mkdir /media/ARCHOS5
+        chmod 777 /media/ARCHOS5
     fi
 fi
