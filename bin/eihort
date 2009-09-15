@@ -8,6 +8,7 @@ share=true
 torrents=true
 www=true
 up=true
+pacsync=true
 
 function parsearg()
 {
@@ -23,7 +24,10 @@ function parsearg()
             m2hd=false
             archos5=false
             media=false;;
+        "nopacsync")
+            pacsync=false;;
         "noshare")
+            pacsync=false
             share=false;;
         "notorrents")
             torrents=false;;
@@ -34,51 +38,44 @@ function parsearg()
     esac
 }
 
+function emount ()
+{
+    rmdir /media/$1
+    ln -s /share/eihort-media/$1 /media/$1
+}
+
+function eumount ()
+{
+    rm /media/$1
+    mkdir /media/$1
+    chmod 777 /media/$1
+}
+
+
 for arg in "${*[@]}"; do
     parsearg $arg
 done
 
 if $up; then
-    if $mhd; then
-        rmdir /media/MHD
-        ln -s /share/eihort-media/MHD /media/MHD
-    fi
-
-    if $m2hd; then
-        rmdir /media/M2HD
-        ln -s /share/eihort-media/M2HD /media/M2HD
-    fi
-
-    if $archos5; then
-        rmdir /media/ARCHOS5
-        ln -s /share/eihort-media/ARCHOS5 /media/ARCHOS5
-    fi
+    $mhd     && emount MHD
+    $m2hd    && emount M2HD
+    $archos5 && emount ARCHOS5
 
     $share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
     $media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
     $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
     $www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
+
+    $pacsync && /etc/cron.weekly/packagecache.sh
 else
+    $pacsync && /etc/cron.weekly/packagecache.sh
+
     $share    && umount /share/eihort
     $media    && umount /share/eihort-media
     $torrents && umount /share/eihort-torrents
     $www      && umount /share/eihort-www
 
-    if $mhd; then
-        rm /media/MHD
-        mkdir /media/MHD
-        chmod 777 /media/MHD
-    fi
-
-    if $m2hd; then
-        rm /media/M2HD
-        mkdir /media/M2HD
-        chmod 777 /media/M2HD
-    fi
-
-    if $archos5; then
-        rm /media/ARCHOS5
-        mkdir /media/ARCHOS5
-        chmod 777 /media/ARCHOS5
-    fi
+    $mhd     && eumount MHD
+    $m2hd    && eumount M2HD
+    $archos5 && eumount ARCHOS5
 fi
