@@ -51,31 +51,53 @@ function eumount ()
     chmod 777 /media/$1
 }
 
+function emounted ()
+{
+    mount | grep -q //eihort/$1
+}
+
+function emedia ()
+{
+    file /media/$1 | grep -q /share/eihort-media/$1
+}
+
+function ecache ()
+{
+    file /var/cache/pacman/pkg | grep -q /share/eihort/pacman-cache
+}
+
+function packagecache ()
+{
+    ecache || /etc/cron.weekly/packagecache.sh 2>/dev/null
+
+    [ "$1" = "on" ]  && rmdir /var/cache/pacman/pkg && ln -s /share/eihort/pacman-cache /var/cache/pacman/pkg
+    [ "$1" = "off" ] && rm /var/cache/pacman/pkg    && mkdir /var/cache/pacman/pkg
+}
 
 for arg in "${*[@]}"; do
     parsearg $arg
 done
 
 if $up; then
-    $mhd     && emount MHD
-    $m2hd    && emount M2HD
-    $archos5 && emount ARCHOS5
+    $mhd      && emount MHD
+    $m2hd     && emount M2HD
+    $archos5  && emount ARCHOS5
 
     $share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
     $media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
     $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
     $www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
 
-    $pacsync && /etc/cron.weekly/packagecache.sh
+    $pacsync  && packagecache on
 else
-    $pacsync && /etc/cron.weekly/packagecache.sh
+    ecache            && packagecache off
 
-    $share    && umount /share/eihort
-    $media    && umount /share/eihort-media
-    $torrents && umount /share/eihort-torrents
-    $www      && umount /share/eihort-www
+    emounted share    && umount /share/eihort
+    emounted media    && umount /share/eihort-media
+    emounted torrents && umount /share/eihort-torrents
+    emounted www      && umount /share/eihort-www
 
-    $mhd     && eumount MHD
-    $m2hd    && eumount M2HD
-    $archos5 && eumount ARCHOS5
+    emedia MHD        && eumount MHD
+    emedia M2HD       && eumount M2HD
+    emedia ARCHOS5    && eumount ARCHOS5
 fi
