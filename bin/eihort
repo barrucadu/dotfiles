@@ -61,17 +61,9 @@ function emedia ()
     file /media/$1 | grep -q /share/eihort-media/$1
 }
 
-function ecache ()
-{
-    file /var/cache/pacman/pkg | grep -q /share/eihort/pacman-cache
-}
-
 function packagecache ()
 {
-    ecache || /etc/cron.weekly/packagecache.sh 2>/dev/null
-
-    [ "$1" = "on" ]  && rmdir /var/cache/pacman/pkg && ln -s /share/eihort/pacman-cache /var/cache/pacman/pkg
-    [ "$1" = "off" ] && rm /var/cache/pacman/pkg    && mkdir /var/cache/pacman/pkg
+    /etc/cron.weekly/packagecache.sh 2>/dev/null
 }
 
 for arg in "${*[@]}"; do
@@ -91,10 +83,8 @@ if $up && [[ $eihortcheck == 1 ]]; then
     $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
     $www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
 
-    $pacsync  && packagecache on
+    $pacsync  && packagecache
 else
-    ecache            && packagecache off
-
     emounted share    && umount /share/eihort
     emounted media    && umount /share/eihort-media
     emounted torrents && umount /share/eihort-torrents
