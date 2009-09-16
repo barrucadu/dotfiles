@@ -78,7 +78,10 @@ for arg in "${*[@]}"; do
     parsearg $arg
 done
 
-if $up; then
+mount | grep -q eihort
+eihortcheck=$?
+
+if $up && [[ $eihortcheck == 1 ]]; then
     $mhd      && emount MHD
     $m2hd     && emount M2HD
     $archos5  && emount ARCHOS5

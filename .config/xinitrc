@@ -2,23 +2,15 @@
 
 cmdline="`cat /proc/cmdline`"
 
-function background()
-{
-    $* &>/dev/null &
-}
-
 function notinschool()
 {
-    if [[ ! "$cmdline" == *school* ]]; then
-        background $*
-    fi
+    grep -q school /proc/cmdline
 }
 
 function inschool()
 {
-    if [[ "$cmdline" == *school* ]]; then
-        background $*
-    fi
+    grep -q school /proc/cmdline
+    return $[1 - $?]
 }
 
 if [[ -f /var/run/daemons/hal ]]; then
@@ -41,15 +33,9 @@ if [[ -f /var/run/daemons/hal ]]; then
         xrdb -load ~/.Xdefaults
     # /X
 
-    # Services
-    urxvtd -q -f -o
-    notinschool xscreensaver -no-splash
-    notinschool mpddp
-    notinschool ucron
-    
-    # Appearence
-    notinschool /home/barrucadu/bin/randombg
-    inschool feh --bg-scale /usr/share/wallpapers/Anime/flcl04.png
+    # BCompA
+    inschool    && bcompa login true &>~/.data/bcompa &
+    notinschool && bcompa login      &>~/.data/bcompa &
     
     # Window Manager
     exec stumpwm
