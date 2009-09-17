@@ -1,14 +1,24 @@
 #!/bin/zsh
 
 i=1
-xkcdmax=637
+stop=-1
+
+[ "$1" != "" ] && i=$1
+[ "$2" != "" ] && stop=$2
 
 [ -f index.html ] && rm index.html &>/dev/null
 
-while [[ $i != $xkcdmax ]]; do
+wget "http://www.xkcd.com/" &>/dev/null
+endcomic=`md5sum index.html`
+checksum=" "
+rm index.html
+
+while [[ $i != $stop ]] && [[ "$checksum" != "$endcomic" ]]; do
     if [[ $i != 404 ]]; then # There is no comic 404 ^^
+
         wget "http://www.xkcd.com/$i" &>/dev/null
-        
+        checksum=`md5sum index.html`
+
         file=`cat index.html | grep "img src.*comics" | sed "s/\(.*src=\"\|\".*\)//g"`
         wget "$file" &>/dev/null
         
@@ -33,15 +43,15 @@ while [[ $i != $xkcdmax ]]; do
             n="0$i"
         fi
         
-        convert -size "$width"x$[$height +  $altheight + 24] xc:white "$n-$filename"
-        
-        composite -geometry "$width"x16+0+0               name.png  "$n-$filename" "$n-$filename"
-        composite -geometry "$width"x"$height"+0+20       $filename "$n-$filename" "$n-$filename"
-        composite -geometry "$width"x32+0+$[$height + 24] alt.png   "$n-$filename" "$n-$filename"
+        if [[ ! -f "$n-$filename" ]]; then        
+            convert -size "$width"x$[$height +  $altheight + 24] xc:white "$n-$filename"                
+            composite -geometry "$width"x16+0+0               name.png  "$n-$filename" "$n-$filename"
+            composite -geometry "$width"x"$height"+0+20       $filename "$n-$filename" "$n-$filename"
+            composite -geometry "$width"x"$altheight"+0+$[$height + 24] alt.png   "$n-$filename" "$n-$filename"
+            echo "Done $n-$filename"
+        fi
         
         rm $filename name.png alt.png
-        
-        echo "Done $n-$filename"
     fi
     i=$[$i + 1]
 done

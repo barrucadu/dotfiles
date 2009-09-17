@@ -14,3 +14,4 @@
 <Multi_key> <asciicircum> <n>                          : "ⁿ"
 <Multi_key> <exclam>      <exclam>                     : "¡"
 <Multi_key> <question>    <question>                   : "⸮"
+<Multi_key> <less>        <three>                      : "❤"

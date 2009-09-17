@@ -50,6 +50,7 @@ URxvt*inheritPixmap:     true
 URxvt*shading:           30
 URxvt*tintColor:         white
 URxvt*internalBorder:    0
+URxvt.imLocale:          en.GB.UTF-8
 
 !! Mouse
 Xcursor*theme: aero

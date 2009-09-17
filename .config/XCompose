@@ -26,3 +26,6 @@ include "/home/barrucadu/.config/xorg/XCompose.d/futhark"
 
 # Other Symbols
 include "/home/barrucadu/.config/xorg/XCompose.d/other"
+
+# Phrases
+include "/home/barrucadu/.config/xorg/XCompose.d/phrases"

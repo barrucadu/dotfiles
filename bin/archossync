@@ -39,10 +39,7 @@ function synchronise ()
     [ "$two" = "$HOME/archos/" ] && \
         two="$HOME/archos/$1"
 
-    if [[ "$1" = "Pictures" ]]; then
-        copy $one $two "(Manga|Webcomics|_arcthumb)"
-        copy $two $one "(Manga|Webcomics|_arcthumb)"
-    elif [[ "$1" = "Video" ]]; then
+    if [[ "$1" = "Video" ]]; then
         copy $one $two "(anime|movies|_arcthumb)"
         copy $two $one "(anime|movies|_arcthumb)"
     else

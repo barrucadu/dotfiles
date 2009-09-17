@@ -103,7 +103,10 @@ def solvelambda (expression, args):
             expression[0]["body"][n] = replaceargs (symbol, args)
         n += 1
 
-    expression = [expression[0]]
+    if type(expression[0]) is list and len(expression[0]) == 1:
+        expression = expression[0]
+    else:
+        expression = [expression[0]]
 
     if lambdain(expression[0]["body"]):
         print(expression[0]["body"])
