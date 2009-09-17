@@ -45,9 +45,11 @@ while [[ $i != $stop ]] && [[ "$checksum" != "$endcomic" ]]; do
         
         if [[ ! -f "$n-$filename" ]]; then        
             convert -size "$width"x$[$height +  $altheight + 24] xc:white "$n-$filename"                
-            composite -geometry "$width"x16+0+0               name.png  "$n-$filename" "$n-$filename"
-            composite -geometry "$width"x"$height"+0+20       $filename "$n-$filename" "$n-$filename"
-            composite -geometry "$width"x"$altheight"+0+$[$height + 24] alt.png   "$n-$filename" "$n-$filename"
+
+            composite -geometry "$width"x16+0+0 name.png "$n-$filename" "$n-$filename"
+            composite -geometry "$width"x"$height"+0+20 $filename "$n-$filename" "$n-$filename"
+            composite -geometry "$width"x"$altheight"+0+$[$height + 24] alt.png "$n-$filename" "$n-$filename"
+
             echo "Done $n-$filename"
         fi
         
