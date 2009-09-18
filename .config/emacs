@@ -13,7 +13,7 @@
 (prefer-coding-system       'utf-8)
 
 ; Extra Files
-(add-to-list 'load-path "~/code/elisp/")
+(add-to-list 'load-path "/home/barrucadu/code/elisp/")
 
 (load "phrases.el"  nil t t)
 (load "latex.el"    nil t t)

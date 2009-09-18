@@ -1,0 +1,10 @@
+## -*- conf -*- 
+
+<Multi_key> <less>    <apostrophe> : "‘"
+<Multi_key> <greater> <apostrophe> : "’"
+<Multi_key> <less>    <quotedbl>   : "“"
+<Multi_key> <greater> <quotedbl>   : "”"
+<Multi_key> <n>       <minus>      : "–"
+<Multi_key> <m>       <minus>      : "—"
+<Multi_key> <p>       <p>          : "¶"
+<Multi_key> <s>       <s>          : "§"

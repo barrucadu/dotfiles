@@ -24,6 +24,9 @@ include "/home/barrucadu/.config/xorg/XCompose.d/greek"
 # Elder Futhark
 include "/home/barrucadu/.config/xorg/XCompose.d/futhark"
 
+# Fancy punctuation
+include "/home/barrucadu/.config/xorg/XCompose.d/typography"
+
 # Other Symbols
 include "/home/barrucadu/.config/xorg/XCompose.d/other"
 
