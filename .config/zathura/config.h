@@ -1,12 +1,12 @@
 /* settings */
-static const float ZOOM_STEP         = 0.1;
-static const float SCROLL_STEP       = 40;
-static const float HL_TRANSPARENCY   = 0.4;
-static const int   SHOW_NOTIFICATION = 5;
-static const int   DEFAULT_WIDTH     = 1280;
-static const int   DEFAULT_HEIGHT    = 800;
-static const char  BROWSER[]         = "opera %s";
-static const char  PRINTER[]         = "";
+static const float  ZOOM_STEP         = 0.1;
+static const float  SCROLL_STEP       = 40;
+static const float  HL_TRANSPARENCY   = 0.4;
+static const int    SHOW_NOTIFICATION = 5;
+static const int    DEFAULT_WIDTH     = 1280;
+static const int    DEFAULT_HEIGHT    = 800;
+static const char   BROWSER[]         = "opera %s";
+static const char  *PRINTER[]         = {};
 
 /* look */
 static const char font[]                  = "onuava normal 10";
@@ -42,8 +42,8 @@ Shortcut shortcuts[] = {
   {0,                    GDK_f,         sc_navigate,         { NEXT } },
   {0,                    GDK_b,         sc_navigate,         { PREVIOUS } },
   {0,                    GDK_h,         sc_scroll,           { LEFT } },
-  {0,                    GDK_k,         sc_scroll,           { DOWN } },
-  {0,                    GDK_j,         sc_scroll,           { UP } },
+  {0,                    GDK_j,         sc_scroll,           { DOWN } },
+  {0,                    GDK_k,         sc_scroll,           { UP } },
   {0,                    GDK_l,         sc_scroll,           { RIGHT } },
   {0,                    GDK_Page_Up,   sc_scroll,           { TOP } },
   {0,                    GDK_Page_Down, sc_scroll,           { BOTTOM } },
@@ -68,6 +68,7 @@ Shortcut shortcuts[] = {
   {0,                    GDK_slash,     sc_focus_inputbar,   { .data = "/" } },
 
   // Misc
+  {0,                    GDK_m,         sc_toggle_inputbar,  {0} },
   {0,                    GDK_q,         sc_quit,             {0} },
 };
 
