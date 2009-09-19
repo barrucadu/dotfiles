@@ -61,35 +61,38 @@ Shortcut shortcuts[] = {
   {0,                    GDK_r,         sc_rotate,           { RIGHT } },
   {0,                    GDK_e,         sc_rotate,           { LEFT } },
 
-  // Misc
-  {0,                    GDK_q,         sc_quit,             {0} },
+  // Inputbar
   {0,                    GDK_colon,     sc_focus_inputbar,   { .data = ":" } },
   {0,                    GDK_o,         sc_focus_inputbar,   { .data = ":open " } },
   {0,                    GDK_g,         sc_focus_inputbar,   { .data = ":goto " } },
   {0,                    GDK_slash,     sc_focus_inputbar,   { .data = "/" } },
+
+  // Misc
+  {0,                    GDK_q,         sc_quit,             {0} },
 };
 
 /* commands */
 Command commands[] = {
   // command,         function
   {"export",          cmd_export},
-  {"e",               cmd_export},
   {"form",            cmd_form},
-  {"f",               cmd_form},
   {"goto",            cmd_goto},
-  {"g",               cmd_goto},
   {"info",            cmd_info},
-  {"i",               cmd_info},
   {"links",           cmd_links},
-  {"l",               cmd_links},
   {"open",            cmd_open},
-  {"o",               cmd_open},
   {"rotate",          cmd_rotate},
-  {"r",               cmd_rotate},
   {"save",            cmd_save},
-  {"s",               cmd_save},
   {"quit",            cmd_quit},
-  {"q",               cmd_quit},
   {"zoom",            cmd_zoom},
+
+  {"e",               cmd_export},
+  {"f",               cmd_form},
+  {"g",               cmd_goto},
+  {"i",               cmd_info},
+  {"l",               cmd_links},
+  {"o",               cmd_open},
+  {"r",               cmd_rotate},
+  {"s",               cmd_save},
+  {"q",               cmd_quit},
   {"z",               cmd_zoom},
 };
