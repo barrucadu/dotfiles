@@ -62,9 +62,27 @@ function genre ()
 
 function list ()
 {
-    ls $MOVIEPATH/by-director/* | \
-        sed "/^\(\s*\|.*\/.*\|.*\.\(srt\|idx\|sub\)\)$/d" | \
-        sed "s/^\(.*\)\..*$/\\1/" | \
+    folder=by-director
+
+    if [[ "$1" != "" ]]; then
+        if ls $MOVIEPATH/by-genre/ | grep -q -i $1; then
+            genre=`ls $MOVIEPATH/by-genre/ | grep -i $1`
+            folder="by-genre/$genre"
+        elif ls $MOVIEPATH/by-director/ | grep -q -i $1; then
+            director=`ls $MOVIEPATH/by-director/ | grep -i $1`
+            folder="by-director/$director"
+        else
+            return 2
+        fi
+
+        ls $MOVIEPATH/$folder/* | \
+            sed "/^.*\.\(srt\|idx\|sub\)$/d" | \
+            sed "s/^.*\/\(.*\)\..*$/\\1/"
+    else
+        ls $MOVIEPATH/by-director/* | \
+            sed "/^\(\s*\|.*\/.*\|.*\.\(srt\|idx\|sub\)\)$/d" | \
+            sed "s/^\(.*\)\..*$/\\1/"
+    fi | \
         sort | \
         $PAGER
 }
@@ -103,7 +121,7 @@ function help ()
     echo "    play     <movie>: Play a movie in VLC."
     echo "    genre    <movie>: Find the genres of a movie."
     echo "    random   <query>: Select a random movie of the (optional) specified genre / director."
-    echo "    list            : List all movies."
+    echo "    list     <query>: List all movies of the (optional) specified genre / director."
     echo
     echo "Arguments:"
     echo "    -f = fuzzy matching. Less accurate."
@@ -136,7 +154,7 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
         "genre")
             genre $args;;
         "list")
-            list;;
+            list $args;;
         "random")
             random $args;;
         "" | "help")
