@@ -1,9 +1,9 @@
 ;; -*- lisp -*-
 
 ; Interface
-(menu-bar-mode      0)
-(column-number-mode t)
-(display-time-mode  t)
+(menu-bar-mode       0)
+(column-number-mode  t)
+(display-time-mode   t)
 (global-hl-line-mode 1)
 (set-face-background 'hl-line "#111111")
 
@@ -92,7 +92,10 @@
 (setq-default ispell-program-name "aspell")
 (setq-default indent-tabs-mode     nil)
 (setq default-tab-width            4)
+(setq tab-width                    4)
+(setq c-basic-offset               4)
 (setq make-backup-files            nil)
+(setq indent-tabs-mode             t)
 (setq kill-whole-line              t)
 (setq inhibit-splash-screen        t)
 (setq org-return-follows-link      t)
