@@ -1,22 +1,14 @@
 (define (next-prime current)
-  (define (siter n cur)
-    (cond ((= (remainder n cur) 0) #f)
-          ((<= cur (sqrt n)) (siter n (+ cur 1)))
-          (else #t)))
+  (define (prime? n cur)
+    (if (or  (< n 2) (integer?      (/ n cur))  (> cur (sqrt n)))
+        (and (> n 2) (not (integer? (/ n cur))) (> cur (sqrt n)))
+        (prime? n (+ cur 1))))
 
-  (define (iter cur)
-    (if (cond ((= cur 2) #t)
-              ((< cur 2) #f)
-              (else (siter cur 2)))
-        cur
-        (iter (+ cur 1))))
+  (if (or (= current 2) (prime? current 2)) current (next-prime (+ current 1))))
 
-  (iter (+ current 1)))
+(define (prime-factorise cur prime factors)
+  (cond ((= (next-prime cur) cur) (append factors (list cur)))
+        ((integer? (/ cur prime)) (prime-factorise (/ cur prime) prime (append factors (list prime))))
+        (else                     (prime-factorise cur (next-prime (+ prime 1)) factors))))
 
-(define (blast-into-factors x)
-  (define (iter cur prime factors)
-    (cond ((= (next-prime (- cur 2)) cur) (append factors (list cur)))
-          ((integer? (/ cur prime))       (iter (/ cur prime) prime (append factors (list prime))))
-          (else                           (iter cur (next-prime prime) factors))))
-
-  (iter x 2 '()))
+(define (blast-into-factors x) (prime-factorise x 2 '()))
