@@ -243,7 +243,7 @@ def parsempdconf():
             rest = line[7:].strip()
             mpd["db_file"] = rest[1:-1]
         # The rest of the code in this function wouldn't be needed if I could assume nobody would use "~" in their MPD config...
-        elif line[:4] == "user" and not holduser:
+        elif line[:4] == "user" and not holduser and mpd["user"] == "":
             rest = line[4:].strip()
             mpd["user"] = rest[1:-1]
 
