@@ -6,5 +6,5 @@
 <Multi_key> <greater> <quotedbl>   : "”"
 <Multi_key> <n>       <minus>      : "–"
 <Multi_key> <m>       <minus>      : "—"
-<Multi_key> <p>       <p>          : "¶"
-<Multi_key> <s>       <s>          : "§"
+<Multi_key> <P>       <P>          : "¶"
+<Multi_key> <S>       <S>          : "§"

@@ -61,3 +61,4 @@
 <Multi_key> <R>           <R>                                    : "ℝ"
 <Multi_key> <C>           <C>                                    : "ℂ"
 <Multi_key> <asciicircum> <minus>                                : "⁻"
+<Multi_key> <s>           <minus>                                : "−"

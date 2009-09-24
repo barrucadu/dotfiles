@@ -57,6 +57,18 @@
                                 ("/*..todo$"       . org-mode))
                               auto-mode-alist))
 
+; Functions
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(defun switch-to-previous-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 ; Key Bindings
 (global-set-key [?\C-n]       'setnu-mode)
 (global-set-key [?\C-x ?n]    'setnu-mode)
@@ -75,14 +87,7 @@
 (global-set-key [?\M-O ?d]    'backward-word)
 (global-set-key [?\M-[ ?3 ?^] 'backward-kill-word)
 (global-set-key [?\C-Z]        nil)
-
-; Functions
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)   ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-(defalias 'yes-or-no-p 'y-or-n-p)
+(global-set-key [?\C-x ?\C-x]  'switch-to-previous-buffer)
 
 ; Hooks
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)

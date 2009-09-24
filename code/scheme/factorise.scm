@@ -6,9 +6,7 @@
 
   (if (or (= current 2) (prime? current 2)) current (next-prime (+ current 1))))
 
-(define (prime-factorise cur prime factors)
+(define (blast-into-factors cur (prime 2) (factors '()))
   (cond ((= (next-prime cur) cur) (append factors (list cur)))
-        ((integer? (/ cur prime)) (prime-factorise (/ cur prime) prime (append factors (list prime))))
-        (else                     (prime-factorise cur (next-prime (+ prime 1)) factors))))
-
-(define (blast-into-factors x) (prime-factorise x 2 '()))
+        ((integer? (/ cur prime)) (blast-into-factors (/ cur prime) prime (append factors (list prime))))
+        (else                     (blast-into-factors cur (next-prime (+ prime 1)) factors))))
