@@ -1,4 +1,3 @@
-<<<<<<< HEAD:.gitignore
 # -*- conf -*-
 
 # Ignore everything
@@ -10,6 +9,7 @@
 !cron/
 !docs/
 !.config/
+!menu
 
 # GIT stuff
 !.gitignore
