@@ -73,6 +73,9 @@ done
 mount | grep -q eihort
 eihortcheck=$?
 
+[ "$1" = "" ] && [ "$eihortcheck" = 1 ] && 1=true
+[ "$1" = "" ] && [ "$eihortcheck" = 0 ] && 1=false
+
 if $up && [[ $eihortcheck == 1 ]]; then
     $mhd      && emount MHD
     $m2hd     && emount M2HD

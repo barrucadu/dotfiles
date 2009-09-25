@@ -11,9 +11,11 @@ main-games-towersofhanoi urxvtc -e hanoi
 main-games-nethack       urxvtc -e nethack
 main-games-kildclient    kildclient
 
-main-internet-opera opera
-main-internet-uzbl  uzbl
-main-internet-claws claws-mail
+main-internet-opera   opera
+main-internet-uzbl    uzbl
+main-internet-claws   claws-mail
+main-internet-ncftp   ncftp
+main-internet-weechat weechat-curses
 
 main-media-ncmpcpp urxvtc -e ncmpcpp
 main-media-vlc     vlc
@@ -27,3 +29,9 @@ main-programming-mzscheme urxvtc -e mzscheme
 main-programming-python   urxvtc -e python
 main-programming-clisp    urxvtc -e clisp
 main-programming-idle     idle
+
+main-system-mount    bcompa amount
+main-system-eihort   bcompa sudo eihort
+main-system-network  bcompa network
+main-system-shutdown sudo shutdown -hP now
+main-system-reboot   sudo reboot

@@ -58,7 +58,7 @@ function login ()
         
         echo "BCompA commands"
         amount
-        network
+        if-server-exists eihort || network
         if-server-exists eihort && sudo eihort up
         wait-for-daemon mpd     && mpddp
 
