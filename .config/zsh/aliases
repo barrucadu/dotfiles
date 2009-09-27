@@ -1,7 +1,6 @@
 ## -*- shell-script -*-
 
-# Global (in-line) aliases
-#
+# Global aliases
 alias -g G='| grep'
 alias -g M='| most'
 alias -g X='| xargs'
@@ -13,6 +12,30 @@ alias -g W='| wc -l'
 alias -g N='&>/dev/null'
 alias -g 1N='1>/dev/null'
 alias -g 2N='2>/dev/null'
+
+# Suffix aliases
+alias -s conf='emacs'
+alias -s pdf='zathura'
+alias -s doc='soffice'
+    # Images
+alias -s gif='mirage'
+alias -s png='mirage'
+alias -s jpg='mirage'
+alias -s jpeg='mirage'
+alias -s xcf='gimp'
+alias -s svg='inkscape'
+    # Media
+alias -s ogg='vlc'
+alias -s mp3='vlc'
+alias -s mp4='vlc'
+alias -s avi='vlc'
+alias -s mkv='vlc'
+alias -s ogm='vlc'
+    # Web
+alias -s com='opera'
+alias -s net='opera'
+alias -s org='opera'
+alias -s uk='opera'
 
 # Short aliases
 alias !='sudo'
