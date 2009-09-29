@@ -213,3 +213,8 @@ function pkgroot ()
             || pkgroot "`echo $pkginfo | sed "/Required By.*/!d" | sed "s/.*: \([a-z\-\+\.0-9]*\).*/\\1/"`"
 
 }
+
+function prod()
+{
+    ping $1 | ~/bin/prod
+}
