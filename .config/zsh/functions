@@ -77,7 +77,7 @@ function gith()
 
 function gituz()
 {
-    pushd ~/uzbl
+    pushd ~/projects/uzbl
     commit $1
     git push uzbl experimental
     popd
@@ -93,7 +93,7 @@ function gituw()
 
 function gitwii()
 {
-    pushd ~/wiipen
+    pushd ~/projects/wiipen
     commit $1
     git push wiipen master
     popd

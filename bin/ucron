@@ -6,14 +6,14 @@ while(True):
 	now = datetime.datetime.now()
 
 	# Run minutely commands.
-	os.system("for script in ~/cron/minute/*; do $script; done")
+	os.system("for script in ~/.data/ucron/minute/*; do $script; done")
 	
 	if now.minute == 30:
 		# Run bihourly commands.
-		os.system("for script in ~/cron/halfhour/*; do $script; done")
+		os.system("for script in ~/.data/ucron/halfhour/*; do $script; done")
 	elif now.minute == 0:
 		# Run bihourly and hourly commands.
-		os.system("for script in ~/cron/halfhour/*; do $script; done")
-		os.system("for script in ~/cron/hour/*; do $script; done")
+		os.system("for script in ~/.data/ucron/halfhour/*; do $script; done")
+		os.system("for script in ~/.data/ucron/hour/*; do $script; done")
 
 	time.sleep(60)

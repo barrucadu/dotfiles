@@ -18,13 +18,9 @@ function umount ()
 
 function amount ()
 {
-    mount MHD     false
-    mount M2HD    false
-    mount ARCHOS5 false
-
-    mount MHD
-    mount M2HD
-    mount ARCHOS5
+    /bin/mount | grep MHD     || mount MHD
+    /bin/mount | grep M2HD    || mount M2HD
+    /bin/mount | grep ARCHOS5 || mount ARCHOS5
 }
 
 function wait-for-daemon ()

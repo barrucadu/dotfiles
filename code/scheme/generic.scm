@@ -25,6 +25,9 @@
 (define (! n)
   (prod 1 n))
 
+(define (? n)
+  (sum 0 n))
+
 (define (gcd a b)
   (if (= b 0) a
 	(gcd b (remainder a b))))
@@ -46,38 +49,38 @@
 
 (define (isprime n)
   (define (iter cur)
-	(cond ((= (remainder n cur) 0) #f)
-		  ((<= cur (sqrt n)) (iter (+ cur 1)))
-		  (else #t)))
+    (cond ((= (remainder n cur) 0) #f)
+          ((<= cur (sqrt n)) (iter (+ cur 1)))
+          (else #t)))
   (cond ((= n 2) #t)
-		((< n 2) #f)
-		(else (iter 2))))
+        ((< n 2) #f)
+        (else (iter 2))))
 
 ;;;;;;;;;; Numerical Accumulation Functions
 (define (accumulator from to increment counter function)
   (define (iter current total)
-	(if (= current to) total
-		(let ((newcurrent (increment current)))
-		  (iter newcurrent
-				(counter total (function newcurrent))))))
+    (if (= current to) total
+        (let ((newcurrent (increment current)))
+          (iter newcurrent
+                (counter total (function newcurrent))))))
   (if (or (= from to) (< to from)) (function from)
-		(iter from (function from))))
+      (iter from (function from))))
 
 (define (sum from to)
   (accumulator from to inc
-			   (lambda (x y) (+ x y))
-			   identity))
+               (lambda (x y) (+ x y))
+               identity))
 
 (define (prod from to)
   (accumulator from to inc
-			   (lambda (x y) (let ((z (* x y)))
-							   (if (= z 0) 1 z)))
-			   identity))
+               (lambda (x y) (let ((z (* x y)))
+                               (if (= z 0) 1 z)))
+               identity))
 
 (define (exp-func x r)
   (+ 1 (accumulator 0 r inc
-			   (lambda (a b) (+ a (if (= b 0) 0 (/ (expt x b) (! b)))))
-			   identity)))
+                    (lambda (a b) (+ a (if (= b 0) 0 (/ (expt x b) (! b)))))
+                    identity)))
 
 ;;;;;;;;;; Exponention
 (define (exp x)

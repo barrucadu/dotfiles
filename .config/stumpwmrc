@@ -71,7 +71,7 @@
 (define-key *top-map*  (kbd "M-Print")   "exec urxvtc -e screenshot")
 (define-key *top-map*  (kbd "Print")     "exec import -window root ~/screenshot.png")
 (define-key *top-map*  (kbd "M-F9")      "loadrc")
-(define-key *root-map* (kbd "m")         "exec ~/menu/menu.sh")
+(define-key *root-map* (kbd "m")         "exec ~/.data/menu/menu.sh")
 (define-key *root-map* (kbd "M")         "mode-line")
 (define-key *top-map*  (kbd "M-space")   "exec emelfm2")
 (define-key *top-map*  (kbd "C-M-space") "exec kildclient")

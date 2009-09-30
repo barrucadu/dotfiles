@@ -62,3 +62,7 @@
 <Multi_key> <C>           <C>                                    : "ℂ"
 <Multi_key> <asciicircum> <minus>                                : "⁻"
 <Multi_key> <s>           <minus>                                : "−"
+<Multi_key> <v>           <bracketleft>                          : "⌈"
+<Multi_key> <v>           <bracketright>                         : "⌉"
+<Multi_key> <asciicircum> <bracketleft>                          : "⌊"
+<Multi_key> <asciicircum> <bracketright>                         : "⌋"

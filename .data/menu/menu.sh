@@ -12,7 +12,7 @@ dmenusb="`xrdb -query | grep '*color0:' | sed 's/.*#/#/'`"
 
 function resetmenu ()
 {
-    menupath="$HOME/menu/menus"
+    menupath="$HOME/.data/menu/menus"
     menufile="main"
     menutrack="main"
     choice="main"

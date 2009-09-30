@@ -47,7 +47,7 @@ URxvt*scrollBar:         false
 URxvt*saveLines:         1000
 URxvt*transparent:       true
 URxvt*inheritPixmap:     true
-URxvt*shading:           30
+URxvt*shading:           0
 URxvt*tintColor:         white
 URxvt*internalBorder:    0
 URxvt.imLocale:          en.GB.UTF-8

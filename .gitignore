@@ -9,7 +9,7 @@
 !cron/
 !docs/
 !.config/
-!menu
+!.data/
 
 # GIT stuff
 !.gitignore
