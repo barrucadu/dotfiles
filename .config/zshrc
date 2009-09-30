@@ -15,11 +15,7 @@ if [[ ! $(tty) == *pts* ]]; then
                 source ~/.config/zsh/profile
             fi
         done
-    elif [[ ! "$TERM" == "screen-256color" ]]; then
-        # Start screen
-        screen
     fi
-    logout
 else
     # Welcome message
     clear
