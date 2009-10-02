@@ -54,9 +54,11 @@
 (defun latex-insert-formula ()
   "Insert a formula block into the current LaTeX document"
   (interactive)
-  (insert "\\begin{align*}\n")
+  (insert "\\begin{equation}\n")
+  (insert "\\begin{array}{rl}\n")
   (insert "  &= \\\\\n")
-  (insert "\\end{align*}"))
+  (insert "\\end{array}\n")
+  (insert "\\end{equation}"))
 
 ; Insert a figure
 (defun latex-insert-figure ()

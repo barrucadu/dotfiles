@@ -1,7 +1,7 @@
 ## -*- shell-script -*-
 
 # Environmental Variables
-export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin"
+export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
 export BROWSER=/usr/bin/opera
 export EDITOR=emacs
 export VISUAL=emacs

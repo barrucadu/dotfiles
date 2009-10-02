@@ -14,7 +14,7 @@ alias -g 1N='1>/dev/null'
 alias -g 2N='2>/dev/null'
 
 # Suffix aliases
-alias -s conf='emacs'
+alias -s conf='emacs -nw'
 alias -s pdf='zathura'
 alias -s doc='soffice'
     # Images
@@ -42,8 +42,8 @@ alias !='sudo'
 alias @='opera'
 alias c='clear'
 alias e='exit'
-alias o='emacs'
-alias O='sudo emacs'
+alias o='emacs -nw'
+alias O='sudo emacs -nw'
 alias t='todo'
 
 # Basic commands

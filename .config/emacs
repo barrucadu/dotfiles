@@ -4,13 +4,31 @@
 (menu-bar-mode       0)
 (column-number-mode  t)
 (display-time-mode   t)
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#111111")
 
 ; UTF-8
 (set-keyboard-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (prefer-coding-system       'utf-8)
+
+; Extra Files
+(add-to-list 'load-path "/home/barrucadu/code/elisp/")
+
+(load "phrases.el"       nil t t)
+(load "latex.el"         nil t t)
+(load "phpxhtml.el"      nil t t)
+(load "auctex.el"        nil t t)
+(load "preview-latex.el" nil t t)
+(load "zenburn.el"       nil t t)
+
+(require 'setnu+)
+(require 'w3m-load)
+(require 'tex-site)
+(require 'color-theme)
+
+(autoload 'php-mode       "php-mode.el"      "PHP Mode."          t)
+(autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."     t)
+(autoload 'python-mode    "python-mode.el"   "Python Mode."       t)
+(autoload 'hide-mode-line "hide-mode-line"                    nil t)
 
 ; Variables
 (setq-default ispell-program-name "aspell")
@@ -26,22 +44,9 @@
       kill-whole-line         t
       inhibit-splash-screen   t
       org-return-follows-link t
-      org-log-done            'time)
-
-; Extra Files
-(add-to-list 'load-path "/home/barrucadu/code/elisp/")
-
-(load "phrases.el"  nil t t)
-(load "latex.el"    nil t t)
-(load "phpxhtml.el" nil t t)
-
-(require 'setnu+)
-(require 'w3m-load)
-
-(autoload 'php-mode       "php-mode.el"      "PHP Mode."          t)
-(autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."     t)
-(autoload 'python-mode    "python-mode.el"   "Python Mode."       t)
-(autoload 'hide-mode-line "hide-mode-line"                    nil t)
+      org-log-done            'time
+      TeX-auto-save           t
+      TeX-parse-self          t)
 
 ; File Associations
 (setq auto-mode-alist (append '(("/PKGBUILD$"      . pkgbuild-mode)
@@ -91,3 +96,10 @@
 
 ; Hooks
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+; Miscellanious
+(color-theme-initialize)
+(color-theme-zenburn)
+
+(custom-set-variables
+  '(preview-scale-function 1.33))

@@ -23,20 +23,22 @@
 *color7:  COLOUR_THEME_LIGHT_GREY
 *color15: COLOUR_THEME_WHITE
 
-!! XFT
-Xft.dpi:       96
-Xft.antialias: true
-Xft.hinting:   full
-Xft.hintstyle: hintslight
-Xft.rgba:      rgb
+!! XFT && Fonts
+Xft.dpi:        96
+Xft.antialias:  true
+Xft.hinting:    full
+Xft.hintstyle:  hintslight
+Xft.rgba:       rgb
+*font:          FONT
+*boldFont:      FONT_BOLD
+*italicFont:    FONT_ITALIC
+*underlineFont: FONT_UNDERLINE
 
 !! Terminal
 URxvt.urlLauncher:       opera
 URxvt.matcher.button:    1
 URxvt.perl-ext-common:   default,matcher
 URxvt.colorUL:           #86a2be
-URxvt*font:              FONT
-URxvt*boldFont:          FONT_BOLD
 URxvt*buffered:          true
 URxvt*background:        COLOUR_THEME_BG
 URxvt*foreground:        COLOUR_THEME_FG
@@ -51,6 +53,9 @@ URxvt*shading:           0
 URxvt*tintColor:         white
 URxvt*internalBorder:    0
 URxvt.imLocale:          en.GB.UTF-8
+
+!! Emacs
+Emacs*font: Onuava-8
 
 !! Mouse
 Xcursor*theme: aero
