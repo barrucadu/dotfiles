@@ -51,7 +51,8 @@ function login ()
         echo "Starting services"
         xscreensaver -no-splash &>/dev/null &
         ucron &>/dev/null &
-        
+        ~/.data/uzbl/scripts/cookie_daemon.py restart &>/dev/null &
+
         echo "BCompA commands"
         amount
         if-server-exists eihort || network

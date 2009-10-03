@@ -6,4 +6,4 @@ OPTIONS=" -i -l 10"
 
 goto=`sort $bookmarks_file | dmenu $OPTIONS $COLORS | cut -d ' ' -f -100  | awk '{print $NF}'`
 
-[ -n "$goto" ] && uzblctrl -s $5 -c "uri $goto"
+[ -n "$goto" ] && echo "uri $goto" | socat - unix-connect:$5

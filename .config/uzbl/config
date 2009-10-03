@@ -1,7 +1,7 @@
 ############### SETTINGS ###############
 
 # Appearence
-set show_status       = 1
+set show_status            = 1
 set status_format          = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">[\@MODE:\@keycmd]</span> <span weight="bold">\@status_message</span> <span foreground="#606060">[\@LOAD_PROGRESSBAR]</span> <span foreground="#99FF66">\@uri</span> </span>
 set status_message         = <span color="darkred">W</span>
 set status_background      = #101010
@@ -11,7 +11,12 @@ set status_pbar_pending    = .
 set status_pbar_width      = 20
 set insert_indicator       = Ins
 set command_indicator      = Cmd
-toggle_status
+
+@progress format   = [%d%s%p]
+@progress spinner  = -\\|/
+@progress done     = -
+@progress pending  =
+
 
 # Behaviour
 set always_insert_mode     = 0
@@ -26,12 +31,13 @@ set minimum_font_size      = 6
 set stylesheet_uri         = file:///home/barrucadu/.config/uzbl/default.css
 
 # Handlers
-set history_handler        = spawn $XDG_CONFIG_HOME/uzbl/handlers/history.sh
-set download_handler       = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
-set cookie_handler         = spawn $XDG_CONFIG_HOME/uzbl/handlers/cookies.sh
-set load_start_handler     = set status_message = <span foreground="red">S</span>
-set load_commit_handler    = set status_message = <span foreground="yellow">C</span>
-set load_finish_handler    = set status_message = <span foreground="green">D</span>
+@on_event LOAD_START  = set status_message = <span foreground="red">S</span>
+@on_event LOAD_COMMIT = set status_message = <span foreground="yellow">C</span>
+@on_event LOAD_FINISH = set status_message = <span foreground="green">D</span>
+@on_event LOAD_FINISH = spawn $XDG_DATA_HOME/uzbl/handlers/history.sh
+set download_handler  = spawn $XDG_DATA_HOME/uzbl/handlers/download.sh
+set scheme_handler    = spawn $XDG_DATA_HOME/uzbl/scripts/scheme.py
+set cookie_handler    = talk_to_socket $XDG_CACHE_HOME/uzbl/cookie_daemon_socket
 
 # Interface
 set fifo_dir               = /home/barrucadu/tmp/uzbl
@@ -43,22 +49,22 @@ set useragent              = Uzbl (X11; U; Arch Linux @(uname -r)@ x86_64; en-GB
 ############### BINDINGS ###############
 
 # Browser Control
-bind b  = back
+bind n  = back
 bind m  = forward
 bind S  = stop
 bind r  = reload
-bind +  = chain 'zoom_in' 'script $XDG_CONFIG_HOME/uzbl/scripts/scroll.js'
-bind -  = chain 'zoom_out' 'script $XDG_CONFIG_HOME/uzbl/scripts/scroll.js'
-bind 0  = chain 'set zoom_level = 1' 'script $XDG_CONFIG_HOME/uzbl/scripts/scroll.js'
+bind +  = chain 'zoom_in' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
+bind -  = chain 'zoom_out' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
+bind 0  = chain 'set zoom_level = 1' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
 bind t  = toggle_status
-bind kk = exit
+bind q  = exit
 bind i  = toggle_insert_mode
 
 # Page Navigation
-bind w  = scroll_vert -150
-bind a  = scroll_horz -150
-bind s  = scroll_vert 150
-bind d  = scroll_horz 150
+bind h  = scroll_horz -150
+bind j  = scroll_vert 150
+bind k  = scroll_vert -150
+bind l  = scroll_horz 150
 bind .* = search %s
 bind /  = search
 bind >  = scroll_end
@@ -70,8 +76,6 @@ bind gh = uri http://eihort/home/
 bind ge = uri http://eihort/
 bind gu = uri http://www.uzbl.org/
 bind ,_ = uri %s
-bind ?  = uri http://localhost/uzbl-bindings.php
-bind !  = uri http://localhost/uzbl-code.php
 
 # Search bindings
      # Search Engines
@@ -87,9 +91,7 @@ bind \e_ = uri http://www.encyclopediadramatica.com/Special:Search?search=%s&go=
 bind \b_ = uri http://www.biblegateway.com/keyword/?search=%s
 bind \h_ = uri http://www.wikihow.com/Special:LSearch?fulltext=Search&search=%s
 bind \U_ = uri http://www.urbandictionary.com/define.php?term=%s
-bind \H_ = uri http://dothack.wikia.com/wiki/Special:Search?search=%s&go=1
      # Torrents
-bind \P_ = uri http://thepiratebay.org/s/?q=%s&page=0&orderby=99
 bind \M_ = uri http://www.mininova.org/search/?search=%s
 bind \i_ = uri http://isohunt.com/torrents/?ihq=%s
      # Entertainment / Books
@@ -104,10 +106,10 @@ bind gc = sh "echo set uri = `xclip -o` > $4"
 bind gC = sh "echo set uri = `xclip -o -selection clipboard` > $4"
 
 # External Bindings
-bind u  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_bookmarks.sh
-bind U  = spawn $XDG_CONFIG_HOME/uzbl/scripts/load_url_from_history.sh
-bind B  = spawn $XDG_CONFIG_HOME/uzbl/scripts/add_url_to_bookmarks.sh
-bind f* = script $XDG_CONFIG_HOME/uzbl/scripts/hint.js %s
-bind F  = spawn $XDG_CONFIG_HOME/uzbl/scripts/formfiller.pl load
-bind D  = spawn $XDG_CONFIG_HOME/uzbl/handlers/download.sh
+bind u  = spawn $XDG_DATA_HOME/uzbl/scripts/load_url_from_bookmarks.sh
+bind U  = spawn $XDG_DATA_HOME/uzbl/scripts/load_url_from_history.sh
+bind B  = spawn $XDG_DATA_HOME/uzbl/scripts/add_url_to_bookmarks.sh
+bind f* = script $XDG_DATA_HOME/uzbl/scripts/hint.js %s
+bind F  = spawn $XDG_DATA_HOME/uzbl/scripts/formfiller.pl load
+bind D  = spawn $XDG_DATA_HOME/uzbl/handlers/download.sh
 bind :  = js %s

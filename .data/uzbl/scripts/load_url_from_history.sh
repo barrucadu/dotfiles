@@ -6,4 +6,4 @@ OPTIONS=" -i -l 10"
 
 goto=`< $history_file dmenu $OPTIONS $COLORS | cut -d ' ' -f -3  | awk '{print $NF}'`
 
-[ -n "$goto" ] && uzblctrl -s $5 -c "uri $goto"
+[ -n "$goto" ] && echo "uri $goto" | socat - unix-connect:$5
