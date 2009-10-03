@@ -3,8 +3,8 @@
 # Environmental Variables
 export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
 export BROWSER=/usr/bin/opera
-export EDITOR=emacs
-export VISUAL=emacs
+export EDITOR="emacs -nw"
+export VISUAL="emacs -nw"
 export PAGER=/usr/bin/most
 export ACK_PAGER=$PAGER
 export HISTFILE=~/.data/zsh/history

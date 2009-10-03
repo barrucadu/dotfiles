@@ -3,7 +3,7 @@
 # System
 function start()
 {
-	for arg in "${*[@]}"; do
+    for arg in "${*[@]}"; do
         sudo /etc/rc.d/$arg start
     done
 }
@@ -137,7 +137,7 @@ EOF
 
 function ou()
 {
-    emacs $1
+    emacs -nw $1
     ncftp barrucadu <<EOF
 cd $2
 put $1
