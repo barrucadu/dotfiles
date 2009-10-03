@@ -55,7 +55,10 @@ URxvt*internalBorder:    0
 URxvt.imLocale:          en.GB.UTF-8
 
 !! Emacs
-Emacs*font: Onuava-8
+Emacs*font:               Onuava-8
+Emacs*fullscreen:         fullboth
+Emacs*toolBar:            0
+Emacs*verticalScrollBars: off
 
 !! Mouse
 Xcursor*theme: aero

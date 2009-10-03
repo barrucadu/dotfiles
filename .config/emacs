@@ -1,9 +1,10 @@
 ;; -*- lisp -*-
 
 ; Interface
-(menu-bar-mode       0)
-(column-number-mode  t)
-(display-time-mode   t)
+(menu-bar-mode         0)
+(column-number-mode    t)
+(display-time-mode     t)
+(global-font-lock-mode 1)
 
 ; UTF-8
 (set-keyboard-coding-system 'utf-8)
@@ -57,7 +58,7 @@
                                 ("/*..rdf$"        . xml-mode)
                                 ("/*..xsl$"        . xml-mode)
                                 ("/*..py$"         . python-mode)
-                                ("/*..tex$"        . latex-mode)
+                                ("/*..tex$"        . LaTeX-mode)
                                 ("/*..sh$"         . shell-script-mode)
                                 ("/*..red$"        . asm-mode)
                                 ("/*..org$"        . org-mode)
