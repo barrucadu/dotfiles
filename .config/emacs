@@ -1,6 +1,15 @@
 ;; -*- lisp -*-
 
+(add-to-list 'load-path "/home/barrucadu/code/elisp/")
+
 ; Interface
+(require 'color-theme)
+
+(load "zenburn.el" nil t t)
+
+(color-theme-initialize)
+(color-theme-zenburn)
+
 (menu-bar-mode         0)
 (column-number-mode    t)
 (display-time-mode     t)
@@ -11,66 +20,80 @@
 (set-terminal-coding-system 'utf-8)
 (prefer-coding-system       'utf-8)
 
-; Extra Files
-(add-to-list 'load-path "/home/barrucadu/code/elisp/")
-
+; LaTeX
 (load "phrases.el"       nil t t)
 (load "latex.el"         nil t t)
-(load "phpxhtml.el"      nil t t)
 (load "auctex.el"        nil t t)
 (load "preview-latex.el" nil t t)
-(load "zenburn.el"       nil t t)
 
-(require 'setnu+)
-(require 'w3m-load)
 (require 'tex-site)
-(require 'color-theme)
 
-(autoload 'php-mode       "php-mode.el"      "PHP Mode."          t)
-(autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."     t)
-(autoload 'python-mode    "python-mode.el"   "Python Mode."       t)
-(autoload 'hide-mode-line "hide-mode-line"                    nil t)
-
-; Variables
-(setq-default ispell-program-name "aspell")
-(setq-default indent-tabs-mode     nil)
-
-(setq c-default-style         "bsd"
-      c-basic-offset          4
-      tab-width               4
-      tab-stop-list           '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80)
-      indent-tabs-mode        nil
-      make-backup-files       nil
-      indent-tabs-mode        t
-      kill-whole-line         t
-      inhibit-splash-screen   t
-      org-return-follows-link t
-      org-log-done            'time
-      TeX-auto-save           t
-      TeX-parse-self          t
+(setq TeX-auto-save                    t
+      TeX-parse-self                   t
       TeX-electric-sub-and-superscript 1
-      preview-scale-function  1.33)
+      preview-scale-function           1.33)
 
-; File Associations
-(setq auto-mode-alist (append '(("/PKGBUILD$"      . pkgbuild-mode)
-                                ("/*..php$"        . php-mode)
-                                ("/*..inc$"        . php-mode)
-                                ("/*..rdf$"        . xml-mode)
-                                ("/*..xsl$"        . xml-mode)
-                                ("/*..py$"         . python-mode)
-                                ("/*..tex$"        . LaTeX-mode)
-                                ("/*..sh$"         . shell-script-mode)
-                                ("/*..red$"        . asm-mode)
-                                ("/*..org$"        . org-mode)
+(add-hook 'LaTeX-mode-hook                'flyspell-mode)
+(add-hook 'LaTeX-mode-hook                'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook                'TeX-fold-mode)
+
+; Web development
+(load "phpxhtml.el" nil t t)
+(autoload 'php-mode "php-mode.el" "PHP Mode." t)
+
+(setq auto-mode-alist (append '(("/*..php$" . php-mode)
+                                ("/*..inc$" . php-mode)
+                                ("/*..rdf$" . xml-mode)
+                                ("/*..xsl$" . xml-mode))
+                              auto-mode-alist))
+
+; C
+(setq c-default-style "bsd"
+      c-basic-offset  4)
+
+; Org-mode
+(setq org-return-follows-link t
+      org-log-done            'time)
+
+(setq auto-mode-alist (append '(("/*..org$"        . org-mode)
                                 ("/*..todo$"       . org-mode))
                               auto-mode-alist))
 
-; Functions
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."
   (let (org-log-done org-log-states)   ; turn off logging
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+; Miscellanious
+(require 'setnu+)
+(require 'w3m-load)
+(require 'ffap)
+
+(autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."     t)
+(autoload 'python-mode    "python-mode.el"   "Python Mode."       t)
+(autoload 'hide-mode-line "hide-mode-line"                    nil t)
+
+(setq ispell-program-name  "aspell"
+      tab-width             4
+      tab-stop-list         '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80)
+      indent-tabs-mode      nil
+      make-backup-files     nil
+      indent-tabs-mode      t
+      kill-whole-line       t
+      inhibit-splash-screen t
+      ffap-require-prefix   t
+      ffap-url-fetcher      'w3m-browse-url)
+
+(setq auto-mode-alist (append '(("/PKGBUILD$"      . pkgbuild-mode)
+                                ("/*..py$"         . python-mode)
+                                ("/*..tex$"        . LaTeX-mode)
+                                ("/*..sh$"         . shell-script-mode)
+                                ("/*..red$"        . asm-mode))
+                              auto-mode-alist))
+
+; Functions
 (defun switch-to-previous-buffer ()
   (interactive)
   (switch-to-buffer (other-buffer)))
@@ -78,6 +101,8 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ; Key Bindings
+(ffap-bindings)
+
 (global-set-key [?\C-n]       'setnu-mode)
 (global-set-key [?\C-x ?n]    'setnu-mode)
 (global-set-key [?\C-x ?t]    'toggle-truncate-lines)
@@ -94,15 +119,5 @@
 (global-set-key [?\M-O ?c]    'forward-word)
 (global-set-key [?\M-O ?d]    'backward-word)
 (global-set-key [?\M-[ ?3 ?^] 'backward-kill-word)
-(global-set-key [?\C-Z]        nil)
 (global-set-key [?\C-x ?\C-x]  'switch-to-previous-buffer)
-
-; Hooks
-(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-(add-hook 'LaTeX-mode-hook                'flyspell-mode)
-(add-hook 'LaTeX-mode-hook                'LaTeX-math-mode)
-(add-hook 'LaTeX-mode-hook                'TeX-fold-mode)
-
-; Miscellanious
-(color-theme-initialize)
-(color-theme-zenburn)
+(global-set-key [?\C-Z]        nil)
