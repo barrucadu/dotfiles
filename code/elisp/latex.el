@@ -12,6 +12,7 @@
   (insert "\\usepackage{amssymb}\n")
   (insert "\\usepackage{amsthm}\n")
   (insert "\\usepackage{graphicx}\n")
+  (insert "\\usepackage{kpfonts}\n")
   (insert "\\usepackage[margin=1.5in]{geometry}\n")
   (insert "\\usepackage{ucs}\n\n")
   (insert "\\newcommand{\\superscript}[1]{\\ensuremath{^{\\textrm{#1}}}}\n")

@@ -46,7 +46,9 @@
       org-return-follows-link t
       org-log-done            'time
       TeX-auto-save           t
-      TeX-parse-self          t)
+      TeX-parse-self          t
+      TeX-electric-sub-and-superscript 1
+      preview-scale-function  1.33)
 
 ; File Associations
 (setq auto-mode-alist (append '(("/PKGBUILD$"      . pkgbuild-mode)
@@ -96,10 +98,10 @@
 
 ; Hooks
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+(add-hook 'LaTeX-mode-hook                'flyspell-mode)
+(add-hook 'LaTeX-mode-hook                'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook                'TeX-fold-mode)
 
 ; Miscellanious
 (color-theme-initialize)
 (color-theme-zenburn)
-
-(custom-set-variables
-  '(preview-scale-function 1.33))
