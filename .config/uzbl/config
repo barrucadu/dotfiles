@@ -106,7 +106,7 @@ set toggle_cmd_ins = @toggle_modes command insert
 @bind gh     = uri http://eihort/home/
 @bind ge     = uri http://eihort/
 @bind gu     = uri http://www.uzbl.org/
-@bind ,_     = uri %s
+@bind ,      = spawn $XDG_DATA_HOME/uzbl/scripts/load_url_from_brain.sh
 
 # Search bindings
 @bind \\  = spawn $XDG_DATA_HOME/uzbl/scripts/search.sh
