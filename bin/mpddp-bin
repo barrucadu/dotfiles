@@ -348,34 +348,50 @@ def dieGracefully():
     sys.exit()
 
 # Execute the program main loop
-populateLists(False)
+starting = True
+looped   = False
+while starting:
+    try:
+        initiallooped = looped
+        looped        = True
+        
+        populateLists(initiallooped)
+
+        starting = False
+    except:
+        time.sleep(2)
+    
 loops = 0
 try:
     while True:
         if os.path.exists('/tmp/killmpddp'):
             dieGracefully()
         
-        client.connect(host, port)
-        info = client.currentsong()
-        status = client.status()
-        playlist = client.playlistinfo()
-        client.disconnect()
+        try:
+            client.connect(host, port)
+            info = client.currentsong()
+            status = client.status()
+            playlist = client.playlistinfo()
+            client.disconnect()
+            
+            if len(info) > 0:
+                if int(status['song']) >= changeafter:
+                    for i in range(changeafter - 1, int(status['song'])):
+                        updatePlaylist()
+
+            if len(playlist) < playlistlen:
+                for i in range(len(playlist), playlistlen):
+                    addNewTrackToPlaylist()
         
-        if len(info) > 0:
-            if int(status['song']) >= changeafter:
-                for i in range(changeafter - 1, int(status['song'])):
-                    updatePlaylist()
-        if len(playlist) < playlistlen:
-            for i in range(len(playlist), playlistlen):
-                addNewTrackToPlaylist()
+            if loops == 59:
+                if update == 'yes':
+                    populateLists(True)
+                loops = 0
+            else:
+                loops = loops + 1
         
-        if loops == 59:
-            if update == 'yes':
-                populateLists(True)
-            loops = 0
-        else:
-            loops = loops + 1
-        
-        time.sleep(1)
+            time.sleep(1)
+        except:
+            time.sleep(2)
 except KeyboardInterrupt:
     dieGracefully()

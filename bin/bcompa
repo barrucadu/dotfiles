@@ -54,13 +54,13 @@ function login ()
 
         echo "BCompA commands"
         amount
-        if-server-exists eihort || network
-        if-server-exists eihort && sudo eihort up
-        wait-for-daemon mpd     && mpddp
+        if-server-exists google.com || network
+        if-server-exists eihort     && sudo eihort up
+        mpddp
 
         echo "Starting programs"
-        opera      &>/dev/null &
-        claws-mail &>/dev/null &
+        uzbl-browser &>/dev/null &
+        claws-mail   &>/dev/null &
     else
         echo "Starting programs"
         urxvtc -e emacs &>/dev/null &
