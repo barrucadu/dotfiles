@@ -75,14 +75,6 @@ function gith()
     popd
 }
 
-function gituz()
-{
-    pushd ~/projects/uzbl
-    commit $1
-    git push uzbl experimental
-    popd
-}
-
 function gituw()
 {
     pushd ~/websites/uzbl.org

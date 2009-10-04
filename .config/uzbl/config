@@ -1,22 +1,35 @@
 ############### SETTINGS ###############
 
+# Basic
+set mode_config  = request MODE_CONFIG
+set toggle_modes = request TOGGLE_MODES
+set on_event     = request ON_EVENT
+set progress     = request PROGRESS_CONFIG
+set bind         = request BIND
+
+set set_mode   = set mode =
+set set_status = set status_message =
+
 # Appearence
 set show_status            = 1
-set status_format          = <span font="DejaVu Sans Mono Bold 10"><span background="khaki" foreground="black">[\@MODE:\@keycmd]</span> <span weight="bold">\@status_message</span> <span foreground="#606060">[\@LOAD_PROGRESSBAR]</span> <span foreground="#99FF66">\@uri</span> </span>
+
+set progress_section       = <span foreground="#606060">\@[\@progress_format]\@</span>
+set mode_section           = <span background="khaki" foreground="black">\@[\@mode_indicator:\@keycmd]\@</span>
+set status_section         = <span weight="bold">\@status_message</span>
+set uri_section            = <span foreground="#99FF66">\@uri</span>
+set status_format          = <span font="DejaVu Sans Mono Bold 10">@mode_section @status_section @progress_section @uri_section</span>
+
 set status_message         = <span color="darkred">W</span>
 set status_background      = #101010
 set status_top             = 0
 set status_pbar_done       = :
 set status_pbar_pending    = .
 set status_pbar_width      = 20
-set insert_indicator       = Ins
-set command_indicator      = Cmd
 
-@progress format   = [%d%s%p]
-@progress spinner  = -\\|/
+@progress width    = 8
+@progress format   = [%d>%p]%c
 @progress done     = -
 @progress pending  =
-
 
 # Behaviour
 set always_insert_mode     = 0
@@ -40,76 +53,105 @@ set scheme_handler    = spawn $XDG_DATA_HOME/uzbl/scripts/scheme.py
 set cookie_handler    = talk_to_socket $XDG_CACHE_HOME/uzbl/cookie_daemon_socket
 
 # Interface
-set fifo_dir               = /home/barrucadu/tmp/uzbl
-set socket_dir             = /home/barrucadu/tmp/uzbl
+set fifo_dir   = /tmp
+set socket_dir = /tmp
 
 # Network
-set useragent              = Uzbl (X11; U; Arch Linux @(uname -r)@ x86_64; en-GB) Webkit/@WEBKIT_MAJOR.@WEBKIT_MINOR.@WEBKIT_MICRO
+set useragent = Uzbl (X11; U; Arch Linux @(uname -r)@ x86_64; en-GB) Webkit/@WEBKIT_MAJOR.@WEBKIT_MINOR.@WEBKIT_MICRO
 
 ############### BINDINGS ###############
 
 # Browser Control
-bind n  = back
-bind m  = forward
-bind S  = stop
-bind r  = reload
-bind +  = chain 'zoom_in' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
-bind -  = chain 'zoom_out' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
-bind 0  = chain 'set zoom_level = 1' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
-bind t  = toggle_status
-bind q  = exit
-bind i  = toggle_insert_mode
+@bind n  = back
+@bind m  = forward
+@bind S  = stop
+@bind r  = reload
+@bind +  = chain 'zoom_in' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
+@bind -  = chain 'zoom_out' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
+@bind 0  = chain 'set zoom_level = 1' 'script $XDG_DATA_HOME/uzbl/scripts/scroll.js'
+@bind t  = toggle_status
+@bind q  = exit
 
 # Page Navigation
-bind h  = scroll_horz -150
-bind j  = scroll_vert 150
-bind k  = scroll_vert -150
-bind l  = scroll_horz 150
-bind .* = search %s
-bind /  = search
-bind >  = scroll_end
-bind <  = scroll_begin
+@bind h  = scroll_horz -150
+@bind j  = scroll_vert 150
+@bind k  = scroll_vert -150
+@bind l  = scroll_horz 150
+@bind .* = search %s
+@bind /  = search
+@bind >  = scroll_end
+@bind <  = scroll_begin
 
 # Goto Bindings
-bind gg = uri http://www.google.com/
-bind gh = uri http://eihort/home/
-bind ge = uri http://eihort/
-bind gu = uri http://www.uzbl.org/
-bind ,_ = uri %s
+@bind gg = uri http://www.google.com/
+@bind gh = uri http://eihort/home/
+@bind ge = uri http://eihort/
+@bind gu = uri http://www.uzbl.org/
+@bind ,_ = uri %s
 
 # Search bindings
      # Search Engines
-bind \g_ = uri http://www.google.com/search?q=%s
+@bind \g_ = uri http://www.google.com/search?q=%s
      # Wikis / References
-bind \w_ = uri http://en.wikipedia.org/wiki/Special:Search?search=%s
-bind \a_ = uri http://wiki.archlinux.org/index.php/Special:Search?search=%s&go=Go
-bind \p_ = uri http://www.php.net/search.php?pattern=%s&show=quickref&x=0&y=0
-bind \d_ = uri http://dictionary.reference.com/search?q=%s&x=0&y=0
-bind \t_ = uri http://thesaurus.reference.com/search?q=%s&x=0&y=0
-bind \u_ = uri http://uncyclopedia.org/wiki/Special:Search?search=~%s&go=Go
-bind \e_ = uri http://www.encyclopediadramatica.com/Special:Search?search=%s&go=Go
-bind \b_ = uri http://www.biblegateway.com/keyword/?search=%s
-bind \h_ = uri http://www.wikihow.com/Special:LSearch?fulltext=Search&search=%s
-bind \U_ = uri http://www.urbandictionary.com/define.php?term=%s
+@bind \w_ = uri http://en.wikipedia.org/wiki/Special:Search?search=%s
+@bind \a_ = uri http://wiki.archlinux.org/index.php/Special:Search?search=%s&go=Go
+@bind \p_ = uri http://www.php.net/search.php?pattern=%s&show=quickref&x=0&y=0
+@bind \d_ = uri http://dictionary.reference.com/search?q=%s&x=0&y=0
+@bind \t_ = uri http://thesaurus.reference.com/search?q=%s&x=0&y=0
+@bind \u_ = uri http://uncyclopedia.org/wiki/Special:Search?search=~%s&go=Go
+@bind \e_ = uri http://www.encyclopediadramatica.com/Special:Search?search=%s&go=Go
+@bind \b_ = uri http://www.biblegateway.com/keyword/?search=%s
+@bind \h_ = uri http://www.wikihow.com/Special:LSearch?fulltext=Search&search=%s
+@bind \U_ = uri http://www.urbandictionary.com/define.php?term=%s
      # Torrents
-bind \M_ = uri http://www.mininova.org/search/?search=%s
-bind \i_ = uri http://isohunt.com/torrents/?ihq=%s
+@bind \M_ = uri http://www.mininova.org/search/?search=%s
+@bind \i_ = uri http://isohunt.com/torrents/?ihq=%s
      # Entertainment / Books
-bind \m_ = uri http://www.imdb.com/find?s=all&q=%s&x=0&y=0
-bind \A_ = uri http://www.amazon.co.uk/s/field-keywords=%s
-bind \W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleSearchString=%s&searchType=0&Image1.x=0&Image1.y=0
+@bind \m_ = uri http://www.imdb.com/find?s=all&q=%s&x=0&y=0
+@bind \A_ = uri http://www.amazon.co.uk/s/field-keywords=%s
+@bind \W_ = uri http://www.waterstones.com/waterstonesweb/simpleSearch.do?simpleSearchString=%s&searchType=0&Image1.x=0&Image1.y=0
 
 # Script Bindings
-bind y  = sh "echo -ne $6 | xclip"
-bind Y  = sh "echo -ne $6 | xclip -selection clipboard"
-bind gc = sh "echo set uri = `xclip -o` > $4"
-bind gC = sh "echo set uri = `xclip -o -selection clipboard` > $4"
+@bind y  = sh "echo -ne $6 | xclip"
+@bind Y  = sh "echo -ne $6 | xclip -selection clipboard"
+@bind gc = sh "echo set uri = `xclip -o` > $4"
+@bind gC = sh "echo set uri = `xclip -o -selection clipboard` > $4"
 
 # External Bindings
-bind u  = spawn $XDG_DATA_HOME/uzbl/scripts/load_url_from_bookmarks.sh
-bind U  = spawn $XDG_DATA_HOME/uzbl/scripts/load_url_from_history.sh
-bind B  = spawn $XDG_DATA_HOME/uzbl/scripts/add_url_to_bookmarks.sh
-bind f* = script $XDG_DATA_HOME/uzbl/scripts/hint.js %s
-bind F  = spawn $XDG_DATA_HOME/uzbl/scripts/formfiller.pl load
-bind D  = spawn $XDG_DATA_HOME/uzbl/handlers/download.sh
-bind :  = js %s
+@bind u  = spawn $XDG_DATA_HOME/uzbl/scripts/load_url_from_bookmarks.sh
+@bind U  = spawn $XDG_DATA_HOME/uzbl/scripts/load_url_from_history.sh
+@bind B  = spawn $XDG_DATA_HOME/uzbl/scripts/add_url_to_bookmarks.sh
+@bind f* = script $XDG_DATA_HOME/uzbl/scripts/hint.js %s
+@bind F  = spawn $XDG_DATA_HOME/uzbl/scripts/formfiller.pl load
+@bind D  = spawn $XDG_DATA_HOME/uzbl/handlers/download.sh
+@bind :  = js %s
+
+
+# Mode Config
+set default_mode = command
+
+# Define some mode specific uzbl configurations.
+set command = @mode_config command
+set insert  = @mode_config insert
+set stack   = @mode_config stack
+
+# Command mode config.
+@command status_background = #202020
+@command mode_indicator    = Cmd
+
+# Insert mode config.
+@insert status_background = #303030
+@insert mode_indicator    = Ins
+
+# Multi-stage-binding mode config.
+@stack keycmd_events     = 1
+@stack modcmd_updates    = 1
+@stack status_background = #202020
+@stack mode_indicator    = Bnd
+
+set toggle_cmd_ins = @toggle_modes command insert
+
+@bind i       = @toggle_cmd_ins
+@bind <Ctrl>c = @set_mode command
+
+set uri = uzbl.org
