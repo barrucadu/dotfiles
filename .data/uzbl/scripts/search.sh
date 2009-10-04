@@ -7,9 +7,9 @@ COLORS=" -nb #303030 -nf khaki -sb #CCFFAA -sf #303030"
 OPTIONS=" -i -l 10"
 
 engine=`sort $search_file | sed "s/\(.*\) .*/\\1/" | dmenu $OPTIONS $COLORS | cut -d ' ' -f -100  | awk '{print $NF}'`
+uri=`grep $engine $search_file | sed "s/.* //"`
 
-if [[ "$engine" != "" ]]; then
-    uri=`grep $engine $search_file | sed "s/.* //"`
+if [[ "$engine" != "" ]] && [[ "$uri" != "" ]]; then
     query=`dmenu $COLORS`
     
     if [[ "$query" != "" ]]; then
