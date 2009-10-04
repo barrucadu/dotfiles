@@ -11,22 +11,21 @@ set set_mode   = set mode =
 set set_status = set status_message =
 
 # Appearence
-set show_status            = 1
+set show_status            = 0
 
 set progress_section       = <span foreground="#606060">\@[\@progress_format]\@</span>
-set mode_section           = <span background="khaki" foreground="black">\@[\@mode_indicator:\@keycmd]\@</span>
+set keycmd_section         = <span foreground="#F00060">\@[\@keycmd]\@</span>
 set status_section         = <span weight="bold">\@status_message</span>
 set uri_section            = <span foreground="#99FF66">\@uri</span>
-set status_format          = <span font="DejaVu Sans Mono Bold 10">@mode_section @status_section @progress_section @uri_section</span>
+set status_format          = <span font="DejaVu Sans Mono Bold 10">@keycmd_section @progress_section @uri_section</span>
 
-set status_message         = <span color="darkred">W</span>
 set status_background      = #101010
 set status_top             = 0
 set status_pbar_done       = :
 set status_pbar_pending    = .
 set status_pbar_width      = 20
 
-@progress width    = 8
+@progress width    = 10
 @progress format   = [%d>%p]%c
 @progress done     = -
 @progress pending  =
@@ -43,10 +42,7 @@ set autoshrink_images      = 0
 set minimum_font_size      = 6
 set stylesheet_uri         = file:///home/barrucadu/.config/uzbl/default.css
 
-# Handlers
-@on_event LOAD_START  = set status_message = <span foreground="red">S</span>
-@on_event LOAD_COMMIT = set status_message = <span foreground="yellow">C</span>
-@on_event LOAD_FINISH = set status_message = <span foreground="green">D</span>
+# Events & Handlers
 @on_event LOAD_FINISH = spawn $XDG_DATA_HOME/uzbl/handlers/history.sh
 set download_handler  = spawn $XDG_DATA_HOME/uzbl/handlers/download.sh
 set scheme_handler    = spawn $XDG_DATA_HOME/uzbl/scripts/scheme.py
@@ -59,9 +55,30 @@ set socket_dir = /tmp
 # Network
 set useragent = Uzbl (X11; U; Arch Linux @(uname -r)@ x86_64; en-GB) Webkit/@WEBKIT_MAJOR.@WEBKIT_MINOR.@WEBKIT_MICRO
 
+# Mode Config
+set default_mode = command
+
+set command = @mode_config command
+set insert  = @mode_config insert
+set stack   = @mode_config stack
+
+@command status_background = #101010
+@command mode_indicator    = Cmd
+
+@insert status_background = #202020
+@insert mode_indicator    = Ins
+
+@stack keycmd_events     = 1
+@stack modcmd_updates    = 1
+@stack status_background = #303030
+@stack mode_indicator    = Bnd
+
+set toggle_cmd_ins = @toggle_modes command insert
+
 ############### BINDINGS ###############
 
 # Browser Control
+@bind i  = @toggle_cmd_ins
 @bind n  = back
 @bind m  = forward
 @bind S  = stop
@@ -73,21 +90,24 @@ set useragent = Uzbl (X11; U; Arch Linux @(uname -r)@ x86_64; en-GB) Webkit/@WEB
 @bind q  = exit
 
 # Page Navigation
-@bind h  = scroll_horz -150
-@bind j  = scroll_vert 150
-@bind k  = scroll_vert -150
-@bind l  = scroll_horz 150
-@bind .* = search %s
-@bind /  = search
-@bind >  = scroll_end
-@bind <  = scroll_begin
+@bind h           = scroll_horz -150
+@bind j           = scroll_vert 150
+@bind k           = scroll_vert -150
+@bind l           = scroll_horz 150
+@bind <Page_Up>   = scroll_vert -450
+@bind <Page_Down> = scroll_vert 450
+@bind .*          = search %s
+@bind /           = search
+@bind >           = scroll_end
+@bind <           = scroll_begin
 
 # Goto Bindings
-@bind gg = uri http://www.google.com/
-@bind gh = uri http://eihort/home/
-@bind ge = uri http://eihort/
-@bind gu = uri http://www.uzbl.org/
-@bind ,_ = uri %s
+@bind gg     = uri http://www.google.com/
+@bind <Home> = uri http://eihort/home/
+@bind gh     = uri http://eihort/home/
+@bind ge     = uri http://eihort/
+@bind gu     = uri http://www.uzbl.org/
+@bind ,_     = uri %s
 
 # Search bindings
      # Search Engines
@@ -125,33 +145,3 @@ set useragent = Uzbl (X11; U; Arch Linux @(uname -r)@ x86_64; en-GB) Webkit/@WEB
 @bind F  = spawn $XDG_DATA_HOME/uzbl/scripts/formfiller.pl load
 @bind D  = spawn $XDG_DATA_HOME/uzbl/handlers/download.sh
 @bind :  = js %s
-
-
-# Mode Config
-set default_mode = command
-
-# Define some mode specific uzbl configurations.
-set command = @mode_config command
-set insert  = @mode_config insert
-set stack   = @mode_config stack
-
-# Command mode config.
-@command status_background = #202020
-@command mode_indicator    = Cmd
-
-# Insert mode config.
-@insert status_background = #303030
-@insert mode_indicator    = Ins
-
-# Multi-stage-binding mode config.
-@stack keycmd_events     = 1
-@stack modcmd_updates    = 1
-@stack status_background = #202020
-@stack mode_indicator    = Bnd
-
-set toggle_cmd_ins = @toggle_modes command insert
-
-@bind i       = @toggle_cmd_ins
-@bind <Ctrl>c = @set_mode command
-
-set uri = uzbl.org
