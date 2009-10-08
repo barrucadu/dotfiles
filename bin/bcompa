@@ -18,6 +18,12 @@ function umount ()
 
 function amount ()
 {
+    if [[ -f /tmp/bcompa ]]; then
+	/bin/mount | grep MHD     || mount MHD     false
+	/bin/mount | grep M2HD    || mount M2HD    false
+	/bin/mount | grep ARCHOS5 || mount ARCHOS5 false
+    fi
+
     /bin/mount | grep MHD     || mount MHD
     /bin/mount | grep M2HD    || mount M2HD
     /bin/mount | grep ARCHOS5 || mount ARCHOS5
@@ -65,6 +71,8 @@ function login ()
         echo "Starting programs"
         urxvtc -e emacs &>/dev/null &
     fi
+
+    touch /tmp/bcompa
 }
 
 command=$1

@@ -45,7 +45,7 @@ alias e='exit'
 alias o='emacs -nw'
 alias O='sudo emacs -nw'
 alias t='todo'
-
+alias m='o ~/.config/mpddp/config; nmpc clear; mpddp'
 # Basic commands
 alias su='su - '
 alias free='free -mt'
