@@ -3,7 +3,7 @@ main-applications-rxvt-unicode urxvtc
 main-applications-gimp         gimp
 main-applications-emelfm2      emelfm2
 
-main-games-myman            urxvtc -e myman
+main-games-myman            urxvtc -e myman2
 main-games-huntthewumpus    urxvtc -e wump
 main-games-hangman          urxvtc -e hangman
 main-games-pkgname          urxvtc -e pkgname
@@ -11,6 +11,7 @@ main-games-towersofhanoi    urxvtc -e hanoi
 main-games-nethack          urxvtc -e nethack
 main-games-kildclient       kildclient
 main-games-battleforwesnoth wesnoth
+main-games-npush            urxvtc -e npush
 
 main-internet-opera   opera
 main-internet-uzbl    uzbl
