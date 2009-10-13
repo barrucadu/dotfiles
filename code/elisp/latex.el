@@ -15,6 +15,8 @@
   (insert "\\usepackage{kpfonts}\n")
   (insert "\\usepackage[margin=1.5in]{geometry}\n")
   (insert "\\usepackage{ucs}\n\n")
+  (insert "\\usepackage{algorithmic}\n\n")
+  (insert "\\usepackage{algorithm}\n\n")
   (insert "\\newcommand{\\superscript}[1]{\\ensuremath{^{\\textrm{#1}}}}\n")
   (insert "\\newcommand{\\subscript}[1]{\\ensuremath{_{\\textrm{#1}}}}\n\n")
   (insert "\\author{Michael Walker}\n")
@@ -60,6 +62,17 @@
   (insert "  &= \\\\\n")
   (insert "\\end{array}\n")
   (insert "\\end{equation}"))
+
+; Insert an algorithm block
+(defun latex-insert-algorithm ()
+  "Insert an algorithm block into the current LaTeX document"
+  (interactive)
+  (insert "\\begin{algorithm}\n")
+  (insert "  \\caption{}\n")
+  (insert "  \\label{alg}\n")
+  (insert "  \\begin{algorithmic}\n")
+  (insert "  \\end{algorithmic}\n")
+  (insert "\\end{algorithm}"))
 
 ; Insert a figure
 (defun latex-insert-figure ()

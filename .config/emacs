@@ -1,6 +1,7 @@
 ;; -*- lisp -*-
 
 (add-to-list 'load-path "/home/barrucadu/code/elisp/")
+(add-to-list 'load-path "/home/barrucadu/.config/emacspriv/")
 
 ; Interface
 (require 'color-theme)
@@ -65,6 +66,10 @@
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+; Identi.ca
+(require 'identica-mode)
+(load "identica-credentials.el" nil t t)
 
 ; Miscellanious
 (require 'setnu+)
