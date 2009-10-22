@@ -1,42 +1,50 @@
 #!/bin/zsh
 
-cmdline="`cat /proc/cmdline`"
+# X
 
-function notinschool()
-{
-    grep -q school /proc/cmdline
-}
+# Keyboard
+setxkbmap gb
+setxkbmap -option compose:menu
+setxkbmap -option terminate:ctrl_alt_bksp
+xmodmap -e "clear Mod4"
 
-function inschool()
-{
-    grep -q school /proc/cmdline
-    return $[1 - $?]
-}
+# Touchpad
+synclient MinSpeed=0.10
+synclient MaxSpeed=0.80
+synclient AccelFactor=0.50
+synclient VertEdgeScroll=1
+synclient HorizEdgeScroll=1
 
-if [[ -f /var/run/daemons/hal ]]; then
-    # X
-        # Keyboard
-        setxkbmap gb
-        setxkbmap -option compose:menu
-        setxkbmap -option terminate:ctrl_alt_bksp
-        xmodmap -e "clear Mod4"
+# Other
+xsetroot -cursor_name left_ptr
+xrdb -load ~/.Xdefaults
 
-        # Touchpad
-        synclient MinSpeed=0.10
-        synclient MaxSpeed=0.80
-        synclient AccelFactor=0.50
-        synclient VertEdgeScroll=1
-        synclient HorizEdgeScroll=1
+# /X
 
-        # Other
-        xsetroot -cursor_name left_ptr
-        xrdb -load ~/.Xdefaults
-    # /X
+# APPS
 
-    # BCompA
-    inschool    && bcompa login true &>~/.data/bcompa &
-    notinschool && bcompa login      &>~/.data/bcompa &
+if grep -q school /proc/cmdline; then
+    urxvtc -e emacs &>/dev/null &
+else
+    # Network
+    ping google.com -c1 || sudo netcfg-auto-wireless
+    ping eihort     -c1 || sudo eihort up
     
-    # Window Manager
+    # Programs
+    mpddp
+    ucron      &>/dev/null &
+    opera      &>/dev/null &
+    claws-mail &>/dev/null &
+fi
+
+# /APPS
+
+# WM
+
+if [[ "$WM" != "" ]]; then
+    exec $WM
+else
     exec stumpwm
 fi
+
+# /WM
