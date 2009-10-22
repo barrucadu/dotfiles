@@ -44,15 +44,6 @@ function re()
 	exit
 }
 
-# Maintenence
-function maintain()
-{
-    sudo pacman-optimize
-    sudo sync
-    sudo updatedb
-    sudo localepurge
-}
-
 # Git
 function commit()
 {
@@ -152,6 +143,18 @@ function pkgroot ()
 function pkginfo ()
 {
     pacman -Qi $1 || pacman -Si $1
+}
+
+# Archos Playlists
+function toarchos()
+{
+    sed "s/all-files/\/Music/" $XDG_DATA_HOME/mpd/playlists/$1.m3u > /media/ARCHOS5/Playlists/$1.m3u
+}
+
+function fromarchos()
+{
+    sed "s/all-files/\/Music/" /media/ARCHOS5/Playlists/$1.m3u > $XDG_DATA_HOME/mpd/playlists/$1.m3u
+    sed -i "/^#.*/d" $XDG_DATA_HOME/mpd/playlists/$1.m3u
 }
 
 # Misc

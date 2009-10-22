@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+# Aliases and stuff...
+. ~/.config/zsh/aliases
+. ~/.config/zsh/functions
+
+# Update
+sudo pacman -Syu
+
+# Git repositories
+gith
+gitbar
+
+# Clean up
+deorphan
+sudo /etc/cron.weekly/packagecache.sh
+sudo localepurge
+sudo pacman -Sc
+
+# General maintenence
+sudo pacman-optimize
+sudo updatedb
+sudo sync

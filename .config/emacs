@@ -54,7 +54,13 @@
 
 ; Org-mode
 (setq org-return-follows-link t
-      org-log-done            'time)
+      org-log-done            'time
+      org-agenda-files (list "~/org/home.org"
+			     "~/org/school.org"
+			     "~/org/misc.org"))
+
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
 
 (setq auto-mode-alist (append '(("/*..org$"        . org-mode)
                                 ("/*..todo$"       . org-mode))
