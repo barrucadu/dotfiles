@@ -15,7 +15,7 @@ gitbar
 deorphan
 sudo /etc/cron.weekly/packagecache.sh
 sudo localepurge
-sudo pacman -Sc
+sudo pacman -Sc --cachedir /share/eihort/pacman-cache
 
 # General maintenence
 sudo pacman-optimize
