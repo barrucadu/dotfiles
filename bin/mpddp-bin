@@ -305,13 +305,12 @@ def populateLists(redoing): # Parse the configuration file, and grab the tracks 
 
 def dieGracefully():
     global saveonquit
-
-    if os.path.exists('/tmp/killmpddp'):
-        try:
-            os.remove('/tmp/killmpddp')
-            print "Removed kill file..."
-        except OSError:
-            print "No kill file to remove."
+    
+    try:
+        os.remove('/tmp/killmpddp')
+        print "Removed kill file..."
+    except OSError:
+        print "No kill file to remove."
             
     if saveonquit == 'yes':
         try:
