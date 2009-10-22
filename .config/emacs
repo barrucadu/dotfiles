@@ -52,6 +52,15 @@
 (setq c-default-style "bsd"
       c-basic-offset  4)
 
+; Pascal (ew)
+(defun pascal-compile () 
+  "Compile a Pascal source file."
+  (interactive)
+  (save-excursion
+	(let ((cb (current-buffer)))
+	  (set-buffer (get-buffer-create "*TEMP*"))
+	  (call-process "fpc" nil nil nil (buffer-file-name cb)))))
+
 ; Org-mode
 (setq org-return-follows-link t
       org-log-done            'time

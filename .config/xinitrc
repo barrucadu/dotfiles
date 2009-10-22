@@ -37,6 +37,8 @@ else
     claws-mail &>/dev/null &
 fi
 
+randombg
+
 # /APPS
 
 # WM
