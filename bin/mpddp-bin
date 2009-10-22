@@ -96,57 +96,40 @@ def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which
     global host
     global port
 
-    paths     = []
-    playlists = []
-    smarts    = []
-    nevers    = []
+    criteria = {'path'     : [],
+                'playlist' : [],
+                'smart'    : [],
+                'never'    : []}
+
     tracks    = []
     
     for rule in rules:
-        if rule[0] == 'path' and not rule[1] in paths:
-            paths.append(rule[1])
-        elif rule[0] == 'playlist' and not rule[1] in playlists:
-            playlists.append(rule[1])
-        elif rule[0] == 'smart' and not rule[1] in smarts:
-            smarts.append(rule[1])
-        elif rule[0] == 'never' and not rule[1] in nevers:
-            nevers.append(rule[1])
-    
+        if rule[0] in ['path', 'playlist', 'smart', 'never']:
+            chunk = criteria[rule[0]]
+            if not rule[1] in chunk:
+                chunk.append(rule[1])
+                
     client.connect(host, port)
-    
-    for path in paths:
-        temptracks = client.search("file", path)
-        for track in temptracks:
-            if isinstance(track, dict):
-                track = track['file']
-            dontadd = False
-            for never in nevers:
-                if never in track:
-                    dontadd = True
-            if dontadd == False and not track in tracks:
-                tracks.append(track)
 
-    for playlist in playlists:
-        temptracks = client.listplaylist(playlist)
-        for track in temptracks:
-            if isinstance(track, dict):
-                track = track['file']
-            dontadd = False
-            for never in nevers:
-                if never in track:
-                    dontadd = True
-            if dontadd == False and not track in tracks:
-                tracks.append(track)
+    for type in ['path', 'playlist', 'smart']:
+        for item in criteria[type]:
+            temptracks = []
+            
+            if type == 'path':
+                temptracks = client.search("file", item)
+            elif type == 'playlist':
+                temptracks = client.listplaylist(playlist)
+            elif type == 'smart':
+                temptracks = getFilenamesFromMPDSPL(smart)
+                
+            for track in temptracks:
+                if not track['file'] in tracks:
+                    tracks.append(track['file'])
 
-    for smart in smarts:
-        temptracks = getFilenamesFromMPDSPL(smart)
-        for track in temptracks:
-            dontadd = False
-            for never in nevers:
-                if never in track:
-                    dontadd = True
-            if dontadd == False and not track in tracks:
-                tracks.append(track)
+    for track in tracks:
+        for never in criteria['never']:
+            if never in track:
+                tracks.remove(track)
 
     client.disconnect()
     return tracks
@@ -322,20 +305,21 @@ def populateLists(redoing): # Parse the configuration file, and grab the tracks 
 
 def dieGracefully():
     global saveonquit
-    
+
+    if os.path.exists('/tmp/killmpddp'):
+        try:
+            os.remove('/tmp/killmpddp')
+            print "Removed kill file..."
+        except OSError:
+            print "No kill file to remove."
+            
     if saveonquit == 'yes':
         try:
             os.remove('/var/lib/mpddp/playlist')
             print "Removed old playlist..."
         except OSError:
             print "No old playlist to remove."
-
-        try:
-            os.remove('/tmp/killmpddp')
-            print "Removed kill file..."
-        except OSError:
-            print "No kill file to remove."
-
+            
         print "Saving playlist to", savedir, "playlist"
         filehandler = open(savedir + 'playlist', 'w')
         playlist = client.playlistinfo()
@@ -343,7 +327,7 @@ def dieGracefully():
             print "Writing", track['file']
             filehandler.write(track['file'] + '\n')
         filehandler.close()
-
+        
     print "Quitting..."
     sys.exit()
 
