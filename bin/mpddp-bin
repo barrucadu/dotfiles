@@ -118,14 +118,17 @@ def getFilenamesFromMPD(rules): # Gets the filenames from MPD of all files which
             if type == 'path':
                 temptracks = client.search("file", item)
             elif type == 'playlist':
-                temptracks = client.listplaylist(playlist)
+                temptracks = client.listplaylist(item)
             elif type == 'smart':
-                temptracks = getFilenamesFromMPDSPL(smart)
+                temptracks = getFilenamesFromMPDSPL(item)
                 
             for track in temptracks:
-                if not track['file'] in tracks:
-                    tracks.append(track['file'])
+                if isinstance(track, dict):
+                    track = track['file']
+                if not track in tracks:
+                    tracks.append(track)
 
+    print tracks
     for track in tracks:
         for never in criteria['never']:
             if never in track:
