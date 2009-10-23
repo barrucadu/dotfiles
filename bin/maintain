@@ -6,6 +6,7 @@
 
 # Update
 sudo pacman -Syu
+abs
 
 # Git repositories
 gith
