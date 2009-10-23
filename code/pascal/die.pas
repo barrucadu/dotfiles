@@ -30,7 +30,7 @@ begin
 	       if err <> 0 then
 	       begin
 		  writeln('An error occurred at ', err, ' (rolls)');
-		  looping := false
+		  exit
 	       end
 	       else
 	       begin
@@ -38,28 +38,24 @@ begin
 		  if err <> 0 then
 		  begin
 		     writeln('An error occurred at ', err, ' (size)');
-		     looping := false
-		  end
-		  else
-		     looping := false;
-	       end;
-	    end;
-      end;
+		     exit
+		  end;
+		  looping := false;
+	       end
+	    end
+      end
    end;
 
-   if err = 0 then
+   sum := 0;
+   
+   for i := 1 to rolls do
    begin
-      sum := 0;
-      
-      for i := 1 to rolls do
-      begin
-	 a := random(size) + 1;
-	 writeln('Roll ', i, ' = ', a);
-	 sum := sum + a;
-      end;
-      
-      mean := sum / rolls;
-      writeln('Sum:  ', sum);
-      writeln('Mean: ', mean:2:2);
+      a := random(size) + 1;
+      writeln('Roll ', i, ' = ', a);
+      sum := sum + a;
    end;
+   
+   mean := sum / rolls;
+   writeln('Sum:  ', sum);
+   writeln('Mean: ', mean:2:2);
 end.
