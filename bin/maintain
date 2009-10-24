@@ -19,6 +19,7 @@ sudo localepurge
 sudo pacman -Sc --cachedir /share/eihort/pacman-cache
 
 # General maintenence
+scp /etc/pacman.conf barrucadu@eihort:/home/barrucadu/pacman_laptop.conf
 sudo pacman-optimize
 sudo updatedb
 sudo sync
