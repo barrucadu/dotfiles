@@ -17,7 +17,7 @@ synclient HorizEdgeScroll=1
 
 # Other
 xsetroot -cursor_name left_ptr
-xrdb -load ~/.Xdefaults
+xrdb -load ~/.config/xorg/Xdefaults
 
 # /X
 
@@ -28,7 +28,7 @@ if grep -q school /proc/cmdline; then
 else
     # Network
     ping google.com -c1 || sudo netcfg-auto-wireless
-    ping eihort     -c1 || sudo eihort up
+    ping eihort     -c1 && sudo eihort up
     
     # Programs
     mpddp
