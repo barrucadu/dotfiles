@@ -2,36 +2,43 @@
 
 # Environmental Variables
 export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
+    # Programs
 export BROWSER=/usr/bin/opera
 export EDITOR="emacs -nw"
 export VISUAL="emacs -nw"
 export PAGER=/usr/bin/most
-export ACK_PAGER=$PAGER
+    # History
 export HISTFILE=~/.data/zsh/history
 export HISTSIZE=1000
 export SAVEHIST=1000
 export DIRSTACKSIZE=16
+    # XDG
 export XDG_CACHE_HOME=~/.cache
 export XDG_CONFIG_HOME=~/.config
 export XDG_DATA_HOME=~/.data
+    # Input
 export QT_XFT=1
 export GDK_USE_XFT=1
 export GTK_IM_MODULE=xim
-export WEBKIT_IGNORE_SSL_ERRORS=1
-export NETHACKOPTIONS=@/home/barrucadu/.config/nethack/config
-export SCHEME_LIBRARY_PATH=/usr/lib/slib/
+    # Locale
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 export LC_CTYPE=en_GB.UTF-8
+    # Libraries
 export LD_PRELOAD=libetc.so
 export LIBETC_BLACKLIST="/bin/ls:/bin/mv:/bin/cp:/bin/ln:/usr/bin/find:/bin/rm:/bin/cat:/bin/ln:/usr/bin/file:/usr/bin/most:/bin/zcat:/bin/grep:/usr/bin/git:/usr/bin/git-cvsserver:/usr/bin/git-receive-pack:/usr/bin/git-shell:/usr/bin/git-upload-archive:/usr/bin/git-upload-pack:/usr/bin/gitk"
 export LIBETC_DATA="/home/barrucadu/.gtk-bookmarks"
 export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barrucadu/.signature:/home/barrucadu/.texlive:/home/barrucadu/.git:/home/barrucadu/.gitignore:/home/barrucadu/.gitconfig"
+    # NMPC / MPD
 export NMPC_DEFCMD="status"
 export NMPC_DEFHELP="all"
+export MPDHOST="eihort"
+    # Misc
+export WEBKIT_IGNORE_SSL_ERRORS=1
+export NETHACKOPTIONS=@/home/barrucadu/.config/nethack/config
+export SCHEME_LIBRARY_PATH=/usr/lib/slib/
 export TODOFILE="$HOME/org/misc.org"
 export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
-export MPDHOST="eihort"
 
 # Framebuffer colours
 if [ "$TERM" = "linux" ]; then
@@ -63,8 +70,6 @@ fi
 for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 	eval PR_$color='$terminfo[bold]$fg[${(L)color}]'
 	eval PR_LIGHT_$color='$fg[${(L)color}]'
-
-	(( count = $count + 1 ))
 
 	export PR_$color
 	export PR_LIGHT_$color
