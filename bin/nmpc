@@ -247,9 +247,9 @@ function error()
     echo "Unknown command: $*"
 }
 
-MPD_SERVER="eihort"
-MPD_PORT="6600"
-MPD_PASSWORD=""
+MPD_SERVER=`thisorthat $MPDHOST "localhost"`
+MPD_PORT=`thisorthat $MPDPORT "6600"`
+MPD_PASSWORD=`thisorthat $MPDPASS "6600"`
 
 NMPC_DEFCMD=`thisorthat $NMPC_DEFCMD "playing"`
 NMPC_VERSION=9.8.21
