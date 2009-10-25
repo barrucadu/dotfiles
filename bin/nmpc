@@ -249,7 +249,7 @@ function error()
 
 MPD_SERVER=`thisorthat $MPDHOST "localhost"`
 MPD_PORT=`thisorthat $MPDPORT "6600"`
-MPD_PASSWORD=`thisorthat $MPDPASS "6600"`
+MPD_PASSWORD=`thisorthat $MPDPASS ""`
 
 NMPC_DEFCMD=`thisorthat $NMPC_DEFCMD "playing"`
 NMPC_VERSION=9.8.21
