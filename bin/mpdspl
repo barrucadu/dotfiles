@@ -42,7 +42,8 @@ def showhelp():
     print "    -dFILE, --dbpath=FILE    - Location of the database file."
     print "    -cFILE, --cachepath=FILE - Location of the cache file."
     print "    -CFILE, --confpath=FILE  - Location of the MPD config file."
-    print "    -uUSER, --mpduser=USER   - Username that MPD runs as.."
+    print "    -pPATH, --playlists=PATH - Location of the MPD playlist files."
+    print "    -uUSER, --mpduser=USER   - Username that MPD runs as."
     print "    -n, --new [name] [rules] - Create a new playlist."
     print "    -s, --simple             - (used with -n) Only print the final track list (with paths relative to the MPD root dir) to STDOUT."
     print "    -h, --help               - Display this text and exit.\n"
@@ -174,6 +175,12 @@ def parseargs():
                     confpath = os.path.expanduser(argument[2:])
                 elif argument[:11] == "--confpath=":
                     confpath = os.path.expanduser(argument[11:])
+            elif argument[:2] == "-p" or argument[:12] == "--playlists=":
+                # Useful for when over a network share
+                if argument[:2] == "-p":
+                    mpd["playlist_directory"] = os.path.expanduser(argument[2:])
+                elif argument[:12] == "--playlists=":
+                    mpd["playlist_directory"] = os.path.expanduser(argument[12:])
             elif argument[:2] == "-u" or argument[:10] == "--mpduser=":
                 # As is any person to whom this applies...
                 if argument[:2] == "-u":
@@ -230,13 +237,14 @@ def parsempdconf():
     # Don't load the user or db_file values if they've already been told to us
     holduser = not mpd["user"] == ""
     holddb   = not mpd["db_file"] == ""
+    holdplay = not mpd["playlist_directory"] == ""
 
     for line in config:
         line = line.strip()
         if line[:15] == "music_directory":
             rest = line[15:].strip()
             mpd["music_directory"] = rest[1:-1]
-        elif line[:18] == "playlist_directory":
+        elif line[:18] == "playlist_directory" and not holdplay:
             rest = line[18:].strip()
             mpd["playlist_directory"] = rest[1:-1]
         elif line[:7] == "db_file" and not holddb:
@@ -344,7 +352,6 @@ def saveplaylist():
         
         # Save as list object. This lets us load them all into a big list nicely.
         savegubbage([newname, newrules], datapath + "/" + newname)
-
 
 # Parse some options!
 parseargs()

@@ -16,6 +16,7 @@ changeafter    = 0  # The number of tracks before more are added/removed to/from
 clearinitially = '' # Whether to clear the playlist initially or not.
 saveonquit     = '' # Whether to save/load the playlist on exit/start or not.
 update         = '' # Whether to periodically check the config file / filesystem for changes.
+mpdsplopts     = [] # Any additional options to pass to MDPSPL
 
 confdir = '/etc/mpddp.conf' # The path of the main MPDDP config file.
 savedir = ''                # The folder where MPDDP saves and loads files.
@@ -84,7 +85,13 @@ def updatePlaylist(): # Update the MPD playlist, and the internal representation
     addNewTrackToPlaylist()
 
 def getFilenamesFromMPDSPL(expression):
+    global mpdsplopts
+    
     argvector = ["mpdspl", "-s", "-n", "mpddp-smart", expression]
+    
+    for opt in mpdsplopts:
+        argvector.insert(1, opt)
+        
     process   = subprocess.Popen(argvector, stdout=subprocess.PIPE)
     output    = process.communicate()[0]
     tracks    = output.splitlines()
@@ -195,7 +202,8 @@ def parseConfigFile(): # Open the configuration file and parse the rules.
               'clearinitially' : 'yes',
               'saveonquit'     : 'no',
               'savedir'        : '/var/lib/mpddp/',
-              'update'         : 'no'}
+              'update'         : 'no',
+              'mpdsplopts'     : []}
     
     for line in conf.splitlines():
         result = parseConfigLine(line)
@@ -214,6 +222,8 @@ def parseConfigFile(): # Open the configuration file and parse the rules.
                     print "Invalid value specified for", result['type']
             except TypeError:
                 print "Invalid value specified for", result['type']
+        elif result['type'] == 'mpdsplopts':
+            output['mpdsplopts'] = result['value'].split(" ")
         elif result['type'] == 'server' or result['type'] == 'savedir' or result['type'] == 'update':
             output[result['type']] = result['value']
 
@@ -264,6 +274,7 @@ def populateLists(redoing): # Parse the configuration file, and grab the tracks 
     global saveonquit
     global savedir
     global update
+    global mpdsplopts
     global oldconfig
     
     config = parseConfigFile()
@@ -277,6 +288,7 @@ def populateLists(redoing): # Parse the configuration file, and grab the tracks 
         saveonquit     = config['saveonquit']
         savedir        = config['savedir']
         update         = config['update']
+        mpdsplopts     = config['mpdsplopts']
         oldconfig      = config
         
         print "Configuration updated:", config

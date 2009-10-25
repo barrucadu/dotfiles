@@ -247,7 +247,7 @@ function error()
     echo "Unknown command: $*"
 }
 
-MPD_SERVER="localhost"
+MPD_SERVER="eihort"
 MPD_PORT="6600"
 MPD_PASSWORD=""
 

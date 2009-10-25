@@ -1,9 +1,9 @@
 ## -*- conf -*-
 
 ##### connection settings #####
-mpd_host               = "localhost"
+mpd_host               = "eihort"
 mpd_port               = "6600"
-mpd_music_dir          = "/home/barrucadu/music"
+mpd_music_dir          = "/media/MHD"
 mpd_connection_timeout = "5"
 mpd_crossfade_time     = "5"
 
@@ -51,7 +51,7 @@ user_interface                   = "alternative"
 progressbar_look                 = "-)"
 
 ##### visualisation #####
-visualizer_fifo_path = "/tmp/mpd.fifo"
+visualizer_fifo_path = "/share/eihort/mpd/mpd.fifo"
 visualizer_type      = "wave"
 
 ##### colors definitions #####
