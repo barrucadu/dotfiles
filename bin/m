@@ -70,7 +70,7 @@ def showhelp ():
     print ("a command with arguments must be the last command in the string.\n")
     
     print ("Examples:")
-    print ("    m pS nc pRr      - Stop MPDDP, clear the playlist, edit the MPDDP config, and restart MPDDP.")
+    print ("    m pRr nc         - Reconfigure and restart MPDDP, and clear the playlist.")
     print ("    m nul:Favourites - Update the database and load the Favourites playlist.")
 
 def mpddpcmd (cmd):
