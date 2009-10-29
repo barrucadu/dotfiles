@@ -23,8 +23,11 @@ xrdb -load ~/.config/xorg/Xdefaults
 
 # APPS
 
+urxvtd -q -f -o
+randombg
+
 if grep -q school /proc/cmdline; then
-    urxvtc -e emacs &>/dev/null &
+    emacs &>/dev/null &
 else
     # Network
     ping google.com -c1 || sudo netcfg-auto-wireless
@@ -36,8 +39,6 @@ else
     opera      &>/dev/null &
     claws-mail &>/dev/null &
 fi
-
-randombg
 
 # /APPS
 
