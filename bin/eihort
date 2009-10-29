@@ -2,7 +2,8 @@
 
 mhd=true
 m2hd=false
-archos5=false
+m2hdb=false
+archos5=true
 media=true
 share=true
 torrents=true
@@ -17,8 +18,10 @@ function parsearg()
             mhd=false;;
         "m2hd")
             m2hd=true;;
-        "archos5")
-            archos5=true;;
+        "m2hdb")
+            m2hd=true;;
+        "noarchos5")
+            archos5=false;;
         "nomedia")
             mhd=false
             m2hd=false
@@ -79,6 +82,7 @@ eihortcheck=$?
 if $up && [[ $eihortcheck == 1 ]]; then
     $mhd      && emount MHD
     $m2hd     && emount M2HD
+    $m2hdb    && emount M2HDb
     $archos5  && emount ARCHOS5
 
     $share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
@@ -95,5 +99,6 @@ else
 
     emedia MHD        && eumount MHD
     emedia M2HD       && eumount M2HD
+    emedia M2HDb      && eumount M2HDb
     emedia ARCHOS5    && eumount ARCHOS5
 fi
