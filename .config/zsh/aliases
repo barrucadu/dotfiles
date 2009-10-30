@@ -71,8 +71,6 @@ alias shutdown='sudo shutdown -hP now'
 alias lshw='sudo lshw'
 
 # Package management
-alias build='sudo pacbuilder -Sbkve'
-alias autobuild='sudo pacbuilder -Sbkve --noconfirm'
 alias fullupgrade='sudo abs && yaourt -Syu --aur --devel'
 alias upgrade='yaourt -Syu --aur'
 alias orphans='pacman -Qtdq'
