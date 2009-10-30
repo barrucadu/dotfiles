@@ -54,17 +54,14 @@
 (define-key *top-map* (kbd "C-XF86HomePage")  "exec claws-mail")
 
 ; Audio
-(define-key *top-map* (kbd "XF86AudioPlay")          "exec nmpc toggle")
-(define-key *top-map* (kbd "XF86AudioStop")          "exec nmpc stop")
-(define-key *top-map* (kbd "XF86AudioPrev")          "exec nmpc previous")
-(define-key *top-map* (kbd "XF86AudioNext")          "exec nmpc next")
-(define-key *top-map* (kbd "XF86AudioMute")          "exec amixer set Master toggle")
-(define-key *top-map* (kbd "XF86AudioLowerVolume")   "exec amixer set Master 1%-")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume")   "exec amixer set Master 1%+")
-(define-key *top-map* (kbd "C-XF86AudioMute")        "exec ssh barrucadu@eihort amixer set Master toggle")
-(define-key *top-map* (kbd "C-XF86AudioLowerVolume") "exec ssh barrucadu@eihort amixer set Master 1%-")
-(define-key *top-map* (kbd "C-XF86AudioRaiseVolume") "exec ssh barrucadu@eihort amixer set Master 1%+")
-(define-key *top-map* (kbd "C-XF86AudioPlay")        "exec ssh barrucadu@eihort /usr/local/bin/audioswap")
+(define-key *top-map* (kbd "XF86AudioPlay")        "exec nmpc toggle")
+(define-key *top-map* (kbd "XF86AudioStop")        "exec nmpc stop")
+(define-key *top-map* (kbd "XF86AudioPrev")        "exec nmpc previous")
+(define-key *top-map* (kbd "XF86AudioNext")        "exec nmpc next")
+(define-key *top-map* (kbd "XF86AudioMute")        "exec volchng Master toggle")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec volchng Master 1%-")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec volchng Master 1%+")
+(define-key *top-map* (kbd "C-XF86AudioPlay")      "exec volchng toggle")
 
 ; Misc Keys
 (define-key *top-map*  (kbd "M-Print")   "exec urxvtc -e screenshot")

@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+sshto='barrucadu@eihort'
+
+if [[ "$1" == "toggle" ]]; then
+    if mount | grep -q eihort; then
+	ssh $sshto /usr/local/bin/audioswap
+    fi
+else
+    if mount | grep -q eihort; then
+	ssh $sshto amixer set $1 $2
+    else
+	amixer set $1 $2
+    fi
+fi
