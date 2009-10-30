@@ -1,0 +1,49 @@
+Applications
+    Emacs        [emacs]
+    Rxvt-unicode [urxvtc]
+    GIMP         [gimp]
+    Emelfm2      [emelfm2]
+
+Games
+    MyMan              [urxvtc -e myman2]
+    Hunt the Wumpus    [urxvtc -e wump]
+    Hangman            [urxvtc -e hangman]
+    pkgname            [urxvtc -e pkgname]
+    Towers of Hanoi    [urxvtc -e hanoi]
+    Nethack            [urxvtc -e nethack]
+    Kildclient         [kildclient]
+    Battle for Wesnoth [wesnoth]
+    nPush              [urxvtc -e npush]
+
+Internet
+    Opera   [opera]
+    Uzbl    [uzbl]
+    Claws   [claws-mail]
+    NcFTP   [urxvtc -e ncftp]
+    Weechat [urxvtc -e weechat-curses]
+
+Media
+    Ncmpcpp [urxvtc -e ncmpcpp]
+    Sonata  [sonata]
+    VLC     [vlc]
+
+Office
+    ePDFView           [epdfview]
+    Zathura            [zathura]
+    OpenOffice Calc    [soffice -calc]
+    OpenOffice Writer  [soffice -writer]
+    OpenOffice Impress [soffice -impress]
+    OpenOffice Base    [soffice -base]
+
+Programming
+    Python   [urxvtc -e python]
+    MzScheme [urxvtc -e mzscheme]
+    DrScheme [drscheme]
+    Clisp    [urxvtc -e clisp]
+    IDLE     [idle]
+    GDB      [urxvtc -e "gdb -ex run -ex backtrace"]
+
+Misc
+    Eihort   [urxvtc -e "ssh barrucadu@eihort"]
+    Shutdown [sudo shutdown -hP now]
+    Reboot   [sudo reboot]

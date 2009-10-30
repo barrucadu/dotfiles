@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+
+dmenunf="`xrdb -query | grep '*color14:' | sed 's/.*#/#/'`"
+dmenusf="`xrdb -query | grep '*color10:' | sed 's/.*#/#/'`"
+dmenunb="`xrdb -query | grep '*color0:' | sed 's/.*#/#/'`"
+dmenusb="`xrdb -query | grep '*color0:' | sed 's/.*#/#/'`"
+
+categories="`sed "/^\( .*\|\)$/d" ~/.data/menu/menu`"
+category=`echo $categories | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
+entries=""
+parsing=false
+
+while read line; do
+    if echo "$categories" | grep -q "$line"; then
+	if [[ "$category" == "$line" ]]; then
+	    parsing=true
+	else
+	    parsing=false
+	fi
+    else
+	if $parsing; then
+	    if [[ "$entries" == "" ]]; then
+		entries="$line"
+	    else
+		entries="$entries\n$line"
+	    fi
+	fi
+    fi
+done < $XDG_DATA_HOME/menu/menu
+
+choice=`echo $entries | sed "s/ *\[.*//" | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
+
+`grep $choice $XDG_DATA_HOME/menu/menu | sed "s/.*\[\(.*\)\]/\\1/"` &>/dev/null &
