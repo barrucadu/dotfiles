@@ -10,24 +10,26 @@ category=`echo $categories | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $d
 entries=""
 parsing=false
 
-while read line; do
-    if echo "$categories" | grep -q "$line"; then
-	if [[ "$category" == "$line" ]]; then
-	    parsing=true
-	else
-	    parsing=false
-	fi
-    else
-	if $parsing; then
-	    if [[ "$entries" == "" ]]; then
-		entries="$line"
+if [[ ! "$category" == "" ]]; then
+    while read line; do
+	if echo "$categories" | grep -q "$line"; then
+	    if [[ "$category" == "$line" ]]; then
+		parsing=true
 	    else
-		entries="$entries\n$line"
+		parsing=false
+	    fi
+	else
+	    if $parsing; then
+		if [[ "$entries" == "" ]]; then
+		    entries="$line"
+		else
+		    entries="$entries\n$line"
+		fi
 	    fi
 	fi
-    fi
-done < $XDG_DATA_HOME/menu/menu
+    done < $XDG_DATA_HOME/menu/menu
+    
+    choice=`echo $entries | sed "s/ *\[.*//" | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
 
-choice=`echo $entries | sed "s/ *\[.*//" | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
-
-`grep $choice $XDG_DATA_HOME/menu/menu | sed "s/.*\[\(.*\)\]/\\1/"` &>/dev/null &
+    `grep $choice $XDG_DATA_HOME/menu/menu | sed "s/.*\[\(.*\)\]/\\1/"` &>/dev/null &
+fi
