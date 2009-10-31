@@ -26,6 +26,7 @@ Media
     Ncmpcpp [urxvtc -e ncmpcpp]
     Sonata  [sonata]
     VLC     [vlc]
+    Moviedb [moviedb-menu]
 
 Office
     ePDFView           [epdfview]

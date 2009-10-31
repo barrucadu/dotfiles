@@ -29,8 +29,9 @@ function director ()
     returncode=2
 
     for name in $MOVIEPATH/by-director/*; do
-        ls $name | match $1 $fuzzy -q && echo $name | sed "s/^.*\///" && returncode=0
-    done
+        ls $name | match $1 $fuzzy -q && echo -n "$name, " | sed "s/^.*\///" && returncode=0
+    done | sed "s/, $//"
+    echo
     
     return $returncode
 }
@@ -54,8 +55,9 @@ function genre ()
     returncode=2
 
     for name in $MOVIEPATH/by-genre/*; do
-        ls $name | match $1 $fuzzy -q && echo $name | sed "s/^.*\///" && returncode=0
-    done
+        ls $name | match $1 $fuzzy -q && echo -n "$name, " | sed "s/^.*\///" && returncode=0
+    done | sed "s/, $//"
+    echo
     
     return $returncode
 }

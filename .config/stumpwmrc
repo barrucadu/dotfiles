@@ -43,7 +43,6 @@
 (define-key *top-map* (kbd "M-Super_L")     "exec emacs")
 
 ; Right Hand
-(define-key *top-map* (kbd "C-S-Left")  "exec urxvtc -e emacs ~/docs/main.todo")
 (define-key *top-map* (kbd "C-S-Up")    "exec urxvtc -e ncmpcpp")
 (define-key *top-map* (kbd "C-S-Down")  "exec vlc")
 (define-key *top-map* (kbd "C-S-Right") "exec urxvtd -q -f -o")
@@ -68,7 +67,8 @@
 (define-key *top-map*  (kbd "Print")     "exec import -window root ~/screenshot.png")
 (define-key *top-map*  (kbd "M-F9")      "loadrc")
 (define-key *root-map* (kbd "m")         "exec ~/bin/menu")
-(define-key *root-map* (kbd "M")         "mode-line")
+(define-key *root-map* (kbd "M")         "exec ~/bin/moviedb-menu")
+(define-key *root-map* (kbd "C-m")       "mode-line")
 (define-key *top-map*  (kbd "M-space")   "exec emelfm2")
 (define-key *top-map*  (kbd "C-M-space") "exec kildclient")
 
