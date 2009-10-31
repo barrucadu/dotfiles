@@ -10,9 +10,9 @@ dmenusb="`xrdb -query | grep '*color0:' | sed 's/.*#/#/'`"
 function choice ()
 {
     if $2; then
-	echo $1 | dmenu -i -l 6 -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb
+	echo $1 | dmenu -i -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb -l 6
     else
-	echo $1 | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb
+	echo $1 | dmenu -i -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb
     fi
 }
 
