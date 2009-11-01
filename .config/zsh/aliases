@@ -71,8 +71,9 @@ alias shutdown='sudo shutdown -hP now'
 alias lshw='sudo lshw'
 
 # Package management
-alias fullupgrade='sudo abs && yaourt -Syu --aur --devel'
-alias upgrade='yaourt -Syu --aur'
+alias yaourt='LD_PRELOAD= yaourt'
+alias fullupgrade='sudo abs && LD_PRELOAD= yaourt -Syu --aur --devel'
+alias upgrade='LD_PRELOAD= yaourt -Syu --aur'
 alias orphans='pacman -Qtdq'
 alias paclist='pacman -Ql'
 alias pacfile='pacman -Qo'
