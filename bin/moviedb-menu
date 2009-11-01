@@ -36,26 +36,40 @@ function choosefilm ()
 	movies=""
 
 	if [[ "$2" == "p" ]]; then
-	    movies=`moviedb-lists list "$1" && echo "Random" && echo "Play All"`
+	    movies=`echo "-Random-\n-Play All-\n " && moviedb-lists list "$1"`
 	else
-	    movies=`moviedb list $1 && echo "Random"`
+	    movies=`echo "-Random-\n-Play All-\n " && moviedb list "$1"`
 	fi
 
 	film=`choice $movies true`
-	
-	if [[ "$film" == "Random" ]]; then
-	    playfilm "`moviedb random $1`"
-	elif [[ "$film" == "Play All" ]] && [[ "$2" == "p" ]]; then
-	    moviedb-lists play "$1" &>/dev/null &
-	elif [[ "$film" != "" ]]; then
-	    playfilm "$film"
+
+	if [[ "$film" != "" ]] && [[ "$film" != " " ]]; then
+	    if [[ "$film" != "-Random-" ]] && [[ "$film" != "-Play All-" ]]; then
+		playfilm "$film"
+	    else
+		if [[ "$2" == "p" ]]; then
+		    if [[ "$film" == "-Play All-" ]]; then
+			moviedb-lists play "$1" &>/dev/null &
+		    elif [[ "$film" == "-Random-" ]]; then
+			playfilm "`moviedb-lists list \"$1\" | shuf -n1`"
+		    fi
+		else
+		    if [[ "$film" == "-Play All-" ]]; then
+			m3u="/tmp/`date +%s`.m3u"
+			moviedb files $1 > $m3u
+			(vlc $m3u && rm $m3u) &>/dev/null &
+		    elif [[ "$film" == "-Random-" ]]; then
+			playfilm "`moviedb random $1`"
+		    fi
+		fi
+	    fi
 	fi
     fi
 }
 
 function choosecategory ()
 {
-    choice `ls $MOVIEPATH/by-$1`
+    choice "`ls $MOVIEPATH/by-$1`"
 }
 
 option=`choice "Director\nGenre\nPlaylist\nRandom" false`

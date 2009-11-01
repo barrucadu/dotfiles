@@ -17,6 +17,7 @@ export XDG_CACHE_HOME=~/.cache
 export XDG_CONFIG_HOME=~/.config
 export XDG_DATA_HOME=~/.data
     # Input
+export XCOMPOSEFILE=~/.config/xorg/XCompose
 export QT_XFT=1
 export GDK_USE_XFT=1
 export GTK_IM_MODULE=xim

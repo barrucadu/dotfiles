@@ -11,7 +11,7 @@ if [[ ! $(tty) == *pts* ]]; then
         while true; do
             if [[ -f /var/run/daemons/hal ]]; then
                 echo "Starting X11 at `date`"
-                startx &> /dev/null
+                startx ~/.config/xorg/xinitrc &> /dev/null
                 source ~/.config/zsh/profile
             fi
         done

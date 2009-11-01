@@ -4,7 +4,7 @@ PLAYLISTPATH=`[ "$PLAYLISTPATH" = "" ] && echo "$XDG_DATA_HOME/moviedb" || echo 
 
 function play()
 {
-    if [[ ! -f "$PLAYLISTPATH/$1.m3u" ]]; then
+    if [[ -f "$PLAYLISTPATH/$1.m3u" ]]; then
 	vlc "$PLAYLISTPATH/$1.m3u" &>/dev/null &
     else
 	return 2
