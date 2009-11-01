@@ -87,16 +87,14 @@ function list ()
 	fi
     else
 	if [[ "$2" != "f" ]]; then
-            ls $MOVIEPATH/$folder/* | \
+            ls $MOVIEPATH/by-director/*/* | \
 		sed "/^.*\.\(srt\|idx\|sub\)$/d" | \
 		sed "s/^.*\/\(.*\)\..*$/\\1/"
 	else
-	    ls $MOVIEPATH/$folder/* | \
+	    ls $MOVIEPATH/by-director/*/* | \
 		sed "/^.*\.\(srt\|idx\|sub\)$/d"
 	fi
-    fi | \
-        sort | \
-        $PAGER
+    fi | sort
 }
 
 function random ()
@@ -169,7 +167,7 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
         "list")
             list $args;;
         "files")
-            list $args "f";;
+            list "$args" "f";;
         "random")
             random $args;;
         "" | "help")

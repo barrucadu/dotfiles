@@ -72,7 +72,7 @@ function choosecategory ()
     choice "`ls $MOVIEPATH/by-$1`"
 }
 
-option=`choice "Director\nGenre\nPlaylist\nRandom" false`
+option=`choice "Director\nGenre\nPlaylist\nRandom\nPlay All" false`
 
 case $option in
     "Director" | "Genre")
@@ -89,6 +89,9 @@ case $option in
 	playfilm "`moviedb random`"
 	;;
 
-    "")
+    "Play All")
+	m3u="/tmp/`date +%s`.m3u"
+	moviedb files > $m3u
+	(vlc $m3u && rm $m3u) &>/dev/null &
 	;;
 esac
