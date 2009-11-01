@@ -16,6 +16,19 @@
 (display-time-mode     t)
 (global-font-lock-mode 1)
 
+(setq default-mode-line-format '("-"
+				 mode-line-mule-info
+				 mode-line-modified
+				 mode-line-frame-identification
+				 mode-line-buffer-identification
+				 "  "
+				 global-mode-string
+				 "   %[(" mode-name mode-line-process minor-mode-alist "%n"")%]--"
+				 (line-number-mode "L%l--")
+				 (column-number-mode "C%c--")
+				 (-3 . "%p")
+				 "-%-"))
+
 ; UTF-8
 (set-keyboard-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -112,6 +125,9 @@
                                 ("/*..sh$"         . shell-script-mode)
                                 ("/*..red$"        . asm-mode))
                               auto-mode-alist))
+
+(show-paren-mode 1)
+(set-face-foreground 'show-paren-match-face "#bc8383")
 
 ; Functions
 (defun switch-to-previous-buffer ()
