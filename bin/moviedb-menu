@@ -33,11 +33,20 @@ function playfilm ()
 function choosefilm ()
 {
     if [[ "$1" != "" ]]; then
-	movies=`moviedb list $1 && echo "Random"`
+	movies=""
+
+	if [[ "$2" == "p" ]]; then
+	    movies=`moviedb-lists list "$1" && echo "Random" && echo "Play All"`
+	else
+	    movies=`moviedb list $1 && echo "Random"`
+	fi
+
 	film=`choice $movies true`
 	
 	if [[ "$film" == "Random" ]]; then
 	    playfilm "`moviedb random $1`"
+	elif [[ "$film" == "Play All" ]] && [[ "$2" == "p" ]]; then
+	    moviedb-lists play "$1" &>/dev/null &
 	elif [[ "$film" != "" ]]; then
 	    playfilm "$film"
 	fi
@@ -46,15 +55,20 @@ function choosefilm ()
 
 function choosecategory ()
 {
-    ls $MOVIEPATH/by-$1 | dmenu -i -l 6 -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb
+    choice `ls $MOVIEPATH/by-$1`
 }
 
-option=`choice "Director\nGenre\nRandom" false`
+option=`choice "Director\nGenre\nPlaylist\nRandom" false`
 
 case $option in
     "Director" | "Genre")
 	category=`choosecategory $option:l`
 	choosefilm $category
+	;;
+
+    "Playlist")
+	list=`choice "\`moviedb-lists list\`"`
+	choosefilm $list "p"
 	;;
 
     "Random")
