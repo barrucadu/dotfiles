@@ -34,7 +34,7 @@ function help()
     echo
     echo "Commands:"
     echo "    user   [user]   [type]: Play a user playlist. type is optional and one of loved, personal, recommended, or playlist."
-    echo "    tags   [tag]    [user]: Play globaltags or usertags. user is optional and is specified, the usertags playlist is selected."
+    echo "    tags   [tag]    [user]: Play globaltags or usertags. user is optional and, when specified, the usertags playlist is selected."
     echo "    artist [artist] [type]: Play an artist playlist. type is optional and one of similarartists, or fans."
     echo "    genre  [genre]        : Play a genre playlist."
     echo
