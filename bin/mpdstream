@@ -10,11 +10,18 @@ function stream()
 function lastfm()
 {
     url="lastfm://$1/$2"
-
+    
     if [[ "$3" != "" ]]; then
 	url="$url/$3"
     fi
 
+    if [[ "$1" == "tags" ]]; then
+	if [[ "$3" == "" ]]; then
+	    url="lastfm://globaltags/$2"
+	else
+	    url="lastfm://usertags/$3/$2"
+	fi
+    fi
     stream "$url"
 }
 
