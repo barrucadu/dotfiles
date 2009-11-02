@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+function stream()
+{
+    nmpc clear
+    nmpc add "$1"
+    nmpc play
+}
+
+function lastfm()
+{
+    url="lastfm://$1/$2"
+
+    if [[ "$3" != "" ]]; then
+	url="$url/$3"
+    fi
+
+    stream "$url"
+}
+
+function help()
+{
+    echo "mpdstream - add streams or last.fm radio to MPD"
+    echo
+    echo "Usage:"
+    echo "    mpdstream ([url] | [command] [args])"
+    echo
+    echo "Commands:"
+    echo "    user   [user]   [type]: Play a user playlist. type is optional and one of loved, personal, recommended, or playlist."
+    echo "    tags   [tag]    [user]: Play globaltags or usertags. user is optional and is specified, the usertags playlist is selected."
+    echo "    artist [artist] [type]: Play an artist playlist. type is optional and one of similarartists, or fans."
+    echo "    genre  [genre]        : Play a genre playlist."
+    echo
+    echo "Author:"
+    echo "    mpdstream is written and maintained by Michael Walker (Barrucadu)"
+    echo "    Contact information and my public key can be found on my website, http://www.barrucadu.co.uk"
+}
+
+case $1 in
+    "user" | "tags" | "artist" | "genre")
+	lastfm "$2" "$3"
+	;;
+    "help")
+	help
+	;;
+    *)
+	stream "$1"
+	;;
+esac
