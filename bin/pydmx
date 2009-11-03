@@ -1,0 +1,320 @@
+#!/usr/bin/env python3
+
+# Python script to control dmx devices. Requires the server to be up and running.
+
+import os, sys, imp, subprocess, curses, curses.wrapper
+
+# ----- System Setup----- #
+try:
+    model     = sys.argv[1]
+    universe  = int(sys.argv[2])
+    startchan = int(sys.argv[3])
+    command   = ""
+    arg1      = ""
+    arg2      = 0
+
+    if len(sys.argv) > 4:
+        command = sys.argv[4]
+        
+    if not command in ["", "list", "curses"] or len(sys.argv) > 5:
+        arg1 = sys.argv[5]
+
+    if len(sys.argv) > 6:
+        arg2 = sys.argv[6]
+        
+except IndexError:
+    print("Usage: pydmx [model] [universe] [startchannel] (curses | list (command) | [command] [arg])")
+    sys.exit(1)
+
+datapath = os.getenv("XDG_DATA_HOME")
+if datapath == "":
+    datapath = os.getenv("HOME") + "/.local/share"
+
+datapath += "/pydmx/" + model + ".py"
+
+try:
+    data = imp.load_source(model, datapath)
+except IOError:
+    print("The datafile " + datapath + " does not exist.")
+    sys.exit(1)
+
+# {channel : [curvalue, [minval1, description1, maxval1], ...], ...}
+chandata = {}
+for i in data.dmx.keys():
+    for j in data.dmx[i].keys():
+        key = data.dmx[i][j][1]
+        var = [data.dmx[i][j][0], data.dmx[i][j][2]]
+        
+        if len(data.dmx[i][j]) > 3:
+            var.append(data.dmx[i][j][3])
+        
+        if key in chandata.keys():
+            chandata[key].append(var)
+        else:
+            chandata.update({key : [0, var]})
+
+#print(chandata)
+#sys.exit()
+
+# ----- Function Definitions ----- #
+def dmxcmd(universe, channel, value):
+    global chandata
+
+    chandata[channel][0] = int(value)
+    
+    argvector = ["qdmx", "setchannel", str(universe), str(channel), str(value)]
+    process   = subprocess.Popen(argvector, stdout=subprocess.PIPE)
+    output    = process.communicate()
+    #print(output) - for debugging
+
+def updateui(stdscr, channels, active):
+    global startchan
+    global data
+    
+    stdscr.erase()
+
+    numbars       = len(channels)
+    height, width = stdscr.getmaxyx()
+    barsize       = int((width - 12) / numbars)
+    barheight     = height - 15
+    barwidth      = 2
+
+    for i in range(0, numbars):
+        n = 0
+        for channelnum in channels.keys():
+            if n == i: break
+            n += 1
+        channel = channels[channelnum]
+        
+        value = channel[0]
+        
+        stdscr.move(5, i * barsize + 6)
+        
+        attr = curses.color_pair(0)
+        if i == active:
+            attr = curses.color_pair(4)
+            
+        stdscr.addstr(data.channels[i], attr)
+
+        stdscr.move(6, i * barsize + 6)
+        stdscr.addstr(str(value))
+
+        stdscr.move(8, i * barsize + 6)
+        stdscr.addch(curses.ACS_ULCORNER)
+        
+        for j in range(0, barwidth):
+            stdscr.addch(curses.ACS_HLINE)
+            
+        stdscr.addch(curses.ACS_URCORNER)
+
+        goesupto = 0
+        if not value == 0:
+            goesupto = int(barheight * value / 255)
+        
+        for j in range(1, barheight):
+            stdscr.move(j + 8, i * barsize + 6)
+            stdscr.addch(curses.ACS_VLINE)
+
+            y = barheight - j
+            
+            for k in range(0, barwidth):
+                attr = curses.color_pair(0)
+                
+                if y <= goesupto:
+                    if y >= 2 * barheight / 3:
+                        attr = curses.color_pair(1)
+                    elif y >= barheight / 3:
+                        attr = curses.color_pair(2)
+                    else:
+                        attr = curses.color_pair(3)
+                    
+                stdscr.addch(" ", attr)
+                
+            stdscr.addch(curses.ACS_VLINE)
+
+        stdscr.move(8 + barheight, i * barsize + 6)
+        stdscr.addch(curses.ACS_LLCORNER)
+        
+        for j in range(0, barwidth):
+            stdscr.addch(curses.ACS_HLINE)
+            
+        stdscr.addch(curses.ACS_LRCORNER)
+        
+        stdscr.move(10 + barheight, i * barsize + 6)
+        stdscr.addstr(str(channelnum + startchan))
+
+        if active == i:
+            for chan in channel:
+                if type(chan) is list:
+                    if chan[0] == value or (len(chan) > 2 and (chan[0] <= value <= chan[2])):
+
+                        stdscr.move(height - 2, 1)
+                        stdscr.addstr("Device: ", curses.color_pair(5) and curses.A_BOLD)
+                        stdscr.addstr(data.name)
+                        
+                        stdscr.move(height - 1, 1)
+                        stdscr.addstr("State:  ", curses.color_pair(5) and curses.A_BOLD)
+                        stdscr.addstr(chan[1])
+        
+
+def cursesui(stdscr):
+    global chandata
+    global universe
+    
+    curses.curs_set(0)
+
+    curses.init_pair(1, curses.COLOR_RED,   curses.COLOR_RED)
+    curses.init_pair(2, curses.COLOR_BLUE,  curses.COLOR_BLUE)
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_GREEN)
+    curses.init_pair(4, curses.COLOR_RED,   curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_CYAN,  curses.COLOR_BLACK)
+
+    activechan = 0
+
+    while True:
+        updateui(stdscr, chandata, activechan)
+        
+        ch     = stdscr.getch()
+        newval = -1
+        
+        if ch == ord('q'):
+            break
+        
+        elif ch == curses.KEY_LEFT:
+            if not activechan == 0:
+                activechan -= 1
+                
+        elif ch == curses.KEY_RIGHT:
+            if not activechan == len(chandata) - 1:
+                activechan += 1
+                
+        elif ch in [curses.KEY_UP, curses.KEY_PPAGE]:
+            for cmd in chandata[activechan]:
+                if type(cmd) is list:
+                    newdata = chandata[activechan][0] + 1
+                    if ch == curses.KEY_PPAGE:
+                        newdata += 9
+
+                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]):
+                        newval = newdata
+                    elif cmd[0] > chandata[activechan][0]:
+                        if cmd[0] < newval or newval == -1:
+                            newval = cmd[0]
+                            
+        elif ch in [curses.KEY_DOWN, curses.KEY_NPAGE]:
+            for cmd in chandata[activechan]:
+                if type(cmd) is list:
+                    newdata = chandata[activechan][0] - 1
+                    if ch == curses.KEY_NPAGE:
+                        newdata -= 9
+
+                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]):
+                        newval = newdata
+                    elif cmd[0] < chandata[activechan][0]:
+                        if cmd[0] > newval or newval == -1:
+                            newval = cmd[0]
+                            
+        elif ch == ord('t'):
+            newval = chandata[activechan][0]
+            for cmd in chandata[activechan]:
+                if type(cmd) is list:
+                    if len(cmd) > 2 and newval < cmd[2]:
+                        newval = cmd[2]
+                    elif newval < cmd[0]:
+                        newval = cmd[0]
+            
+        elif ch == ord('b'):
+            newval = chandata[activechan][0]
+            for cmd in chandata[activechan]:
+                if type(cmd) is list:
+                    if newval > cmd[0]:
+                        newval = cmd[0]            
+            
+        if not newval == -1:
+            dmxcmd(universe, activechan, newval)
+    
+    curses.curs_set(1)
+
+def listcmds(arg):
+    global data
+    
+    print("Commands for " + data.name + ":")
+    for i in data.dmx.keys():
+        if arg == "" or arg == i:
+            commands = []
+            longest  = 0
+            
+            for j in data.dmx[i].keys():
+                cmd = "'" + j + "'"
+                if data.dmx[i][j][0] == "?":
+                    cmd = "'" + j + " [val]'"
+                    
+                commands.append([cmd, data.dmx[i][j][2]])
+                
+                if len(cmd) > longest:
+                    longest = len(cmd)
+
+            print(i)
+            for cmd in commands:
+                spacing = longest - len(cmd[0])
+                print("    " + cmd[0], cmd[1].rjust(len(cmd[1]) + spacing))
+            print()
+            
+def parsecmd(command, arg, arg2):
+    global universe
+    global startchan
+    global data
+    
+    funbreak = False
+
+    if command == "list":
+        listcmds(arg)
+    elif command == "curses":
+        curses.wrapper(cursesui)
+    else:
+        try:
+            cmd = data.dmx[command][arg]
+        except KeyError:
+            print("Command not found")
+            funbreak = True
+            
+        if not funbreak:
+            if type(cmd[0]) is int:
+                # Normal set-channel-to-value command
+                dmxcmd(universe, startchan + cmd[1], cmd[0])
+            else:
+                # Set-channel-to-user value command
+                dmxcmd(universe, startchan + cmd[1], arg2)
+
+def enterprompt():
+    funbreak = False
+    foo      = input(">  ")
+    
+    if foo == "exit":
+        print("Exiting...")
+        sys.exit(0)
+    else:
+        bar = foo.split()
+        try:
+            command = bar[0]
+            arg     = ""
+            arg2    = ""
+
+            if len(bar) > 1:
+                arg = bar[1]
+            
+            if len(bar) > 2:
+                arg2 = bar[2]            
+        except IndexError:
+            funbreak = True
+
+        if not funbreak:
+            parsecmd(command, arg, arg2)
+
+        enterprompt()
+
+# ----- Start Up ----- #
+if command == "":
+    enterprompt()
+else:
+    parsecmd(command, arg1, arg2)
