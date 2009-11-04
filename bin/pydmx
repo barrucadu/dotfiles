@@ -9,14 +9,14 @@ try:
     model     = sys.argv[1]
     universe  = int(sys.argv[2])
     startchan = int(sys.argv[3])
-    command   = ""
-    arg1      = ""
-    arg2      = 0
+    command   = None
+    arg1      = None
+    arg2      = None
 
     if len(sys.argv) > 4:
         command = sys.argv[4]
         
-    if not command in ["", "list", "curses"] or len(sys.argv) > 5:
+    if len(sys.argv) > 5:
         arg1 = sys.argv[5]
 
     if len(sys.argv) > 6:
@@ -286,35 +286,54 @@ def parsecmd(command, arg, arg2):
                 # Set-channel-to-user value command
                 dmxcmd(universe, startchan + cmd[1], arg2)
 
-def enterprompt():
+def parsepromptline(line):
+    bar      = line.split()
+    command  = ""
+    arg      = ""
+    arg2     = ""
     funbreak = False
-    foo      = input(">  ")
-    
-    if foo == "exit":
+
+    try:
+        command = bar[0]
+        
+        if len(bar) > 1:
+            arg = bar[1]
+            
+        if len(bar) > 2:
+            arg2 = bar[2]
+    except IndexError:
+        funbreak = True
+
+    return command, arg, arg2, funbreak
+
+
+def enterprompt(command=None, arg=None, arg2=None):
+    if command == None:
+        
+        funbreak = False
+        foo = input("> ")
+        
+#        try:
+#            foo = sys.stdin.readline()
+#        except EOFError:
+#            foo = input("> ")
+        
+        if foo == "exit": 
+            print("Exiting...")
+            sys.exit(0)
+        else:
+            command, arg, arg2, funbreak = parsepromptline(foo)
+            if not funbreak:
+                parsecmd(command, arg, arg2)
+                
+    elif command == "exit":
         print("Exiting...")
         sys.exit(0)
-    else:
-        bar = foo.split()
-        try:
-            command = bar[0]
-            arg     = ""
-            arg2    = ""
 
-            if len(bar) > 1:
-                arg = bar[1]
-            
-            if len(bar) > 2:
-                arg2 = bar[2]            
-        except IndexError:
-            funbreak = True
-
-        if not funbreak:
-            parsecmd(command, arg, arg2)
-
-        enterprompt()
+    elif not command == "":
+        parsecmd(command, arg, arg2)
+    
+    enterprompt()
 
 # ----- Start Up ----- #
-if command == "":
-    enterprompt()
-else:
-    parsecmd(command, arg1, arg2)
+enterprompt(command, arg1, arg2)
