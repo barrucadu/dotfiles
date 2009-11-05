@@ -2,7 +2,7 @@
 
 # Python script to control dmx devices. Requires the server to be up and running.
 
-import os, sys, imp, subprocess, curses, curses.wrapper
+import os, sys, imp, subprocess, curses, curses.ascii, curses.wrapper
 
 # ----- Global Variables ----- #
 datapath   = None
@@ -11,6 +11,39 @@ activename = None
 chandata   = None
 
 # ----- Function Definitions ----- #
+def dmxcmd(channel, value=None, name=None):
+    global activename
+    global chandata
+
+    if name == None:
+        name = activename
+
+    argvector = []
+    if value == None:
+        argvector = ["k8062", str(channel)]
+    else:
+        chandata[name][channel][0] = int(value)
+        channel += chandata[name]['info']['startchan']
+        argvector = ["k8062", str(channel), str(value)]
+        
+    process = subprocess.Popen(argvector, stdout=subprocess.PIPE)
+    output  = process.communicate()
+    
+    if value == None: return int(output[0])
+
+def loaddmx(name):
+    global chandata
+
+    loaded = False
+    for chan in chandata[name].keys():
+        if not chan == 'info':
+            newval = dmxcmd(chan + chandata[name]['info']['startchan'])
+            if not chandata[name][chan][0] == newval:
+                chandata[name][chan][0] = newval
+                loaded = True
+
+    return loaded
+
 def nameinit(newname, newmodel, newstartchan):
     global chandata
     global data
@@ -37,18 +70,12 @@ def nameinit(newname, newmodel, newstartchan):
             else:
                 chandata[newname].update({key : [0, var]})
 
-def dmxcmd(channel, value):
-    global chandata
-    global activename
+    dontload = loaddmx(newname)
 
-    chandata[activename][channel][0] = int(value)
-    
-    channel += chandata[activename]['info']['startchan']
-    
-    argvector = ["k8062", str(channel), str(value)]
-    process   = subprocess.Popen(argvector, stdout=subprocess.PIPE)
-    output    = process.communicate()
-    #print(output) - for debugging
+    if not dontload:
+        for channel in range(0, len(data.defaults)):
+            dmxcmd(channel, data.defaults[channel], newname)
+             
 
 def updateui(stdscr, active):
     global chandata
@@ -129,6 +156,10 @@ def updateui(stdscr, active):
                 if type(chan) is list:
                     if chan[0] == value or (len(chan) > 2 and (chan[0] <= value <= chan[2])):
 
+                        stdscr.move(height - 3, 1)
+                        stdscr.addstr("Name:   ", curses.color_pair(5) and curses.A_BOLD)
+                        stdscr.addstr(activename)
+
                         stdscr.move(height - 2, 1)
                         stdscr.addstr("Device: ", curses.color_pair(5) and curses.A_BOLD)
                         stdscr.addstr(data.name)
@@ -144,13 +175,13 @@ def cursesui(stdscr):
     
     curses.curs_set(0)
 
+    activechan = 0
+
     curses.init_pair(1, curses.COLOR_RED,   curses.COLOR_RED)
     curses.init_pair(2, curses.COLOR_BLUE,  curses.COLOR_BLUE)
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_GREEN)
     curses.init_pair(4, curses.COLOR_RED,   curses.COLOR_BLACK)
     curses.init_pair(5, curses.COLOR_CYAN,  curses.COLOR_BLACK)
-
-    activechan = 0
 
     while True:
         updateui(stdscr, activechan)
@@ -161,6 +192,9 @@ def cursesui(stdscr):
         if ch == ord('q'):
             break
         
+        elif ch == ord('r'):
+            loaddmx(activename)
+
         elif ch == curses.KEY_LEFT:
             if not activechan == 0:
                 activechan -= 1
@@ -169,27 +203,27 @@ def cursesui(stdscr):
             if not activechan == len(chandata[activename]) - 1:
                 activechan += 1
                 
-        elif ch in [curses.KEY_UP, curses.KEY_PPAGE]:
+        elif ch in [curses.KEY_UP, curses.KEY_PPAGE, ord('n')]:
             for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
                     newdata = chandata[activename][activechan][0] + 1
                     if ch == curses.KEY_PPAGE:
                         newdata += 9
 
-                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]):
+                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]) and not ch == ord('n'):
                         newval = newdata
                     elif cmd[0] > chandata[activename][activechan][0]:
                         if cmd[0] < newval or newval == -1:
                             newval = cmd[0]
                             
-        elif ch in [curses.KEY_DOWN, curses.KEY_NPAGE]:
+        elif ch in [curses.KEY_DOWN, curses.KEY_NPAGE, ord('p')]:
             for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
                     newdata = chandata[activename][activechan][0] - 1
                     if ch == curses.KEY_NPAGE:
                         newdata -= 9
 
-                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]):
+                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]) and not ch == ord('p'):
                         newval = newdata
                     elif cmd[0] < chandata[activename][activechan][0]:
                         if cmd[0] > newval or newval == -1:
@@ -271,6 +305,9 @@ def parsecmd(command, arg, arg2, arg3):
     elif command == "change":
         if arg in chandata.keys():
             activename = arg
+        
+    elif command == "reload":
+        loaddmx(activename)
         
     else:
         try:
@@ -370,7 +407,7 @@ activename = 'start'
 #print(chandata)
 #sys.exit()
 
-# ----- Start Up ----- #
+# ----- Main ----- #
 looping = True
 
 while looping:

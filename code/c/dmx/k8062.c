@@ -31,20 +31,28 @@ void dmx_close()
 
 int main(int argc, char* argv[])
 {
+    int chan = 0;
+    int val  = 0;
+
+    dmx_open();
+
     if(argc == 3) {
-	int chan = atoi(argv[1]);
-	int val  = atoi(argv[2]);
+	chan = atoi(argv[1]);
+	val  = atoi(argv[2]);
 
 	if(0 <= chan && chan <= 512 && 0 <= val && val <= 255) {
-	    dmx_open();
 	    dmx_channels[chan]=val;
-	    dmx_close();
-
-	    printf("Value of channel %i changed to %i.\n", chan, val);
 	} else {
 	    fprintf(stderr, "Invalid channel or value: 0 <= channel <= 512, 0 <= value <= 255\n");
 	}
+    } else if(argc == 2) {
+	chan = atoi(argv[1]);
+	if(0 <= chan && chan <= 512) {
+	    printf("%i\n", dmx_channels[chan]);
+	}
     } else {
-	printf("Usage: dmx [channel] [value]\n");
+	printf("Usage: k8062 [channel] (value)\n");
     }
+
+    dmx_close();
 }
