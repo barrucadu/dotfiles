@@ -152,21 +152,24 @@ def updateui(stdscr, active):
         stdscr.addstr(str(i + chandata[activename]['info']['startchan']))
 
         if active == i:
+            stdscr.move(height - 3, 1)
+            stdscr.addstr("Name:   ", curses.color_pair(5) and curses.A_BOLD)
+            stdscr.addstr(activename)
+            
+            stdscr.move(height - 2, 1)
+            stdscr.addstr("Device: ", curses.color_pair(5) and curses.A_BOLD)
+            stdscr.addstr(data.name)
+
+            stdscr.move(height - 1, 1)
+            stdscr.addstr("State:  ", curses.color_pair(5) and curses.A_BOLD)
+
+            highest = None
             for chan in channel:
                 if type(chan) is list:
-                    if chan[0] == value or (len(chan) > 2 and (chan[0] <= value <= chan[2])):
+                    if chan[0] <= value and (highest == None or chan[0] > highest[0]):
+                        highest = chan
 
-                        stdscr.move(height - 3, 1)
-                        stdscr.addstr("Name:   ", curses.color_pair(5) and curses.A_BOLD)
-                        stdscr.addstr(activename)
-
-                        stdscr.move(height - 2, 1)
-                        stdscr.addstr("Device: ", curses.color_pair(5) and curses.A_BOLD)
-                        stdscr.addstr(data.name)
-                        
-                        stdscr.move(height - 1, 1)
-                        stdscr.addstr("State:  ", curses.color_pair(5) and curses.A_BOLD)
-                        stdscr.addstr(chan[1])
+            stdscr.addstr(highest[1])
         
 
 def cursesui(stdscr):
@@ -210,7 +213,7 @@ def cursesui(stdscr):
                     if ch == curses.KEY_PPAGE:
                         newdata += 9
 
-                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]) and not ch == ord('n'):
+                    if 0 <= newdata <= 255 and not ch == ord('n'):
                         newval = newdata
                     elif cmd[0] > chandata[activename][activechan][0]:
                         if cmd[0] < newval or newval == -1:
@@ -223,7 +226,7 @@ def cursesui(stdscr):
                     if ch == curses.KEY_NPAGE:
                         newdata -= 9
 
-                    if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]) and not ch == ord('p'):
+                    if 0 <= newdata <= 255 and not ch == ord('p'):
                         newval = newdata
                     elif cmd[0] < chandata[activename][activechan][0]:
                         if cmd[0] > newval or newval == -1:
