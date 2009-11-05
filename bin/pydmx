@@ -4,88 +4,69 @@
 
 import os, sys, imp, subprocess, curses, curses.wrapper
 
-# ----- System Setup----- #
-try:
-    model     = sys.argv[1]
-    universe  = int(sys.argv[2])
-    startchan = int(sys.argv[3])
-    command   = None
-    arg1      = None
-    arg2      = None
-
-    if len(sys.argv) > 4:
-        command = sys.argv[4]
-        
-    if len(sys.argv) > 5:
-        arg1 = sys.argv[5]
-
-    if len(sys.argv) > 6:
-        arg2 = sys.argv[6]
-        
-except IndexError:
-    print("Usage: pydmx [model] [universe] [startchannel] (curses | list (command) | [command] [arg])")
-    sys.exit(1)
-
-datapath = os.getenv("XDG_DATA_HOME")
-if datapath == "":
-    datapath = os.getenv("HOME") + "/.local/share"
-
-datapath += "/pydmx/" + model + ".py"
-
-try:
-    data = imp.load_source(model, datapath)
-except IOError:
-    print("The datafile " + datapath + " does not exist.")
-    sys.exit(1)
-
-# {channel : [curvalue, [minval1, description1, maxval1], ...], ...}
-chandata = {}
-for i in data.dmx.keys():
-    for j in data.dmx[i].keys():
-        key = data.dmx[i][j][1]
-        var = [data.dmx[i][j][0], data.dmx[i][j][2]]
-        
-        if len(data.dmx[i][j]) > 3:
-            var.append(data.dmx[i][j][3])
-        
-        if key in chandata.keys():
-            chandata[key].append(var)
-        else:
-            chandata.update({key : [0, var]})
-
-#print(chandata)
-#sys.exit()
+# ----- Global Variables ----- #
+datapath   = None
+data       = None
+activename = None
+chandata   = None
 
 # ----- Function Definitions ----- #
-def dmxcmd(universe, channel, value):
+def nameinit(newname, newmodel, newstartchan):
     global chandata
+    global data
 
-    chandata[channel][0] = int(value)
+    datafile = datapath + "/pydmx/" + newmodel + ".py"
     
-    argvector = ["qdmx", "setchannel", str(universe), str(channel), str(value)]
+    try:
+        data = imp.load_source(newmodel, datafile)
+    except IOError:
+        print("The datafile " + datapath + " does not exist.")
+
+    chandata.update({newname : {'info' : {'model'     : newmodel,
+                                          'startchan' : int(newstartchan)}}})
+    for i in data.dmx.keys():
+        for j in data.dmx[i].keys():
+            key = data.dmx[i][j][1]
+            var = [data.dmx[i][j][0], data.dmx[i][j][2]]
+            
+            if len(data.dmx[i][j]) > 3:
+                var.append(data.dmx[i][j][3])
+        
+            if key in chandata[newname].keys():
+                chandata[newname][key].append(var)
+            else:
+                chandata[newname].update({key : [0, var]})
+
+def dmxcmd(channel, value):
+    global chandata
+    global activename
+
+    chandata[activename][channel][0] = int(value)
+    
+    channel += chandata[activename]['info']['startchan']
+    
+    argvector = ["k8062", str(channel), str(value)]
     process   = subprocess.Popen(argvector, stdout=subprocess.PIPE)
     output    = process.communicate()
     #print(output) - for debugging
 
-def updateui(stdscr, channels, active):
-    global startchan
+def updateui(stdscr, active):
+    global chandata
+    global activename
     global data
-    
+
+    channels = chandata[activename]
+
     stdscr.erase()
 
-    numbars       = len(channels)
+    numbars       = len(channels) - 1
     height, width = stdscr.getmaxyx()
     barsize       = int((width - 12) / numbars)
     barheight     = height - 15
     barwidth      = 2
 
     for i in range(0, numbars):
-        n = 0
-        for channelnum in channels.keys():
-            if n == i: break
-            n += 1
-        channel = channels[channelnum]
-        
+        channel = channels[i]
         value = channel[0]
         
         stdscr.move(5, i * barsize + 6)
@@ -141,7 +122,7 @@ def updateui(stdscr, channels, active):
         stdscr.addch(curses.ACS_LRCORNER)
         
         stdscr.move(10 + barheight, i * barsize + 6)
-        stdscr.addstr(str(channelnum + startchan))
+        stdscr.addstr(str(i + chandata[activename]['info']['startchan']))
 
         if active == i:
             for chan in channel:
@@ -159,7 +140,7 @@ def updateui(stdscr, channels, active):
 
 def cursesui(stdscr):
     global chandata
-    global universe
+    global activename
     
     curses.curs_set(0)
 
@@ -172,7 +153,7 @@ def cursesui(stdscr):
     activechan = 0
 
     while True:
-        updateui(stdscr, chandata, activechan)
+        updateui(stdscr, activechan)
         
         ch     = stdscr.getch()
         newval = -1
@@ -185,38 +166,38 @@ def cursesui(stdscr):
                 activechan -= 1
                 
         elif ch == curses.KEY_RIGHT:
-            if not activechan == len(chandata) - 1:
+            if not activechan == len(chandata[activename]) - 1:
                 activechan += 1
                 
         elif ch in [curses.KEY_UP, curses.KEY_PPAGE]:
-            for cmd in chandata[activechan]:
+            for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
-                    newdata = chandata[activechan][0] + 1
+                    newdata = chandata[activename][activechan][0] + 1
                     if ch == curses.KEY_PPAGE:
                         newdata += 9
 
                     if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]):
                         newval = newdata
-                    elif cmd[0] > chandata[activechan][0]:
+                    elif cmd[0] > chandata[activename][activechan][0]:
                         if cmd[0] < newval or newval == -1:
                             newval = cmd[0]
                             
         elif ch in [curses.KEY_DOWN, curses.KEY_NPAGE]:
-            for cmd in chandata[activechan]:
+            for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
-                    newdata = chandata[activechan][0] - 1
+                    newdata = chandata[activename][activechan][0] - 1
                     if ch == curses.KEY_NPAGE:
                         newdata -= 9
 
                     if len(cmd) > 2 and (cmd[0] <= newdata <= cmd[2]):
                         newval = newdata
-                    elif cmd[0] < chandata[activechan][0]:
+                    elif cmd[0] < chandata[activename][activechan][0]:
                         if cmd[0] > newval or newval == -1:
                             newval = cmd[0]
                             
         elif ch == ord('t'):
-            newval = chandata[activechan][0]
-            for cmd in chandata[activechan]:
+            newval = chandata[activename][activechan][0]
+            for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
                     if len(cmd) > 2 and newval < cmd[2]:
                         newval = cmd[2]
@@ -224,14 +205,14 @@ def cursesui(stdscr):
                         newval = cmd[0]
             
         elif ch == ord('b'):
-            newval = chandata[activechan][0]
-            for cmd in chandata[activechan]:
+            newval = chandata[activename][activechan][0]
+            for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
                     if newval > cmd[0]:
                         newval = cmd[0]            
             
         if not newval == -1:
-            dmxcmd(universe, activechan, newval)
+            dmxcmd(activechan, newval)
     
     curses.curs_set(1)
 
@@ -260,10 +241,10 @@ def listcmds(arg):
                 print("    " + cmd[0], cmd[1].rjust(len(cmd[1]) + spacing))
             print()
             
-def parsecmd(command, arg, arg2):
-    global universe
-    global startchan
+def parsecmd(command, arg, arg2, arg3):
     global data
+    global chandata
+    global activename
     
     funbreak = False
 
@@ -271,6 +252,26 @@ def parsecmd(command, arg, arg2):
         listcmds(arg)
     elif command == "curses":
         curses.wrapper(cursesui)
+    elif command == "names":
+        for name in chandata.keys():
+            if name == activename:
+                print(name, "[active]")
+            else:
+                print(name)
+                
+            print("    Model:", chandata[name]['info']['model'])
+            print("    Start:", chandata[name]['info']['startchan'])
+            
+    elif command == "new":
+        if arg == "" or arg2 == "" or arg3 == "":
+            print("Usage: new [name] [model] [startchannel]")
+        else:
+            nameinit(arg, arg2, arg3)
+
+    elif command == "change":
+        if arg in chandata.keys():
+            activename = arg
+        
     else:
         try:
             cmd = data.dmx[command][arg]
@@ -281,16 +282,17 @@ def parsecmd(command, arg, arg2):
         if not funbreak:
             if type(cmd[0]) is int:
                 # Normal set-channel-to-value command
-                dmxcmd(universe, startchan + cmd[1], cmd[0])
+                dmxcmd(cmd[1], cmd[0])
             else:
                 # Set-channel-to-user value command
-                dmxcmd(universe, startchan + cmd[1], arg2)
+                dmxcmd(cmd[1], arg2)
 
 def parsepromptline(line):
     bar      = line.split()
     command  = ""
     arg      = ""
     arg2     = ""
+    arg3     = ""
     funbreak = False
 
     try:
@@ -301,10 +303,13 @@ def parsepromptline(line):
             
         if len(bar) > 2:
             arg2 = bar[2]
+
+        if len(bar) > 3:
+            arg3 = bar[3]
     except IndexError:
         funbreak = True
 
-    return command, arg, arg2, funbreak
+    return command, arg, arg2, arg3, funbreak
 
 
 def enterprompt(command=None, arg=None, arg2=None):
@@ -313,27 +318,63 @@ def enterprompt(command=None, arg=None, arg2=None):
         funbreak = False
         foo = input("> ")
         
-#        try:
-#            foo = sys.stdin.readline()
-#        except EOFError:
-#            foo = input("> ")
-        
         if foo == "exit": 
             print("Exiting...")
             sys.exit(0)
         else:
-            command, arg, arg2, funbreak = parsepromptline(foo)
+            command, arg, arg2, arg3, funbreak = parsepromptline(foo)
             if not funbreak:
-                parsecmd(command, arg, arg2)
+                parsecmd(command, arg, arg2, arg3)
                 
     elif command == "exit":
-        print("Exiting...")
-        sys.exit(0)
+        return False
 
     elif not command == "":
         parsecmd(command, arg, arg2)
     
-    enterprompt()
+    return True
+
+# ----- System Setup----- #
+model      = None
+startchan  = None
+command    = None
+arg1       = None
+arg2       = None
+datapath   = None
+
+try:
+    model     = sys.argv[1]
+    startchan = int(sys.argv[2])
+
+    if len(sys.argv) > 3:
+        command = sys.argv[3]
+        
+    if len(sys.argv) > 4:
+        arg1 = sys.argv[4]
+
+    if len(sys.argv) > 5:
+        arg2 = sys.argv[5]
+        
+except IndexError:
+    print("Usage: pydmx [model] [startchannel] (curses | list (command) | [command] [arg])")
+    sys.exit(1)
+
+datapath = os.getenv("XDG_DATA_HOME")
+if datapath == "":
+    datapath = os.getenv("HOME") + "/.local/share"
+
+chandata = {}
+nameinit('start', model, startchan)
+activename = 'start'
+
+#print(chandata)
+#sys.exit()
 
 # ----- Start Up ----- #
-enterprompt(command, arg1, arg2)
+looping = True
+
+while looping:
+    looping = enterprompt(command, arg1, arg2)
+
+print("Exiting...")
+sys.exit(0)
