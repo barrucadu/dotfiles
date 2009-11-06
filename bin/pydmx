@@ -7,8 +7,8 @@ import os, sys, imp, subprocess, curses, curses.ascii, curses.wrapper
 # ----- Global Variables ----- #
 datapath   = None
 data       = None
-activename = None
-chandata   = None
+chandata   = {}
+activename = ''
 
 # ----- Function Definitions ----- #
 def dmxcmd(channel, value=None, name=None):
@@ -28,7 +28,7 @@ def dmxcmd(channel, value=None, name=None):
         
     process = subprocess.Popen(argvector, stdout=subprocess.PIPE)
     output  = process.communicate()
-    
+
     if value == None: return int(output[0])
 
 def loaddmx(name):
@@ -306,11 +306,50 @@ def parsecmd(command, arg, arg2, arg3):
             nameinit(arg, arg2, arg3)
 
     elif command == "change":
-        if arg in chandata.keys():
+        if not arg == "" and arg in chandata.keys():
             activename = arg
-        
+        else:
+            print("Usage: change [name]")
+
     elif command == "reload":
         loaddmx(activename)
+        
+    elif command == "rename":
+        if arg in chandata.keys() and not (arg2 in chandata.keys() or arg2 == ""):
+            chandata.update({arg2 : chandata[arg]})
+            chandata.pop(arg)
+        else:
+            print("Usage: rename [old] [new]")
+
+    elif command == "help":
+        print("Usage: pydmx (help | [model] [startchannel])")
+        print("The model and startchannel are optional, if not specified use the new command.")
+        print("PyDMX also accepts commands from stdin, just make sure you end with an exit command to avoid an error message.\n")
+        print("Internal commands:")
+        print("    new [name] [model] [startchannel] - initialise a new named device.")
+        print("    names                             - list all devices.")
+        print("    change [name]                     - change to a different named device.")
+        print("    rename [old] [new]                - change the name of a device. If the active device is renamed, a change command must immediately follow.")
+        print("    reload                            - reload cached DMX values for the current device from dmxd.")
+        print("    curses                            - start the ncurses interface.")
+        print("    list (arg)                        - list all commands for the current device provided by the data file. If arg is specified, restrict to that category.")
+        print("    help                              - display this text")
+        print("    exit                              - close pydmx\n")
+        print("Curses UI:")
+        print("    Up        - Increment the value of the current channel.")
+        print("    Down      - Decrement the value of the current channel.")
+        print("    Left      - Change to the previous channel.")
+        print("    Right     - Change to the next channel.")
+        print("    Page Up   - Increment the value of the current channel by 10.")
+        print("    Page Down - Decrement the value of the current channel by 10.")
+        print("    n         - Change to the next discrete region for that channel.")
+        print("    p         - Change to the previous discrete region for that channel.")
+        print("    t         - Change the value of the channel to 255.")
+        print("    b         - Change the value of the channel to 0.")
+        print("    r         - Equivalent of reload command.")
+        print("    q         - Close the interface.\n")
+        print("PyDMX requires that dmxd be running as root, and that k8062 be executable and in your $PATH.")
+        print("PyDMX is developed and maintained by Barrucadu (Michael Walker).")
         
     else:
         try:
@@ -352,69 +391,38 @@ def parsepromptline(line):
     return command, arg, arg2, arg3, funbreak
 
 
-def enterprompt(command=None, arg=None, arg2=None):
-    if command == None:
-        
-        funbreak = False
-        foo = input("> ")
-        
-        if foo == "exit": 
-            print("Exiting...")
-            sys.exit(0)
-        else:
-            command, arg, arg2, arg3, funbreak = parsepromptline(foo)
-            if not funbreak:
-                parsecmd(command, arg, arg2, arg3)
-                
-    elif command == "exit":
-        return False
+def enterprompt():
+    funbreak = False
 
-    elif not command == "":
-        parsecmd(command, arg, arg2)
+    foo = input("> ")
     
+    if foo == "exit": 
+        return False
+    else:
+        command, arg, arg2, arg3, funbreak = parsepromptline(foo)
+        if not funbreak:
+            parsecmd(command, arg, arg2, arg3)
     return True
 
-# ----- System Setup----- #
-model      = None
-startchan  = None
-command    = None
-arg1       = None
-arg2       = None
-datapath   = None
-
-try:
-    model     = sys.argv[1]
-    startchan = int(sys.argv[2])
-
-    if len(sys.argv) > 3:
-        command = sys.argv[3]
-        
-    if len(sys.argv) > 4:
-        arg1 = sys.argv[4]
-
-    if len(sys.argv) > 5:
-        arg2 = sys.argv[5]
-        
-except IndexError:
-    print("Usage: pydmx [model] [startchannel] (curses | list (command) | [command] [arg])")
-    sys.exit(1)
-
+# ----- Main ----- #
 datapath = os.getenv("XDG_DATA_HOME")
 if datapath == "":
     datapath = os.getenv("HOME") + "/.local/share"
 
-chandata = {}
-nameinit('start', model, startchan)
-activename = 'start'
-
-#print(chandata)
-#sys.exit()
-
-# ----- Main ----- #
+if "help" in sys.argv or "-h" in sys.argv or "--help" in sys.argv:
+    parsecmd("help", None, None, None)
+    sys.exit(0)
+else:
+    if len(sys.argv) > 2:
+        model = sys.argv[1]
+        startchan = int(sys.argv[2])
+        nameinit('start', model, startchan)
+        activename = 'start'
+        
 looping = True
 
 while looping:
-    looping = enterprompt(command, arg1, arg2)
+    looping = enterprompt()
 
 print("Exiting...")
 sys.exit(0)
