@@ -7,11 +7,12 @@ import os, sys, imp, subprocess, curses, curses.ascii, curses.wrapper
 # ----- Global Variables ----- #
 datapath   = None
 data       = None
+dbodata    = {}
 chandata   = {}
 activename = ''
 
 # ----- Function Definitions ----- #
-def dmxcmd(channel, value=None, name=None):
+def dmxcmd(channel, value=None, name=None, holding=False):
     global activename
     global chandata
 
@@ -25,11 +26,17 @@ def dmxcmd(channel, value=None, name=None):
         chandata[name][channel][0] = int(value)
         channel += chandata[name]['info']['startchan']
         argvector = ["k8062", str(channel), str(value)]
-        
-    process = subprocess.Popen(argvector, stdout=subprocess.PIPE)
-    output  = process.communicate()
 
-    if value == None: return int(output[0])
+    if not holding:
+        process = subprocess.Popen(argvector, stdout=subprocess.PIPE)
+        output  = process.communicate()
+
+    if value == None:
+        try:
+            return int(output[0])
+        except ValueError:
+            print("Dmxd does not seem to be running.")
+            sys.exit()
 
 def loaddmx(name):
     global chandata
@@ -43,6 +50,29 @@ def loaddmx(name):
                 loaded = True
 
     return loaded
+
+def applyheldchanges():
+    global activename
+    global chandata
+
+    for channel in chandata[activename].keys():
+        if not channel == 'info':
+            dmxcmd(channel, chandata[activename][0])
+
+def dbo():
+    global activename
+    global chandata
+    global dbodata
+
+    if not dbodata = {}:
+        for channel in dbodata.keys():
+            dmxcmd(channel, dbodata[channel])
+        dbodata = {}
+    else:
+        for channel in chandata[activename].keys():
+            if not channel == 'info':
+                dbodata.update({channel : chandata[activename][0]})
+                dmxcmd(channel, 0)
 
 def nameinit(newname, newmodel, newstartchan):
     global chandata
@@ -77,7 +107,7 @@ def nameinit(newname, newmodel, newstartchan):
             dmxcmd(channel, data.defaults[channel], newname)
              
 
-def updateui(stdscr, active):
+def updateui(stdscr, active, holding):
     global chandata
     global activename
     global data
@@ -91,6 +121,23 @@ def updateui(stdscr, active):
     barsize       = int((width - 12) / numbars)
     barheight     = height - 15
     barwidth      = 2
+
+    stdscr.move(1, 1)
+    if holding:
+        if dbo:
+            stdscr.addstr("[Holding/DBO]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)
+        else:
+            stdscr.addstr("[Holding]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)            
+    elif dbo:
+        stdscr.addstr("[DBO]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)
+
+    stdscr.move(height - 3, 1)
+    stdscr.addstr("Name:   ", curses.color_pair(5) and curses.A_BOLD)
+    stdscr.addstr(activename)
+    
+    stdscr.move(height - 2, 1)
+    stdscr.addstr("Device: ", curses.color_pair(5) and curses.A_BOLD)
+    stdscr.addstr(data.name)
 
     for i in range(0, numbars):
         channel = channels[i]
@@ -152,14 +199,6 @@ def updateui(stdscr, active):
         stdscr.addstr(str(i + chandata[activename]['info']['startchan']))
 
         if active == i:
-            stdscr.move(height - 3, 1)
-            stdscr.addstr("Name:   ", curses.color_pair(5) and curses.A_BOLD)
-            stdscr.addstr(activename)
-            
-            stdscr.move(height - 2, 1)
-            stdscr.addstr("Device: ", curses.color_pair(5) and curses.A_BOLD)
-            stdscr.addstr(data.name)
-
             stdscr.move(height - 1, 1)
             stdscr.addstr("State:  ", curses.color_pair(5) and curses.A_BOLD)
 
@@ -179,7 +218,8 @@ def cursesui(stdscr):
     curses.curs_set(0)
 
     activechan = 0
-
+    holding    = False
+    
     curses.init_pair(1, curses.COLOR_RED,   curses.COLOR_RED)
     curses.init_pair(2, curses.COLOR_BLUE,  curses.COLOR_BLUE)
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_GREEN)
@@ -187,7 +227,7 @@ def cursesui(stdscr):
     curses.init_pair(5, curses.COLOR_CYAN,  curses.COLOR_BLACK)
 
     while True:
-        updateui(stdscr, activechan)
+        updateui(stdscr, activechan, holding)
         
         ch     = stdscr.getch()
         newval = -1
@@ -197,6 +237,16 @@ def cursesui(stdscr):
         
         elif ch == ord('r'):
             loaddmx(activename)
+
+        elif ch == ord('h'):
+            if holding:
+                holding = False
+                applyheldchanges()
+            else:
+                holding = True
+
+        elif ch == ord('d'):
+            dbo()
 
         elif ch == curses.KEY_LEFT:
             if not activechan == 0:
@@ -233,23 +283,13 @@ def cursesui(stdscr):
                             newval = cmd[0]
                             
         elif ch == ord('t'):
-            newval = chandata[activename][activechan][0]
-            for cmd in chandata[activename][activechan]:
-                if type(cmd) is list:
-                    if len(cmd) > 2 and newval < cmd[2]:
-                        newval = cmd[2]
-                    elif newval < cmd[0]:
-                        newval = cmd[0]
+            newval = 255
             
         elif ch == ord('b'):
-            newval = chandata[activename][activechan][0]
-            for cmd in chandata[activename][activechan]:
-                if type(cmd) is list:
-                    if newval > cmd[0]:
-                        newval = cmd[0]            
+            newval = 0
             
         if not newval == -1:
-            dmxcmd(activechan, newval)
+            dmxcmd(activechan, newval, None ,holding)
     
     curses.curs_set(1)
 
@@ -263,9 +303,7 @@ def listcmds(arg):
             longest  = 0
             
             for j in data.dmx[i].keys():
-                cmd = "'" + j + "'"
-                if data.dmx[i][j][0] == "?":
-                    cmd = "'" + j + " [val]'"
+                cmd = "'" + j + " [" + str(data.dmx[i][j][0]) + "+]'"
                     
                 commands.append([cmd, data.dmx[i][j][2]])
                 
@@ -321,6 +359,9 @@ def parsecmd(command, arg, arg2, arg3):
         else:
             print("Usage: rename [old] [new]")
 
+    elif command == "dbo":
+        dbo()
+
     elif command == "help":
         print("Usage: pydmx (help | [model] [startchannel])")
         print("The model and startchannel are optional, if not specified use the new command.")
@@ -333,6 +374,7 @@ def parsecmd(command, arg, arg2, arg3):
         print("    reload                            - reload cached DMX values for the current device from dmxd.")
         print("    curses                            - start the ncurses interface.")
         print("    list (arg)                        - list all commands for the current device provided by the data file. If arg is specified, restrict to that category.")
+        print("    dbo                               - Toggle dead black out.")
         print("    help                              - display this text")
         print("    exit                              - close pydmx\n")
         print("Curses UI:")
@@ -346,6 +388,8 @@ def parsecmd(command, arg, arg2, arg3):
         print("    p         - Change to the previous discrete region for that channel.")
         print("    t         - Change the value of the channel to 255.")
         print("    b         - Change the value of the channel to 0.")
+        print("    h         - Toggle hold mode. Any changes made in hold more are applied when hold mode is disabled.")
+        print("    d         - Equivalent of dbo command.")
         print("    r         - Equivalent of reload command.")
         print("    q         - Close the interface.\n")
         print("PyDMX requires that dmxd be running as root, and that k8062 be executable and in your $PATH.")
@@ -359,12 +403,13 @@ def parsecmd(command, arg, arg2, arg3):
             funbreak = True
             
         if not funbreak:
-            if type(cmd[0]) is int:
-                # Normal set-channel-to-value command
-                dmxcmd(cmd[1], cmd[0])
-            else:
-                # Set-channel-to-user value command
-                dmxcmd(cmd[1], arg2)
+            value = 0
+            try:
+                value = int(arg2)
+            except ValueError:
+                value = cmd[0]
+                
+            dmxcmd(cmd[1], value)
 
 def parsepromptline(line):
     bar      = line.split()
