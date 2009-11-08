@@ -82,7 +82,7 @@ def dmxcmd(channel, value=None, name=None, holding=False):
         try:
             return int(output[0])
         except ValueError:
-            print("Dmxd does not seem to be running.")
+            print("Cannot get DMX channel value.")
             sys.exit()
 
 def loaddmx(name):
