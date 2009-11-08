@@ -36,20 +36,20 @@ def printhelp():
     print("    help                               - display this text")
     print("    exit                               - close pydmx\n")
     print("Curses UI:")
-    print("    Up        - increment the value of the current channel.")
-    print("    Down      - decrement the value of the current channel.")
-    print("    Left      - change to the previous channel.")
-    print("    Right     - change to the next channel.")
-    print("    Page Up   - increment the value of the current channel by 10.")
-    print("    Page Down - decrement the value of the current channel by 10.")
-    print("    n         - change to the next discrete region for that channel.")
-    print("    p         - change to the previous discrete region for that channel.")
-    print("    t         - change the value of the channel to 255.")
-    print("    b         - change the value of the channel to 0.")
-    print("    h         - toggle hold mode. Any changes made in hold more are applied when hold mode is disabled.")
-    print("    d         - equivalent of dbo command.")
-    print("    r         - equivalent of reload command.")
-    print("    q         - close the interface.\n")
+    print("    Up                                 - increment the value of the current channel.")
+    print("    Down                               - decrement the value of the current channel.")
+    print("    Left                               - change to the previous channel.")
+    print("    Right                              - change to the next channel.")
+    print("    Page Up                            - increment the value of the current channel by 10.")
+    print("    Page Down                          - decrement the value of the current channel by 10.")
+    print("    n                                  - change to the next discrete region for that channel.")
+    print("    p                                  - change to the previous discrete region for that channel.")
+    print("    t                                  - change the value of the channel to 255.")
+    print("    b                                  - change the value of the channel to 0.")
+    print("    h                                  - toggle hold mode. Any changes made in hold more are applied when hold mode is disabled.")
+    print("    d                                  - equivalent of dbo command.")
+    print("    r                                  - equivalent of reload command.")
+    print("    q                                  - close the interface.\n")
     print("PyDMX requires that dmxd be running as root, and that k8062 be executable and in your $PATH.")
     print("PyDMX is developed and maintained by Barrucadu (Michael Walker).")
 
@@ -71,7 +71,7 @@ def dmxcmd(channel, value=None, name=None, holding=False):
 
         if name in binddata.keys():
             for binded in binddata[(name, channel)]:
-                if not chandata[binded[0]][binded[1]][0] = int(value):
+                if not chandata[binded[0]][binded[1]][0] == int(value):
                     dmxcmd(binded[1], value, binded[0], holding)
 
     if not holding:
