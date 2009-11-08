@@ -71,7 +71,8 @@ def dmxcmd(channel, value=None, name=None, holding=False):
 
         if name in binddata.keys():
             for binded in binddata[(name, channel)]:
-                dmxcmd(binded[1], value, binded[0], holding)
+                if not chandata[binded[0]][binded[1]][0] = int(value):
+                    dmxcmd(binded[1], value, binded[0], holding)
 
     if not holding:
         process = subprocess.Popen(argvector, stdout=subprocess.PIPE)
