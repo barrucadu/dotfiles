@@ -79,9 +79,21 @@ done
 export PR_NO_COLOR="$terminfo[sgr0]"
 
 # Shell prompt
-export PROMPT="$PR_LIGHT_GREEN%* $PR_RED%B%2~%b $PR_GREEN%%$PR_NO_COLOR "
-export PS1=$PROMPT
+export basicprompt="$PR_LIGHT_GREEN%* $PR_RED%B%2~%b $PR_GREEN%%$PR_NO_COLOR "
+export PROMPT=""
+export PS1=""
 export PS2="$PR_LIGHT_GREEN%* $PR_BLUE%B%_%b $PR_GREEN%%$PR_NO_COLOR "
+export PS3="$PR_LIGHT_GREEN%* $PR_GREEN%Bselect%b $PR_GREEN%%$PR_NO_COLOR "
+
+function precmd()
+{
+    if [[ "$?" == "0" ]]; then
+	export PROMPT=$basicprompt
+    else
+	export PROMPT="$PR_RED%B:(%b $basicprompt"
+    fi
+    export PS1=$PROMPT
+}
 
 # Emacs shell mode
 [[ $EMACS = t ]] && unsetopt zle
