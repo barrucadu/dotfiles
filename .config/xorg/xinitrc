@@ -24,21 +24,8 @@ xrdb -load ~/.config/xorg/Xdefaults
 # APPS
 
 urxvtd -q -f -o
+ucron &>/dev/null &
 randombg
-
-if grep -q school /proc/cmdline; then
-    emacs &>/dev/null &
-else
-    # Network
-    ping google.com -c1 || sudo netcfg-auto-wireless
-    ping eihort     -c1 && sudo eihort up &
-    
-    # Programs
-    mpddp
-    ucron      &>/dev/null &
-    opera      &>/dev/null &
-    claws-mail &>/dev/null &
-fi
 
 # /APPS
 

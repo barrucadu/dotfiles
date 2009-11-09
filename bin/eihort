@@ -9,7 +9,6 @@ share=true
 torrents=true
 www=true
 up=true
-pacsync=true
 
 function parsearg()
 {
@@ -27,10 +26,7 @@ function parsearg()
             m2hd=false
             archos5=false
             media=false;;
-        "nopacsync")
-            pacsync=false;;
         "noshare")
-            pacsync=false
             share=false;;
         "notorrents")
             torrents=false;;
@@ -64,11 +60,6 @@ function emedia ()
     file /media/$1 | grep -q /share/eihort-media/$1
 }
 
-function packagecache ()
-{
-    /etc/cron.weekly/packagecache.sh 2>/dev/null
-}
-
 for arg in "${*[@]}"; do
     parsearg $arg
 done
@@ -89,8 +80,6 @@ if $up && [[ $eihortcheck == 1 ]]; then
     $media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
     $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
     $www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
-
-    $pacsync  && packagecache
 else
     emounted share    && umount /share/eihort
     emounted media    && umount /share/eihort-media
