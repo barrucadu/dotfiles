@@ -62,13 +62,15 @@ alias locate='locate -e -L'
 alias mkdir='mkdir -p'
 alias tree='tree -L 2 -d -l'
       # Root
-alias wifi='sudo wifi-select wlan0'
-alias abs='sudo abs'
-alias updatedb='sudo updatedb'
-alias sync='sudo sync'
-alias reboot='sudo reboot'
-alias shutdown='sudo shutdown -hP now'
-alias lshw='sudo lshw'
+if [[ $UID != 0 ]]; then
+    alias wifi='sudo wifi-select wlan0'
+    alias abs='sudo abs'
+    alias updatedb='sudo updatedb'
+    alias sync='sudo sync'
+    alias reboot='sudo reboot'
+    alias shutdown='sudo shutdown -hP now'
+    alias lshw='sudo lshw'
+fi
 
 # Package management
 alias yaourt='LD_PRELOAD= yaourt'
@@ -88,7 +90,6 @@ alias pacgroups='pacman -Qg | sed "s/ .*//" | sort | uniq'
 
 # Security
 alias gpgasc='gpg -a --detach-sign'
-alias xlock='xscreensaver-command -lock'
 alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Maintenance
@@ -115,19 +116,19 @@ alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 alias gdb='gdb -ex run -ex backtrace --args'
 
 # Miscellanious
-alias aliases='cat ~/.config/zsh/aliases'
-alias functions='cat ~/.config/zsh/functions'
+if [[ $UID != 0 ]]; then
+    alias aliases='cat ~/.config/zsh/aliases'
+    alias functions='cat ~/.config/zsh/functions'
+else
+    alias aliases='cat /home/barrucadu/.config/zsh/aliases'
+    alias functions='cat /home/barrucadu/.config/zsh/functions'
+fi
 alias rmatrix='cmatrix -C red -l -b'
 alias mp3ogg='mp32ogg-bash *.mp3 && rm *.mp3'
 alias parts='cat /proc/partitions'
 alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/.config/xorg/Xdefaults'
-alias zen='fortune /usr/share/fortune/zen'
 alias rfcdate='date --rfc-3339="seconds"'
 alias screenx='screen -r `screen -ls | grep Detached | sed "s/(.*//"`'
 alias myman='myman -z big -i'
-alias qdmx='LD_PRELOAD= qdmx'
-alias qdmxadmin='LD_PRELOAD= qdmxadmin'
-alias qdmxobserver='LD_PRELOAD= qdmxobserver'
-alias qdmxsv='LD_PRELOAD= qdmxsv'
 alias pydmx='LD_PRELOAD= pydmx'

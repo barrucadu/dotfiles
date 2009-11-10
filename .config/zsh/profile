@@ -26,10 +26,12 @@ export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 export LC_CTYPE=en_GB.UTF-8
     # Libraries
-export LD_PRELOAD=libetc.so
-export LIBETC_BLACKLIST="/bin/ls:/bin/mv:/bin/cp:/bin/ln:/usr/bin/find:/bin/rm:/bin/cat:/bin/ln:/usr/bin/file:/usr/bin/most:/bin/zcat:/bin/grep:/usr/bin/git:/usr/bin/git-cvsserver:/usr/bin/git-receive-pack:/usr/bin/git-shell:/usr/bin/git-upload-archive:/usr/bin/git-upload-pack:/usr/bin/gitk"
-export LIBETC_DATA="/home/barrucadu/.gtk-bookmarks"
-export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barrucadu/.signature:/home/barrucadu/.texlive:/home/barrucadu/.git:/home/barrucadu/.gitignore:/home/barrucadu/.gitconfig"
+if [[ $UID != 0 ]]; then
+    export LD_PRELOAD=libetc.so
+    export LIBETC_BLACKLIST="/bin/ls:/bin/mv:/bin/cp:/bin/ln:/usr/bin/find:/bin/rm:/bin/cat:/bin/ln:/usr/bin/file:/usr/bin/most:/bin/zcat:/bin/grep:/usr/bin/git:/usr/bin/git-cvsserver:/usr/bin/git-receive-pack:/usr/bin/git-shell:/usr/bin/git-upload-archive:/usr/bin/git-upload-pack:/usr/bin/gitk"
+    export LIBETC_DATA="/home/barrucadu/.gtk-bookmarks"
+    export LIBETC_IGNORE="/home/barrucadu/.icons:/home/barrucadu/.themes:/home/barrucadu/.signature:/home/barrucadu/.texlive:/home/barrucadu/.git:/home/barrucadu/.gitignore:/home/barrucadu/.gitconfig"
+fi
     # NMPC / MPD
 export NMPC_DEFCMD="status"
 export NMPC_DEFHELP="all"
@@ -79,23 +81,15 @@ done
 export PR_NO_COLOR="$terminfo[sgr0]"
 
 # Shell prompt
-export basicprompt="$PR_LIGHT_GREEN%* $PR_RED%B%2~%b $PR_GREEN%%$PR_NO_COLOR "
-
-export PROMPT=$basicprompt
-export PROMPT2="$PR_LIGHT_GREEN%* $PR_BLUE%B%_%b $PR_GREEN%%$PR_NO_COLOR "
-export PROMPT3="$PR_LIGHT_GREEN%* $PR_GREEN%Bselect%b $PR_GREEN%%$PR_NO_COLOR "
-
-export PS2=$PROMPT2
-export PS3=$PROMPT3
 
 function precmd()
 {
-    if [[ "$?" == "0" ]]; then
-	export PROMPT=$basicprompt
-    else
-	export PROMPT="$PR_RED%B:(%b $basicprompt"
-    fi
-    export PS1=$PROMPT
+    # Last command failed:    red :(
+    # Working dir unwritable: red pwd, else cyan pwd
+    # Running as root:        red #, red time, else green %, green time
+
+    export PROMPT="`[ $? != 0 ] && echo "$PR_RED%B:(%b "``[ $UID != 0 ] && echo "$PR_LIGHT_GREEN%*" || echo "$PR_RED%*"` `[ -w \`pwd\` ] && echo "$PR_CYAN" || echo "$PR_RED"`%B%2~%b `[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`$PR_NO_COLOR "
+    export PROMPT2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
 }
 
 # Emacs shell mode

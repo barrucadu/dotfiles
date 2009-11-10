@@ -145,18 +145,6 @@ function pkginfo ()
     pacman -Qi $1 || pacman -Si $1
 }
 
-# Archos Playlists
-function toarchos()
-{
-    sed "s/all-files/\/Music/" $XDG_DATA_HOME/mpd/playlists/$1.m3u > /media/ARCHOS5/Playlists/$1.m3u
-}
-
-function fromarchos()
-{
-    sed "s/all-files/\/Music/" /media/ARCHOS5/Playlists/$1.m3u > $XDG_DATA_HOME/mpd/playlists/$1.m3u
-    sed -i "/^#.*/d" $XDG_DATA_HOME/mpd/playlists/$1.m3u
-}
-
 # Misc
 function mkd()
 {
@@ -218,5 +206,5 @@ function define ()
 
 function prod()
 {
-    ping $1 | ~/bin/prod
+    ping $1 | /home/barrucadu/bin/prod
 }
