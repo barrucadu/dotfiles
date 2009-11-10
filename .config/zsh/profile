@@ -80,10 +80,13 @@ export PR_NO_COLOR="$terminfo[sgr0]"
 
 # Shell prompt
 export basicprompt="$PR_LIGHT_GREEN%* $PR_RED%B%2~%b $PR_GREEN%%$PR_NO_COLOR "
-export PROMPT=""
-export PS1=""
-export PS2="$PR_LIGHT_GREEN%* $PR_BLUE%B%_%b $PR_GREEN%%$PR_NO_COLOR "
-export PS3="$PR_LIGHT_GREEN%* $PR_GREEN%Bselect%b $PR_GREEN%%$PR_NO_COLOR "
+
+export PROMPT=$basicprompt
+export PROMPT2="$PR_LIGHT_GREEN%* $PR_BLUE%B%_%b $PR_GREEN%%$PR_NO_COLOR "
+export PROMPT3="$PR_LIGHT_GREEN%* $PR_GREEN%Bselect%b $PR_GREEN%%$PR_NO_COLOR "
+
+export PS2=$PROMPT2
+export PS3=$PROMPT3
 
 function precmd()
 {
@@ -137,13 +140,26 @@ autoload -Uz compinit
 compinit
 
 # Misc Settings
-setopt auto_cd              # automatically cd to paths
-setopt correct              # spell check for commands only
-setopt hash_list_all        # search all paths before command completion
-setopt hist_ignore_dups     # when I run a command several times, only store one
-setopt hist_no_functions    # don't show function definitions in history
-setopt hist_reduce_blanks   # reduce whitespace in history
-setopt hist_verify          # ask me before running a command line with history sub
-setopt interactive_comments # allow comments in interactive shells
-setopt extended_glob        # treat #, ^, and ~ specially in filename generation
-setopt chase_links          # treat '..' relative to the target of a symlink
+setopt auto_cd # directory navigation
+setopt auto_pushd
+setopt pushd_silent
+setopt pushd_to_home
+setopt chase_links
+
+setopt menu_complete # completion
+setopt hash_list_all
+
+setopt extended_glob # globbing
+setopt glob_dots
+setopt mark_dirs
+setopt multibyte
+setopt null_glob
+
+setopt hist_ignore_dups # history
+setopt hist_no_functions
+setopt hist_reduce_blanks
+setopt hist_verify
+setopt share_history
+
+setopt interactive_comments # miscellanious
+setopt correct
