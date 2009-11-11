@@ -36,7 +36,7 @@
 ;; Key bindings
 ; Left Hand
 (define-key *top-map* (kbd "M-S-Super_L")   "exec urxvtc -e python")
-(define-key *top-map* (kbd "C-Super_L")     "exec urxvtc -e newscreen")
+(define-key *top-map* (kbd "C-Super_L")     "exec urxvtc -e tmux")
 (define-key *top-map* (kbd "C-S-Super_L")   "exec urxvtc -sh 0 -e cmatrix -C red -l -b")
 (define-key *top-map* (kbd "C-M-Super_L")   "exec urxvtc -e mzscheme")
 (define-key *top-map* (kbd "C-M-S-Super_L") "exec urxvtc -e clisp")
@@ -73,8 +73,8 @@
 (define-key *top-map*  (kbd "C-M-space") "exec kildclient")
 
 ; Rebind some default bindings
-(define-key *root-map* (kbd "c")     "exec urxvt -e screen")
-(define-key *root-map* (kbd "C-c")   "exec urxvt -e screen")
+(define-key *root-map* (kbd "c")     "exec urxvt -e tmux")
+(define-key *root-map* (kbd "C-c")   "exec urxvt -e tmux")
 (define-key *root-map* (kbd "e")     "exec urxvt -e emacs")
 (define-key *root-map* (kbd "C-e")   "exec urxvt -e emacs")
 
