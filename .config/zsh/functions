@@ -212,6 +212,7 @@ function prod()
 function backup()
 {
     DEST=/media/M2HDb/cthulhu
+
     # Copy over stuff
     sudo rsync -azv --delete --exclude=/share \
 	--exclude=/tmp \
@@ -235,14 +236,12 @@ function backup()
     sudo mkdir -p $DEST/tmp
     sudo mkdir -p $DEST/dev
     sudo mkdir -p $DEST/sys
+    sudo mkdir -p $DEST/mnt
     sudo mkdir -p $DEST/proc
 
     sudo mkdir -p $DEST/media/cd
     sudo mkdir -p $DEST/media/dvd
     sudo mkdir -p $DEST/media/fl
-
-    sudo mkdir -p $DEST/mnt/eihort
-    sudo mkdir -p $DEST/mnt/tmp
 
     sudo mkdir -p $DEST/home/barrucadu/tmp/downloads
     sudo mkdir -p $DEST/home/barrucadu/tmp/misc
