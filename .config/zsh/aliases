@@ -94,7 +94,6 @@ alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Maintenance
 alias fixopera='rm -r ~/.config/opera/{mail,lock}'
-alias backup='sudo rsync -az --delete --exclude=/share --exclude=/tmp --exclude=/dev --exclude=/sys --exclude=/proc --exclude=/media --exclude=/mnt --exclude=/home/barrucadu/tmp / --exclude=/home/barrucadu/.git / /media/M2HDb/cthulhu'
 
 # Servers
 alias sql='mysql -p -u root'
