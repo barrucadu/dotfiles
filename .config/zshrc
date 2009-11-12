@@ -5,7 +5,6 @@
 . ~/.config/zsh/aliases
 
 if [[ ! $(tty) == *pts* ]]; then
-    # Start screen or X
     if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
         # Start X
         while true; do
@@ -20,7 +19,5 @@ else
     # Welcome message
     clear
     ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
-    echo
-    todo lt | sed "s/^.* TODO /To Do: /" | sort -R | head -n1
     echo
 fi
