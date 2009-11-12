@@ -73,8 +73,8 @@
 (define-key *top-map*  (kbd "C-M-space") "exec kildclient")
 
 ; Rebind some default bindings
-(define-key *root-map* (kbd "c")     "exec urxvt -e tmux")
-(define-key *root-map* (kbd "C-c")   "exec urxvt -e tmux")
+(define-key *root-map* (kbd "c")     "exec urxvt")
+(define-key *root-map* (kbd "C-c")   "exec urxvt")
 (define-key *root-map* (kbd "e")     "exec urxvt -e emacs")
 (define-key *root-map* (kbd "C-e")   "exec urxvt -e emacs")
 
