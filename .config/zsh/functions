@@ -209,6 +209,11 @@ function prod()
     ping $1 | /home/barrucadu/bin/prod
 }
 
+function calc()
+{
+    echo "print($1)" | python3
+}
+
 function backup()
 {
     DEST=/media/M2HDb/cthulhu
