@@ -66,3 +66,4 @@
 <Multi_key> <v>           <bracketright>                         : "⌉"
 <Multi_key> <asciicircum> <bracketleft>                          : "⌊"
 <Multi_key> <asciicircum> <bracketright>                         : "⌋"
+<Multi_key> <o>           <f>                                    : "∘"
