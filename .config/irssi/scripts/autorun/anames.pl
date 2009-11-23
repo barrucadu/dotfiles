@@ -1,1 +1,1 @@
-anames.pl
+../anames.pl
