@@ -148,6 +148,7 @@ aliases = {
   UNSET = "set -clear";
   RESET = "set -default";
   svsnick = "quote svsnick";
+  sysnick = "quote sysnick";
 };
 
 statusbar = {
@@ -270,3 +271,4 @@ settings = {
   "fe-text" = { actlist_sort = "refnum"; };
   "fe-common/core" = { theme = "mithru"; };
 };
+logs = { };
