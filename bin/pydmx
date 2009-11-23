@@ -118,7 +118,7 @@ def dbo():
     else:
         for channel in chandata[activename].keys():
             if not channel == 'info':
-                dbodata.update({channel : chandata[activename][0]})
+                dbodata.update({channel : chandata[activename][channel][0]})
                 dmxcmd(channel, 0)
 
 def nameinit(newname, newmodel, newstartchan):
@@ -157,6 +157,7 @@ def nameinit(newname, newmodel, newstartchan):
 def updateui(stdscr, active, holding):
     global chandata
     global activename
+    global dbodata
     global data
 
     channels = chandata[activename]
@@ -171,11 +172,11 @@ def updateui(stdscr, active, holding):
 
     stdscr.move(1, 1)
     if holding:
-        if dbo:
+        if not dbodata == {}:
             stdscr.addstr("[Holding/DBO]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)
         else:
             stdscr.addstr("[Holding]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)            
-    elif dbo:
+    elif not dbodata == {}:
         stdscr.addstr("[DBO]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)
 
     stdscr.move(height - 3, 1)
