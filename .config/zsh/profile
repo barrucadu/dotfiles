@@ -16,6 +16,12 @@ export DIRSTACKSIZE=16
 export XDG_CACHE_HOME=~/.cache
 export XDG_CONFIG_HOME=~/.config
 export XDG_DATA_HOME=~/.data
+export XDG_DESKTOP_DIR=~/
+export XDG_DOWNLOAD_DIR=~/tmp/downloads
+export XDG_DOCUMENTS_DIR=~/docs
+export XDG_MUSIC_DIR=~/music
+export XDG_PICTURES_DIR=~/graphics
+export XDG_VIDEOS_DIR=~/movies
     # Input
 export XCOMPOSEFILE=~/.config/xorg/XCompose
 export QT_XFT=1

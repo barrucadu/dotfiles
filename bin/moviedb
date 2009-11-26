@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/movies" || echo $MOVIEPATH`
+MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
 
 function args2str ()
 {  
