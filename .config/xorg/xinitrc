@@ -25,7 +25,12 @@ xrdb -load ~/.config/xorg/Xdefaults
 
 urxvtd -q -f -o
 ucron &>/dev/null &
-randombg
+
+if grep -q school /proc/cmdline; then
+    feh --bg-scale /usr/share/wallpapers/Linux/Archstone Blue.png
+else
+    randombg
+fi
 
 # /APPS
 
