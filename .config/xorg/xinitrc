@@ -27,7 +27,7 @@ urxvtd -q -f -o
 ucron &>/dev/null &
 
 if grep -q school /proc/cmdline; then
-    feh --bg-scale /usr/share/wallpapers/Linux/Archstone Blue.png
+    feh --bg-scale "/usr/share/wallpapers/Linux/Archstone Blue.png"
 else
     randombg
 fi

@@ -24,7 +24,7 @@ while [[ $i != $stop ]] && [[ "$checksum" != "$endcomic" ]]; do
 
         filename=`echo $file | sed "s/.*\///g"`
         name=`cat index.html | grep "h1" | sed "s/.*>\(.*\)<\/h.*/\\1/"`
-        alt=`cat index.html | grep "img.*title=" | sed "s/\(.*title=\"\|\".*\)//g"`
+        alt=`cat index.html | grep "img.*title=" | sed "s/\(.*title=\"\|\".*\)//g" | sed "/^christmas banner$/d" | sed "s/&amp;/&/g" | sed "s/&quot;/\"/g"`
         
         rm index.html &>/dev/null
         
