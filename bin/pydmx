@@ -2,7 +2,7 @@
 
 # Python script to control dmx devices. Requires the server to be up and running.
 
-import os, sys, imp, subprocess, curses, curses.ascii, curses.wrapper
+import os, sys, imp, subprocess, curses, curses.ascii, curses.wrapper, time, threading
 
 # ----- Global Variables ----- #
 datapath   = None
@@ -10,6 +10,7 @@ data       = None
 dbodata    = {}
 binddata   = {}
 chandata   = {}
+chases     = []
 activename = ''
 dmxcommands = {'get' : 'k8062 [channel]',
                'set' : 'k8062 [channel] [value]'}
@@ -46,14 +47,25 @@ def printhelp():
     print("    p                                  - change to the previous discrete region for that channel.")
     print("    t                                  - change the value of the channel to 255.")
     print("    b                                  - change the value of the channel to 0.")
+    print(" ------- ")
+    print("    c                                  - open chase interface. NYI")
+    print(" ------- ")
+    print("    s                                  - open device switcher. NYI")
+    print("    0-9                                - switch to device #n.  NYI")
+    print(" ------- ")
     print("    h                                  - toggle hold mode. Any changes made in hold more are applied when hold mode is disabled.")
-    print("    d                                  - equivalent of dbo command.")
-    print("    r                                  - equivalent of reload command.")
+    print("    d                                  - toggle dead black out.")
+    print("    r                                  - reload cached DMX values for the current device from dmxd.")
     print("    q                                  - close the interface.\n")
+    print("Chases:")
+    print("    Chases consist of a single python file.")
+    print("    Chases should consist of a class named chase containing a function named run.")
+    print("    The chase should have startchan (0-512) speed (0-255) and running (initially True) variables.")
+    print("    Chases are looked for under $XDG_DATA_HOME/pydmx/chases/*.py\n")
     print("PyDMX requires that dmxd be running as root, and that k8062 be executable and in your $PATH.")
     print("PyDMX is developed and maintained by Barrucadu (Michael Walker).")
 
-def dmxcmd(channel, value=None, name=None, holding=False):
+def dmxcmd(channel, value=None, name=None, holding=False, inchase=False):
     global activename
     global chandata
     global bindddata
@@ -69,12 +81,12 @@ def dmxcmd(channel, value=None, name=None, holding=False):
         chandata[name][channel][0] = int(value)
         argvector = dmxcommands['set'].replace('[channel]', str(channel)).replace('[value]', str(value)).split()
 
-        if name in binddata.keys():
+        if name in binddata.keys() and not inchase:
             for binded in binddata[(name, channel)]:
                 if not chandata[binded[0]][binded[1]][0] == int(value):
                     dmxcmd(binded[1], value, binded[0], holding)
 
-    if not holding:
+    if not holding or inchase:
         process = subprocess.Popen(argvector, stdout=subprocess.PIPE)
         output  = process.communicate()
 
@@ -121,38 +133,249 @@ def dbo():
                 dbodata.update({channel : chandata[activename][channel][0]})
                 dmxcmd(channel, 0)
 
-def nameinit(newname, newmodel, newstartchan):
-    global chandata
-    global data
+def startchase(chasename, startchan, speed):
+    global datapath
+    global chases
 
-    datafile = datapath + "/pydmx/" + newmodel + ".py"
+    chase    = None
+    datafile = datapath + "/pydmx/chases/" + chasename + ".py"
+
+    try:
+        chase = imp.load_source(chasename, datafile)
+        chases.append[{'chase'     : chasename,
+                       'startchan' : startchan,
+                       'speed'     : speed,
+                       'thread'    : chase.chase()}]
+
+        i = len(chases) - 1
+        chases[i]['thread'].startchan = startchan
+        chases[i]['thread'].speed     = speed
+        chases[i]['thread'].dmxcmd    = dmxcmd
+        chases[i]['thread'].start()
+
+    except IOError:
+        print("The chase file " + datafile + " does not exist.")
+
+    return chase
+
+def editchase(chasename, oldstartchan, startchan, speed, running):
+    global chases
+
+    for chase in chases:
+        if chase['chase'] == chasename and chase['startchan'] == oldstartchan:
+            # I somehow doubt we'd be running the same chase on the same startchan at the same time...
+            if running:
+                chase['thread'].startchan = startchan
+                chase['thread'].speed     = speed
+            else:
+                chase['thread'].running   = False
+                chases.remove (chase)
+
+def nameinit(newname, newmodel, newstartchan):
+    global data
+    global chandata
+    global datapath
+        
+    datafile = datapath + "/pydmx/models/" + newmodel + ".py"
     
     try:
         data = imp.load_source(newmodel, datafile)
-    except IOError:
-        print("The datafile " + datapath + " does not exist.")
-
-    chandata.update({newname : {'info' : {'model'     : newmodel,
+        chandata.update({newname : {'info' : {'model'     : newmodel,
                                           'startchan' : int(newstartchan)}}})
-    for i in data.dmx.keys():
-        for j in data.dmx[i].keys():
-            key = data.dmx[i][j][1]
-            var = [data.dmx[i][j][0], data.dmx[i][j][2]]
+        for i in data.dmx.keys():
+            for j in data.dmx[i].keys():
+                key = data.dmx[i][j][1]
+                var = [data.dmx[i][j][0], data.dmx[i][j][2]]
             
-            if len(data.dmx[i][j]) > 3:
-                var.append(data.dmx[i][j][3])
+                if len(data.dmx[i][j]) > 3:
+                    var.append(data.dmx[i][j][3])
         
-            if key in chandata[newname].keys():
-                chandata[newname][key].append(var)
-            else:
-                chandata[newname].update({key : [0, var]})
+                if key in chandata[newname].keys():
+                    chandata[newname][key].append(var)
+                else:
+                    chandata[newname].update({key : [0, var]})
 
-    dontload = loaddmx(newname)
+        dontload = loaddmx(newname)
 
-    if not dontload:
-        for channel in range(0, len(data.defaults)):
-            dmxcmd(channel, data.defaults[channel], newname)
-             
+        if not dontload:
+            for channel in range(0, len(data.defaults)):
+                dmxcmd(channel, data.defaults[channel], newname)
+                
+    except IOError:
+        print("The datafile " + datafile + " does not exist.")
+
+
+def chaseui(stdscr, selected=0):
+    global chases
+
+    height, width = stdscr.getmaxyx()
+
+    stdscr.clear()
+    stdscr.move(1, 1)
+    stdscr.addstr("Controls: arrows for navigation / a to add / e to edit / d to delete / q to quit.")
+    
+    stdscr.move(5, int(width / 2 - 10))
+    
+    stdscr.addch(curses.ACS_ULCORNER)
+    for i in range(0, 20):
+        stdscr.addch(curses.ACS_HLINE)
+    stdscr.addch(curses.ACS_URCORNER)
+
+    if len(chases) > 0:
+        for i in range(0, len(chases)):
+            stdscr.move(5 + i, int(width / 2 - 10))
+            stdscr.addch(curses.ACS_VLINE)
+            
+            text = chases[i].chase + " " + str(chases[i].startchan) + " " + str(chases[i].speed)
+            attr = curses.color_pair(0)
+            if i == selected:
+                attr = curses.color_pair(4)
+            stdscr.addstr(text, attr)
+
+            for i in range(0, 18 - len(text)):
+                stdscr.addstr(" ")
+        
+            stdscr.addch(curses.ACS_VLINE)
+    else:
+        i = 0
+
+    stdscr.move(6 + i, int(width / 2 - 10))
+    stdscr.addch(curses.ACS_LLCORNER)
+    for i in range(0, 20):
+        stdscr.addch(curses.ACS_HLINE)
+    stdscr.addch(curses.ACS_LRCORNER)
+
+    ch = 0
+    allowed = [ord('a'), ord('e'), ord('d'), ord('q'), curses.KEY_UP, curses.KEY_DOWN]
+
+    while not ch in allowed:
+        ch = stdscr.getch()
+
+    if ch == curses.KEY_UP and selected > 0:
+        chaseui(stdscr, selected - 1)
+    elif ch == curses.KEY_DOWN and selected < len(chases) - 1:
+        chaseui(stdscr, selected + 1)
+    elif ch == ord('d'):
+        editchase(chases[selected]['chase'], chases[selected]['startchan'], 0, 0, False)
+    elif ch == ord('a'):
+        stdscr.move(height - 1, 1)
+        stdscr.addstr("Enter the name of the chase: ")
+
+        newname = ""
+        ch2 = 0
+        while not ch2 == 10:
+            ch2 = stdscr.getch()
+            if not ch2 == 10:
+                if ch2 == curses.KEY_BACKSPACE:
+                    newname = newname[0:-1]
+                    stdscr.addstr("^H")
+                else:
+                    newname += chr(ch2)
+                    stdscr.addstr(chr(ch2))
+
+        stdscr.move(height - 1, 1)
+        #for i in range(0, width):
+        #    stdscr.addstr(" ")
+        stdscr.move(height - 1, 1)
+
+        stdscr.addstr("Enter the starting channel: ")
+
+        newchan = ""
+        ch2 = 0
+        while not ch2 == 10:
+            ch2 = stdscr.getch()
+            if not ch2 == 10:
+                if ch2 == curses.KEY_BACKSPACE:
+                    newchan = newchan[0:-1]
+                    stdscr.addstr("^H")
+                else:
+                    newchan += chr(ch2)
+                    stdscr.addstr(chr(ch2))
+
+        stdscr.move(height - 1, 1)
+        #for i in range(0, width):
+        #    stdscr.addstr(" ")
+        stdscr.move(height - 1, 1)
+
+        stdscr.addstr("Enter the speed (0-255): ")
+
+        newspeed = ""
+        ch2 = 0
+        while not ch2 == 10:
+            ch2 = stdscr.getch()
+            if not ch2 == 10:
+                if ch2 == curses.KEY_BACKSPACE:
+                    newspeed = newspeed[0:-1]
+                    stdscr.addstr("^H")
+                else:
+                    newspeed += chr(ch2)
+                    stdscr.addstr(chr(ch2))
+
+        stdscr.move(height - 1, 1)
+        #for i in range(0, width):
+        #    stdscr.addstr(" ")
+        stdscr.move(height - 1, 1)
+
+        stdscr.addstr("Name: " + newname + " / Channel: " + newchan + " / Speed: " + newspeed + ". Press enter to save, or escape to quit.")
+
+        ch2 = 0
+        while not ch2 in [10, 27]:
+            ch2 = stdscr.getch()
+
+        if ch2 == 10:
+            startchase(newname, int(newchan), int(newspeed))
+
+    elif ch == ord('e'):
+        stdscr.move(height - 1, 1)
+        stdscr.addstr("Enter the starting channel (current: " + chases[selected]['startchan'] + "): ")
+
+        newchan = ""
+        ch2 = 0
+        while not ch2 == 10:
+            ch2 = stdscr.getch()
+            if not ch2 == 10:
+                if ch2 == curses.KEY_BACKSPACE:
+                    newchan = newchan[0:-1]
+                    stdscr.addstr("^H")
+                else:
+                    newchan += chr(ch2)
+                    stdscr.addstr(chr(ch2))
+
+        stdscr.move(height - 1, 1)
+        for i in range(0, width):
+            stdscr.addstr(" ")
+        stdscr.move(height - 1, 1)
+
+        stdscr.addstr("Enter the speed (0-255) (current: " + chases[selected]['speed'] + "): ")
+
+        newspeed = ""
+        ch2 = 0
+        while not ch2 == 10:
+            ch2 = stdscr.getch()
+            if not ch2 == 10:
+                if ch2 == curses.KEY_BACKSPACE:
+                    newspeed = newspeed[0:-1]
+                    stdscr.addstr("^H")
+                else:
+                    newspeed += chr(ch2)
+                    stdscr.addstr(chr(ch2))
+
+        stdscr.move(height - 1, 1)
+        for i in range(0, width):
+            stdscr.addstr(" ")
+        stdscr.move(height - 1, 1)
+
+        stdscr.addstr("Channel: " + newchan + " / Speed: " + newspeed + ". Press enter to save, or escape to quit.")
+
+        ch2 = 0
+        while not ch2 in [10, 27]:
+            ch2 = stdscr.getch()
+
+        if ch2 == 10:
+            editchase(chases[selected]['chase'], chases[selected]['startchan'], int(newchan), int(newspeed), True)
+
+    if not ch == ord('q') and not (ch == curses.KEY_UP and selected > 0) and not (ch == curses.KEY_DOWN and selected < len(chases) - 1):
+        chaseui(stdscr, selected)
 
 def updateui(stdscr, active, holding):
     global chandata
@@ -335,8 +558,17 @@ def cursesui(stdscr):
         elif ch == ord('b'):
             newval = 0
             
+        elif ch == ord('c'):
+            chaseui(stdscr)
+
+#        elif ch in range(ord('0'), ord('9')):
+#            devswitch(int(ch));
+
+#        elif ch == ord('s'):
+#            devui(stdscr)
+
         if not newval == -1:
-            dmxcmd(activechan, newval, None ,holding)
+            dmxcmd(activechan, newval, None, holding)
     
     curses.curs_set(1)
 

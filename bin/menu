@@ -1,12 +1,16 @@
 #!/usr/bin/env zsh
 
+# With these two lines...
+menufile="$XDG_DATA_HOME/menu/menu"
+[[ "$1" = "" ]] || menufile=$1
+
 dmenunf="`xrdb -query | grep '*color14:' | sed 's/.*#/#/'`"
 dmenusf="`xrdb -query | grep '*color10:' | sed 's/.*#/#/'`"
 dmenunb="`xrdb -query | grep '*color0:' | sed 's/.*#/#/'`"
 dmenusb="`xrdb -query | grep '*color0:' | sed 's/.*#/#/'`"
 
-categories="`sed "/^\( .*\|\)$/d" ~/.data/menu/menu`"
-category=`echo $categories | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
+categories="`sed "/^\( .*\|\)$/d" $menufile`"
+category=`echo $categories | sed "s/ *\[.*//" | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
 entries=""
 parsing=false
 
@@ -27,9 +31,15 @@ if [[ ! "$category" == "" ]]; then
 		fi
 	    fi
 	fi
-    done < $XDG_DATA_HOME/menu/menu
+    done < $menufile
     
-    choice=`echo $entries | sed "s/ *\[.*//" | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
+    # ...and these four lines...
+    if [[ "$entries" == "" ]]; then
+	choice=$category
+    else
+	choice=`echo $entries | sed "s/ *\[.*//" | dmenu -nf $dmenunf -nb $dmenunb -sf $dmenusf -sb $dmenusb`
+    fi
+    # ...we have nested menu support :)
 
-    `grep $choice $XDG_DATA_HOME/menu/menu | sed "s/.*\[\(.*\)\]/\\1/"` &>/dev/null &
+    [[ ! "$choice" == "" ]] && `grep "$choice *\[" $menufile | sed "s/.*\[\(.*\)\]/\\1/"` &>/dev/null &
 fi

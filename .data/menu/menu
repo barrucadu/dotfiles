@@ -44,7 +44,6 @@ Programming
     IDLE     [idle]
     GDB      [urxvtc -e "gdb -ex run -ex backtrace"]
 
-Misc
-    Eihort   [urxvtc -e "ssh barrucadu@eihort"]
+Stop
     Shutdown [sudo shutdown -hP now]
     Reboot   [sudo reboot]

@@ -16,6 +16,7 @@ synclient VertEdgeScroll=1
 synclient HorizEdgeScroll=1
 
 # Other
+xset s noblank
 xsetroot -cursor_name left_ptr
 xrdb -load ~/.config/xorg/Xdefaults
 
