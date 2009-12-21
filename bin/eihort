@@ -70,24 +70,29 @@ eihortcheck=$?
 [ "$1" = "" ] && [ "$eihortcheck" = 1 ] && 1=true
 [ "$1" = "" ] && [ "$eihortcheck" = 0 ] && 1=false
 
-if $up && [[ $eihortcheck == 1 ]]; then
-    $mhd      && emount MHD
-    $m2hd     && emount M2HD
-    $m2hdb    && emount M2HDb
-    $archos5  && emount ARCHOS5
-
-    $share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
-    $media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
-    $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
-    $www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
+if ping -c1 eihort &>/dev/null; then
+    if $up && [[ $eihortcheck == 1 ]]; then
+	$mhd      && emount MHD
+	$m2hd     && emount M2HD
+	$m2hdb    && emount M2HDb
+	$archos5  && emount ARCHOS5
+	
+	$share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
+	$media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
+	$torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
+	$www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
+    else
+	emounted share    && umount /share/eihort
+	emounted media    && umount /share/eihort-media
+	emounted torrents && umount /share/eihort-torrents
+	emounted www      && umount /share/eihort-www
+	
+	emedia MHD        && eumount MHD
+	emedia M2HD       && eumount M2HD
+	emedia M2HDb      && eumount M2HDb
+	emedia ARCHOS5    && eumount ARCHOS5
+    fi
 else
-    emounted share    && umount /share/eihort
-    emounted media    && umount /share/eihort-media
-    emounted torrents && umount /share/eihort-torrents
-    emounted www      && umount /share/eihort-www
-
-    emedia MHD        && eumount MHD
-    emedia M2HD       && eumount M2HD
-    emedia M2HDb      && eumount M2HDb
-    emedia ARCHOS5    && eumount ARCHOS5
+    echo "Eihort not found."
+    return 2
 fi
