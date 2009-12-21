@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+if [[ -e /dev/disk/by-label/$1 ]]; then
+    mount /dev/disk/by-label/$1
+elif  [[ -e /media/$1 ]]; then
+    mount /media/$1
+else
+    mount $1
+fi
