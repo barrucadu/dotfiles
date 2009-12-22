@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 screenshotpath=/home/barrucadu/`date +%F`.png
-websitepath=/home/barrucadu/websites/barrucadu.co.uk/
+websitepath=/home/barrucadu/websites/barrucadu.co.uk
 dir=`pwd`
 
 echo "Taking screenshot in 5 seconds."
@@ -22,7 +22,7 @@ mogrify -scale 40% `date +%F`.png
 
 cd ../info/
 
-WM=`grep -E "[^#]exec" ~/.config/xinitrc`
+WM=`grep -E "[^#]exec" ~/.config/xorg/xinitrc`
 niceWM=""
 case "$WM" in
         *stumpwm*)
