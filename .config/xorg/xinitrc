@@ -15,8 +15,11 @@ synclient AccelFactor=0.50
 synclient VertEdgeScroll=1
 synclient HorizEdgeScroll=1
 
-# Other
+# Screensaver
 xset s noblank
+xset s off
+
+# Other
 xsetroot -cursor_name left_ptr
 xrdb -load ~/.config/xorg/Xdefaults
 
