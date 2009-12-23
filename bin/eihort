@@ -80,7 +80,7 @@ if ping -c1 eihort &>/dev/null; then
 	$m2hdb    && emount M2HDb
 	$archos5  && emount ARCHOS5
 	
-	if sshfs; then
+	if $sshfs; then
 	    $share    && sshfs barrucadu@network.barrucadu.co.uk:/srv/share    /share/eihort          -C -p 2222
 	    $media    && sshfs barrucadu@network.barrucadu.co.uk:/media        /share/eihort-media    -C -p 2222
 	    $torrents && sshfs barrucadu@network.barrucadu.co.uk:/srv/torrents /share/eihort-torrents -C -p 2222
@@ -92,7 +92,7 @@ if ping -c1 eihort &>/dev/null; then
 	    $www      && mount -t cifs -o username=share,password=share //eihort/www      /share/eihort-www
 	fi
     else
-	if sshfs; then
+	if $sshfs; then
 	    emounted share    && fusermount -u /share/eihort
 	    emounted media    && fusermount -u /share/eihort-media
 	    emounted torrents && fusermount -u /share/eihort-torrents
