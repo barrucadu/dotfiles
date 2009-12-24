@@ -86,16 +86,22 @@ done
 
 export PR_NO_COLOR="$terminfo[sgr0]"
 
-# Shell prompt
+# pre/post commands
 
-function precmd()
+function precmd() # Uses: setting user/root PROMPT1, PROMPT2, and PROMPT3 variables.
 {
     # Last command failed:    red :(
     # Working dir unwritable: red pwd, else cyan pwd
     # Running as root:        red #, red time, else green %, green time
 
-    export PROMPT="`[ $? != 0 ] && echo "$PR_RED%B:(%b "``[ $UID != 0 ] && echo "$PR_LIGHT_GREEN%*" || echo "$PR_RED%*"` `[ -w \`pwd\` ] && echo "$PR_CYAN" || echo "$PR_RED"`%B%2~%b `[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`$PR_NO_COLOR "
+    export PROMPT="`[ $? != 0 ] && echo "$PR_RED%B:(%b "``[ $UID != 0 ] && echo "$PR_LIGHT_GREEN%*" || echo "$PR_RED%*"` `[ -w "\`pwd\`" ] && echo "$PR_CYAN" || echo "$PR_RED"`%B%2~%b `[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`$PR_NO_COLOR "
     export PROMPT2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
+    export PROMPT3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "
+}
+
+function postcmd() # Uses: rehashing command completion.
+{
+    rehash
 }
 
 # Emacs shell mode
