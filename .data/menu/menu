@@ -11,9 +11,7 @@ Games
     pkgname            [urxvtc -e pkgname]
     Towers of Hanoi    [urxvtc -e hanoi]
     Nethack            [urxvtc -e nethack]
-    Kildclient         [kildclient]
     Battle for Wesnoth [wesnoth]
-    nPush              [urxvtc -e npush]
 
 Internet
     Opera   [opera]
