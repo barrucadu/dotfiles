@@ -175,5 +175,6 @@
 (global-set-key [?\M-O ?c]    'forward-word)
 (global-set-key [?\M-O ?d]    'backward-word)
 (global-set-key [?\M-[ ?3 ?^] 'backward-kill-word)
-(global-set-key [?\C-x ?\C-x]  'switch-to-previous-buffer)
+(global-set-key [?\C-x ?\C-x] 'switch-to-previous-buffer)
+(global-set-key [?\C-q]       'search-forward)
 (global-set-key [?\C-Z]        nil)

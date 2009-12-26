@@ -16,8 +16,14 @@ if [[ ! $(tty) == *pts* ]]; then
         done
     fi
 else
-    # Welcome message
-    clear
-    ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
-    echo
+    if [[ $DVTM == "" ]]; then
+	# Not in dvtm? Madness!
+	dvtm
+	exit
+    else
+        # Welcome message
+	clear
+	ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
+	echo
+    fi
 fi
