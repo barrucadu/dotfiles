@@ -3,10 +3,10 @@
 # Environmental Variables
 export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
     # Programs
-export BROWSER=/usr/bin/opera
-export EDITOR="emacs -nw"
-export VISUAL="emacs -nw"
-export PAGER=/usr/bin/most
+export BROWSER=opera
+export EDITOR=editor
+export VISUAL=editor
+export PAGER=most
     # History
 export HISTFILE=~/.data/zsh/history
 export HISTSIZE=1000

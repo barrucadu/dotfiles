@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+emacsclient --alternate-editor="" -c "$@" -t
