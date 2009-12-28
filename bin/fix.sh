@@ -13,7 +13,6 @@ function showhelp()
     echo "-o     Run pacman-optimize after reinstallations (no effect if neither -i nor -a are given)"
     echo
     echo "Warning: All package installations are forced."
-    echo "Note:    Arguments are processed in the order displayed above."
 }
 
 function fixmirrors()
@@ -26,7 +25,7 @@ function fixmirrors()
 	sudo mkdir -p /etc/pacman.d/
     fi
 
-    sudo echo "Server = ftp://ftp.archlinux.org/\$repo/os/`uname -m`" > /etc/pacman.d/mirrorlist
+    sudo zsh -c "echo \"Server = ftp://ftp.archlinux.org/\\\$repo/os/`uname -m`\" > /etc/pacman.d/mirrorlist"
 }
 
 function fixpacman()
