@@ -14,7 +14,7 @@ alias -g 1N='1>/dev/null'
 alias -g 2N='2>/dev/null'
 
 # Suffix aliases
-alias -s conf='emacs -nw'
+alias -s conf='editor'
 alias -s pdf='zathura'
 alias -s doc='soffice'
     # Images
@@ -42,8 +42,8 @@ alias !='sudo'
 alias @='opera'
 alias c='clear'
 alias e='exit'
-alias o='emacs -nw'
-alias O='sudo emacs -nw'
+alias o='editor'
+alias O='sudoedit'
 alias t='todo'
 
 # Basic commands
@@ -105,7 +105,8 @@ alias dssh='ssh barrucadu@hoyes.dyndns.org'
 alias bftp='ncftp barrucadu'
 alias uftp='ncftp uzbl'
 alias pftp='ncftp ofear'
-alias torrent='ssh -t rtorrent@eihort "screen -r"'
+alias rtorrent='ssh -t rtorrent@eihort "screen -r rtorrent"'
+alias fttps='ssh -t rtorrent@eihort "screen -r fttps"'
 
 # Git
 alias g-='git rm'
