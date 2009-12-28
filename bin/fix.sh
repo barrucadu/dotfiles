@@ -9,8 +9,8 @@ function showhelp()
     echo "-u     Update system"
     echo "-i     Reinstall all packages"
     echo "-a     Reinstall all foreign packages (using yaourt)"
-    echo "-s     Sanity-check package lists before reinstalling using \$EDITOR (no effect if neither -i or -a are given)"
-    echo "-o     Run pacman-optimize after reinstallations (no effect if neither -i or -a are given)"
+    echo "-s     Sanity-check package lists before reinstalling using \$EDITOR (no effect if neither -i nor -a are given)"
+    echo "-o     Run pacman-optimize after reinstallations (no effect if neither -i nor -a are given)"
     echo
     echo "Warning: All package installations are forced."
     echo "Note:    Arguments are processed in the order displayed above."
