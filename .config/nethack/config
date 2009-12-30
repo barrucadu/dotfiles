@@ -18,5 +18,5 @@ STATUSCOLOR=held:red,blind:red
 
 OPTIONS=color,eight_bit_tty,lit_corridor,hilite_pet,showexp,showscore,standout,time
 OPTIONS=!autopickup,disclose:yi ya +v +g +c,!legacy,pickup_burden:B,pushweapon
-OPTIONS=align:random,character:random,gender:male,name:Barrucadu,race:random
+OPTIONS=name:Barrucadu,gender:male
 OPTIONS=catname:Morris,dogname:Shaggy,fruit:Coconut,horsename:Epona
