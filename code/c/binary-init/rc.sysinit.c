@@ -3,108 +3,250 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/wait.h>
-#include <glib.h>
+#include <sys/stat.h>
 
 #include "rc.h"
+#include "functions.h"
 
-int run(char* args[])
+int startudev()
 {
-    int pid = fork();
+    run("/sbin/udevd --daemon");
+    run("/sbin/udevadm trigger");
+
+    return 1;
+}
+
+int modprobe()
+{
+    char* probecmd = malloc(512 * sizeof(char*));
+    int i;
+
+    char* modules[] = MODULES;
+    i = 0;
+    while(strcmp(modules[i], "") != 0)
+    {
+	strcpy(probecmd, "/sbin/modprobe ");
+	strcat(probecmd, modules[i]);
+	run(probecmd);
+	i ++;
+    }
+
+    char* acpi_modules[] = ACPI_MODULES;
+    i = 0;
+    while(strcmp(acpi_modules[i], "") != 0)
+    {
+	strcpy(probecmd, "/sbin/modprobe ");
+	strcat(probecmd, acpi_modules[i]);
+	run(probecmd);
+	i ++;
+    }
+
+    free(probecmd);
+    return 1;
+}
+
+int loopbackup()
+{
+    run("/sbin/ifconfig lo 127.0.0.1 up");
+    return 1;
+}
+
+int mountroot()
+{
+    run("/bin/mount -n -o remount,ro /");
+    return 1;
+}
+
+int fsck()
+{
+    char* fsckcmd = malloc(512 * sizeof(char*));
     
-    if(pid == 0)
-    {
-	return execv(args[0], args);
-    } else {
-	int status;
-	waitpid(pid, &status, 0);
-	return status;
-    }
+    strcpy(fsckcmd, "/bin/fsck -A -T -C -a -t ");
+    strcat(fsckcmd, NETFS);
+    run(fsckcmd);
+
+    free(fsckcmd);
+    return 1;
 }
 
-void mount(char* type, char* device, char* location, char* options, int nomtab)
+int mountall()
 {
-    int argn = 6;
+    char* mountcmd = malloc(512 * sizeof(char*));
 
-    if(strcmp(options, "") > 0)
-	argn += 1;
+    run("/bin/mount -n -o remount,rw /");
+    system("/bin/rm -f /etc/mtab*");
+    run("/bin/mount -o remount,rw /");
+    system("/bin/grep -e '/proc ' -e '/sys ' -e '/dev ' /proc/mounts >> /etc/mtab");
+    strcpy(mountcmd, "/bin/mount -a -t ");
+    strcat(mountcmd, NETFS);
+    strcat(mountcmd, " -O no_netdev");
+    run(mountcmd);
 
-    if(nomtab == 1)
-	argn += 1;
-
-    char** args = calloc(argn, 256);
-    args[0] = "/bin/mount";
-    args[1] = "-t";
-    args[2] = type;
-    args[3] = device;
-    args[4] = location;
-
-    if(options)
-    {
-	args[5] = "-o";
-	args[6] = options;
-
-	if(nomtab == 1)
-	{
-	    args[7] = "-n";
-	    args[8] = NULL;
-	} else {
-	    args[7] = NULL;
-	}
-    } else if(nomtab == 1) {
-	args[5] = "-n";
-	args[6] = NULL;
-    } else {
-	args[5] = NULL;
-    }
-
-    run(args);
-    free(args);
+    free(mountcmd);
+    return 1;
 }
 
-void remount(char* location, int ro, int nomtab)
+int swapon()
 {
-    char** args = calloc(5, 256);
-    args[0] = "/bin/mount";
-    args[1] = "-o";
+    run("/sbin/swapon -a");
+    return 1;
+}
+
+int sysclock()
+{
+    char* clockcmd = malloc(512 * sizeof(char*));
+
+    if(!fexists("/var/lib/hwclock/adjtime"))
+    {
+	echo("/var/lib/hwclock/adjtime", "0.0 0 0.0", 0);
+    }
     
-    if(ro == 1)
+    char* timepath = malloc(80 * sizeof(char));
+    strcpy(timepath, "/usr/share/zoneinfo/");
+    strcat(timepath, TIMEZONE);
+
+    if(!strcmp(TIMEZONE, "") && fexists(timepath))
     {
-	args[2] = "remount,ro";
-    } else {
-	args[2] = "remount";
+	remove("/etc/localtime");
+	
+	strcpy(clockcmd, "/bin/cp \"");
+	strcat(clockcmd, timepath);
+	strcat(clockcmd, "\" /etc/localtime");
+	run(clockcmd);
     }
 
-    args[3] = location;
-
-    if(nomtab == 1)
+    free(timepath);
+    
+    if(!strcmp(HWCLOCK_PARAMS, ""))
     {
-	args[4] = "-n";
-	args[5] = NULL;
-    } else {
-	args[4] = NULL;
+	run("/sbin/hwclock --adjust");
+	
+	strcpy(clockcmd, "/sbin/hwclock ");
+	strcat(clockcmd, HWCLOCK_PARAMS);
+	run(clockcmd);
     }
 
-    run(args);
-    free(args);
+    free(clockcmd);
+
+    return 1;
 }
 
-void modprobe(char* module)
+int randomseed()
 {
-    char** args = calloc(3, 256);
-    args[0] = "/sbin/modprobe";
-    args[1] = module;
-    args[2] = NULL;
+    char* seedcmd = malloc(512 * sizeof(char*));
 
-    run(args);
-    free(args);
+    strcpy(seedcmd, "/bin/cat ");
+    strcat(seedcmd, RANDOM_SEED);
+    strcat(seedcmd, " > /dev/urandom");
+    system(seedcmd);
+    
+    free(seedcmd);
+    return 1;
 }
 
-void echo(char* filename, char* string)
+int cleanfiles()
 {
-    FILE *file;
-    file = fopen(filename, "w+");
-    fprintf(file, "%s", string);
-    fclose(file);
+    remove("/etc/nologin");
+    remove("/etc/shutdownpid");
+    remove("/forcefsck");
+
+    system("/bin/rm -f /var/lock/*");
+    system("/bin/rm -f /tmp/* /tmp/.* &>/dev/null");
+    system("cd /var/run && /usr/bin/find . ! -type d -exec /bin/rm -f -- {} \\;");
+
+    echo("/var/run/utmp", "", 0);
+    chmod("/var/run/utmp", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+
+    mkdir("/tmp/.ICE-unix", S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO);
+    mkdir("/tmp/.X11-unix", S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO);
+
+    return 1;
+}
+
+int doldconfig()
+{
+    run("/sbin/ldconfig");
+    return 1;
+}
+
+int hostname()
+{
+    char* hostcmd = malloc(512 * sizeof(char*));
+
+    strcpy(hostcmd, "/bin/hostname ");
+    strcat(hostcmd, HOSTNAME);
+
+    run(hostcmd);
+
+    free(hostcmd);
+    
+    return 1;
+}
+
+int dodepmod()
+{
+    run("/sbin/depmod -A");
+    return 1;
+}
+
+int dolocale()
+{
+    char* loccmd = malloc(512 * sizeof(char*));
+
+    echo("/etc/profile.d/locale.sh", "", 0);
+    chmod("/etc/profile.d/locale.sh", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+
+    strcpy(loccmd, "export LANG=");
+    strcat(loccmd, LOCALE);
+    echo("/etc/profile.d/locale.sh", loccmd, 0);
+
+    free(loccmd);
+    return 1;
+}
+
+int utfconsoles()
+{
+    /* Eww, using system for this is a messy work-around */
+    system("for i in /dev/tty[0-9]*; do /usr/bin/kbd_mode -u < ${i}; printf \"\\e%%G\" > ${i}; done");
+    echo("/etc/profile.d/locale.sh", "if [ \"$CONSOLE\" = \"\" -a \"$TERM\" = \"linux\" -a -t 1 ]; then printf \"\\e%%G\"; fi", 1);
+    return 1;
+}
+
+int dokeymap()
+{
+    char* keycmd = malloc(512 * sizeof(char*));
+
+    strcpy(keycmd, "/bin/loadkeys -q -u ");
+    strcat(keycmd, KEYMAP);
+
+    run(keycmd);
+    free(keycmd);
+
+    return 1;
+}
+
+int dofont()
+{
+    char* fontcmd = malloc(512 * sizeof(char*));
+
+    /* Another horrible work-around function */
+    strcpy(fontcmd, "for i in /dev/tty[2-9]*; do /usr/bin/setfont ");
+    if(strcmp(CONSOLEMAP, ""))
+    {
+	strcat(fontcmd, CONSOLEFONT);
+	strcat(fontcmd, " -C ${i} >/dev/null 2>&1");
+    } else {
+	strcat(fontcmd, "-m ");
+	strcat(fontcmd, CONSOLEMAP);
+	strcat(fontcmd, " ");
+	strcat(fontcmd, CONSOLEFONT);
+	strcat(fontcmd, " -C ${i} >/dev/null 2>&1");
+    }
+    strcpy(fontcmd, "; done");
+    system(fontcmd);
+
+    free(fontcmd);
+    return 1;
 }
 
 int main(int argc, char *argv[])
@@ -112,106 +254,211 @@ int main(int argc, char *argv[])
     (void) argc;
     (void) argv;
 
-    int i;
-    char** args = calloc(11, 256);
-    
+    char* cmd = malloc(512 * sizeof(char*));
+
     printf("\nArch Linux\n");
     printf("Copyright 2002-2007 Judd Vinet, 2007-2010 Aaron Griffin\n\n");
 
     /* Mount /dev, /proc, and /sys */
-    mount("tmpfs", "none", "/dev", "mode=0755", 1);
-    mount("proc",  "none", "/proc", "", 0);
-    mount("sysfs", "none", "/sys", "", 0);
+    run("/bin/mount -n -t tmpfs none /dev -o mode=0755");
+    run("/bin/mount -n -t proc none /proc");
+    run("/bin/mount -n -t sysfs none /sys");
 
     /* Copy static device nodes to /dev */
     system("cp -a /lib/udev/devices/* /dev/");
 
     /* Start minlogd until syslog takes over */
-    args[0] = "/sbin/minlogd";
-    args[1] = NULL;
-    run(args);
+    run("/sbin/minilogd");
 
     /* Run dmesg; anything serious gets printed */
-    args[0] = "/bin/dmesg";
-    args[1] = "-n";
-    args[2] = DMESG_LVL;
-    args[3] = NULL;
-    run(args);
+    strcpy(cmd, "/bin/dmesg -n ");
+    strcat(cmd, DMESG_LVL);
+    run(cmd);
 
     /* Enable real-time clock access */
-    modprobe("rtc-cmos");
+    run("modprobe rtc-cmos");
 
-    args[0] = "/bin/mknod";
-    args[1] = "/dev/rtc0";
-    args[2] = "c";
-    args[3] = RTC_MAJOR;
-    args[4] = "0";
-    args[5] = NULL;
-    run(args);
+    strcpy(cmd, "/bin/mknod /dev/rtc0 c ");
+    strcat(cmd, RTC_MAJOR);
+    strcat(cmd, " 0");
+    run(cmd);
 
-    args[0] = "/bin/ln";
-    args[1] = "-s";
-    args[2] = "/dev/rtc0";
-    args[3] = "/dev/rtc";
-    args[4] = NULL;
-    run(args);
+    run("/bin/ln -s /dev/rtc0 /dev/rtc");
 
     /* Set clock early */
-    args[0] = "/sbin/hwclock";
-    args[1] = "--hctosys";
-    args[2] = "--localtime";
-    args[3] = "--noadjfile";
-    args[4] = NULL;
-    run(args);
+    run("/sbin/hwclock --hctosys --localtime --noadjfile");
 
     /* Disable hotplugging */
-    echo("/proc/sys/kernel/hotplug", "");
+    echo("/proc/sys/kernel/hotplug", "", 0);
 
     /* Run UDev */
-    printf("Starting UDev daemon\n");
-    args[0] = "/sbin/udevd";
-    args[1] = "--daemon";
-    args[2] = NULL;
-    run(args);
-
-    args[0] = "/sbin/udevadm";
-    args[1] = "trigger";
-    args[2] = NULL;
-    run(args);
-
-    /* Kernel modules */
-    printf("Probing kernel modules\n");
-    i = 0;
-    while(strcmp(MODULES[i], "") != 0)
+    printf("Starting UDev daemon...");
+    if(startudev())
     {
-	modprobe(MODULES[i]);
-	i ++;
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
     }
 
-    i = 0;
-    while(strcmp(ACPI_MODULES[i], "") != 0)
+    /* Kernel modules */
+    printf("Probing kernel modules...");
+    if(modprobe())
     {
-	modprobe(ACPI_MODULES[i]);
-	i ++;
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
     }
 
     /* Finish UDev */
-    args[0] = "/sbin/udevadm";
-    args[1] = "settle";
-    args[2] = NULL;
-    run(args);
+    run("/sbin/udevadm settle");
 
     /* Loopback */
-    printf("Bringing up loopback interface\n");
-    args[0] = "/sbin/ifconfig";
-    args[1] = "lo";
-    args[2] = "127.0.0.1";
-    args[3] = "up";
-    args[4] = NULL;
-    run(args);
+    printf("Bringing up loopback interface...");
+    if(loopbackup())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
 
     /* Mount root */
-    printf("Mounting root filesystem read-only\n");
-    remount("/", 1, 1);
+    printf("Mounting root filesystem read-only...");
+    if(mountroot())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    /* fsck */
+    /* Todo: add fsck failed / reboot required handling; forcefsck */
+    printf("Performing filesystem consistency check...");
+    if(fsck())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    /* Mount */
+    printf("Mounting filesystems...");
+    if(mountall())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    /* Swap */
+    printf("Activating swap partition...");
+    if(swapon())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+    
+    /* Clock */
+    printf("Activating system clock...");
+    if(sysclock())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    /* Random seed */
+    if(fexists(RANDOM_SEED))
+    {
+	printf("Initialising random seed...");
+	if(randomseed())
+	{
+	    printf(" ...done!\n");
+	} else {
+	    printf(" ...fail!\n");
+	}
+    }
+
+    /* Leftovers */
+    printf("Removing leftover boot files...");
+    if(cleanfiles())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    /* Shared library links */
+    if(DOLDCONFIG)
+    {
+	printf("Updating shared library links...");
+	if(doldconfig())
+	{
+	    printf(" ...done!\n");
+	} else {
+	    printf(" ...fail!\n");
+	}
+    }
+
+    /* Hostname */
+    printf("Setting hostname...");
+    if(hostname())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    /* Module deps */
+    if(DODEPMOD)
+    {
+	printf("Updating module dependencies...");
+	if(dodepmod())
+	{
+	    printf(" ...done!\n");
+	} else {
+	    printf(" ...fail!\n");
+	}
+    }
+
+    /* Set locale */
+    printf("Setting locale...");
+    if(dolocale())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    printf("Setting consoles to UTF-8 mode...");
+    if(utfconsoles())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }    
+
+    if(!strcmp(KEYMAP, ""))
+    {
+	printf("Setting keymap...");
+	if(dokeymap())
+	{
+	    printf(" ...done!\n");
+	} else {
+	    printf(" ...fail!\n");
+	}
+    }
+
+    printf("Loading console font...");
+    if(dofont())
+    {
+	printf(" ...done!\n");
+    } else {
+	printf(" ...fail!\n");
+    }
+
+    system("/bin/dmesg >| /var/log/dmesg.log");
+
+    free(cmd);
     return 0;
 }

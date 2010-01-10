@@ -1,15 +1,24 @@
-#define RTC_MAJOR "253"
-#define DMESG_LVL "3"
+/* Functional settings */
 
-extern char **environ;
+#define RTC_MAJOR   "253"
+#define DMESG_LVL   "3"
+#define VERBOSE      0
+#define NETFS       "nonfs,nonfs4,nosmbfs,nocifs,nocodafs,noncpfs,nosysfs,noshfs,nofuse,nofuseblk,noglusterfs"
+#define RANDOM_SEED "/var/lib/misc/random-seed"
+#define DOLDCONFIG   0
+#define DODEPMOD     0
 
-int run(char* args[]);
-void mount(char* type, char* device, char* location, char* options, int nomtab);
-void remount(char* location, int ro, int nomtab);
-void modprobe(char* module);
-void echo(char* filename, char* string);
-int main(int argc, char *argv[]);
+/* General Settings */
+#define TIMEZONE       "Europe/London"
+#define HWCLOCK_PARAMS ""
+#define HOSTNAME       "cthulhu"
+#define LOCALE         "en_GB.utf8"
+#define KEYMAP         "uk"
+#define CONSOLEMAP     ""
+#define CONSOLEFONT    "ter-112n"
 
 /* Terminate these arrays with an empty string */
-char* MODULES[]      = {"iwl4965", "acpi-cpufreq", "snd-hda-intel", "radeon", ""};
-char* ACPI_MODULES[] = {"ac", "battery", "button", "fan", "processor", "thermal", ""};
+#define MODULES   {"iwl4965", "acpi-cpufreq", "snd-hda-intel", "radeon", ""}
+#define ACPI_MODULES {"ac", "battery", "button", "fan", "processor", "thermal", ""}
+
+extern char **environ;
