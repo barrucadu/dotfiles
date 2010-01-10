@@ -42,6 +42,12 @@ fi
 export NMPC_DEFCMD="status"
 export NMPC_DEFHELP="all"
 export MPDHOST="eihort"
+    # Proxies
+if [[ -f /tmp/noproxy ]]; then
+    export http_proxy=
+else
+    export http_proxy="eihort:3128"
+fi
     # Misc
 export WEBKIT_IGNORE_SSL_ERRORS=1
 export NETHACKOPTIONS=@/home/barrucadu/.config/nethack/config

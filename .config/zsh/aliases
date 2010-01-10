@@ -87,6 +87,7 @@ alias deorphan='sudo pacman -Rsc $(pacman -Qtdq)'
 alias pacgraph='pacgraph -b \#111111 -l \#ffffff -t \#eeeeee -d \#aaaaaa'
 alias pacgroup='pacman -Qg'
 alias pacgroups='pacman -Qg | sed "s/ .*//" | sort | uniq'
+alias pacman32='pacman --root /opt/arch32 --cachedir /opt/arch32/var/cache/pacman/pkg --config /opt/arch32/etc/pacman.conf --dbpath /opt/arch32/var/lib/pacman'
 
 # Security
 alias gpgasc='gpg -a --detach-sign'
