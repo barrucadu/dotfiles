@@ -18,7 +18,15 @@
 #define CONSOLEFONT    "ter-112n"
 
 /* Terminate these arrays with an empty string */
-#define MODULES   {"iwl4965", "acpi-cpufreq", "snd-hda-intel", "radeon", ""}
+#define MODULES      {"iwl4965", "acpi-cpufreq", "snd-hda-intel", "radeon", ""}
 #define ACPI_MODULES {"ac", "battery", "button", "fan", "processor", "thermal", ""}
+
+/* Using my customised daemons arrays from /etc/rc.conf */
+#define DIMPORTANT {"syslog-ng", "dbus", "hal", "alsa", "crond", ""}
+#define DNETWORK   {"net-profiles", "openntpd", ""}
+#define DSCHOOL    {"httpd", "mysqld", ""}
+#define DNORMAL    {"uptimed", "randomsound", "sensors", "bluetooth", "arch32", ""}
+/* Note: This isn't very flexible. I should think up a way of specifying rules for which daemons to start
+ * eg: network detected, a certain kernel command line parameter set... */
 
 extern char **environ;

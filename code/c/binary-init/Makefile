@@ -1,13 +1,14 @@
 CFLAGS=-Wall -W -c -O3 -march=core2 -mtune=native -pipe
 LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,--hash-style=gnu
 
-all: rc.sysinit.o functions.o
-	gcc $(LDFLAGS) *.o -o rc.sysinit
-	strip rc.sysinit
+all: rc.sysinit.o rc.srvinit.o functions.o
+	gcc $(LDFLAGS) rc.sysinit.o functions.o -o sysinitc
+	gcc $(LDFLAGS) rc.srvinit.o functions.o -o srvinitc
+	strip *initc
 
-install: rc.sysinit
-	cp rc.sysinit /sbin/sysinitc
+install: sysinitc srvinitc
+	cp *initc /sbin/
 
 clean:
-	rm -f rc.sysinit
+	rm -f *initc
 	rm -f *.o

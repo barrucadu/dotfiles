@@ -1,3 +1,5 @@
+/* rc.sysinit.c - responsible for basic system init (udev, mounting, etc) */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,8 +12,8 @@
 
 int startudev()
 {
-    run("/sbin/udevd --daemon");
-    run("/sbin/udevadm trigger");
+    run("/sbin/udevd --daemon",  "/dev/null");
+    run("/sbin/udevadm trigger", "/dev/null");
 
     return 1;
 }
@@ -27,7 +29,7 @@ int modprobe()
     {
 	strcpy(probecmd, "/sbin/modprobe ");
 	strcat(probecmd, modules[i]);
-	run(probecmd);
+	run(probecmd, "/dev/null");
 	i ++;
     }
 
@@ -37,7 +39,7 @@ int modprobe()
     {
 	strcpy(probecmd, "/sbin/modprobe ");
 	strcat(probecmd, acpi_modules[i]);
-	run(probecmd);
+	run(probecmd, "/dev/null");
 	i ++;
     }
 
@@ -47,13 +49,13 @@ int modprobe()
 
 int loopbackup()
 {
-    run("/sbin/ifconfig lo 127.0.0.1 up");
+    run("/sbin/ifconfig lo 127.0.0.1 up", "/dev/null");
     return 1;
 }
 
 int mountroot()
 {
-    run("/bin/mount -n -o remount,ro /");
+    run("/bin/mount -n -o remount,ro /", "/dev/null");
     return 1;
 }
 
@@ -63,7 +65,7 @@ int fsck()
     
     strcpy(fsckcmd, "/bin/fsck -A -T -C -a -t ");
     strcat(fsckcmd, NETFS);
-    run(fsckcmd);
+    run(fsckcmd, "/dev/null");
 
     free(fsckcmd);
     return 1;
@@ -73,14 +75,14 @@ int mountall()
 {
     char* mountcmd = malloc(512 * sizeof(char*));
 
-    run("/bin/mount -n -o remount,rw /");
-    system("/bin/rm -f /etc/mtab*");
-    run("/bin/mount -o remount,rw /");
+    run("/bin/mount -n -o remount,rw /", "/dev/null");
+    system("/bin/rm -f /etc/mtab* &>/dev/null");
+    run("/bin/mount -o remount,rw /", "/dev/null");
     system("/bin/grep -e '/proc ' -e '/sys ' -e '/dev ' /proc/mounts >> /etc/mtab");
     strcpy(mountcmd, "/bin/mount -a -t ");
     strcat(mountcmd, NETFS);
     strcat(mountcmd, " -O no_netdev");
-    run(mountcmd);
+    run(mountcmd, "/dev/null");
 
     free(mountcmd);
     return 1;
@@ -88,7 +90,7 @@ int mountall()
 
 int swapon()
 {
-    run("/sbin/swapon -a");
+    run("/sbin/swapon -a", "/dev/null");
     return 1;
 }
 
@@ -112,18 +114,18 @@ int sysclock()
 	strcpy(clockcmd, "/bin/cp \"");
 	strcat(clockcmd, timepath);
 	strcat(clockcmd, "\" /etc/localtime");
-	run(clockcmd);
+	run(clockcmd, "/dev/null");
     }
 
     free(timepath);
     
     if(!strcmp(HWCLOCK_PARAMS, ""))
     {
-	run("/sbin/hwclock --adjust");
+	run("/sbin/hwclock --adjust", "/dev/null");
 	
 	strcpy(clockcmd, "/sbin/hwclock ");
 	strcat(clockcmd, HWCLOCK_PARAMS);
-	run(clockcmd);
+	run(clockcmd, "/dev/null");
     }
 
     free(clockcmd);
@@ -150,9 +152,9 @@ int cleanfiles()
     remove("/etc/shutdownpid");
     remove("/forcefsck");
 
-    system("/bin/rm -f /var/lock/*");
+    system("/bin/rm -f /var/lock/* &>/dev/null");
     system("/bin/rm -f /tmp/* /tmp/.* &>/dev/null");
-    system("cd /var/run && /usr/bin/find . ! -type d -exec /bin/rm -f -- {} \\;");
+    system("cd /var/run && /usr/bin/find . ! -type d -exec /bin/rm -f -- {} \\; &>/dev/null");
 
     echo("/var/run/utmp", "", 0);
     chmod("/var/run/utmp", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
@@ -165,7 +167,7 @@ int cleanfiles()
 
 int doldconfig()
 {
-    run("/sbin/ldconfig");
+    run("/sbin/ldconfig", "/dev/null");
     return 1;
 }
 
@@ -176,7 +178,7 @@ int hostname()
     strcpy(hostcmd, "/bin/hostname ");
     strcat(hostcmd, HOSTNAME);
 
-    run(hostcmd);
+    run(hostcmd, "/dev/null");
 
     free(hostcmd);
     
@@ -185,7 +187,7 @@ int hostname()
 
 int dodepmod()
 {
-    run("/sbin/depmod -A");
+    run("/sbin/depmod -A", "/dev/null");
     return 1;
 }
 
@@ -219,7 +221,7 @@ int dokeymap()
     strcpy(keycmd, "/bin/loadkeys -q -u ");
     strcat(keycmd, KEYMAP);
 
-    run(keycmd);
+    run(keycmd, "/dev/null");
     free(keycmd);
 
     return 1;
@@ -260,33 +262,33 @@ int main(int argc, char *argv[])
     printf("Copyright 2002-2007 Judd Vinet, 2007-2010 Aaron Griffin\n\n");
 
     /* Mount /dev, /proc, and /sys */
-    run("/bin/mount -n -t tmpfs none /dev -o mode=0755");
-    run("/bin/mount -n -t proc none /proc");
-    run("/bin/mount -n -t sysfs none /sys");
+    run("/bin/mount -n -t tmpfs none /dev -o mode=0755", "/dev/null");
+    run("/bin/mount -n -t proc none /proc", "/dev/null");
+    run("/bin/mount -n -t sysfs none /sys", "/dev/null");
 
     /* Copy static device nodes to /dev */
-    system("cp -a /lib/udev/devices/* /dev/");
+    system("cp -a /lib/udev/devices/* /dev/ &>/dev/null");
 
     /* Start minlogd until syslog takes over */
-    run("/sbin/minilogd");
+    run("/sbin/minilogd", "/dev/null");
 
     /* Run dmesg; anything serious gets printed */
     strcpy(cmd, "/bin/dmesg -n ");
     strcat(cmd, DMESG_LVL);
-    run(cmd);
+    run(cmd, "/dev/null");
 
     /* Enable real-time clock access */
-    run("modprobe rtc-cmos");
+    run("modprobe rtc-cmos", "/dev/null");
 
     strcpy(cmd, "/bin/mknod /dev/rtc0 c ");
     strcat(cmd, RTC_MAJOR);
     strcat(cmd, " 0");
-    run(cmd);
+    run(cmd, "/dev/null");
 
-    run("/bin/ln -s /dev/rtc0 /dev/rtc");
+    run("/bin/ln -s /dev/rtc0 /dev/rtc", "/dev/null");
 
     /* Set clock early */
-    run("/sbin/hwclock --hctosys --localtime --noadjfile");
+    run("/sbin/hwclock --hctosys --localtime --noadjfile", "/dev/null");
 
     /* Disable hotplugging */
     echo("/proc/sys/kernel/hotplug", "", 0);
@@ -310,7 +312,7 @@ int main(int argc, char *argv[])
     }
 
     /* Finish UDev */
-    run("/sbin/udevadm settle");
+    run("/sbin/udevadm settle", "/dev/null");
 
     /* Loopback */
     printf("Bringing up loopback interface...");

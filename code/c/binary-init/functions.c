@@ -4,23 +4,32 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <errno.h>
+#include <fcntl.h>
 
 #include "rc.h"
 #include "functions.h"
 
 /* Todo: done/fail function; colour */
 
-int run(char* cmd)
+int run(char* cmd, char* outfile)
 {
-    /* Todo: output redirection */
-
     int pid = fork();
 
     if(pid == 0)
     {
 	if(VERBOSE)
 	{
-	    printf(":: %s\n", cmd);
+	    printf("Run [%s]\n", cmd);
+	}
+
+	if(!strcmp(outfile, ""))
+	{
+	    int fd;
+	    fd = open("dirlist.txt", O_RDWR | O_CREAT);
+	    dup2(fd, STDOUT_FILENO);
+	    dup2(fd, STDERR_FILENO);
+	    close(fd);
 	}
 
 	char** args = calloc(25, 80 * sizeof(char *));
@@ -37,14 +46,17 @@ int run(char* cmd)
 	}
 	args[i + 1] = NULL;
 
-	errno = execv(args[0], args);
 	free(cmdline);
 	free(args);
-	exit(errno);
+
+	if(execv(args[0], args) == -1)
+	{
+	    exit(errno);
+	}
     } else {
-	int status;
+	int status = 0;
 	waitpid(pid, &status, 0);
-	return status;
+	return WEXITSTATUS(status);
     }
 }
 

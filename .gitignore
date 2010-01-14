@@ -13,3 +13,8 @@
 
 # GIT stuff
 !.gitignore
+
+# Misc
+!README.md
+!LICENSE-WTFPL
+!LICENSE-GPL
