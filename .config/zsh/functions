@@ -84,7 +84,7 @@ function gitwii()
 
 function gitbar()
 {
-    pushd ~/websites/barrucadu.co.uk
+    pushd ~/websites/barrucadu.co.uk/www
     commit $1
     git push github master
     popd
