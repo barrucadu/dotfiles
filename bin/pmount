@@ -1,9 +1,38 @@
 #!/bin/zsh
 
-if [[ -e /dev/disk/by-label/$1 ]]; then
-    mount /dev/disk/by-label/$1
-elif  [[ -e /media/$1 ]]; then
-    mount /media/$1
-else
-    mount $1
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "" ]]; then
+    echo "Usage: pmount [device] [options]"
+    echo
+    echo "Options:"
+    echo "    -u = unmount"
+    echo "    -s = use sudo"
+    echo
+    echo "Device:"
+    echo "    If /dev/disk/by-label/\$device exists, that is passed to mount."
+    echo "    If /dev/\$device exists, that is passed to mount."
+    echo "    If /media/\$device exists, that is passed to mount."
+    echo "    If none of the above exist, \$device is passed to mount."
+    echo
+    echo "Michael Walker (Barrucadu) <mike@barrucadu.co.uk>"
+    exit
 fi
+
+sudocmd=""
+mountcmd=mount
+device="$1"
+
+if [[ -e /dev/disk/by-label/$1 ]]; then
+    device="/dev/disk/by-label/$1"
+elif  [[ -e /media/$1 ]]; then
+    device="/media/$1"
+fi
+
+if [[ "$*" =~ "-u" ]]; then
+    mountcmd=umount
+fi
+
+if [[ "$*" =~ "-s" ]]; then
+    sudocmd=sudo
+fi
+
+$sudocmd $mountcmd $device
