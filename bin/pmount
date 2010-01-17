@@ -8,10 +8,12 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "" ]]; then
     echo "    -s = use sudo"
     echo
     echo "Device:"
-    echo "    If /dev/disk/by-label/\$device exists, that is passed to mount."
-    echo "    If /dev/\$device exists, that is passed to mount."
-    echo "    If /media/\$device exists, that is passed to mount."
-    echo "    If none of the above exist, \$device is passed to mount."
+    echo "    A file or directory with the name given in \$1 is looked for in these locations:"
+    echo "      - /dev/disk/by-label"
+    echo "      - /dev/disk/by-uuid"
+    echo "      - /media"
+    echo "      - /dev"
+    echo "    The first matching path found is passed to mount."
     echo
     echo "Michael Walker (Barrucadu) <mike@barrucadu.co.uk>"
     exit
@@ -23,8 +25,12 @@ device="$1"
 
 if [[ -e /dev/disk/by-label/$1 ]]; then
     device="/dev/disk/by-label/$1"
+elif [[ -e /dev/disk/by-uuid/$1 ]]; then
+    device="/dev/disk/by-uuid/$1"
 elif  [[ -e /media/$1 ]]; then
     device="/media/$1"
+elif  [[ -e /dev/$1 ]]; then
+    device="/dev/$1"
 fi
 
 if [[ "$*" =~ "-u" ]]; then
