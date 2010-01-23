@@ -1,0 +1,16 @@
+kernel plan:
+    * Fix all the damn warmings...
+    * ext2/fat32
+    * Loadable kernel module support
+    * Multitasking
+    * Clock
+
+libc plan:
+    * Complete implementation of ANSI standard C library
+
+libposix plan:
+    * Complete implementation of POSIX standard C library (extends libc)
+    * Dummy functions for permissions and suchlike (until filesystem/user/group permissions are implemented)
+
+misc ideas:
+    * Port Aprz shell to mos. It's simple enough.

@@ -263,3 +263,18 @@ function backup()
     # Recreate some devices.
     sudo cp -a /lib/udev/devices/* $DEST/dev/
 }
+
+function ahurd()
+{
+    remotes=(files)
+
+    if [[ "$1" == "down" ]]; then
+	for i in $remotes; do
+	    fusermount -u /hurd/$i
+	done
+    else
+	for i in $remotes; do
+	    sshfs archhurd@nitti.dreamhost.com:/home/archhurd/$i.archhurd.org/ /hurd/$i -o uid=1000,gid=100
+	done
+    fi
+}
