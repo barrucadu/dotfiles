@@ -1,5 +1,4 @@
 #include <kernel.h>
-#include <string.h>
 #include <mm.h>
 
 size_t strlen(const u8int* str)

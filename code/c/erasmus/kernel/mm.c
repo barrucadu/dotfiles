@@ -1,7 +1,5 @@
 #include <kernel.h>
-#include <multiboot.h>
 #include <mm.h>
-#include <string.h>
 #include <hardware/vga.h>
 
 mmap_t mmap;

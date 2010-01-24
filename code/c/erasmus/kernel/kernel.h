@@ -29,6 +29,10 @@ typedef struct regs
     u32int eip, cs, eflags, useresp, ss;    
 } regs_t;
 
+/* These are needed by *everything* */
+#include <multiboot.h>
+#include <string.h>
+
 /* kernel.c functions */
 u8int *memcpy(u8int *dest, const u8int *src, size_t count);
 u8int *memset(u8int *dest, const u8int val, size_t count);
@@ -40,5 +44,6 @@ void status(u8int* sender, u8int* message, u8int mode);
 void panic(u8int* message);
 void parse_command_line(u8int *cmdline);
 void show_banner();
+void mbinfodump(multiboot_info_t mbi);
 
 #endif

@@ -10,7 +10,8 @@ LDFLAGS := -T kernel/link.ld -melf_i386
 all: kernel libc
 
 kernel: kasm kbase khardware
-	ld $(LDFLAGS) -o Kernel kernel/start kernel/*.oasm kernel/*.o kernel/hardware/*.o
+	@ld $(LDFLAGS) -o Kernel kernel/start kernel/*.oasm kernel/*.o kernel/hardware/*.o
+	@gzip -f Kernel
 
 kasm: kernel/start.asm kernel/gdt.asm kernel/idt.asm kernel/irqs.asm kernel/isrs.asm
 	@nasm -f elf -o kernel/start     kernel/start.asm
@@ -26,13 +27,13 @@ khardware: kernel/hardware/vga.o kernel/hardware/keyboard.o
 libc:
 	@echo "No POSIX-compliant libc implementation yet."
 
-qemu: Kernel image/erasmus.img
+qemu: Kernel.gz image/erasmus.img
 	@mount -o loop,offset=32256 -t ext2 image/erasmus.img image/mnt
 
 	@mkdir -p image/mnt/boot/
 	@mkdir -p image/mnt/lib/
 
-	@cp Kernel   image/mnt/boot/
+	@cp Kernel.gz image/mnt/boot/
 
 	@umount image/mnt
 

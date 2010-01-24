@@ -1,5 +1,4 @@
 #include <kernel.h>
-#include <string.h>
 #include <gdt.h>
 
 gdt_entry_t gdt[3];

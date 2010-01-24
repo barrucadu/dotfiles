@@ -1,5 +1,4 @@
 #include <kernel.h>
-#include <string.h>
 #include <irqs.h>
 
 void *irq_routines[16] = {
@@ -11,13 +10,13 @@ void *irq_routines[16] = {
 void irq_install_handler(s32int irq, void (*handler)(regs_t *r))
 {
     irq_routines[irq] = handler;
-    status((u8int*) "irq", ksprintf((u8int*) "Added handler for IRQ %s", itos(irq, 10)), KDEBUG);
+    status((u8int*) "irq", ksprintf((u8int*) "Added handler for IRQ %s", itos(irq, 10)), KSILLY);
 }
 
 void irq_uninstall_handler(s32int irq)
 {
     irq_routines[irq] = 0;
-    status((u8int*) "irq", ksprintf((u8int*) "Removed handler for IRQ %s", itos(irq, 10)), KDEBUG);
+    status((u8int*) "irq", ksprintf((u8int*) "Removed handler for IRQ %s", itos(irq, 10)), KSILLY);
 }
 
 

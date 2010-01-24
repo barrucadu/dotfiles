@@ -99,7 +99,7 @@ void change_layout(u8int *layout)
     u32int found = 0;
     for(i = 0; i < numlayouts && !found; i ++)
     {
-	if(layouts[i].name == layout)
+	if(strcmp(layouts[i].name, layout))
 	{
 	    status((u8int*) "kb", ksprintf((u8int*) "Loading keyboard layout '%s'", layout), KINFO);
 	    curlayout = i;

@@ -17,7 +17,7 @@ typedef struct mmap
 } mmap_t;
 
 /* Functions */
-void mm_grab_map(multiboot_info_t);
+void mm_grab_map(multiboot_info_t mbi);
 void mm_dump_map();
 u8int *kmalloc(u32int size);
 

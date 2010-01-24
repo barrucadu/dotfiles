@@ -1,6 +1,6 @@
 grub/
 image/
-Kernel
+Kernel.gz
 kernel/*.o
 kernel/*.oasm
 kernel/hardware/*.o

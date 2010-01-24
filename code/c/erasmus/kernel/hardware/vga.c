@@ -1,6 +1,8 @@
 #include <kernel.h>
 #include <hardware/vga.h>
 
+/* todo: enter mode 13h */
+
 u16int *textmemptr;
 u32int blank;
 u32int attrib;
@@ -18,7 +20,7 @@ void setup_vga()
 
     cls();
 
-    status((u8int*) "vga", (u8int*) "Initialised VGA", 0);
+    status((u8int*) "vga", (u8int*) "Initialised VGA", KINFO);
 }
 
 void scrollup()

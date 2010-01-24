@@ -1,6 +1,4 @@
 #include <kernel.h>
-#include <multiboot.h>
-#include <string.h>
 #include <gdt.h>
 #include <idt.h>
 #include <isrs.h>
@@ -135,6 +133,7 @@ void panic(u8int* message)
 void parse_command_line(u8int* cmdline)
 {
     /* Parse the cmdline into the options array */
+    /* Bug: The first option found is messed up when printed... */
     u32int start = 0;
     u32int mid;
     u32int end;
@@ -168,6 +167,8 @@ void parse_command_line(u8int* cmdline)
 	} else if(strcmp(key, (u8int*) "keymap")) {
 	    keymap = (u8int*) var;
 	}
+
+	status((u8int*) "kmain", ksprintf((u8int*) "Found parameter '%s' = '%s'", key, var), KDEBUG);
     }
 }
 
@@ -181,10 +182,18 @@ void show_banner()
     puts((u8int*) "   _|_|_|_|  _|          _|_|_|  _|_|_|    _|    _|    _|    _|_|_|  _|_|_|\n\n");
 }
 
+void mbinfodump(multiboot_info_t mbi)
+{
+    if(mbi.flags & MULTIBOOT_INFO_BOOT_LOADER_NAME)
+    {
+	status((u8int*) "kmain", ksprintf("Bootloader name '%s'", mbi.boot_loader_name), KDEBUG);
+    }
+}
+
 void kmain(multiboot_info_t* mbi, unsigned int magic)
 {
     /* Level 0 boot:
-     *  Initialise the screen to print status messages */
+     *  Initialise the screen to print status messages, check GRUB, and parse the command line */
     setup_vga();
     show_banner();
 
@@ -198,6 +207,8 @@ void kmain(multiboot_info_t* mbi, unsigned int magic)
     {
 	parse_command_line((u8int*) mbi->cmdline);
     }
+
+    mbinfodump(*mbi);
 
     /* Level 1 boot:
      *  Start up basic stuff: GDT and IDT, ISR and IRQ handlers, PIT control, memory manager */
