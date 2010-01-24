@@ -5,28 +5,34 @@
 /* This file contains a lot of magic. Fix that. */
 #define	_vmemwr(DS,DO,S,N)	memcpy((char *)((DS) * 16 + (DO)), S, N)
 
+mode_t modes[5] = {
+    {(u8int*) "40x25", M40x25, (u8int**) &g_40x25_text, (u8int**) &g_8x16_font, 25, 40, 16},
+    {(u8int*) "40x50", M40x50, (u8int**) &g_40x50_text, (u8int**) &g_8x8_font,  50, 40, 8},
+    {(u8int*) "80x25", M80x25, (u8int**) &g_80x25_text, (u8int**) &g_8x16_font, 25, 80, 16},
+    {(u8int*) "90x30", M90x30, (u8int**) &g_90x30_text, (u8int**) &g_8x16_font, 30, 90, 16},
+    {(u8int*) "90x60", M90x60, (u8int**) &g_90x60_text, (u8int**) &g_8x8_font,  30, 90, 8}
+};
+
 u16int *textmemptr;
 u32int blank;
 u32int attrib;
 u32int csr_x, csr_y;
 u32int rows, cols;
+u8int* res;
 
-void setup_vga(u32int highres)
+void setup_vga(u32int mode)
 {
-    if(highres)
+    u32int i;
+    for(i = 0; i < 5; i ++)
     {
-	/* Let's try and set up 90x60 text mode :D */
-	cols = 90;
-	rows = 60;
-
-	write_regs(g_90x60_text);
-	write_font(g_8x8_font, 8);
-    } else {
-	cols = 80;
-	rows = 25;
-
-	write_regs(g_80x25_text);
-	write_font(g_8x16_font, 16);
+	if(modes[i].id == mode)
+	{
+	    res = modes[i].name;
+	    cols = modes[i].cols;
+	    rows = modes[i].rows;
+	    write_regs(modes[i].regs);
+	    write_font(modes[i].font, modes[i].fsize);
+	}
     }
     
     textmemptr = (u16int *)0xB8000;
@@ -38,7 +44,7 @@ void setup_vga(u32int highres)
 
     cls();
 
-    status((u8int*) "vga", (u8int*) "Initialised VGA", KINFO);
+    status((u8int*) "vga", ksprintf((u8int*) "Initialised VGA to mode %s", res), KINFO);
 }
 
 /* Start magic */

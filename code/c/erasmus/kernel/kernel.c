@@ -8,9 +8,11 @@
 #include <hardware/vga.h>
 #include <hardware/keyboard.h>
 
-u32int verbosity = KERROR;
-u32int highres   = FALSE;
+u32int verbosity = KINFO;
+u32int vidmode   = M80x25;
 u8int* keymap    = (u8int*) "gb";
+
+extern u8int* res;
 
 u8int *memcpy(u8int *dest, const u8int *src, size_t count)
 {
@@ -171,13 +173,23 @@ void parse_command_line(u8int* cmdline)
 		verbosity = KINFO;
 	    } else if(strcmp(var, (u8int*) "kwarn")) {
 		verbosity = KWARN;
+	    } else if(strcmp(var, (u8int*) "kerror")) {
+		verbosity = KERROR;
 	    }
-	} else if(strcmp(key, (u8int*) "keymap")) {
+	} else if(strcmp(key, (u8int*) "keymap")) { /* Keymap */
 	    keymap = (u8int*) var;
-	} else if(strcmp(key, (u8int*) "mode")) {
-	    if(strcmp(var, (u8int*) "90x60"))
+	} else if(strcmp(key, (u8int*) "mode")) { /* Screen resolution */
+	    if(strcmp(var, (u8int*) "40x25"))
 	    {
-		highres = TRUE;
+		vidmode = M40x25;
+	    } else if(strcmp(var, (u8int*) "40x50")) {
+		vidmode = M40x50;
+	    } else if(strcmp(var, (u8int*) "80x25")) {
+		vidmode = M80x25;
+	    } else if(strcmp(var, (u8int*) "90x30")) {
+		vidmode = M90x30;
+	    } else if(strcmp(var, (u8int*) "90x60")) {
+		vidmode = M90x60;
 	    }
 	}
     }
@@ -214,15 +226,10 @@ void kmain(multiboot_info_t* mbi, unsigned int magic)
 	parse_command_line((u8int*) mbi->cmdline);
     }
 
-    setup_vga(highres);
+    setup_vga(vidmode);
     show_banner();
 
-    if(highres)
-    {
-	status((u8int*) "vga", (u8int*) "Initialised screen to text mode 90x60", KINFO);
-    } else {
-	status((u8int*) "vga", (u8int*) "Initialised screen to text mode 80x25", KINFO);
-    }
+    status((u8int*) "vga", ksprintf((u8int*) "Initialised screen to text mode %s", res), KINFO);
 
     mbinfodump(*mbi);
 

@@ -20,7 +20,11 @@
 #define COL_WHITE         15
 
 /* Video mode setting */
-#define HIGH_RES 1
+#define M40x25 0
+#define M40x50 1
+#define M80x25 2
+#define M90x30 3
+#define M90x60 4
 
 #define VGA_AC_INDEX        0x3C0
 #define VGA_AC_WRITE        0x3C0
