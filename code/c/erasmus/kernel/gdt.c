@@ -35,4 +35,6 @@ void gdt_install()
 
     /* Load our new GDT. */
     gdt_flush();
+    
+    status((u8int*) "gdt", (u8int*) "Loaded GDT", 0);
 }

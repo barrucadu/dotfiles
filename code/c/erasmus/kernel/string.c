@@ -1,5 +1,6 @@
 #include <kernel.h>
 #include <string.h>
+#include <mm.h>
 
 size_t strlen(const u8int* str)
 {
@@ -16,7 +17,7 @@ size_t strlen(const u8int* str)
 
 u8int* strrev(u8int* string)
 {
-    u8int* str;
+    u8int* str = kmalloc(strlen(string) * sizeof(u8int*));
     u32int i, len;
 
     len = strlen((const u8int*) string);
@@ -28,6 +29,54 @@ u8int* strrev(u8int* string)
     str[i] = '\0';
     
     return str;
+}
+
+u8int* ksprintf(u8int* format, ...)
+{
+    /* Very simple sprintf: supports %s, returns the final string */
+    va_list args;
+    va_start(args, format);
+
+    u8int *strings[256];
+    u32int size = strlen(format);
+    u32int i, j, k, l;
+    u8int *s;
+
+    l = 0;
+    while((s = va_arg(args, u8int*)))
+    {
+	strings[l] = s;
+	size += strlen(s);
+	l ++;
+    }
+    
+    u8int *output = kmalloc(size);
+
+    j = 0;
+    l = 0;
+    for(i = 0; i < (u32int) strlen(format); i ++)
+    {
+	if(format[i] == '%') /* Start of control character */
+	{
+	    if(format[i + 1] == 's') /* Embed the next string */
+	    {
+		for(k = 0; k < (u32int) strlen(strings[l]); k ++)
+		{
+		    output[j] = strings[l][k];
+		    j ++;
+		}
+		j --;
+		l ++;
+	    }
+	    i ++;
+	} else {
+	    output[j] = format[i];
+	}
+	j ++;
+    }
+    output[j] = '\0';
+
+    return output;
 }
 
 u8int* itos(u32int number, u32int base)

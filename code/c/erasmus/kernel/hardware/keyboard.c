@@ -1,56 +1,12 @@
 #include <kernel.h>
+#include <string.h>
+#include <irqs.h>
 #include <hardware/keyboard.h>
 #include <hardware/vga.h>
-#include <irqs.h>
 
-/* Lower-case layout */
-u8int kbdgb[128] =
-{
-    0,  27, '1', '2', '3', '4', '5', '6', '7', '8',
-    '9', '0', '-', '=', '\b',
-    '\t',
-    'q', 'w', 'e', 'r',
-    't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',
-    0, /* Control */
-    'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',
-    '\'', '#',   0, /* Left shift */
-    '\\', 'z', 'x', 'c', 'v', 'b', 'n',/* 49 */
-    'm', ',', '.', '/',   0, /* Right shift */
-    '*',
-    0, /* Alt */
-    ' ',
-    0, /* Caps lock */
-    0, /* 59 - F1 key ... > */
-    0,   0,   0,   0,   0,   0,   0,   0,
-    0, /* < ... F10 */
-    0, /* 69 - Num lock*/
-    0, /* Scroll Lock */
-    0, /* Home key */
-    0, /* Up Arrow */
-    0, /* Page Up */
-    '-',
-    0, /* Left Arrow */
-    0,
-    0, /* Right Arrow */
-    '+',
-    0, /* 79 - End key*/
-    0, /* Down Arrow */
-    0, /* Page Down */
-    0, /* Insert Key */
-    0, /* Delete Key */
-    0,   0,   0,
-    0, /* F11 Key */
-    0, /* F12 Key */
-    0, /* All other keys are undefined */
-};
-
-/* Upper-case/shifted layout */
-u8int kbdGB[128] =
-{
-    0,  27, '!', '"', '3', '$', '%', '^', '&', '*', '(', ')', '_', '+', 0, 0, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 0,
-    0, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '@', '~', 0, '|', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0,
-};
-
+kblayout_t layouts[1];
+u32int numlayouts;
+u32int curlayout;
 u8int flags;
 u8int locks;
 
@@ -120,29 +76,75 @@ void keyboard_handler(regs_t *r)
 	/* Nothing to see here... */
     } else {
 	/* Key press */	
-	u8int key = kbdgb[scancode];
+	u8int key = layouts[curlayout].lower[scancode];
 
 	if(flags & 0x80) /* Shifted */
 	{
 	    /* Note: shift currently acts as a lock at the moment, which is irritating... */
 	    if(scancode <= 55)
-		key = kbdGB[scancode];
+		key = layouts[curlayout].upper[scancode];
 	} else if(locks & 0x20) {/* Caps lock */
 	    /* Only shift *letters* in caps lock */
 	    if((scancode >= 16 && scancode <= 25) || (scancode >= 30 && scancode <= 38) || (scancode >= 44 && scancode <= 50))
-		key = kbdGB[scancode];
+		key = layouts[curlayout].upper[scancode];
 	}
 
 	putch(key);
     }
 }
 
-void setup_keyboard()
+void change_layout(u8int *layout)
+{
+    u32int i;
+    u32int found = 0;
+    for(i = 0; i < numlayouts && !found; i ++)
+    {
+	if(layouts[i].name == layout)
+	{
+	    status((u8int*) "kb", ksprintf((u8int*) "Loading keyboard layout '%s'", layout), 0);
+	    curlayout = i;
+	    found = 1;
+	}
+    }
+
+    if(!found)
+    {
+	status((u8int*) "kb", ksprintf((u8int*) "Keyboard layout '%s' not found. Using default layout '%s'", layout, layouts[0].name), 2);
+	curlayout = 0;
+    }
+}
+
+void setup_keyboard(u8int *layout)
 {
     flags = 0; /* shift, control, alt */
     locks = 0; /* scroll, num, caps */
 
+    layouts[0].name = (u8int*) "gb";
+    numlayouts = 1;
+
+    /* Todo: Think of a better way to load the keyboard layout(s). Perhaps from a file when the VFS/ext2 is done... */
+    u8int gb[128] = {
+	0,  27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b', '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',
+	0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '#', 0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, '*', 0, ' ',
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '-', 0, 0, 0, '+', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    };
+    u8int GB[128] = {
+	0,  27, '!', '"', '3', '$', '%', '^', '&', '*', '(', ')', '_', '+', 0, 0, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 0,
+	0, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '@', '~', 0, '|', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0,
+    };
+
+    int i;
+    for(i = 0; i < 128; i ++)
+    {
+	layouts[0].lower[i] = gb[i];
+	layouts[0].upper[i] = GB[i];
+    }
+
     irq_install_handler(1, keyboard_handler);
 
     keyboard_lights();
+    
+    status((u8int*) "kb", (u8int*) "Set up keyboard handler", 0);
+
+    change_layout(layout);
 }

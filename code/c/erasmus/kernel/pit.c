@@ -31,4 +31,7 @@ void timer_install()
 {
     /* The PIT fires on IRQ 0 */
     irq_install_handler(0, timer_handler);
+    timer_phase(100); /* Set the PIT to 100Hz */
+
+    status((u8int*) "time", (u8int*) "Installed PIT handler", 0);
 }

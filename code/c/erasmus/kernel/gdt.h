@@ -1,5 +1,5 @@
 #ifndef __GDT_H
-#define __GDK_H 1
+#define __GDT_H 1
 
 /* Structs */
 typedef struct gdt_entry

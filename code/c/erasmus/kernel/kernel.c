@@ -76,14 +76,50 @@ void outportb(u16int _port, u8int _data)
     __asm__ __volatile__ ("outb %1, %0" : : "dN" (_port), "a" (_data));
 }
 
+void status(u8int* sender, u8int* message, u8int mode)
+{
+    /* mode = 0: information
+       mode = 1: debug
+       mode = 2: warning
+       mode = 3: error */
+
+    /* Todo: verbosity control through kernel command line */
+
+    switch(mode)
+    {
+    case 0:
+	settextcolour(COL_LIGHT_BLUE, COL_BLACK);
+	break;
+    case 1:
+	settextcolour(COL_LIGHT_GREEN, COL_BLACK);
+	break;
+    case 2:
+	settextcolour(COL_LIGHT_MAGENTA, COL_BLACK);
+	break;
+    case 3:
+	settextcolour(COL_LIGHT_RED, COL_BLACK);
+	break;
+    }
+
+    puts(ksprintf((u8int*)  "[%s] ", sender));
+    settextcolour(COL_WHITE, COL_BLACK);
+
+    u32int pad = 8 - (strlen(sender) + 2);
+    
+    for(; pad > 0; pad --)
+    {
+	putch((u8int) ' ');
+    }
+
+    puts(ksprintf((u8int*) "%s\n", message));
+}
+
 void panic(u8int* message)
 {
     /* Simple kernel panic function. Todo: coredump */
-    cls();
+    status((u8int*) "kmain", (u8int*) "Panic", 3);
 
-    puts((u8int*) "Kernel panic: ");
-    puts(message);
-    puts((u8int*) ".\n Halting system...");
+    puts(ksprintf((u8int*) "Kernel panic: %s.\nHalting system...", message));
 
     int irq;
     for(irq = 0; irq < 16; irq ++)
@@ -94,19 +130,20 @@ void panic(u8int* message)
 
 void kmain(multiboot_info_t* mbi, unsigned int magic)
 {
-    /* Basic stuff */
+    /* Level 0 boot:
+     *  Initialise the screen to print status messages */
+    setup_vga();
+
+    /* Level 1 boot:
+     *  Start up basic stuff: GDT and IDT, ISR and IRQ handlers, PIT control, memory manager */
+    status((u8int*) "kmain", (u8int*) "Entering level 1 boot", 1);
     gdt_install();
     idt_install();
     isrs_install();
     irq_install();
     timer_install();
-    timer_phase(100); /* Set the PIT to 100Hz */
 
     __asm__ __volatile__ ("sti");
-
-    /* Extra stuff */
-    setup_vga();
-    setup_keyboard();
 
     if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
@@ -115,10 +152,16 @@ void kmain(multiboot_info_t* mbi, unsigned int magic)
     }
 
     /* Let's grab the memory map GRUB built */
-    mm_grab_map(mbi);
-    /* mm_dump_map() */
+    mm_grab_map(*mbi);
+    /* mm_dump_map(); */
 
+    /* Level 2 boot:
+     *  Extra stuff which isn't as exciting as what has already happened :p */
+    status((u8int*) "kmain", (u8int*) "Entering level 2 boot", 1);
+    setup_keyboard((u8int*) "gb"); /* Todo: Allow specifying a keyboard layout on the command line */
+
+    /* putch('0' / 0); */
     
-
+    status((u8int*) "kmain", (u8int*) "Entering idle loop", 1);
     for(;;); /* There has got to be a more CPU-efficient way of sitting around and doing nothing */
 }

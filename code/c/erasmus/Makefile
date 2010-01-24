@@ -26,8 +26,8 @@ khardware: kernel/hardware/vga.o kernel/hardware/keyboard.o
 libc:
 	@echo "No POSIX-compliant libc implementation yet."
 
-qemu: Kernel image/mos.img
-	@mount -o loop,offset=32256 -t ext2 image/mos.img image/mnt
+qemu: Kernel image/erasmus.img
+	@mount -o loop,offset=32256 -t ext2 image/erasmus.img image/mnt
 
 	@mkdir -p image/mnt/boot/
 	@mkdir -p image/mnt/lib/

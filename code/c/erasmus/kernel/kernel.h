@@ -1,6 +1,11 @@
 #ifndef __KERNEL_H
 #define __KERNEL_H 1
 
+/* definitions */
+#define TRUE  1
+#define FALSE 0
+#define NULL  (char) 0
+
 /* typedefs */
 typedef          int   size_t;
 typedef unsigned int   u32int;
@@ -26,6 +31,7 @@ u16int *memsetw(u16int *dest, const u16int val, size_t count);
 u32int *memsetdw(u32int *dest, const u32int val, size_t count);
 u8int inportb(u16int _port);
 void outportb(u16int _port, u8int _data);
+void status(u8int* sender, u8int* message, u8int mode);
 void panic(u8int* message);
 
 #endif

@@ -17,6 +17,8 @@ void setup_vga()
     csr_y = 0;
 
     cls();
+
+    status((u8int*) "vga", (u8int*) "Initialised VGA", 0);
 }
 
 void scrollup()

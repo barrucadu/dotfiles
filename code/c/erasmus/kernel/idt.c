@@ -23,4 +23,6 @@ void idt_install()
 
     memset((u8int*) &idt, 0, sizeof(idt_entry_t) * 256);
     idt_load();
+
+    status((u8int*) "idt", (u8int*) "Loaded IDT", 0);
 }
