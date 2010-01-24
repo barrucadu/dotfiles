@@ -1,4 +1,5 @@
 #include <kernel.h>
+#include <string.h>
 #include <idt.h>
 
 idt_entry_t idt[256];
@@ -13,6 +14,8 @@ void idt_set_gate(u8int num, u32int base, u16int sel, u8int flags)
     idt[num].sel = sel;
     idt[num].always0 = 0;
     idt[num].flags = flags;
+
+    status((u8int*) "idt", ksprintf((u8int*) "Added IDT gate %s", itos(num, 10)), KSILLY);
 }
 
 void idt_install()
@@ -24,5 +27,5 @@ void idt_install()
     memset((u8int*) &idt, 0, sizeof(idt_entry_t) * 256);
     idt_load();
 
-    status((u8int*) "idt", (u8int*) "Loaded IDT", 0);
+    status((u8int*) "idt", (u8int*) "Loaded IDT", KINFO);
 }

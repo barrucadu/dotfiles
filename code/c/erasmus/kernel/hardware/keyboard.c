@@ -101,7 +101,7 @@ void change_layout(u8int *layout)
     {
 	if(layouts[i].name == layout)
 	{
-	    status((u8int*) "kb", ksprintf((u8int*) "Loading keyboard layout '%s'", layout), 0);
+	    status((u8int*) "kb", ksprintf((u8int*) "Loading keyboard layout '%s'", layout), KINFO);
 	    curlayout = i;
 	    found = 1;
 	}
@@ -109,7 +109,7 @@ void change_layout(u8int *layout)
 
     if(!found)
     {
-	status((u8int*) "kb", ksprintf((u8int*) "Keyboard layout '%s' not found. Using default layout '%s'", layout, layouts[0].name), 2);
+	status((u8int*) "kb", ksprintf((u8int*) "Keyboard layout '%s' not found. Using default layout '%s'", layout, layouts[0].name), KWARN);
 	curlayout = 0;
     }
 }
@@ -144,7 +144,7 @@ void setup_keyboard(u8int *layout)
 
     keyboard_lights();
     
-    status((u8int*) "kb", (u8int*) "Set up keyboard handler", 0);
+    status((u8int*) "kb", (u8int*) "Set up keyboard handler", KINFO);
 
     change_layout(layout);
 }

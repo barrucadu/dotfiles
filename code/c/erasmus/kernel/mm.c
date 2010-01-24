@@ -16,7 +16,7 @@ void mm_grab_map(multiboot_info_t mbi)
 
     multiboot_memory_map_t* map = (multiboot_memory_map_t*) mmap.addr;
 
-    status((u8int*) "mm", (u8int*) "Retrieved GRUB memory map", 0);
+    status((u8int*) "mm", (u8int*) "Retrieved GRUB memory map", KINFO);
     
     u32int i;
 
@@ -26,7 +26,7 @@ void mm_grab_map(multiboot_info_t mbi)
 	mmap.mblock[i].length  = map->len;
 	mmap.mblock[i].type    = map->type;
 
-	status((u8int*) "mm", ksprintf((u8int*) "Region: start %s, length %s, type %s", itos(map->addr, 16), itos(map->len, 16), itos(map->type, 16)), 1);
+	status((u8int*) "mm", ksprintf((u8int*) "Region: start %s, length %s, type %s", itos(map->addr, 16), itos(map->len, 16), itos(map->type, 16)), KDEBUG);
 
 	map = (multiboot_memory_map_t*) ((u32int) map + map->size + sizeof(u32int));
     }

@@ -72,7 +72,7 @@ void isrs_install()
     idt_set_gate(30, (unsigned)isr30, 0x08, 0x8E);
     idt_set_gate(31, (unsigned)isr31, 0x08, 0x8E);
 
-    status((u8int*) "isr", (u8int*) "Activated fault handler", 0);
+    status((u8int*) "isr", (u8int*) "Activated fault handler", KINFO);
 }
 
 void fault_handler(regs_t *r)

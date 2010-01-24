@@ -1,4 +1,5 @@
 #include <kernel.h>
+#include <string.h>
 #include <gdt.h>
 
 gdt_entry_t gdt[3];
@@ -16,6 +17,8 @@ void gdt_set_gate(s32int num, u32int base, u32int limit, u8int access, u8int gra
 
     gdt[num].granularity |= (gran & 0xF0);
     gdt[num].access = access;
+
+    status((u8int*) "gdt", ksprintf((u8int*) "Added GDT gate %s", itos(num, 10)), KSILLY);
 }
 
 void gdt_install()
@@ -36,5 +39,5 @@ void gdt_install()
     /* Load our new GDT. */
     gdt_flush();
     
-    status((u8int*) "gdt", (u8int*) "Loaded GDT", 0);
+    status((u8int*) "gdt", (u8int*) "Loaded GDT", KINFO);
 }

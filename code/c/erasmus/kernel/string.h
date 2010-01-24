@@ -11,7 +11,10 @@ typedef __builtin_va_list va_list;
 /* Functions */
 size_t strlen(const u8int* str);
 u8int* strrev(u8int* string);
+u8int* substr(u8int* string, u32int start, u32int length);
+u32int strfindnext(u8int* string, u8int search, u32int offset);
 u8int* ksprintf(u8int* format, ...);
 u8int* itos(u32int number, u32int base);
+u32int strcmp(u8int* s1, u8int* s2);
 
 #endif

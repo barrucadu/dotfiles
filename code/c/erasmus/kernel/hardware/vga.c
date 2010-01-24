@@ -23,8 +23,8 @@ void setup_vga()
 
 void scrollup()
 {
-    memcpy((u8int*) textmemptr, (u8int*) textmemptr + 80, 2 * 80); /* Copy 80 shorts (2 bytes) of memory to `textmemptr` from 1 line of text down */
-    memsetw(textmemptr + (csr_y - 1) * 80, blank, 80);    /* Write `blank` 80 times to the last line on the screen. */
+    memcpy((u8int*) textmemptr, (u8int*) (textmemptr + (csr_y - 24) * 80), (49 - csr_y) * 80 * 2);
+    memsetw(textmemptr + (49 - csr_y) * 80, blank, 80);
     csr_y --;
 }
 
@@ -83,7 +83,7 @@ void putch(u8int c)
     }
 
     /* If we've gone off the bottom of the screen: */
-    if(csr_y == 26)
+    while(csr_y >= 25)
     {
 	/* Scroll up a line */
 	scrollup();

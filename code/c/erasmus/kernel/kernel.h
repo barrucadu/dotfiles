@@ -2,9 +2,14 @@
 #define __KERNEL_H 1
 
 /* definitions */
-#define TRUE  1
-#define FALSE 0
-#define NULL  (char) 0
+#define TRUE   1
+#define FALSE  0
+#define NULL   (char) 0
+#define KSILLY 0
+#define KDEBUG 1
+#define KINFO  2
+#define KWARN  3
+#define KERROR 4
 
 /* typedefs */
 typedef          int   size_t;
@@ -33,5 +38,7 @@ u8int inportb(u16int _port);
 void outportb(u16int _port, u8int _data);
 void status(u8int* sender, u8int* message, u8int mode);
 void panic(u8int* message);
+void parse_command_line(u8int *cmdline);
+void show_banner();
 
 #endif

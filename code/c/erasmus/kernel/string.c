@@ -7,7 +7,7 @@ size_t strlen(const u8int* str)
     /* A function to return the number of bytes in a string. */
     const u8int *p = str;
 
-    while (*p != '\0')
+    while (*p != NULL)
     {
 	p++;
     }
@@ -26,9 +26,42 @@ u8int* strrev(u8int* string)
     {
 	str[i] = string[len - i - 1];
     }
-    str[i] = '\0';
+
+    str[i] = NULL;
     
     return str;
+}
+
+u8int* substr(u8int* string, u32int start, u32int length)
+{
+    u8int* out = kmalloc(length + 1);
+    
+    u32int i;
+    for(i = 0; i < length; i ++)
+    {
+	out[i] = string[start + i];
+    }
+
+    out[i] = '\0';
+
+    return out;
+}
+
+u32int strfindnext(u8int* string, u8int search, u32int offset)
+{
+    u32int out = offset + 1;
+
+    while(string[out] != search)
+    {
+	out ++;
+
+	if(out > (u32int) strlen(string))
+	{
+	    return 0;
+	}
+    }
+    
+    return out;
 }
 
 u8int* ksprintf(u8int* format, ...)
@@ -74,7 +107,7 @@ u8int* ksprintf(u8int* format, ...)
 	}
 	j ++;
     }
-    output[j] = '\0';
+    output[j] = NULL;
 
     return output;
 }
@@ -106,7 +139,27 @@ u8int* itos(u32int number, u32int base)
 	i += 2;
     }
 
-    num[i] = '\0';
+    num[i] = NULL;
 
     return strrev(num);
+}
+
+u32int strcmp(u8int* s1, u8int* s2) /* Return 1 if strings are identical, 0 otherwise */
+{
+    if(strlen(s1) != strlen(s2))
+    {
+	return FALSE;
+    }
+
+    u32int i;
+    
+    for(i = 0; i < strlen(s1); i ++)
+    {
+	if(s1[i] != s2[i])
+	{
+	    return FALSE;
+	}
+    }
+
+    return TRUE;
 }
