@@ -40,6 +40,7 @@ u16int *memsetw(u16int *dest, const u16int val, size_t count);
 u32int *memsetdw(u32int *dest, const u32int val, size_t count);
 u8int inportb(u16int _port);
 void outportb(u16int _port, u8int _data);
+void outportw(u16int _port, u16int _data);
 void status(u8int* sender, u8int* message, u8int mode);
 void panic(u8int* message);
 void parse_command_line(u8int *cmdline);

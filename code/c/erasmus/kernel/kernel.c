@@ -9,6 +9,7 @@
 #include <hardware/keyboard.h>
 
 u32int verbosity = KERROR;
+u32int highres   = FALSE;
 u8int* keymap    = (u8int*) "gb";
 
 u8int *memcpy(u8int *dest, const u8int *src, size_t count)
@@ -75,6 +76,13 @@ void outportb(u16int _port, u8int _data)
     /* A magic function to write one byte of data to a device. */
 
     __asm__ __volatile__ ("outb %1, %0" : : "dN" (_port), "a" (_data));
+}
+
+void outportw(u16int _port, u16int _data)
+{
+    /* A magic function to write one word of data to a device. */
+
+    __asm__ __volatile__ ("outw %1, %0" : : "dN" (_port), "a" (_data));
 }
 
 void status(u8int* sender, u8int* message, u8int mode)
@@ -166,27 +174,26 @@ void parse_command_line(u8int* cmdline)
 	    }
 	} else if(strcmp(key, (u8int*) "keymap")) {
 	    keymap = (u8int*) var;
+	} else if(strcmp(key, (u8int*) "mode")) {
+	    if(strcmp(var, (u8int*) "90x60"))
+	    {
+		highres = TRUE;
+	    }
 	}
-
-	status((u8int*) "kmain", ksprintf((u8int*) "Found parameter '%s' = '%s'", key, var), KDEBUG);
     }
 }
 
 void show_banner()
 {
-    putch((u8int) '\n');
-    puts((u8int*) "   _|_|_|_|\n");
-    puts((u8int*) "   _|        _|  _|_|    _|_|_|    _|_|_|  _|_|_|  _|_|    _|    _|    _|_|_|\n");
-    puts((u8int*) "   _|_|_|    _|_|      _|    _|  _|_|      _|    _|    _|  _|    _|  _|_|\n");
-    puts((u8int*) "   _|        _|        _|    _|      _|_|  _|    _|    _|  _|    _|      _|_|\n");
-    puts((u8int*) "   _|_|_|_|  _|          _|_|_|  _|_|_|    _|    _|    _|    _|_|_|  _|_|_|\n\n");
+    cls();
+    puts((u8int*) "\n ERASMUS 0.0\n\n");
 }
 
 void mbinfodump(multiboot_info_t mbi)
 {
     if(mbi.flags & MULTIBOOT_INFO_BOOT_LOADER_NAME)
     {
-	status((u8int*) "kmain", ksprintf("Bootloader name '%s'", mbi.boot_loader_name), KDEBUG);
+	status((u8int*) "kmain", ksprintf((u8int*) "Bootloader name '%s'", mbi.boot_loader_name), KDEBUG);
     }
 }
 
@@ -194,18 +201,27 @@ void kmain(multiboot_info_t* mbi, unsigned int magic)
 {
     /* Level 0 boot:
      *  Initialise the screen to print status messages, check GRUB, and parse the command line */
-    setup_vga();
-    show_banner();
 
     if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
 	/* GRUB fail... */
+	setup_vga(FALSE);
 	panic((u8int*) "Invalid multiboot magic number.");
     }
 
     if(mbi->flags & MULTIBOOT_INFO_CMDLINE)
     {
 	parse_command_line((u8int*) mbi->cmdline);
+    }
+
+    setup_vga(highres);
+    show_banner();
+
+    if(highres)
+    {
+	status((u8int*) "vga", (u8int*) "Initialised screen to text mode 90x60", KINFO);
+    } else {
+	status((u8int*) "vga", (u8int*) "Initialised screen to text mode 80x25", KINFO);
     }
 
     mbinfodump(*mbi);

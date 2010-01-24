@@ -1,0 +1,17 @@
+0.1 plan:
+    Working memory manager (paging)
+    ATA driver (grab info about HDDs, able to read/write sectors)
+
+0.2 plan:
+    POSIX-like VFS (/dev, /proc, /root, etc)
+    Ext2 and FAT32 drivers
+    Basic libc
+    ELF loader
+    Multithreading
+    Multitasking
+
+0.3 plan
+    status() output to file
+    1024x768 framebuffer
+    More advanced libc
+    Port of Aprz shell
