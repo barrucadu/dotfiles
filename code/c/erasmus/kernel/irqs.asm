@@ -1,116 +1,28 @@
-global irq0
-global irq1
-global irq2
-global irq3
-global irq4
-global irq5
-global irq6
-global irq7
-global irq8
-global irq9
-global irq10
-global irq11
-global irq12
-global irq13
-global irq14
-global irq15
-
-    ;; Mapping IRQs 0-15 to ISRs 32-47
-irq0:
+%macro IRQ 2
+global irq%1
+irq%1:
     cli
     push byte 0
-    push byte 32
+    push byte %2
     jmp irq_common_stub
+%endmacro
 
-irq1:
-    cli
-    push byte 0
-    push byte 33
-    jmp irq_common_stub
-
-irq2:
-    cli
-    push byte 0
-    push byte 34
-    jmp irq_common_stub
-
-irq3:
-    cli
-    push byte 0
-    push byte 35
-    jmp irq_common_stub
-
-irq4:
-    cli
-    push byte 0
-    push byte 36
-    jmp irq_common_stub
-
-irq5:
-    cli
-    push byte 0
-    push byte 37
-    jmp irq_common_stub
-
-irq6:
-    cli
-    push byte 0
-    push byte 38
-    jmp irq_common_stub
-
-irq7:
-    cli
-    push byte 0
-    push byte 39
-    jmp irq_common_stub
-
-irq8:
-    cli
-    push byte 0
-    push byte 40
-    jmp irq_common_stub
-
-irq9:
-    cli
-    push byte 0
-    push byte 41
-    jmp irq_common_stub
-
-irq10:
-    cli
-    push byte 0
-    push byte 42
-    jmp irq_common_stub
-
-irq11:
-    cli
-    push byte 0
-    push byte 43
-    jmp irq_common_stub
-
-irq12:
-    cli
-    push byte 0
-    push byte 44
-    jmp irq_common_stub
-
-irq13:
-    cli
-    push byte 0
-    push byte 45
-    jmp irq_common_stub
-
-irq14:
-    cli
-    push byte 0
-    push byte 46
-    jmp irq_common_stub
-
-irq15:
-    cli
-    push byte 0
-    push byte 47
-    jmp irq_common_stub
+IRQ 0,  32
+IRQ 1,  33
+IRQ 2,  34
+IRQ 3,  35
+IRQ 4,  36
+IRQ 5,  37
+IRQ 6,  38
+IRQ 7,  39
+IRQ 8,  40
+IRQ 9,  41
+IRQ 10, 42
+IRQ 11, 43
+IRQ 12, 44
+IRQ 13, 45
+IRQ 14, 46
+IRQ 15, 47
 
 extern irq_handler
 

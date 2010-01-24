@@ -2,27 +2,27 @@
 #include <pit.h>
 #include <irqs.h>
 
-int curticks = 0;
+u32int curticks = 0;
 
-void timer_phase(int hz)
+void timer_phase(u32int hz)
 {
     /* Magic function */
 
-    int divisor = 1193180 / hz;       /* Calculate our divisor */
+    u32int divisor = 1193180 / hz;       /* Calculate our divisor */
     outportb(0x43, 0x36);             /* Set our command byte 0x36 */
     outportb(0x40, divisor & 0xFF);   /* Set low byte of divisor */
     outportb(0x40, divisor >> 8);     /* Set high byte of divisor */
 }
 
-void timer_handler(struct regs *r)
+void timer_handler(regs_t *r)
 {
     /* Not doing much currently... */
     curticks ++;
 }
 
-void sleep(int ticks)
+void sleep(u32int ticks)
 {
-    int end = curticks + ticks;
+    u32int end = curticks + ticks;
 
     while(curticks < end);
 }

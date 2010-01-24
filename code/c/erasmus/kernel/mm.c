@@ -1,21 +1,10 @@
 #include <kernel.h>
 #include <multiboot.h>
 #include <mm.h>
+#include <string.h>
 #include <hardware/vga.h>
 
-struct mblock_t
-{
-    unsigned long long address;
-    unsigned long long length;
-    unsigned int type;
-};
-
-struct mmap_t
-{
-    unsigned int addr, length;
-    struct mblock_t mblock[256];
-    unsigned int blocks;
-} mmap;
+mmap_t mmap;
 
 void mm_grab_map(multiboot_info_t* mbi)
 {
@@ -26,15 +15,15 @@ void mm_grab_map(multiboot_info_t* mbi)
 
     multiboot_memory_map_t* map = (multiboot_memory_map_t*) mmap.addr;
     
-    int i;
+    u32int i;
 
-    for(i = 0; (unsigned int) map < mmap.addr + mmap.length && i < 256; i ++)
+    for(i = 0; (u32int) map < mmap.addr + mmap.length && i < 256; i ++)
     {
 	mmap.mblock[i].address = map->addr;
 	mmap.mblock[i].length  = map->len;
 	mmap.mblock[i].type    = map->type;
 
-	map = (multiboot_memory_map_t*) ((unsigned int) map + map->size + sizeof(unsigned int));
+	map = (multiboot_memory_map_t*) ((u32int) map + map->size + sizeof(u32int));
     }
 
     mmap.blocks = i;
@@ -44,22 +33,18 @@ void mm_dump_map()
 {
     /* Print out our memory map */
 
-    puts((unsigned char*) "Memory map start: ");
-    puts(itos(mmap.addr, 16));
-    puts((unsigned char*) ", length: ");
-    puts(itos(mmap.length, 16));
-    putch('\n');
+    puts((u8int*) "Memory map:\n");
 
-    unsigned int i;
+    u32int i;
     for(i = 0; i < mmap.blocks; i ++)
     {
-	puts((unsigned char*) "    Address range: ");
+	puts((u8int*) "    Address range: ");
 	puts(itos(mmap.mblock[i].address, 16));
-	puts((unsigned char*) " -> ");
+	puts((u8int*) " -> ");
 	puts(itos(mmap.mblock[i].address + mmap.mblock[i].length, 16));
-	puts((unsigned char*) " (");
+	puts((u8int*) " (");
 	puts(itos(mmap.mblock[i].length, 16));
-	puts((unsigned char*) "), type ");
+	puts((u8int*) "), type ");
 	puts(itos(mmap.mblock[i].type, 16));
 	putch('\n');
     }

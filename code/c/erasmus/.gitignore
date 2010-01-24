@@ -1,4 +1,5 @@
 grub/
+image/
 Kernel
 kernel/*.o
 kernel/*.oasm

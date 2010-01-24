@@ -1,15 +1,15 @@
 #include <kernel.h>
 #include <hardware/vga.h>
 
-unsigned short *textmemptr;
-unsigned blank;
-int attrib;
-int csr_x;
-int csr_y;
+u16int *textmemptr;
+u32int blank;
+u32int attrib;
+u32int csr_x;
+u32int csr_y;
 
 void setup_vga()
 {
-    textmemptr = (unsigned short *)0xB8000;
+    textmemptr = (u16int *)0xB8000;
 
     settextcolour(COL_WHITE, COL_BLACK); /* White text on a black background */
 
@@ -21,7 +21,7 @@ void setup_vga()
 
 void scrollup()
 {
-    memcpy((unsigned char*) textmemptr, (unsigned char*) textmemptr + 80, 2 * 80); /* Copy 80 shorts (2 bytes) of memory to `textmemptr` from 1 line of text down */
+    memcpy((u8int*) textmemptr, (u8int*) textmemptr + 80, 2 * 80); /* Copy 80 shorts (2 bytes) of memory to `textmemptr` from 1 line of text down */
     memsetw(textmemptr + (csr_y - 1) * 80, blank, 80);    /* Write `blank` 80 times to the last line on the screen. */
     csr_y --;
 }
@@ -29,7 +29,7 @@ void scrollup()
 void move_csr()
 {
     /* VGA magic. */
-    unsigned pos;
+    u32int pos;
     pos = csr_y * 80 + csr_x;
 
     outportb(0x3D4, 14);
@@ -48,7 +48,7 @@ void cls()
     move_csr();
 }
 
-void putch(unsigned char c)
+void putch(u8int c)
 {
     /* Special cases: c = backspace, tab, \n. We're going to use the UNIX line-ending convention. */
     if(c == 0x08)
@@ -66,7 +66,7 @@ void putch(unsigned char c)
 	csr_y ++;
 
     } else if(c >= ' ') {
-	unsigned short *loc;
+	u16int *loc;
 	loc = textmemptr + (csr_y * 80 + csr_x); /* Memory address of the current cursor location. */
 	*loc = c | (attrib << 8);
 	csr_x ++;
@@ -90,16 +90,16 @@ void putch(unsigned char c)
     move_csr();
 }
 
-void puts(unsigned char *str)
+void puts(u8int *str)
 {
-    int i;
-    for(i = 0; i < strlen((char*) str); i ++)
+    u32int i;
+    for(i = 0; str[i]; i ++)
     {
 	putch(str[i]);
     }
 }
 
-void settextcolour(unsigned char foreground, unsigned char background)
+void settextcolour(u8int foreground, u8int background)
 {
     attrib = (background << 4) | (foreground & 0x0F); /* Upper four bits are the background, lower four are the foreground. */
     blank  = 0x20 | (attrib << 8); /* Update our blank character to use the new background. */

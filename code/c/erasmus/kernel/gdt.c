@@ -1,26 +1,10 @@
 #include <kernel.h>
 #include <gdt.h>
 
-struct gdt_entry
-{
-    unsigned short limit_low;
-    unsigned short base_low;
-    unsigned char base_middle;
-    unsigned char access;
-    unsigned char granularity;
-    unsigned char base_high;
-} __attribute__((packed)); /* `packed` stops the compiler from trying to optimise this struct. */
+gdt_entry_t gdt[3];
+gdt_ptr_t gp;
 
-struct gdt_ptr
-{
-    unsigned short limit;
-    unsigned int base;
-} __attribute__((packed));
-
-struct gdt_entry gdt[3];
-struct gdt_ptr gp;
-
-void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran)
+void gdt_set_gate(s32int num, u32int base, u32int limit, u8int access, u8int gran)
 {
     /* Magic function to add a GDT entry */
     gdt[num].base_low = (base & 0xFFFF);
@@ -37,8 +21,8 @@ void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned cha
 void gdt_install()
 {
     /* Set up a few GDT entries and load the new GDT over the GRUB one */
-    gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gp.base  = (int) &gdt;
+    gp.limit = (sizeof(gdt_entry_t) * 3) - 1;
+    gp.base  = (s32int) &gdt;
 
     /* Add the null gate (memory protection thingy) */
     gdt_set_gate(0, 0, 0, 0, 0);

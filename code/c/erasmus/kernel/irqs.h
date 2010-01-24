@@ -1,5 +1,5 @@
 #ifndef __IRQS_H
-#define __IRQS_H
+#define __IRQS_H 1
 
 extern void irq0();
 extern void irq1();
@@ -18,10 +18,10 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-extern void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags);
+extern void idt_set_gate(u8int num, u32int base, u16int sel, u8int flags);
 
-void irq_install_handler(int irq, void (*handler)(struct regs *r));
-void irq_uninstall_handler(int irq);
+void irq_install_handler(s32int irq, void (*handler)(regs_t *r));
+void irq_uninstall_handler(s32int irq);
 void irq_remap();
 void irq_install();
 void irq_handler(struct regs *r);

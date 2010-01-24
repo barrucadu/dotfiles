@@ -1,5 +1,5 @@
 #ifndef __ISRS_H
-#define __ISRS_H
+#define __ISRS_H 1
 
 extern void isr0();
 extern void isr1();

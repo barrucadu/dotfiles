@@ -4,7 +4,7 @@
 #include <irqs.h>
 
 /* Lower-case layout */
-unsigned char kbdgb[128] =
+u8int kbdgb[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',
     '9', '0', '-', '=', '\b',
@@ -45,14 +45,14 @@ unsigned char kbdgb[128] =
 };
 
 /* Upper-case/shifted layout */
-unsigned char kbdGB[128] =
+u8int kbdGB[128] =
 {
     0,  27, '!', '"', '3', '$', '%', '^', '&', '*', '(', ')', '_', '+', 0, 0, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 0,
     0, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '@', '~', 0, '|', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0,
 };
 
-unsigned char flags;
-unsigned char locks;
+u8int flags;
+u8int locks;
 
 void keyboard_lights()
 {
@@ -61,7 +61,7 @@ void keyboard_lights()
     outportb(0xED, locks);
 }
 
-void toggleflag(unsigned char scancode)
+void toggleflag(u8int scancode)
 {
     int lights = 0;
 
@@ -108,9 +108,9 @@ void toggleflag(unsigned char scancode)
 	keyboard_lights();
 }
 
-void keyboard_handler(struct regs *r)
+void keyboard_handler(regs_t *r)
 {
-    unsigned char scancode = inportb(0x60);
+    u8int scancode = inportb(0x60);
 
     toggleflag(scancode);
 
@@ -120,7 +120,7 @@ void keyboard_handler(struct regs *r)
 	/* Nothing to see here... */
     } else {
 	/* Key press */	
-	unsigned char key = kbdgb[scancode];
+	u8int key = kbdgb[scancode];
 
 	if(flags & 0x80) /* Shifted */
 	{

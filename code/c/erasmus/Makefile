@@ -10,7 +10,7 @@ LDFLAGS := -T kernel/link.ld -melf_i386
 all: kernel libc
 
 kernel: kasm kbase khardware
-	@ld $(LDFLAGS) -o Kernel kernel/start kernel/*.oasm kernel/*.o kernel/hardware/*.o
+	ld $(LDFLAGS) -o Kernel kernel/start kernel/*.oasm kernel/*.o kernel/hardware/*.o
 
 kasm: kernel/start.asm kernel/gdt.asm kernel/idt.asm kernel/irqs.asm kernel/isrs.asm
 	@nasm -f elf -o kernel/start     kernel/start.asm
@@ -19,7 +19,7 @@ kasm: kernel/start.asm kernel/gdt.asm kernel/idt.asm kernel/irqs.asm kernel/isrs
 	@nasm -f elf -o kernel/irqs.oasm kernel/irqs.asm
 	@nasm -f elf -o kernel/isrs.oasm kernel/isrs.asm
 
-kbase: kernel/kernel.o kernel/gdt.o kernel/idt.o kernel/isrs.o kernel/irqs.o kernel/pit.o kernel/mm.o
+kbase: kernel/kernel.o kernel/string.o kernel/gdt.o kernel/idt.o kernel/isrs.o kernel/irqs.o kernel/pit.o kernel/mm.o
 
 khardware: kernel/hardware/vga.o kernel/hardware/keyboard.o
 

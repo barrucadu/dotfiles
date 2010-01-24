@@ -22,8 +22,8 @@ void setup_vga();
 void scrollup();
 void move_csr();
 void cls();
-void putch(unsigned char c);
-void puts(unsigned char *str);
-void settextcolour(unsigned char foreground, unsigned char background);
+void putch(u8int c);
+void puts(u8int *str);
+void settextcolour(u8int foreground, u8int background);
 
 #endif

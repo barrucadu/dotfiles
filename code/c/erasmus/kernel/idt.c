@@ -1,25 +1,10 @@
 #include <kernel.h>
 #include <idt.h>
 
-struct idt_entry
-{
-    unsigned short base_lo;
-    unsigned short sel;     /* Our kernel segment goes here! */
-    unsigned char always0;  /* This will ALWAYS be set to 0! */
-    unsigned char flags;
-    unsigned short base_hi;
-} __attribute__ ((packed));
+idt_entry_t idt[256];
+idt_ptr_t idtp;
 
-struct idt_ptr
-{
-    unsigned short limit;
-    unsigned int base;
-} __attribute__ ((packed));
-
-struct idt_entry idt[256];
-struct idt_ptr idtp;
-
-void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags)
+void idt_set_gate(u8int num, u32int base, u16int sel, u8int flags)
 {
     /* Set an IDT gate. This is *far* simpler than the GDT stuff */
 
@@ -33,9 +18,9 @@ void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, uns
 void idt_install()
 {
     /* Set up the IDT pointer and add some stuff to it */
-    idtp.limit = (sizeof (struct idt_entry) * 256) - 1;
-    idtp.base  = (int) &idt;
+    idtp.limit = (sizeof (idt_entry_t) * 256) - 1;
+    idtp.base  = (s32int) &idt;
 
-    memset((unsigned char*) &idt, 0, sizeof(struct idt_entry) * 256);
+    memset((u8int*) &idt, 0, sizeof(idt_entry_t) * 256);
     idt_load();
 }

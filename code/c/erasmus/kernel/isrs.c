@@ -73,11 +73,11 @@ void isrs_install()
     idt_set_gate(31, (unsigned)isr31, 0x08, 0x8E);
 }
 
-void fault_handler(struct regs *r)
+void fault_handler(regs_t *r)
 {
     /* Simple fault handler: passes an error mesage to panic() */
     if(r->int_no < 32)
     {
-	panic((unsigned char*) exception_msg[r->int_no]);
+	panic((u8int*) exception_msg[r->int_no]);
     }
 }

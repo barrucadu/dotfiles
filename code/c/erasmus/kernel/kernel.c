@@ -1,5 +1,6 @@
 #include <kernel.h>
 #include <multiboot.h>
+#include <string.h>
 #include <gdt.h>
 #include <idt.h>
 #include <isrs.h>
@@ -9,7 +10,7 @@
 #include <hardware/vga.h>
 #include <hardware/keyboard.h>
 
-unsigned char *memcpy(unsigned char *dest, const unsigned char *src, size_t count)
+u8int *memcpy(u8int *dest, const u8int *src, size_t count)
 {
     /* A function to copy `count` bytes of data from `src` to `dest`, returning `dest`. */
 
@@ -21,7 +22,7 @@ unsigned char *memcpy(unsigned char *dest, const unsigned char *src, size_t coun
     return dest;
 }
 
-unsigned char *memset(unsigned char *dest, const unsigned char val, size_t count)
+u8int *memset(u8int *dest, const u8int val, size_t count)
 {
     /* A function to set `count` bytes of data in `dest` equal to `val`, returning `dest`. */
 
@@ -33,9 +34,9 @@ unsigned char *memset(unsigned char *dest, const unsigned char val, size_t count
     return dest;
 }
 
-unsigned short *memsetw(unsigned short *dest, const unsigned short val, size_t count)
+u16int *memsetw(u16int *dest, const u16int val, size_t count)
 {
-    /* A function to set `count` bytes of data in `dest` equal to `val`, returning `dest`. 16-bit. */
+    /* A function to set `count` words of data in `dest` equal to `val`, returning `dest`. 16-bit. */
     
     for(; count != 0; count --)
     {
@@ -45,86 +46,44 @@ unsigned short *memsetw(unsigned short *dest, const unsigned short val, size_t c
     return dest;
 }
 
-size_t strlen(const char* str)
+u32int *memsetdw(u32int *dest, const u32int val, size_t count)
 {
-    /* A function to return the number of bytes in a string. */
-    const char *p = str;
-
-    while (*p != '\0')
-    {
-	p++;
-    }
-
-    return (size_t) (p - str);
-}
-
-unsigned char* strrev(unsigned char* string)
-{
-    unsigned char* str;
-    int i, len;
-
-    len = strlen((const char*) string);
-
-    for(i = 0; i < len; i ++)
-    {
-	str[i] = string[len - i - 1];
-    }
-    str[i] = '\0';
+    /* A function to set `count` doublewords of data in `dest` equal to `val`, returning `dest`. 32-bit. */
     
-    return str;
-}
-
-unsigned char* itos(int number, unsigned int base)
-{
-    /* Todo: Allow choice between bases 2, 8, 10, and 16 (maybe also 1 for the lulz) */
-    /* Note: Doesn't seem to work properly (eg, 57 returns "55"), and needs extending to work on long longs */
-
-    /* Slightly modified example from K&R book */
-    int i, sign;
-    unsigned char *str;
-
-    if ((sign = number) < 0)
-        number = -number;
-
-    i = 0;
-    do  /* generate digits in reverse order */
+    for(; count != 0; count --)
     {
-        str[i++] = (number % 10) + '0';   /* get next digit */
-    } while (number /= 10);
-
-    if (sign < 0)
-        str[i++] = '-';
-    str[i] = '\0';
-
-    return strrev(str);
+	*dest++ = val;
+    }
+    
+    return dest;
 }
 
-unsigned char inportb(unsigned short _port)
+u8int inportb(u16int _port)
 {
     /* A magic function to read one byte of data from a device. */
 
-    unsigned char rv;
+    u8int rv;
 
     __asm__ __volatile__ ("inb %1, %0" : "=a" (rv) : "dN" (_port));
 
     return rv;
 }
 
-void outportb(unsigned short _port, unsigned char _data)
+void outportb(u16int _port, u8int _data)
 {
     /* A magic function to write one byte of data to a device. */
 
     __asm__ __volatile__ ("outb %1, %0" : : "dN" (_port), "a" (_data));
 }
 
-void panic(unsigned char* message)
+void panic(u8int* message)
 {
     /* Simple kernel panic function. Todo: coredump */
     cls();
 
-    puts((unsigned char*) "Kernel panic: ");
+    puts((u8int*) "Kernel panic: ");
     puts(message);
-    puts((unsigned char*) ".\n Halting system...");
+    puts((u8int*) ".\n Halting system...");
 
     int irq;
     for(irq = 0; irq < 16; irq ++)
@@ -135,36 +94,31 @@ void panic(unsigned char* message)
 
 void kmain(multiboot_info_t* mbi, unsigned int magic)
 {
+    /* Basic stuff */
     gdt_install();
     idt_install();
     isrs_install();
     irq_install();
     timer_install();
+    timer_phase(100); /* Set the PIT to 100Hz */
 
     __asm__ __volatile__ ("sti");
-    
+
+    /* Extra stuff */
     setup_vga();
     setup_keyboard();
 
     if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
 	/* GRUB fail... */
-	panic((unsigned char*) "Invalid multiboot magic number.");
+	panic((u8int*) "Invalid multiboot magic number.");
     }
 
+    /* Let's grab the memory map GRUB built */
     mm_grab_map(mbi);
+    /* mm_dump_map() */
 
-    unsigned char *cmdline;
-
-    cmdline = (unsigned char *) mbi->cmdline;
-
-    puts((unsigned char*) "Kernel command line: ");
-    puts(cmdline);
-
-    puts(itos(57, 10));
-
-    puts((unsigned char*) "\n\n");
-    mm_dump_map();
+    
 
     for(;;); /* There has got to be a more CPU-efficient way of sitting around and doing nothing */
 }
