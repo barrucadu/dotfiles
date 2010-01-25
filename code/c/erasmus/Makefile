@@ -23,9 +23,9 @@ kernel: kasm kbase khardware
 	ld $(LDFLAGS) -o erasmus kernel/start kernel/*.oasm kernel/*.o kernel/hardware/*.o
 	gzip -f erasmus
 
-kasm:      kernel/start         $(ASMSOURCES:.asm=.oasm)
-kbase:     $(BASESOURCES:.c=.o) $(BASESOURCES:.c=.h)
-khardware: $(HWSOURCES:.c=.o)   $(HWSOURCES:.c=.h)       kernel/hardware/vga-modes.h
+kasm:      kernel/start $(ASMSOURCES:.asm=.oasm)
+kbase:     $(BASESOURCES:.c=.o)
+khardware: $(HWSOURCES:.c=.o)
 
 kernel/start: kernel/start.asm
 	nasm -f elf -o kernel/start kernel/start.asm
