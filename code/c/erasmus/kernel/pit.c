@@ -17,6 +17,7 @@ void timer_phase(u32int hz)
 void timer_handler(regs_t *r)
 {
     /* Not doing much currently... */
+    (void) r;
     curticks ++;
 }
 
@@ -33,5 +34,5 @@ void timer_install()
     irq_install_handler(0, timer_handler);
     timer_phase(100); /* Set the PIT to 100Hz */
 
-    status((u8int*) "time", (u8int*) "Installed PIT handler", KINFO);
+    status((u8int*) "time", (u8int*) "Activated PIT handler", KINFO);
 }

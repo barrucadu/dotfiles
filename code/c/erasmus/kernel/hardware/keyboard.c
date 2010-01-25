@@ -66,6 +66,8 @@ void toggleflag(u8int scancode)
 
 void keyboard_handler(regs_t *r)
 {
+    (void) r;
+
     u8int scancode = inportb(0x60);
 
     toggleflag(scancode);

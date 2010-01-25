@@ -1,5 +1,6 @@
 #include <kernel.h>
 #include <mm.h>
+#include <hardware/vga.h>
 
 size_t strlen(const u8int* str)
 {
@@ -63,6 +64,28 @@ u32int strfindnext(u8int* string, u8int search, u32int offset)
     return out;
 }
 
+void kprintf(u8int* format, ...)
+{
+    /* Very simple printf: supports %s, prints the final string */
+    va_list args;
+    va_start(args, format);
+
+    u8int *strings[256];
+    u32int size = strlen(format);
+    u32int i;
+    u8int *s;
+
+    i = 0;
+    while((s = va_arg(args, u8int*)))
+    {
+	strings[i] = s;
+	size += strlen(s);
+	i ++;
+    }
+    
+    puts(kstrformat(format, strings, size));
+}
+
 u8int* ksprintf(u8int* format, ...)
 {
     /* Very simple sprintf: supports %s, returns the final string */
@@ -71,18 +94,25 @@ u8int* ksprintf(u8int* format, ...)
 
     u8int *strings[256];
     u32int size = strlen(format);
-    u32int i, j, k, l;
+    u32int i;
     u8int *s;
 
-    l = 0;
+    i = 0;
     while((s = va_arg(args, u8int*)))
     {
-	strings[l] = s;
+	strings[i] = s;
 	size += strlen(s);
-	l ++;
+	i ++;
     }
     
+    return kstrformat(format, strings, size);
+}
+
+u8int* kstrformat(u8int* format, u8int* strings[256], u32int size)
+{
+    /* Used by kprintf and ksprintf */
     u8int *output = kmalloc(size);
+    u32int i, j, k, l;
 
     j = 0;
     l = 0;
@@ -152,7 +182,7 @@ u32int strcmp(u8int* s1, u8int* s2) /* Return 1 if strings are identical, 0 othe
 
     u32int i;
     
-    for(i = 0; i < strlen(s1); i ++)
+    for(i = 0; i < (u32int) strlen(s1); i ++)
     {
 	if(s1[i] != s2[i])
 	{

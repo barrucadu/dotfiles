@@ -3,7 +3,7 @@
 #include <hardware/vga-modes.h>
 
 /* This file contains a lot of magic. Fix that. */
-#define	_vmemwr(DS,DO,S,N)	memcpy((char *)((DS) * 16 + (DO)), S, N)
+#define	_vmemwr(DS,DO,S,N)	memcpy((u8int *)((DS) * 16 + (DO)), S, N)
 
 mode_t modes[5] = {
     {(u8int*) "40x25", M40x25, (u8int**) &g_40x25_text, (u8int**) &g_8x16_font, 25, 40, 16},
@@ -30,8 +30,8 @@ void setup_vga(u32int mode)
 	    res = modes[i].name;
 	    cols = modes[i].cols;
 	    rows = modes[i].rows;
-	    write_regs(modes[i].regs);
-	    write_font(modes[i].font, modes[i].fsize);
+	    write_regs((u8int*) modes[i].regs);
+	    write_font((u8int*) modes[i].font, modes[i].fsize);
 	}
     }
     
@@ -48,9 +48,9 @@ void setup_vga(u32int mode)
 }
 
 /* Start magic */
-void write_regs(unsigned char *regs)
+void write_regs(u8int *regs)
 {
-    unsigned i;
+    u16int i;
 
 /* write MISCELLANEOUS reg */
     outportb(VGA_MISC_WRITE, *regs);
@@ -97,10 +97,10 @@ void write_regs(unsigned char *regs)
     outportb(VGA_AC_INDEX, 0x20);
 }
 
-void write_font(unsigned char *buf, unsigned font_height)
+void write_font(u8int *buf, u16int font_height)
 {
-	unsigned char seq2, seq4, gc4, gc5, gc6;
-	unsigned i;
+	u8int seq2, seq4, gc4, gc5, gc6;
+	u16int i;
 
 /* save registers
 set_plane() modifies GC 4 and SEQ 2, so save them as well */
@@ -146,9 +146,9 @@ assume: chain-4 addressing already off */
 	outportb(VGA_GC_DATA, gc6);
 }
 
-void set_plane(unsigned p)
+void set_plane(u16int p)
 {
-	unsigned char pmask;
+	u8int pmask;
 
 	p &= 3;
 	pmask = 1 << p;
@@ -160,14 +160,14 @@ void set_plane(unsigned p)
 	outportb(VGA_SEQ_DATA, pmask);
 }
 
-void vmemwr(unsigned dst_off, unsigned char *src, unsigned count)
+void vmemwr(u16int dst_off, u8int *src, u16int count)
 {
 	_vmemwr(get_fb_seg(), dst_off, src, count);
 }
 
-unsigned get_fb_seg(void)
+u16int get_fb_seg(void)
 {
-	unsigned seg;
+	u16int seg;
 
 	outportb(VGA_GC_INDEX, 6);
 	seg = inportb(VGA_GC_DATA);

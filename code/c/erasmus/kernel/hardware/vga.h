@@ -49,11 +49,11 @@
 
 /* Functions */
 void setup_vga(u32int highres);
-void write_regs(unsigned char *regs);
-void write_font(unsigned char *buf, unsigned font_height);
-void set_plane(unsigned p);
-void vmemwr(unsigned dst_off, unsigned char *src, unsigned count);
-unsigned get_fb_seg(void);
+void write_regs(u8int *regs);
+void write_font(u8int *buf, u16int font_height);
+void set_plane(u16int p);
+void vmemwr(u16int dst_off, u8int *src, u16int count);
+u16int get_fb_seg(void);
 void scrollup();
 void move_csr();
 void cls();

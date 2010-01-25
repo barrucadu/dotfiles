@@ -1,6 +1,6 @@
 grub/
 image/
-Kernel.gz
+erasmus.gz
 kernel/*.o
 kernel/*.oasm
 kernel/hardware/*.o

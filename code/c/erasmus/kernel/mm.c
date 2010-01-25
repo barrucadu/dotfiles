@@ -1,6 +1,5 @@
 #include <kernel.h>
 #include <mm.h>
-#include <hardware/vga.h>
 
 mmap_t mmap;
 u32int mem_start;
@@ -36,12 +35,14 @@ void mm_dump_map()
 {
     /* Print out our memory map */
 
-    puts((u8int*) "Memory map:\n");
+    kprintf((u8int*) "Memory map:\n");
 
     u32int i;
     for(i = 0; i < mmap.blocks; i ++)
     {
-	puts(ksprintf((u8int*)  "    Address range: %s -> %s (%s), type %s\n", itos(mmap.mblock[i].address, 16), itos(mmap.mblock[i].address + mmap.mblock[i].length, 16), itos(mmap.mblock[i].length, 16), itos(mmap.mblock[i].type, 16)));
+	kprintf((u8int*)  "    Address range: %s -> %s (%s), type %s\n",
+		itos(mmap.mblock[i].address, 16), itos(mmap.mblock[i].address + mmap.mblock[i].length, 16),
+		itos(mmap.mblock[i].length, 16),  itos(mmap.mblock[i].type, 16));
     }
 }
 

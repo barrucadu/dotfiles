@@ -6,21 +6,28 @@ Erasmus is a simple operating system written in C and x86 assembly. The (eventua
 Version Plan
 ============
 
- * 0.1 plan:
-   * Working memory manager (paging)
-   * ATA driver (grab info about HDDs, able to read/write sectors)
- * 0.2 plan:
-   * UNIX-like VFS (/dev, /proc, /root, etc)
-   * Ext2 and FAT32 drivers
-   * Basic libc
-   * ELF loader
-   * Multithreading
-   * Multitasking
- * 0.3 plan
-   * status() output to file
-   * 1024x768 framebuffer
-   * More advanced libc
-   * Port of Aprz shell
+### 0.1 plan
+
+ * Working memory manager (paging)
+ * IDE driver
+ * ATA driver (grab info about HDDs, able to read/write sectors)
+
+### 0.2 plan
+
+ * PCI driver
+ * UNIX-like VFS (/dev, /proc, /root, etc)
+ * Ext2 and FAT32 drivers
+ * Basic libc
+ * ELF loader
+ * Multithreading
+ * Multitasking
+
+### 0.3 plan
+ * status() output to file
+ * 1024x768 framebuffer
+ * More advanced libc
+ * A shell
+ * Basic CLI tools (coreutils port?)
 
 Kernel Command Line
 ===================
