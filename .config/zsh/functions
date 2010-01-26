@@ -66,6 +66,14 @@ function gith()
     popd
 }
 
+function giter()
+{
+    pushd ~/projects/erasmus
+    commit $1
+    git push github master
+    popd
+}
+
 function gituw()
 {
     pushd ~/websites/uzbl.org
