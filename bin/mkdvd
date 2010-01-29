@@ -1,11 +1,13 @@
 #!/bin/zsh
 
+wd=`pwd`
 mkdir -p ~/tmp/dvd/
 
 pushd ~/tmp/dvd/
 
 for file in $@; do
-    [[ -f "$file" ]] && ffmpeg -i "$file" -target pal-dvd "track-$(basename "$file").mpg"
+    # File paths relative to cwd
+    [[ -f "$wd/$file" ]] && ffmpeg -i "$wd/$file" -target pal-dvd "track-$(basename "$file").mpg"
 done
 
 echo "<dvdauthor>" > dvd.xml
@@ -15,7 +17,7 @@ echo "<titles>" >> dvd.xml
 echo "<pgc>" >> dvd.xml
 
 for file in $@; do
-    [[ -f "$file" ]] && echo "<vob file=\"track-$(basename "$file").mpg\" pause=\"5\"/>" >> dvd.xml
+    [[ -f "track-$(basename "$file").mpg" ]] && echo "<vob file=\"track-$(basename "$file").mpg\" pause=\"5\"/>" >> dvd.xml
 done
 
 echo "</pgc>" >> dvd.xml
