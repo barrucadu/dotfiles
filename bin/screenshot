@@ -1,12 +1,13 @@
 #!/bin/zsh
 
-screenshotpath=/home/barrucadu/`date +%F`.png
-websitepath=/home/barrucadu/websites/barrucadu.co.uk
+shot=`date +%F`
+screenshotpath=/home/barrucadu/$shot.png
+websitepath=/home/barrucadu/websites/barrucadu.co.uk/www
 dir=`pwd`
 
 echo "Taking screenshot in 5 seconds."
 sleep 5
-echo "Taking screenshot \"`date +%F`.png\""
+echo "Taking screenshot \"$shot.png\""
 
 import -window root $screenshotpath
 cp $screenshotpath $websitepath/screenshots/
@@ -15,31 +16,31 @@ cp $screenshotpath $websitepath/screenshots/thumb-big/
 rm $screenshotpath
 
 cd $websitepath/screenshots/thumb/
-mogrify -scale 10% `date +%F`.png
+convert $websitepath/screenshots/$shot.png -thumbnail 160x100 -background black $shot.png
 
 cd ../thumb-big/
-mogrify -scale 40% `date +%F`.png
+convert $websitepath/screenshots/$shot.png -thumbnail 461x288 -background black $shot.png
 
 cd ../info/
 
 WM=`grep -E "[^#]exec" ~/.config/xorg/xinitrc`
 niceWM=""
 case "$WM" in
-        *stumpwm*)
-                niceWM=StumpWM
-                ;;
-        *scrotwm*)
-                niceWM=ScrotWM
-                ;;
-        *musca*)
-                niceWM=Musca
-                ;;
-        *xmonad*)
-                niceWM=Xmonad
-                ;;
-        *)
-                niceWM=`echo "$WM" | sed "s/.*exec//"`
-                ;;
+    *stumpwm*)
+        niceWM=StumpWM
+        ;;
+    *scrotwm*)
+        niceWM=ScrotWM
+        ;;
+    *musca*)
+        niceWM=Musca
+        ;;
+    *xmonad*)
+        niceWM=Xmonad
+        ;;
+    *)
+        niceWM=`echo "$WM" | sed "s/.*exec//"`
+        ;;
 esac
 
 niceOS="Arch Linux `uname -m`"
@@ -47,31 +48,31 @@ niceFont=`grep "gtk-font-name" ~/.config/gtkrc-2.0 | sed 's/.*="//' | sed 's/"//
 niceIcons=`grep icon-theme-name ~/.config/gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
 niceGtk="Shiki Noble" # Yes, I do change my GTK theme so little I decided it'd be easier to just hardcode it…
 
-echo "<li><strong>OS:</strong> $niceOS</li>" > `date +%F`.txt
-echo "<li><strong>GTK:</strong> $niceGtk</li>" >> `date +%F`.txt
-echo "<li><strong>Icons:</strong> $niceIcons</li>" >> `date +%F`.txt
-echo "<li><strong>WM:</strong> $niceWM</li>" >> `date +%F`.txt
-echo "<li><strong>GTK Font:</strong> $niceFont</li>" >> `date +%F`.txt
-echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> `date +%F`.txt
-echo "<li><strong>Other:</strong> </li>" >> `date +%F`.txt
-emacs `date +%F`.txt
+echo "<li><strong>OS:</strong> $niceOS</li>"                   > $shot.txt
+echo "<li><strong>GTK:</strong> $niceGtk</li>"                >> $shot.txt
+echo "<li><strong>Icons:</strong> $niceIcons</li>"            >> $shot.txt
+echo "<li><strong>WM:</strong> $niceWM</li>"                  >> $shot.txt
+echo "<li><strong>GTK Font:</strong> $niceFont</li>"          >> $shot.txt
+echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> $shot.txt
+echo "<li><strong>Other:</strong> </li>"                      >> $shot.txt
+emacs -nw $shot.txt
 
 ncftp barrucadu <<EOF
 cd /barrucadu.co.uk/screenshots/
-put $websitepath/screenshots/`date +%F`.png
+put $websitepath/screenshots/$shot.png
 
 cd /barrucadu.co.uk/screenshots/thumb/
-put $websitepath/screenshots/thumb/`date +%F`.png
+put $websitepath/screenshots/thumb/$shot.png
 
 cd /barrucadu.co.uk/screenshots/thumb-big/
-put $websitepath/screenshots/thumb-big/`date +%F`.png
+put $websitepath/screenshots/thumb-big/$shot.png
 
 cd /barrucadu.co.uk/screenshots/info/
-put $websitepath/screenshots/info/`date +%F`.txt
+put $websitepath/screenshots/info/$shot.txt
 
 exit
 EOF
 
-echo "[url=\"http://www.barrucadu.co.uk/screenshot.php?s=`date +%F`\"][img]http://www.barrucadu.co.uk/screenshots/thumb-big/`date +%F`.png[/img][/url]" | xclip
+echo "[url=\"http://www.barrucadu.co.uk/screenshot-$shot.php\"][img]http://www.barrucadu.co.uk/screenshots/thumb-big/$shot.png[/img][/url]" | xclip
 
 cd $dir

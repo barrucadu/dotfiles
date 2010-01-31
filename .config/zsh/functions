@@ -226,7 +226,7 @@ function backup()
 {
     DEST=/media/M2HDb/cthulhu
 
-    # Copy over stuff
+    # Copy over stuff - note to self: get a bigger backup drive so I can fit on my 32-bit chroot
     sudo rsync -azv --delete --exclude=/share \
 	--exclude=/tmp \
 	--exclude=/dev \
@@ -236,7 +236,9 @@ function backup()
 	--exclude=/mnt \
 	--exclude=/home/barrucadu/tmp \
 	--exclude=.git \
-	--exclude=/var/abs / $DEST
+	--exclude=/var/abs \
+	--exclude=/opt/arch32 \
+	/ $DEST
 
     # Remake ignored directories
     sudo mkdir -p $DEST/share/dad
