@@ -276,7 +276,7 @@ function backup()
 
 function ahurd()
 {
-    remotes=(files)
+    remotes=(files wiki)
 
     if [[ "$1" == "down" ]]; then
 	for i in $remotes; do
