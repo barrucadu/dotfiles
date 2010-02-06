@@ -1,12 +1,15 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <gd.h>
+#include <glib.h>
+#include <gtk/gtk.h>
 #include "mandelbrot.h"
 
 /* Image options */
 float image_width  = 1000;
 float image_height = 800;
-char* image_file   = (char*) "mandelbrot2.png";
+char* image_file   = (char*) "mandelbrot.png";
 
 /* Real axis options */
 float re_min = -2.0;
@@ -21,7 +24,28 @@ float im_max, im_range, im_factor;
 int iterations  = 255;
 int show_axes   = FALSE;
 int show_colour = TRUE;
+char* re_mins;
+char* re_maxs;
+char* im_mins;
 
+/* Glib option parser variables */
+GOptionEntry entries[] =
+{
+    { "filename",     'f', 0, G_OPTION_ARG_STRING, &image_file,   "Filename to save to",                       NULL },
+    { "image-width",  'w', 0, G_OPTION_ARG_INT,    &image_width,  "Generated image width",                     NULL },
+    { "image-height", 'h', 0, G_OPTION_ARG_INT,    &image_height, "Generated image height",                    NULL },
+    { "re-min",       'r', 0, G_OPTION_ARG_STRING, &re_mins,      "Start value on the real axis",              NULL },
+    { "re-max",       'R', 0, G_OPTION_ARG_STRING, &re_maxs,      "End value on the real axis",                NULL },
+    { "im-min",       'i', 0, G_OPTION_ARG_STRING, &im_mins,      "Start value on the imaginary axis",         NULL },
+    { "iterations",   'n', 0, G_OPTION_ARG_INT,    &iterations,   "Number of iterations to run on each point", NULL },
+    { "show-axes",    'a', 0, G_OPTION_ARG_NONE,   &show_axes,    "Show real and imaginary axes",              NULL },
+    { "show-colour",  'c', 0, G_OPTION_ARG_NONE,   &show_colour,  "Show colour for points not in the set",     NULL },
+    { NULL }
+};
+
+GOptionContext *context;
+
+/* GD Variables */
 gdImagePtr im;
 
 int in_set(cmplx c)
@@ -60,12 +84,21 @@ void save_set()
     fclose(pngout);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     cmplx  c = {0, 0};
     colour t = {0, 0, 0};
     coord  p = {0, 0};
     int    n;
+
+    context = g_option_context_new ("- Mandelbrot set generator");
+    g_option_context_add_main_entries(context, entries, NULL);
+    g_option_context_add_group(context, gtk_get_option_group(TRUE));
+    g_option_context_parse(context, &argc, &argv, NULL);
+
+    if(re_mins) re_min = (float)atof(re_mins);
+    if(re_maxs) re_max = (float)atof(re_maxs);
+    if(im_mins) im_min = (float)atof(im_mins);
 
     re_range  = re_max - re_min;
     re_factor = re_range / (image_width - 1);
