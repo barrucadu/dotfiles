@@ -12,16 +12,19 @@ int image_width  = 1000;
 int image_height = 800;
 char* image_file   = (char*) "fractal.png";
 
-/* Real axis options */
+/* Mandelbrot Set options */
+int power = 2;
+
+/* Misc options */
 float re_min = -2.0;
 float re_max = 1.0;
 float re_range, re_factor;
-
-/* Imaginary axis options */
 float im_min = (float)-1.2;
 float im_max, im_range, im_factor;
+char* re_mins     = NULL;
+char* re_maxs     = NULL;
+char* im_mins     = NULL;
 
-/* Misc options */
 int iterations    = 30;
 int show_axes     = FALSE;
 int show_colour   = FALSE;
@@ -31,9 +34,6 @@ int greyscale     = FALSE;
 int bluescale     = FALSE;
 int redscale      = FALSE;
 int greenscale    = FALSE;
-char* re_mins     = NULL;
-char* re_maxs     = NULL;
-char* im_mins     = NULL;
 
 /* Julia Set options */
 int julia     = FALSE;
@@ -63,12 +63,13 @@ GOptionEntry help_colour[] =
     { "blues",        '\0', 0, G_OPTION_ARG_NONE,   &bluescale,     "Use shades of blue",                      NULL },
     { "reds",         '\0', 0, G_OPTION_ARG_NONE,   &redscale,      "Use shades of red",                       NULL },
     { "greens",       '\0', 0, G_OPTION_ARG_NONE,   &greenscale,    "Use shades of green",                     NULL },
-    { "smooth",       's',  0, G_OPTION_ARG_NONE,   &smooth_colour, "Smooth colours (slower)",                 NULL },
+    { "smooth",       's',  0, G_OPTION_ARG_NONE,   &smooth_colour, "Smooth colours",                          NULL },
     { NULL }
 };
 
 GOptionEntry help_mandelbrot[] =
 {
+    { "power",        'p', 0, G_OPTION_ARG_INT,    &power,        "The power to raise z to (default 2)",       NULL },
     { NULL }
 };
 
@@ -86,6 +87,36 @@ gdImagePtr im;
 /* Program begin */
 int iteration = 0;
 float zmod    = 0.0;
+
+void cmplx_mul(cmplx z1, cmplx z2, float *re, float *im)
+{
+    float tmp_re, tmp_im;
+    
+    tmp_re = z1[0] * z2[0] - z1[1] * z2[1];
+    tmp_im = z1[0] * z2[1] + z1[1] * z2[0];
+    
+    *re = tmp_re;
+    *im = tmp_im;
+}
+
+void cmplx_pow(cmplx z, int pow, float *re, float *im)
+{
+    cmplx tmp1, tmp2;
+
+    tmp1[0] = z[0];
+    tmp1[1] = z[1];
+
+    for(; pow > 1; --pow)
+    {
+	cmplx_mul(tmp1, tmp1, &tmp2[0], &tmp2[1]);
+
+	tmp1[0] = tmp2[0];
+	tmp1[1] = tmp2[1];
+    }
+
+    *re = tmp1[0];
+    *im = tmp1[1];
+}
 
 int in_mandy_set(cmplx c)
 {
@@ -107,13 +138,14 @@ int in_mandy_set(cmplx c)
 	    inset = 0;
 	    break;
 	}
-	
-	d[1] = 2 * d[0] * d[1] + c[1];	
-	d[0] = re2 - im2 + c[0];
+
+	cmplx_pow(d, power, &d[0], &d[1]);
+	d[0] = d[0] + c[0];
+	d[1] = d[1] + c[1];	
     }
 
     iteration = i;
-    zmod      = xmod(d);
+    zmod      = cmplx_mod(d);
 
     return inset;
 }
@@ -139,12 +171,13 @@ int in_julia_set(cmplx c)
 	    break;
 	}
 	
-	d[1] = 2 * d[0] * d[1] + jul[1];	
-	d[0] = re2 - im2 + jul[0];
+	cmplx_pow(d, 2, &d[0], &d[1]);
+	d[0] = d[0] + jul[0];
+	d[1] = d[1] + jul[1];	
     }
 
     iteration = i;
-    zmod      = xmod(d);
+    zmod      = cmplx_mod(d);
 
     return inset;
 }
@@ -230,7 +263,7 @@ int main(int argc, char *argv[])
 
     g_option_context_add_main_entries(context, help_all, NULL);
     g_option_context_add_group(context, gcolour);
-    /* g_option_context_add_group(context, gmandelbrot); - No mandelbrot-specific options yet */
+    g_option_context_add_group(context, gmandelbrot);
     g_option_context_add_group(context, gjulia);
     g_option_context_parse(context, &argc, &argv, NULL);
 
