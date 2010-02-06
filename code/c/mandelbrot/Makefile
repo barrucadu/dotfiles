@@ -6,5 +6,5 @@ CFLAGS := -O2 -lgd $(WARN)
 
 all: mandelbrot
 
-clean: mandelbrot
-	rm mandelbrot
+clean:
+	-@rm mandelbrot
