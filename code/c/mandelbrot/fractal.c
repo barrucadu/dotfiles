@@ -13,7 +13,11 @@ int image_height = 800;
 char* image_file   = (char*) "fractal.png";
 
 /* Mandelbrot Set options */
-int power = 2;
+int power       = 2;
+cmplx mandy     = {0.0, 0.0};
+char* re_mandy  = NULL;
+char* im_mandy  = NULL;
+int   conjugate = FALSE;
 
 /* Misc options */
 float re_min = -2.0;
@@ -44,14 +48,14 @@ char* im_juls = NULL;
 /* Glib option parser variables */
 GOptionEntry help_all[] =
 {
-    { "filename",     'f', 0, G_OPTION_ARG_STRING, &image_file,   "Filename to save to",                       NULL },
-    { "image-width",  'W', 0, G_OPTION_ARG_INT,    &image_width,  "Generated image width",                     NULL },
-    { "image-height", 'H', 0, G_OPTION_ARG_INT,    &image_height, "Generated image height",                    NULL },
-    { "iterations",   'n', 0, G_OPTION_ARG_INT,    &iterations,   "Number of iterations to run on each point", NULL },
-    { "re-min",       'r', 0, G_OPTION_ARG_STRING, &re_mins,      "Start value on the real axis",              NULL },
-    { "re-max",       'R', 0, G_OPTION_ARG_STRING, &re_maxs,      "End value on the real axis",                NULL },
-    { "im-min",       'i', 0, G_OPTION_ARG_STRING, &im_mins,      "Start value on the imaginary axis",         NULL },
-    { "show-axes",    'a', 0, G_OPTION_ARG_NONE,   &show_axes,    "Show real and imaginary axes",              NULL },
+    { "filename",     'f',  0, G_OPTION_ARG_STRING, &image_file,   "Filename to save to",                       NULL },
+    { "image-width",  'W',  0, G_OPTION_ARG_INT,    &image_width,  "Generated image width",                     NULL },
+    { "image-height", 'H',  0, G_OPTION_ARG_INT,    &image_height, "Generated image height",                    NULL },
+    { "iterations",   'n',  0, G_OPTION_ARG_INT,    &iterations,   "Number of iterations to run on each point", NULL },
+    { "re-min",       'r',  0, G_OPTION_ARG_STRING, &re_mins,      "Start value on the real axis",              NULL },
+    { "re-max",       'R',  0, G_OPTION_ARG_STRING, &re_maxs,      "End value on the real axis",                NULL },
+    { "im-min",       'i',  0, G_OPTION_ARG_STRING, &im_mins,      "Start value on the imaginary axis",         NULL },
+    { "show-axes",    '\0', 0, G_OPTION_ARG_NONE,   &show_axes,    "Show real and imaginary axes",              NULL },
     { NULL }
 };
 
@@ -69,15 +73,18 @@ GOptionEntry help_colour[] =
 
 GOptionEntry help_mandelbrot[] =
 {
-    { "power",        'p', 0, G_OPTION_ARG_INT,    &power,        "The power to raise z to (default 2)",       NULL },
+    { "mandy-pow",    'p', 0, G_OPTION_ARG_INT,    &power,        "The power to raise z to (default 2)",       NULL },
+    { "mandy-re",     'a', 0, G_OPTION_ARG_STRING, &re_mandy,     "Real part for the initial parameter",       NULL },
+    { "mandy-im",     'b', 0, G_OPTION_ARG_STRING, &im_mandy,     "Imaginary part for the initial parameter",  NULL },
+    { "mandy-conj",   'M', 0, G_OPTION_ARG_NONE,   &conjugate,    "Use complex conjugate of each z",           NULL },
     { NULL }
 };
 
 GOptionEntry help_julia[] =
 {
     { "julia",        'j', 0, G_OPTION_ARG_NONE,   &julia,        "Generate a Julia set",                      NULL },
-    { "julia-re",     'A', 0, G_OPTION_ARG_STRING, &re_juls,      "Real part for the Julia parameter",         NULL },
-    { "julia-im",     'B', 0, G_OPTION_ARG_STRING, &im_juls,      "Imaginary part for the Julia parameter",    NULL },
+    { "julia-re",     'A', 0, G_OPTION_ARG_STRING, &re_juls,      "Real part for the constant parameter",      NULL },
+    { "julia-im",     'B', 0, G_OPTION_ARG_STRING, &im_juls,      "Imaginary part for the constant parameter", NULL },
     { NULL }
 };
 
@@ -118,18 +125,25 @@ void cmplx_pow(cmplx z, int pow, float *re, float *im)
     *im = tmp1[1];
 }
 
+void cmplx_conj(cmplx z, float *re, float *im)
+{
+    *re = z[0];
+    *im = z[1] * -1;
+}
+
 int in_mandy_set(cmplx c)
 {
     int   i, inset;
     cmplx d;
     float re2, im2;
 
-    d[0] = c[0];
-    d[1] = c[1];
+    d[0] = c[0] + mandy[0];
+    d[1] = c[1] + mandy[1];
 
     inset = 1;
     for(i = 0; i < iterations; ++i)
     {
+	if(conjugate) cmplx_conj(d, &d[0], &d[1]);
 	re2 = d[0] * d[0];
 	im2 = d[1] * d[1];
 	
@@ -275,6 +289,9 @@ int main(int argc, char *argv[])
 	if(re_juls) jul[0] = (float)atof(re_juls);
 	if(im_juls) jul[1] = (float)atof(im_juls);
     }
+
+    if(re_mandy) mandy[0] = (float)atof(re_mandy);
+    if(im_mandy) mandy[1] = (float)atof(im_mandy);
 
     if(re_mins) re_min = (float)atof(re_mins);
     if(re_maxs) re_max = (float)atof(re_maxs);
