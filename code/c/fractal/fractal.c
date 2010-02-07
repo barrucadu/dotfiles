@@ -5,6 +5,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <math.h>
+
+#include "cmplx.h"
 #include "fractal.h"
 
 /* Image options */
@@ -37,7 +39,6 @@ int show_axes  = FALSE;
 int show_colour   = FALSE;
 int smooth_colour = FALSE;
 int inv_colour    = FALSE;
-int greyscale     = FALSE;
 int bluescale     = FALSE;
 int redscale      = FALSE;
 int greenscale    = FALSE;
@@ -65,7 +66,6 @@ GOptionEntry help_colour[] =
 {
     { "show-colour",  'c',  0, G_OPTION_ARG_NONE,   &show_colour,   "Show colour for points not in the set",   NULL },
     { "inv-colour",   'C',  0, G_OPTION_ARG_NONE,   &inv_colour,    "Invert all colours",                      NULL },
-    { "greyscale",    '\0', 0, G_OPTION_ARG_NONE,   &greyscale,     "Use only shades of grey",                 NULL },
     { "blues",        '\0', 0, G_OPTION_ARG_NONE,   &bluescale,     "Use shades of blue",                      NULL },
     { "reds",         '\0', 0, G_OPTION_ARG_NONE,   &redscale,      "Use shades of red",                       NULL },
     { "greens",       '\0', 0, G_OPTION_ARG_NONE,   &greenscale,    "Use shades of green",                     NULL },
@@ -93,55 +93,19 @@ gdImagePtr im;
 int iteration = 0;
 float zmod    = 0.0;
 
-void cmplx_mul(cmplx z1, cmplx z2, float *re, float *im)
-{
-    float tmp_re, tmp_im;
-    
-    tmp_re = z1[0] * z2[0] - z1[1] * z2[1];
-    tmp_im = z1[0] * z2[1] + z1[1] * z2[0];
-    
-    *re = tmp_re;
-    *im = tmp_im;
-}
-
-void cmplx_pow(cmplx z, int pow, float *re, float *im)
-{
-    cmplx tmp1, tmp2;
-
-    tmp1[0] = z[0];
-    tmp1[1] = z[1];
-
-    for(; pow > 1; --pow)
-    {
-	cmplx_mul(tmp1, tmp1, &tmp2[0], &tmp2[1]);
-
-	tmp1[0] = tmp2[0];
-	tmp1[1] = tmp2[1];
-    }
-
-    *re = tmp1[0];
-    *im = tmp1[1];
-}
-
-void cmplx_conj(cmplx z, float *re, float *im)
-{
-    *re = z[0];
-    *im = z[1] * -1;
-}
-
 int in_mandy_set(cmplx c)
 {
     int   i, inset;
     cmplx d;
     float re2, im2;
 
-    d[0] = c[0] + param[0];
-    d[1] = c[1] + param[1];
+    cmplx_add(c, param, &d[0], &d[1]);
 
     inset = 1;
     for(i = 0; i < iterations; ++i)
     {
 	if(conjugate) cmplx_conj(d, &d[0], &d[1]);
+
 	re2 = d[0] * d[0];
 	im2 = d[1] * d[1];
 	
@@ -152,8 +116,7 @@ int in_mandy_set(cmplx c)
 	}
 
 	cmplx_pow(d, power, &d[0], &d[1]);
-	d[0] = d[0] + c[0];
-	d[1] = d[1] + c[1];	
+	cmplx_add(d, c, &d[0], &d[1]);
     }
 
     iteration = i;
@@ -168,8 +131,7 @@ int in_julia_set(cmplx c)
     cmplx d;
     float re2, im2;
 
-    d[0] = c[0];
-    d[1] = c[1];
+    cmplx_add(c, param, &d[0], &d[1]);
 
     inset = 1;
     for(i = 0; i < iterations; ++i)
@@ -184,8 +146,7 @@ int in_julia_set(cmplx c)
 	}
 	
 	cmplx_pow(d, 2, &d[0], &d[1]);
-	d[0] = d[0] + param[0];
-	d[1] = d[1] + param[1];	
+	cmplx_add(d, c, &d[0], &d[1]);
     }
 
     iteration = i;
@@ -230,7 +191,7 @@ void colourise(int inset, int iteration, float zmod, int *r, int *g, int *b)
 		intensity = (float)iteration / iterations;
 	    }
 	    
-	    if(greyscale)
+	    if(!redscale && !greenscale && !bluescale)
 	    {
 		out[0] = (int) (255 - 255 * intensity);
 		out[1] = (int) (255 - 255 * intensity);
