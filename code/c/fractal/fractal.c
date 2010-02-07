@@ -10,14 +10,11 @@
 /* Image options */
 int image_width  = 1000;
 int image_height = 800;
-char* image_file   = (char*) "fractal.png";
+char* image_file = (char*) "fractal.png";
 
 /* Mandelbrot Set options */
-int power       = 2;
-cmplx mandy     = {0.0, 0.0};
-char* re_mandy  = NULL;
-char* im_mandy  = NULL;
-int   conjugate = FALSE;
+int power     = 2;
+int conjugate = FALSE;
 
 /* Misc options */
 float re_min = -2.0;
@@ -25,12 +22,18 @@ float re_max = 1.0;
 float re_range, re_factor;
 float im_min = (float)-1.2;
 float im_max, im_range, im_factor;
-char* re_mins     = NULL;
-char* re_maxs     = NULL;
-char* im_mins     = NULL;
+char* re_mins  = NULL;
+char* re_maxs  = NULL;
+char* im_mins  = NULL;
 
-int iterations    = 30;
-int show_axes     = FALSE;
+cmplx param    = {0.0, 0.0};
+char* param_re = NULL;
+char* param_im = NULL;
+
+int iterations = 30;
+int show_axes  = FALSE;
+
+/* Colour options */
 int show_colour   = FALSE;
 int smooth_colour = FALSE;
 int inv_colour    = FALSE;
@@ -40,10 +43,7 @@ int redscale      = FALSE;
 int greenscale    = FALSE;
 
 /* Julia Set options */
-int julia     = FALSE;
-cmplx jul     = {0.0, 0.0};
-char* re_juls = NULL;
-char* im_juls = NULL;
+int julia = FALSE;
 
 /* Glib option parser variables */
 GOptionEntry help_all[] =
@@ -55,6 +55,8 @@ GOptionEntry help_all[] =
     { "re-min",       'r',  0, G_OPTION_ARG_STRING, &re_mins,      "Start value on the real axis",              NULL },
     { "re-max",       'R',  0, G_OPTION_ARG_STRING, &re_maxs,      "End value on the real axis",                NULL },
     { "im-min",       'i',  0, G_OPTION_ARG_STRING, &im_mins,      "Start value on the imaginary axis",         NULL },
+    { "re",           'a',  0, G_OPTION_ARG_STRING, &param_re,     "Real part for the parameter",               NULL },
+    { "im",           'b',  0, G_OPTION_ARG_STRING, &param_im,     "Imaginary part for the parameter",          NULL },
     { "show-axes",    '\0', 0, G_OPTION_ARG_NONE,   &show_axes,    "Show real and imaginary axes",              NULL },
     { NULL }
 };
@@ -73,18 +75,14 @@ GOptionEntry help_colour[] =
 
 GOptionEntry help_mandelbrot[] =
 {
-    { "mandy-pow",    'p', 0, G_OPTION_ARG_INT,    &power,        "The power to raise z to (default 2)",       NULL },
-    { "mandy-re",     'a', 0, G_OPTION_ARG_STRING, &re_mandy,     "Real part for the initial parameter",       NULL },
-    { "mandy-im",     'b', 0, G_OPTION_ARG_STRING, &im_mandy,     "Imaginary part for the initial parameter",  NULL },
-    { "mandy-conj",   'M', 0, G_OPTION_ARG_NONE,   &conjugate,    "Use complex conjugate of each z",           NULL },
+    { "mandy-pow",    'p',  0, G_OPTION_ARG_INT,    &power,        "The power to raise z to (default 2)",       NULL },
+    { "mandy-conj",   'M',  0, G_OPTION_ARG_NONE,   &conjugate,    "Use complex conjugate of each z",           NULL },
     { NULL }
 };
 
 GOptionEntry help_julia[] =
 {
-    { "julia",        'j', 0, G_OPTION_ARG_NONE,   &julia,        "Generate a Julia set",                      NULL },
-    { "julia-re",     'A', 0, G_OPTION_ARG_STRING, &re_juls,      "Real part for the constant parameter",      NULL },
-    { "julia-im",     'B', 0, G_OPTION_ARG_STRING, &im_juls,      "Imaginary part for the constant parameter", NULL },
+    { "julia",        'j',  0, G_OPTION_ARG_NONE,   &julia,        "Generate a Julia set",                      NULL },
     { NULL }
 };
 
@@ -137,8 +135,8 @@ int in_mandy_set(cmplx c)
     cmplx d;
     float re2, im2;
 
-    d[0] = c[0] + mandy[0];
-    d[1] = c[1] + mandy[1];
+    d[0] = c[0] + param[0];
+    d[1] = c[1] + param[1];
 
     inset = 1;
     for(i = 0; i < iterations; ++i)
@@ -186,8 +184,8 @@ int in_julia_set(cmplx c)
 	}
 	
 	cmplx_pow(d, 2, &d[0], &d[1]);
-	d[0] = d[0] + jul[0];
-	d[1] = d[1] + jul[1];	
+	d[0] = d[0] + param[0];
+	d[1] = d[1] + param[1];	
     }
 
     iteration = i;
@@ -281,17 +279,8 @@ int main(int argc, char *argv[])
     g_option_context_add_group(context, gjulia);
     g_option_context_parse(context, &argc, &argv, NULL);
 
-    if(julia)
-    {
-	jul[0] = 0;
-	jul[1] = 0;
-
-	if(re_juls) jul[0] = (float)atof(re_juls);
-	if(im_juls) jul[1] = (float)atof(im_juls);
-    }
-
-    if(re_mandy) mandy[0] = (float)atof(re_mandy);
-    if(im_mandy) mandy[1] = (float)atof(im_mandy);
+    if(param_re) param[0] = (float)atof(param_re);
+    if(param_im) param[1] = (float)atof(param_im);
 
     if(re_mins) re_min = (float)atof(re_mins);
     if(re_maxs) re_max = (float)atof(re_maxs);
