@@ -17,9 +17,9 @@ extern char* image_file;
 extern int show_colour;
 extern int smooth_colour;
 extern int inv_colour;
-extern int bluescale;
-extern int redscale;
-extern int greenscale;
+extern float bluescale;
+extern float redscale;
+extern float greenscale;
 
 /* Mandelbrot Set options */
 int power     = 2;
@@ -38,6 +38,10 @@ char* im_mins  = NULL;
 cmplx param    = {0.0, 0.0};
 char* param_re = NULL;
 char* param_im = NULL;
+
+char* redscales   = NULL;
+char* greenscales = NULL;
+char* bluescales  = NULL;
 
 int iterations = 30;
 int show_axes  = FALSE;
@@ -65,11 +69,11 @@ GOptionEntry help_colour[] =
 {
     { "show-colour",  'c',  0, G_OPTION_ARG_NONE,   &show_colour,   "Show colour for points not in the set",   NULL },
     { "inv-colour",   'C',  0, G_OPTION_ARG_NONE,   &inv_colour,    "Invert all colours",                      NULL },
-    { "blues",        '\0', 0, G_OPTION_ARG_NONE,   &bluescale,     "Use shades of blue",                      NULL },
-    { "reds",         '\0', 0, G_OPTION_ARG_NONE,   &redscale,      "Use shades of red",                       NULL },
-    { "greens",       '\0', 0, G_OPTION_ARG_NONE,   &greenscale,    "Use shades of green",                     NULL },
+    { "blue",         '\0', 0, G_OPTION_ARG_STRING, &bluescales,    "Brightness of blue componet (0 to 1)",    NULL },
+    { "red",          '\0', 0, G_OPTION_ARG_STRING, &redscales,     "Brightness of red componet (0 to 1)",     NULL },
+    { "green",        '\0', 0, G_OPTION_ARG_STRING, &greenscales,   "Brightness of green componet (0 to 1)",   NULL },
     { "smooth",       's',  0, G_OPTION_ARG_NONE,   &smooth_colour, "Smooth colours",                          NULL },
-    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                         NULL }
 };
 
 GOptionEntry help_mandelbrot[] =
@@ -185,6 +189,10 @@ int main(int argc, char *argv[])
     if(re_maxs) re_max = (float)atof(re_maxs);
     if(im_mins) im_min = (float)atof(im_mins);
     
+    if(redscales)   redscale   = (float)atof(redscales);
+    if(greenscales) greenscale = (float)atof(greenscales);
+    if(bluescales)  bluescale  = (float)atof(bluescales);
+
     re_range  = re_max - re_min;
     re_factor = re_range / (image_width - 1);
     im_max    = im_min + re_range * image_height / image_width;

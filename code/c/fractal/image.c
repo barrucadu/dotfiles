@@ -19,9 +19,9 @@ char* image_file = (char*) "fractal.png";
 int show_colour   = FALSE;
 int smooth_colour = FALSE;
 int inv_colour    = FALSE;
-int bluescale     = FALSE;
-int redscale      = FALSE;
-int greenscale    = FALSE;
+float bluescale   = 0;
+float redscale    = 0;
+float greenscale  = 0;
 
 /* GD Variables */
 gdImagePtr im;
@@ -73,9 +73,9 @@ void colourise(int inset, int iteration, float zmod, int *r, int *g, int *b)
 		out[1] = (int) (255 - 255 * intensity);
 		out[2] = (int) (255 - 255 * intensity);
 	    } else {
-		if(redscale)   out[0] = (int) (255 * intensity);
-		if(greenscale) out[1] = (int) (255 * intensity);
-		if(bluescale)  out[2] = (int) (255 * intensity);
+		if(redscale)   out[0] = (int) (255 * intensity * redscale);
+		if(greenscale) out[1] = (int) (255 * intensity * greenscale);
+		if(bluescale)  out[2] = (int) (255 * intensity * bluescale);
 	    }
 	} else {
 	    out[0] = 255;
