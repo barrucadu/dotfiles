@@ -51,7 +51,7 @@ void save_set()
     fclose(pngout);
 }
 
-void colourise(int inset, int iteration, float zmod, int *r, int *g, int *b)
+void colourise(int inset, int iter, float zmo, int *r, int *g, int *b)
 {
     colour out = {0, 0, 0};
     float intensity;
@@ -62,9 +62,9 @@ void colourise(int inset, int iteration, float zmod, int *r, int *g, int *b)
 	{
 	    if(smooth_colour)
 	    {
-		intensity = 1 / (iteration - logn(log(zmod), 2));
+		intensity = 1 / (float)(iter - logn(log(zmo), 2));
 	    } else {
-		intensity = (float)iteration / iterations;
+		intensity = (float)(iter / iterations);
 	    }
 	    
 	    if(!redscale && !greenscale && !bluescale)

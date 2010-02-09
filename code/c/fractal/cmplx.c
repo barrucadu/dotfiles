@@ -29,14 +29,14 @@ void cmplx_mul(cmplx z1, cmplx z2, float *re, float *im)
     *im = tmp_im;
 }
 
-void cmplx_pow(cmplx z, int pow, float *re, float *im)
+void cmplx_pow(cmplx z, int power, float *re, float *im)
 {
     cmplx tmp1, tmp2;
 
     tmp1[0] = z[0];
     tmp1[1] = z[1];
 
-    for(; pow > 1; --pow)
+    for(; power > 1; --power)
     {
 	cmplx_mul(tmp1, tmp1, &tmp2[0], &tmp2[1]);
 

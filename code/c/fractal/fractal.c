@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     cmplx  c = {0, 0};
     colour t = {0, 0, 0};
     coord  p = {0, 0};
-    float  n;
+    int    n;
 
     GOptionContext *context;
     GOptionGroup   *gcolour;
@@ -194,10 +194,10 @@ int main(int argc, char *argv[])
     if(bluescales)  bluescale  = (float)atof(bluescales);
 
     re_range  = re_max - re_min;
-    re_factor = re_range / (image_width - 1);
-    im_max    = im_min + re_range * image_height / image_width;
+    re_factor = re_range / (float)(image_width - 1);
+    im_max    = (float)im_min + re_range * (float)(image_height / image_width);
     im_range  = im_max - im_min;
-    im_factor = im_range / (image_height - 1);
+    im_factor = im_range / (float)(image_height - 1);
 
     init_im(); /* Initialise the GD pointer */
     

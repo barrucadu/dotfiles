@@ -12,9 +12,6 @@ typedef int   colour[3];
 /* Prototypes */
 int in_mandy_set(cmplx c);
 int in_julia_set(cmplx c);
-void put_pixel(coord p, colour c);
-void save_set(void);
-void colourise(int inset, int iteration, float zmod, int *r, int *g, int *b);
 int main(int argc, char *argv[]);
 
 #endif
