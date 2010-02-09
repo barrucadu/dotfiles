@@ -6,8 +6,9 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-#include "cmplx.h"
 #include "fractal.h"
+#include "image.h"
+#include "cmplx.h"
 
 float cmplx_mod(cmplx z)
 {

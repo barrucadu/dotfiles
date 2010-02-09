@@ -1,8 +1,6 @@
 #ifndef __CMPLX_H
 #define CMPLX_H
 
-typedef float cmplx[2];
-
 float cmplx_mod(cmplx z);
 void cmplx_mul(cmplx z1, cmplx z2, float *re, float *im);
 void cmplx_pow(cmplx z, int pow, float *re, float *im);

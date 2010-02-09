@@ -6,13 +6,20 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-#include "cmplx.h"
 #include "fractal.h"
+#include "image.h"
+#include "cmplx.h"
 
-/* Image options */
-int image_width  = 1000;
-int image_height = 800;
-char* image_file = (char*) "fractal.png";
+/* Externs defined in image.c */
+extern int image_width;
+extern int image_height;
+extern char* image_file;
+extern int show_colour;
+extern int smooth_colour;
+extern int inv_colour;
+extern int bluescale;
+extern int redscale;
+extern int greenscale;
 
 /* Mandelbrot Set options */
 int power     = 2;
@@ -35,14 +42,6 @@ char* param_im = NULL;
 int iterations = 30;
 int show_axes  = FALSE;
 
-/* Colour options */
-int show_colour   = FALSE;
-int smooth_colour = FALSE;
-int inv_colour    = FALSE;
-int bluescale     = FALSE;
-int redscale      = FALSE;
-int greenscale    = FALSE;
-
 /* Julia Set options */
 int julia = FALSE;
 
@@ -59,7 +58,7 @@ GOptionEntry help_all[] =
     { "re",           'a',  0, G_OPTION_ARG_STRING, &param_re,     "Real part for the parameter",               NULL },
     { "im",           'b',  0, G_OPTION_ARG_STRING, &param_im,     "Imaginary part for the parameter",          NULL },
     { "show-axes",    '\0', 0, G_OPTION_ARG_NONE,   &show_axes,    "Show real and imaginary axes",              NULL },
-    { NULL }
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
 };
 
 GOptionEntry help_colour[] =
@@ -70,24 +69,21 @@ GOptionEntry help_colour[] =
     { "reds",         '\0', 0, G_OPTION_ARG_NONE,   &redscale,      "Use shades of red",                       NULL },
     { "greens",       '\0', 0, G_OPTION_ARG_NONE,   &greenscale,    "Use shades of green",                     NULL },
     { "smooth",       's',  0, G_OPTION_ARG_NONE,   &smooth_colour, "Smooth colours",                          NULL },
-    { NULL }
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
 };
 
 GOptionEntry help_mandelbrot[] =
 {
     { "mandy-pow",    'p',  0, G_OPTION_ARG_INT,    &power,        "The power to raise z to (default 2)",       NULL },
     { "mandy-conj",   'M',  0, G_OPTION_ARG_NONE,   &conjugate,    "Use complex conjugate of each z",           NULL },
-    { NULL }
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
 };
 
 GOptionEntry help_julia[] =
 {
     { "julia",        'j',  0, G_OPTION_ARG_NONE,   &julia,        "Generate a Julia set",                      NULL },
-    { NULL }
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
 };
-
-/* GD Variables */
-gdImagePtr im;
 
 /* Program begin */
 int iteration = 0;
@@ -155,64 +151,6 @@ int in_julia_set(cmplx c)
     return inset;
 }
 
-void put_pixel(coord p, colour c)
-{
-    if(inv_colour)
-    {
-	c[0] = 255 - c[0];
-	c[1] = 255 - c[1];
-	c[2] = 255 - c[2];
-    }
-
-    gdImageSetPixel(im, p[0], p[1], gdTrueColor(c[0], c[1], c[2]));
-}
-
-void save_set()
-{
-    FILE * pngout = fopen(image_file, "wb");
-    gdImagePngEx(im, pngout, 0);
-    gdImageDestroy(im);
-    fclose(pngout);
-}
-
-void colourise(int inset, int iteration, float zmod, int *r, int *g, int *b)
-{
-    colour out = {0, 0, 0};
-    float intensity;
-
-    if(!inset)
-    {
-	if(show_colour)
-	{
-	    if(smooth_colour)
-	    {
-		intensity = 1 / (iteration - logn(log(zmod), 2));
-	    } else {
-		intensity = (float)iteration / iterations;
-	    }
-	    
-	    if(!redscale && !greenscale && !bluescale)
-	    {
-		out[0] = (int) (255 - 255 * intensity);
-		out[1] = (int) (255 - 255 * intensity);
-		out[2] = (int) (255 - 255 * intensity);
-	    } else {
-		if(redscale)   out[0] = (int) (255 * intensity);
-		if(greenscale) out[1] = (int) (255 * intensity);
-		if(bluescale)  out[2] = (int) (255 * intensity);
-	    }
-	} else {
-	    out[0] = 255;
-	    out[1] = 255;
-	    out[2] = 255;
-	}
-    }
-    
-    *r = out[0];
-    *g = out[1];
-    *b = out[2];
-}
-
 int main(int argc, char *argv[])
 {
     cmplx  c = {0, 0};
@@ -253,7 +191,7 @@ int main(int argc, char *argv[])
     im_range  = im_max - im_min;
     im_factor = im_range / (image_height - 1);
 
-    im = gdImageCreateTrueColor((int)image_width, (int)image_height);
+    init_im(); /* Initialise the GD pointer */
     
     for(p[0] = 0; p[0] < (int)image_width; ++p[0])
     {

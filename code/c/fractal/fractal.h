@@ -5,8 +5,9 @@
 #define logn(x,b) (log(x) / log(b))
 
 /* Typedefs */
-typedef int coord[2];
-typedef int colour[3];
+typedef float cmplx[2];
+typedef int   coord[2];
+typedef int   colour[3];
 
 /* Prototypes */
 int in_mandy_set(cmplx c);
