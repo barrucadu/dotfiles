@@ -62,9 +62,9 @@ void colourise(int inset, int iter, float zmo, int *r, int *g, int *b)
 	{
 	    if(smooth_colour)
 	    {
-		intensity = 1 / (float)(iter - logn(log(zmo), 2));
+		intensity = 1 / ((float)iter - logn(log(zmo), 2));
 	    } else {
-		intensity = (float)(iter / iterations);
+		intensity = ((float)iter / (float)iterations);
 	    }
 	    
 	    if(!redscale && !greenscale && !bluescale)

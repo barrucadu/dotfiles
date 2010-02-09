@@ -108,7 +108,7 @@ int in_mandy_set(cmplx c)
 
 	re2 = d[0] * d[0];
 	im2 = d[1] * d[1];
-	
+
 	if((re2 + im2) > 4)
 	{
 	    inset = 0;
@@ -145,8 +145,8 @@ int in_julia_set(cmplx c)
 	    break;
 	}
 	
-	cmplx_pow(d, 2, &d[0], &d[1]);
-	cmplx_add(d, c, &d[0], &d[1]);
+	cmplx_pow(d, 2,     &d[0], &d[1]);
+	cmplx_add(d, param, &d[0], &d[1]);
     }
 
     iteration = i;
@@ -195,19 +195,19 @@ int main(int argc, char *argv[])
 
     re_range  = re_max - re_min;
     re_factor = re_range / (float)(image_width - 1);
-    im_max    = (float)im_min + re_range * (float)(image_height / image_width);
+    im_max    = im_min + re_range * ((float)image_height / (float)image_width);
     im_range  = im_max - im_min;
     im_factor = im_range / (float)(image_height - 1);
 
     init_im(); /* Initialise the GD pointer */
-    
-    for(p[0] = 0; p[0] < (int)image_width; ++p[0])
-    {
-	c[0] = (float) (re_min + (float)p[0] * re_factor);
 
-	for(p[1] = 0; p[1] < (int)image_height; ++p[1])
+    for(p[0] = 0; p[0] < image_width; ++p[0])
+    {
+	c[0] = (float) (re_min + p[0] * re_factor);
+
+	for(p[1] = 0; p[1] < image_height; ++p[1])
 	{
-	    c[1] = (float) (im_max - (float)p[1] * im_factor);
+	    c[1] = (float) (im_max - p[1] * im_factor);
 
 	    n = 0;
 	    if(julia)
@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
 	    } else {
 		n = in_mandy_set(c);
 	    }
-	    
+
 	    colourise(n, iteration, zmod, &t[0], &t[1], &t[2]);
 	    put_pixel(p, t);
 	}
