@@ -155,12 +155,23 @@ function pkginfo ()
 
 # RFCs / Manpages
 
+function rfc()
+{
+    rfc=/usr/share/doc/rfc/txt/rfc$1.txt
+
+    if [ -f $rfc ]; then
+	sed 's/\f//' $rfc | $PAGER
+    else
+	echo "RFC $1 not found."
+    fi
+}
+
 function man()
 {
-    rfc=/usr/share/doc/rfc/txt/$1.txt
+    rfc=/usr/share/doc/rfc/txt/rfc$1.txt
 
     if [[ -f $rfc ]]; then
-	sed 's/\f//' $rfc | $PAGER
+	rfc $1
     else
 	/usr/bin/man $@
     fi
@@ -168,7 +179,7 @@ function man()
 
 function rfcsearch()
 {
-    grep "$1" -m1 /usr/share/doc/rfc/txt/*
+    grep "$*" -m1 /usr/share/doc/rfc/txt/rfc*.txt
 }
 
 # Misc
