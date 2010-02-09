@@ -1,3 +1,4 @@
 fractal
+fviewer
 *.png
-*.o
+*/*.o

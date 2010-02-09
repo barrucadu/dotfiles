@@ -3,11 +3,15 @@ WARN    := -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -
 CFLAGS  := -O3 $(shell pkg-config --cflags gtk+-2.0) $(WARN) -ggdb -c
 LDFLAGS := -lgd -lm $(shell pkg-config --libs gtk+-2.0)
 
-.PHONY: all clean
+.PHONY: all clean fractal fviewer
 
-all: fractal
+all: fractal fviewer
 
-fractal: fractal.o cmplx.o image.o
+fractal: fractalsrc/fractal.o fractalsrc/cmplx.o fractalsrc/image.o
+	@gcc $(LDFLAGS) -o fractal fractalsrc/*.o
+
+fviewer: fviewersrc/fviewer.o
+	@gcc $(LDFLAGS) -o fractal fviewersrc/*.o
 
 clean:
-	-@rm fractal *.o
+	-@rm fractal fviewer fractalsrc/*.o fviewersrc/*.o
