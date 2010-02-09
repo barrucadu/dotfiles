@@ -153,6 +153,24 @@ function pkginfo ()
     pacman -Qi $1 || pacman -Si $1
 }
 
+# RFCs / Manpages
+
+function man()
+{
+    rfc=/usr/share/doc/rfc/txt/$1.txt
+
+    if [[ -f $rfc ]]; then
+	sed 's/\f//' $rfc | $PAGER
+    else
+	/usr/bin/man $@
+    fi
+}
+
+function rfcsearch()
+{
+    grep "$1" -m1 /usr/share/doc/rfc/txt/*
+}
+
 # Misc
 function mkd()
 {
