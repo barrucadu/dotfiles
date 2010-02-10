@@ -11,72 +11,51 @@
 #include "image.h"
 #include "cmplx.h"
 
-/* Image options */
-int image_width  = 1000;
-int image_height = 800;
-char* image_file = (char*) "fractal.png";
-
-/* Colour options */
-int show_colour   = FALSE;
-int smooth_colour = FALSE;
-int inv_colour    = FALSE;
-float bluescale   = 0;
-float redscale    = 0;
-float greenscale  = 0;
-
-/* GD Variables */
-gdImagePtr im;
-
-/* Externs defined in fractal.c */
-extern int iterations;
-extern int iteration;
-extern float zmod;
-
-void put_pixel(coord p, colour c)
+void put_pixel(coord p, colour c, image_options_t ioptions)
 {
-    if(inv_colour)
+    if(ioptions.colour.inv_colour)
     {
 	c[0] = 255 - c[0];
 	c[1] = 255 - c[1];
 	c[2] = 255 - c[2];
     }
 
-    gdImageSetPixel(im, p[0], p[1], gdTrueColor(c[0], c[1], c[2]));
+    gdImageSetPixel(ioptions.gd.im, p[0], p[1], gdTrueColor(c[0], c[1], c[2]));
 }
 
-void save_set()
+void save_set(image_options_t ioptions)
 {
-    FILE * pngout = fopen(image_file, "wb");
-    gdImagePngEx(im, pngout, 0);
-    gdImageDestroy(im);
+    FILE * pngout = fopen(ioptions.image.file, "wb");
+    gdImagePngEx(ioptions.gd.im, pngout, 0);
+    gdImageDestroy(ioptions.gd.im);
     fclose(pngout);
 }
 
-void colourise(int inset, int iter, float zmo, int *r, int *g, int *b)
+void colourise(int inset, int iteration, int iterations, float zmod, int *r, int *g, int *b, image_options_t ioptions)
 {
     colour out = {0, 0, 0};
     float intensity;
 
     if(!inset)
     {
-	if(show_colour)
+	if(ioptions.colour.show_colour)
 	{
-	    if(smooth_colour)
+	    if(ioptions.colour.smooth_colour)
 	    {
-		intensity = 1 / ((float)iter - logn(log(zmo), 2));
+		intensity = 1 / ((float)iteration - logn(log(zmod), 2));
 	    } else {
-		intensity = ((float)iter / (float)iterations);
+		intensity = ((float)iteration / (float)iterations);
 	    }
 	    
-	    if(!redscale && !greenscale && !bluescale)
+	    if(!ioptions.colour.redscale && !ioptions.colour.greenscale && !ioptions.colour.bluescale)
 	    {
 		out[0] = (int) (255 - 255 * intensity);
 		out[1] = (int) (255 - 255 * intensity);
 		out[2] = (int) (255 - 255 * intensity);
 	    } else {
-		if(redscale)   out[0] = (int) (255 * intensity * redscale);
-		if(greenscale) out[1] = (int) (255 * intensity * greenscale);
-		if(bluescale)  out[2] = (int) (255 * intensity * bluescale);
+		if(ioptions.colour.redscale)   out[0] = (int) (255 * intensity * ioptions.colour.redscale);
+		if(ioptions.colour.greenscale) out[1] = (int) (255 * intensity * ioptions.colour.greenscale);
+		if(ioptions.colour.bluescale)  out[2] = (int) (255 * intensity * ioptions.colour.bluescale);
 	    }
 	} else {
 	    out[0] = 255;
@@ -90,7 +69,7 @@ void colourise(int inset, int iter, float zmo, int *r, int *g, int *b)
     *b = out[2];
 }
 
-void init_im()
+gdImagePtr init_gd(image_options_t ioptions)
 {
-    im = gdImageCreateTrueColor(image_width, image_height);
+    return gdImageCreateTrueColor(ioptions.image.width, ioptions.image.height);
 }

@@ -11,83 +11,48 @@
 #include "image.h"
 #include "cmplx.h"
 
-/* TODO: Get rid of all these global variables! */
-
-/* Externs defined in image.c */
-extern int   image_width;
-extern int   image_height;
-extern char* image_file;
-extern int   show_colour;
-extern int   smooth_colour;
-extern int   inv_colour;
-extern float bluescale;
-extern float redscale;
-extern float greenscale;
-
-/* Externs defined in fractal.c */
-extern int   power;
-extern int   conjugate;
-extern float re_min;
-extern float re_max;
-extern float re_range;
-extern float re_factor;
-extern float im_min;
-extern float im_max;
-extern float im_range;
-extern float im_factor;
-extern cmplx param;
-extern int   iterations;
-extern int   show_axes;
-extern int   julia;
-
-/* Option Stuff */
-char* re_mins     = NULL;
-char* re_maxs     = NULL;
-char* im_mins     = NULL;
-char* param_re    = NULL;
-char* param_im    = NULL;
-char* redscales   = NULL;
-char* greenscales = NULL;
-char* bluescales  = NULL;
+fractal_options_t foptions;
+image_options_t   ioptions;
+float_options_t   floptions;
 
 /* Glib option parser variables */
 GOptionEntry help_all[] =
 {
-    { "filename",     'f',  0, G_OPTION_ARG_STRING, &image_file,   "Filename to save to",                       NULL },
-    { "image-width",  'W',  0, G_OPTION_ARG_INT,    &image_width,  "Generated image width",                     NULL },
-    { "image-height", 'H',  0, G_OPTION_ARG_INT,    &image_height, "Generated image height",                    NULL },
-    { "iterations",   'n',  0, G_OPTION_ARG_INT,    &iterations,   "Number of iterations to run on each point", NULL },
-    { "re-min",       'r',  0, G_OPTION_ARG_STRING, &re_mins,      "Start value on the real axis",              NULL },
-    { "re-max",       'R',  0, G_OPTION_ARG_STRING, &re_maxs,      "End value on the real axis",                NULL },
-    { "im-min",       'i',  0, G_OPTION_ARG_STRING, &im_mins,      "Start value on the imaginary axis",         NULL },
-    { "re",           'a',  0, G_OPTION_ARG_STRING, &param_re,     "Real part for the parameter",               NULL },
-    { "im",           'b',  0, G_OPTION_ARG_STRING, &param_im,     "Imaginary part for the parameter",          NULL },
-    { "show-axes",    '\0', 0, G_OPTION_ARG_NONE,   &show_axes,    "Show real and imaginary axes",              NULL },
-    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
+    { "filename",     'f',  0, G_OPTION_ARG_STRING, &ioptions.image.file,         "Filename to save to",                       NULL },
+    { "image-width",  'W',  0, G_OPTION_ARG_INT,    &ioptions.image.width,        "Generated image width",                     NULL },
+    { "image-height", 'H',  0, G_OPTION_ARG_INT,    &ioptions.image.height,       "Generated image height",                    NULL },
+    { "iterations",   'n',  0, G_OPTION_ARG_INT,    &foptions.misc.iterations,    "Number of iterations to run on each point", NULL },
+    { "re-min",       'r',  0, G_OPTION_ARG_STRING, &floptions.re_mins,           "Start value on the real axis",              NULL },
+    { "re-max",       'R',  0, G_OPTION_ARG_STRING, &floptions.re_maxs,           "End value on the real axis",                NULL },
+    { "im-min",       'i',  0, G_OPTION_ARG_STRING, &floptions.im_mins,           "Start value on the imaginary axis",         NULL },
+    { "re",           'a',  0, G_OPTION_ARG_STRING, &floptions.param_re,          "Real part for the parameter",               NULL },
+    { "im",           'b',  0, G_OPTION_ARG_STRING, &floptions.param_im,          "Imaginary part for the parameter",          NULL },
+    { "show-axes",    '\0', 0, G_OPTION_ARG_NONE,   &foptions.plot.show_axes,     "Show real and imaginary axes",              NULL },
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,                 "",                                          NULL }
 };
 
 GOptionEntry help_colour[] =
 {
-    { "show-colour",  'c',  0, G_OPTION_ARG_NONE,   &show_colour,   "Show colour for points not in the set",   NULL },
-    { "inv-colour",   'C',  0, G_OPTION_ARG_NONE,   &inv_colour,    "Invert all colours",                      NULL },
-    { "blue",         '\0', 0, G_OPTION_ARG_STRING, &bluescales,    "Brightness of blue componet (0 to 1)",    NULL },
-    { "red",          '\0', 0, G_OPTION_ARG_STRING, &redscales,     "Brightness of red componet (0 to 1)",     NULL },
-    { "green",        '\0', 0, G_OPTION_ARG_STRING, &greenscales,   "Brightness of green componet (0 to 1)",   NULL },
-    { "smooth",       's',  0, G_OPTION_ARG_NONE,   &smooth_colour, "Smooth colours",                          NULL },
-    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                         NULL }
+    { "show-colour",  'c',  0, G_OPTION_ARG_NONE,   &ioptions.colour.show_colour,   "Show colour for points not in the set",   NULL },
+    { "inv-colour",   'C',  0, G_OPTION_ARG_NONE,   &ioptions.colour.inv_colour,    "Invert all colours",                      NULL },
+    { "blue",         '\0', 0, G_OPTION_ARG_STRING, &floptions.bluescales,          "Brightness of blue componet (0 to 1)",    NULL },
+    { "red",          '\0', 0, G_OPTION_ARG_STRING, &floptions.redscales,           "Brightness of red componet (0 to 1)",     NULL },
+    { "green",        '\0', 0, G_OPTION_ARG_STRING, &floptions.greenscales,         "Brightness of green componet (0 to 1)",   NULL },
+    { "smooth",       's',  0, G_OPTION_ARG_NONE,   &ioptions.colour.smooth_colour, "Smooth colours",                          NULL },
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,                   "",                                         NULL }
 };
 
 GOptionEntry help_mandelbrot[] =
 {
-    { "mandy-pow",    'p',  0, G_OPTION_ARG_INT,    &power,        "The power to raise z to (default 2)",       NULL },
-    { "mandy-conj",   'M',  0, G_OPTION_ARG_NONE,   &conjugate,    "Use complex conjugate of each z",           NULL },
-    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
+    { "mandy-pow",    'p',  0, G_OPTION_ARG_INT,    &foptions.mandelbrot.power,     "The power to raise z to (default 2)",       NULL },
+    { "mandy-conj",   'M',  0, G_OPTION_ARG_NONE,   &foptions.mandelbrot.conjugate, "Use complex conjugate of each z",           NULL },
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,                   "",                                          NULL }
 };
 
 GOptionEntry help_julia[] =
 {
-    { "julia",        'j',  0, G_OPTION_ARG_NONE,   &julia,        "Generate a Julia set",                      NULL },
-    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,  "",                                          NULL }
+    { "julia",        'j',  0, G_OPTION_ARG_NONE,   &foptions.julia.julia,          "Generate a Julia set",                      NULL },
+    { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,                   "",                                          NULL }
 };
 
 void do_params(int argc, char *argv[])
@@ -112,33 +77,43 @@ void do_params(int argc, char *argv[])
     g_option_context_add_group(context, gjulia);
     g_option_context_parse(context, &argc, &argv, NULL);
 
-    if(param_re) param[0] = (float)atof(param_re);
-    if(param_im) param[1] = (float)atof(param_im);
+    /* Now for default options */
+    if(!ioptions.image.width)      ioptions.image.width      = 1000;
+    if(!ioptions.image.height)     ioptions.image.height     = 800;
+    if(!ioptions.image.file)       ioptions.image.file       = (char*) "fractal.png";
+    if(!foptions.mandelbrot.power) foptions.mandelbrot.power = 2;
+    if(!foptions.misc.iterations)  foptions.misc.iterations  = 30;
 
-    if(re_mins) re_min = (float)atof(re_mins);
-    if(re_maxs) re_max = (float)atof(re_maxs);
-    if(im_mins) im_min = (float)atof(im_mins);
-    
-    if(redscales)   redscale   = (float)atof(redscales);
-    if(greenscales) greenscale = (float)atof(greenscales);
-    if(bluescales)  bluescale  = (float)atof(bluescales);
+    foptions.plot.re_min = -2.0;
+    foptions.plot.re_max =  1.0;
+    foptions.plot.im_min = -1.2;
+
+    /* I didn't notice a way to do floats with glib option parsing, hence the 'floptions' struct */
+    if(floptions.param_re)    foptions.misc.param[0]     = (float)atof(floptions.param_re);
+    if(floptions.param_im)    foptions.misc.param[1]     = (float)atof(floptions.param_im);
+    if(floptions.re_mins)     foptions.plot.re_min       = (float)atof(floptions.re_mins);
+    if(floptions.re_maxs)     foptions.plot.re_max       = (float)atof(floptions.re_maxs);
+    if(floptions.im_mins)     foptions.plot.im_min       = (float)atof(floptions.im_mins);
+    if(floptions.redscales)   ioptions.colour.redscale   = (float)atof(floptions.redscales);
+    if(floptions.greenscales) ioptions.colour.greenscale = (float)atof(floptions.greenscales);
+    if(floptions.bluescales)  ioptions.colour.bluescale  = (float)atof(floptions.bluescales);
 }
 
 int main(int argc, char *argv[])
 {
     do_params(argc, argv);
 
-    re_range  = re_max - re_min;
-    re_factor = re_range / (float)(image_width - 1);
-    im_max    = im_min + re_range * ((float)image_height / (float)image_width);
-    im_range  = im_max - im_min;
-    im_factor = im_range / (float)(image_height - 1);
+    foptions.plot.re_range  = foptions.plot.re_max - foptions.plot.re_min;
+    foptions.plot.re_factor = foptions.plot.re_range / (float)(ioptions.image.width - 1);
+    foptions.plot.im_max    = foptions.plot.im_min + foptions.plot.re_range * ((float)ioptions.image.height / (float)ioptions.image.width);
+    foptions.plot.im_range  = foptions.plot.im_max - foptions.plot.im_min;
+    foptions.plot.im_factor = foptions.plot.im_range / (float)(ioptions.image.height - 1);
 
-    init_im();
+    ioptions.gd.im = init_gd(ioptions);
 
-    fractal_main_loop();
+    fractal_main_loop(foptions, ioptions);
 
-    save_set();
+    save_set(ioptions);
 
     return 0;
 }

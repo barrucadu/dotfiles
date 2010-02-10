@@ -2,9 +2,9 @@
 #define __IMAGE_H
 
 /* Prototypes */
-void put_pixel(coord p, colour c);
-void save_set(void);
-void colourise(int inset, int iteration, float zmod, int *r, int *g, int *b);
-void init_im(void);
+void       put_pixel(coord p, colour c, image_options_t ioptions);
+void       save_set(image_options_t ioptions);
+void       colourise(int inset, int iteration, int iterations, float zmod, int *r, int *g, int *b, image_options_t ioptions);
+gdImagePtr init_gd(image_options_t ioptions);
 
 #endif

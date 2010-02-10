@@ -11,52 +11,18 @@
 #include "image.h"
 #include "cmplx.h"
 
-/* Externs defined in image.c */
-extern int   image_width;
-extern int   image_height;
-extern char* image_file;
-extern int   show_colour;
-extern int   smooth_colour;
-extern int   inv_colour;
-extern float bluescale;
-extern float redscale;
-extern float greenscale;
-
-/* Mandelbrot Set options */
-int power     = 2;
-int conjugate = FALSE;
-
-/* Misc options */
-float re_min = -2.0;
-float re_max = 1.0;
-float re_range, re_factor;
-
-float im_min = (float)-1.2;
-float im_max, im_range, im_factor;
-
-cmplx param    = {0.0, 0.0};
-int iterations = 30;
-int show_axes  = FALSE;
-
-/* Julia Set options */
-int julia = FALSE;
-
-/* Program begin */
-int iteration = 0;
-float zmod    = 0.0;
-
-int in_mandy_set(cmplx c)
+int in_mandy_set(cmplx c, int *iteration, float *zmod, fractal_options_t foptions)
 {
     int   i, inset;
     cmplx d;
     float re2, im2;
 
-    cmplx_add(c, param, &d[0], &d[1]);
+    cmplx_add(c, foptions.misc.param, &d[0], &d[1]);
 
     inset = 1;
-    for(i = 0; i < iterations; ++i)
+    for(i = 0; i < foptions.misc.iterations; ++i)
     {
-	if(conjugate) cmplx_conj(d, &d[0], &d[1]);
+	if(foptions.mandelbrot.conjugate) cmplx_conj(d, &d[0], &d[1]);
 
 	re2 = d[0] * d[0];
 	im2 = d[1] * d[1];
@@ -67,26 +33,26 @@ int in_mandy_set(cmplx c)
 	    break;
 	}
 
-	cmplx_pow(d, power, &d[0], &d[1]);
+	cmplx_pow(d, foptions.mandelbrot.power, &d[0], &d[1]);
 	cmplx_add(d, c, &d[0], &d[1]);
     }
 
-    iteration = i;
-    zmod      = cmplx_mod(d);
+    *iteration = i;
+    *zmod      = cmplx_mod(d);
 
     return inset;
 }
 
-int in_julia_set(cmplx c)
+int in_julia_set(cmplx c, int *iteration, float *zmod, fractal_options_t foptions)
 {
     int   i, inset;
     cmplx d;
     float re2, im2;
 
-    cmplx_add(c, param, &d[0], &d[1]);
+    cmplx_add(c, foptions.misc.param, &d[0], &d[1]);
 
     inset = 1;
-    for(i = 0; i < iterations; ++i)
+    for(i = 0; i < foptions.misc.iterations; ++i)
     {
 	re2 = d[0] * d[0];
 	im2 = d[1] * d[1];
@@ -97,56 +63,51 @@ int in_julia_set(cmplx c)
 	    break;
 	}
 	
-	cmplx_pow(d, 2,     &d[0], &d[1]);
-	cmplx_add(d, param, &d[0], &d[1]);
+	cmplx_pow(d, 2, &d[0], &d[1]);
+	cmplx_add(d, foptions.misc.param, &d[0], &d[1]);
     }
 
-    iteration = i;
-    zmod      = cmplx_mod(d);
+    *iteration = i;
+    *zmod      = cmplx_mod(d);
 
     return inset;
 }
 
-void fractal_main_loop()
+void fractal_main_loop(fractal_options_t foptions, image_options_t ioptions)
 {
     cmplx  c = {0, 0};
     colour t = {0, 0, 0};
     coord  p = {0, 0};
-    int    n;
+    int    inset, iteration;
+    float  zmod;
 
-    for(p[0] = 0; p[0] < image_width; ++p[0])
+    for(p[0] = 0; p[0] < ioptions.image.width; ++p[0])
     {
-	c[0] = (float) (re_min + p[0] * re_factor);
+	c[0] = (float) (foptions.plot.re_min + p[0] * foptions.plot.re_factor);
 
-	for(p[1] = 0; p[1] < image_height; ++p[1])
+	for(p[1] = 0; p[1] < ioptions.image.height; ++p[1])
 	{
-	    c[1] = (float) (im_max - p[1] * im_factor);
+	    c[1] = (float) (foptions.plot.im_max - p[1] * foptions.plot.im_factor);
 
-	    n = 0;
-	    if(julia)
-	    {
-		n = in_julia_set(c);
-	    } else {
-		n = in_mandy_set(c);
-	    }
+	    inset = (foptions.julia.julia) ? in_julia_set(c, &iteration, &zmod, foptions) : in_mandy_set(c, &iteration, &zmod, foptions);
 
-	    colourise(n, iteration, zmod, &t[0], &t[1], &t[2]);
-	    put_pixel(p, t);
+	    colourise(inset, iteration, foptions.misc.iterations, zmod, &t[0], &t[1], &t[2], ioptions);
+	    put_pixel(p, t, ioptions);
 	}
     }
 
-    if(show_axes)
+    if(foptions.plot.show_axes)
     {
 	t[0] = 100;
 	t[1] = 100;
 	t[2] = 100;
 	
 	p[0] = 0;
-	p[1] = (int) (im_max / im_factor);
-	for(; p[0] < image_width; ++p[0]) put_pixel(p, t);
+	p[1] = (int) (foptions.plot.im_max / foptions.plot.im_factor);
+	for(; p[0] < ioptions.image.width; ++p[0]) put_pixel(p, t, ioptions);
 	
-	p[0] = (int) (- re_min / re_factor);
+	p[0] = (int) (- foptions.plot.re_min / foptions.plot.re_factor);
 	p[1] = 0;
-	for(; p[1] < image_height; ++p[1]) put_pixel(p, t);
+	for(; p[1] < ioptions.image.height; ++p[1]) put_pixel(p, t, ioptions);
     }
 }
