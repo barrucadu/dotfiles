@@ -6,6 +6,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#include "main.h"
 #include "fractal.h"
 #include "image.h"
 #include "cmplx.h"

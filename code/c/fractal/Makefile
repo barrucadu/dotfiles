@@ -7,11 +7,11 @@ LDFLAGS := -lgd -lm $(shell pkg-config --libs gtk+-2.0)
 
 all: fractal fviewer
 
-fractal: fractalsrc/fractal.o fractalsrc/cmplx.o fractalsrc/image.o
+fractal: fractalsrc/main.o fractalsrc/fractal.o fractalsrc/cmplx.o fractalsrc/image.o
 	@gcc $(LDFLAGS) -o fractal fractalsrc/*.o
 
 fviewer: fviewersrc/fviewer.o
-	@gcc $(LDFLAGS) -o fractal fviewersrc/*.o
+	@gcc $(LDFLAGS) -o fviewer fviewersrc/*.o
 
 clean:
 	-@rm fractal fviewer fractalsrc/*.o fviewersrc/*.o
