@@ -168,10 +168,10 @@ function rfc()
 
 function man()
 {
-    rfc=/usr/share/doc/rfc/txt/rfc$1.txt
+    rfc=/usr/share/doc/rfc/txt/rfc$*.txt
 
     if [[ -f $rfc ]]; then
-	rfc $1
+	rfc $*
     else
 	/usr/bin/man $@
     fi
