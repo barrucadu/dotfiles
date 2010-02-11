@@ -145,11 +145,6 @@ int main(int argc, char *argv[])
 	toptions[i].foptions.plot.re_min += slice * i;
 	toptions[i].foptions.plot.re_max -= slice * (threads - i - 1);
 
-	/*printf("Thread %i: Re %f - %f, Im: %f - %f\n",
-	       i,
-	       toptions[i].foptions.plot.re_min, toptions[i].foptions.plot.re_max,
-	       toptions[i].foptions.plot.im_min, toptions[i].foptions.plot.im_max);*/
-	
 	do_range_options(&toptions[i].foptions, 1);
     }
 

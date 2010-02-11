@@ -76,10 +76,6 @@ int in_julia_set(cmplx c, int *iteration, float *zmod, fractal_options_t foption
 
 void fractal_main_loop(fractal_options_t foptions, image_options_t ioptions)
 {
-    /*printf("Re: %f - %f, Im: %f - %f\n",
-	   foptions.plot.re_min, foptions.plot.re_max,
-	   foptions.plot.im_min, foptions.plot.im_max);*/
-
     cmplx  c = {0, 0};
     colour t = {0, 0, 0};
     coord  p = {0, 0};
