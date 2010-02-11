@@ -80,8 +80,16 @@ typedef struct
     char* bluescales;
 } float_options_t;
 
+typedef struct
+{
+    image_options_t   ioptions;
+    fractal_options_t foptions;
+} thread_options_t;
+
 /* Prototypes */
 void do_params(int argc, char *argv[]);
+void *spawn_fractal_generator(void* arg);
+void do_range_options(fractal_options_t *fopts, int isthread);
 int main(int argc, char *argv[]);
 
 #endif

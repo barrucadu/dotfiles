@@ -5,6 +5,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <pthread.h>
 
 #include "main.h"
 #include "fractal.h"
@@ -99,21 +100,68 @@ void do_params(int argc, char *argv[])
     if(floptions.bluescales)  ioptions.colour.bluescale  = (float)atof(floptions.bluescales);
 }
 
+void *spawn_fractal_generator(void* arg)
+{
+    thread_options_t *toptions = (thread_options_t*)arg;
+
+    fractal_main_loop(toptions->foptions, toptions->ioptions);
+
+    pthread_exit(0);
+}
+
+void do_range_options(fractal_options_t *fopts, int isthread)
+{
+    fopts->plot.re_range  = fopts->plot.re_max - fopts->plot.re_min;
+
+    if(!isthread)
+    {
+	fopts->plot.re_factor = fopts->plot.re_range / (float)(ioptions.image.width - 1);
+	fopts->plot.im_max    = fopts->plot.im_min + fopts->plot.re_range * ((float)ioptions.image.height / (float)ioptions.image.width);
+	fopts->plot.im_range  = fopts->plot.im_max - fopts->plot.im_min;
+	fopts->plot.im_factor = fopts->plot.im_range / (float)(ioptions.image.height - 1);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     do_params(argc, argv);
 
-    foptions.plot.re_range  = foptions.plot.re_max - foptions.plot.re_min;
-    foptions.plot.re_factor = foptions.plot.re_range / (float)(ioptions.image.width - 1);
-    foptions.plot.im_max    = foptions.plot.im_min + foptions.plot.re_range * ((float)ioptions.image.height / (float)ioptions.image.width);
-    foptions.plot.im_range  = foptions.plot.im_max - foptions.plot.im_min;
-    foptions.plot.im_factor = foptions.plot.im_range / (float)(ioptions.image.height - 1);
+    do_range_options(&foptions, 0);
 
-    ioptions.gd.im = init_gd(ioptions);
+    /* This whole main function is merely a mess to see if multithreading works */
 
-    fractal_main_loop(foptions, ioptions);
+    thread_options_t *toptions1 = (thread_options_t*)malloc(sizeof(thread_options_t));
+    thread_options_t *toptions2 = (thread_options_t*)malloc(sizeof(thread_options_t));
 
-    save_set(ioptions);
+    toptions1->ioptions = ioptions;
+    toptions1->foptions = foptions;
+
+    toptions1->ioptions.image.width  = toptions1->ioptions.image.width / 2;
+    toptions1->foptions.plot.re_max -= (float)toptions1->foptions.plot.re_range / 2.0;
+
+    do_range_options(&toptions1->foptions, 1);
+
+    toptions2->ioptions = ioptions;
+    toptions2->foptions = foptions;
+
+    toptions2->ioptions.image.width  = toptions2->ioptions.image.width / 2;
+    toptions2->foptions.plot.re_min += (float)toptions2->foptions.plot.re_range / 2.0;
+
+    do_range_options(&toptions2->foptions, 1);
+
+    /* Not an ideal solution - have all image handling in the spawn_fractal_generator function when gd stops being funky */
+    pthread_t threadid1, threadid2;
+
+    init_gd(&toptions1->ioptions);
+    init_gd(&toptions2->ioptions);
+
+    pthread_create(&threadid1, NULL, spawn_fractal_generator, (thread_options_t*)toptions1);
+    pthread_create(&threadid2, NULL, spawn_fractal_generator, (thread_options_t*)toptions2);
+
+    pthread_join(threadid1, NULL);
+    pthread_join(threadid2, NULL);
+
+    merge_and_save_sets(toptions1->ioptions, toptions2->ioptions);
 
     return 0;
 }

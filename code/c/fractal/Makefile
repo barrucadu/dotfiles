@@ -1,7 +1,7 @@
 CC      := gcc
 WARN    := -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Werror
-CFLAGS  := -O3 $(shell pkg-config --cflags gtk+-2.0) $(WARN) -ggdb -c
-LDFLAGS := -lgd -lm $(shell pkg-config --libs gtk+-2.0)
+CFLAGS  := -O3 $(shell pkg-config --cflags gtk+-2.0) $(WARN) -ggdb
+LDFLAGS := -lgd -lm -lpthread $(shell pkg-config --libs gtk+-2.0)
 
 .PHONY: all clean fractal fviewer
 

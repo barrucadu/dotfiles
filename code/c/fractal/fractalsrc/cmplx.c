@@ -5,6 +5,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <pthread.h>
 
 #include "main.h"
 #include "fractal.h"
