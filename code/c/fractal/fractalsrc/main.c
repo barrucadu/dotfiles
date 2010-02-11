@@ -15,6 +15,7 @@
 fractal_options_t foptions;
 image_options_t   ioptions;
 float_options_t   floptions;
+int threads = 1; /* This is *only* used in the main function, and it doesn't really fit anywhere else */
 
 /* Glib option parser variables */
 GOptionEntry help_all[] =
@@ -28,6 +29,7 @@ GOptionEntry help_all[] =
     { "im-min",       'i',  0, G_OPTION_ARG_STRING, &floptions.im_mins,           "Start value on the imaginary axis",         NULL },
     { "re",           'a',  0, G_OPTION_ARG_STRING, &floptions.param_re,          "Real part for the parameter",               NULL },
     { "im",           'b',  0, G_OPTION_ARG_STRING, &floptions.param_im,          "Imaginary part for the parameter",          NULL },
+    { "threads",      't',  0, G_OPTION_ARG_INT,    &threads,                     "The number of threads to use",              NULL },
     { "show-axes",    '\0', 0, G_OPTION_ARG_NONE,   &foptions.plot.show_axes,     "Show real and imaginary axes",              NULL },
     { NULL,           '\0', 0, G_OPTION_ARG_NONE,   (void*) NULL,                 "",                                          NULL }
 };
@@ -128,40 +130,38 @@ int main(int argc, char *argv[])
 
     do_range_options(&foptions, 0);
 
-    /* This whole main function is merely a mess to see if multithreading works */
+    pthread_t        *threadid = (pthread_t*)malloc(sizeof(pthread_t) * threads);
+    thread_options_t *toptions = (thread_options_t*)malloc(sizeof(thread_options_t) * threads);
 
-    thread_options_t *toptions1 = (thread_options_t*)malloc(sizeof(thread_options_t));
-    thread_options_t *toptions2 = (thread_options_t*)malloc(sizeof(thread_options_t));
+    int i;
+    float slice = (float)foptions.plot.re_range / (float)threads;
 
-    toptions1->ioptions = ioptions;
-    toptions1->foptions = foptions;
+    for(i = 0; i < threads; ++i)
+    {
+	toptions[i].ioptions = ioptions;
+	toptions[i].foptions = foptions;
 
-    toptions1->ioptions.image.width  = toptions1->ioptions.image.width / 2;
-    toptions1->foptions.plot.re_max -= (float)toptions1->foptions.plot.re_range / 2.0;
+	toptions[i].ioptions.image.width  = toptions[i].ioptions.image.width / threads;
+	toptions[i].foptions.plot.re_min += slice * i;
+	toptions[i].foptions.plot.re_max -= slice * (threads - i - 1);
 
-    do_range_options(&toptions1->foptions, 1);
+	/*printf("Thread %i: Re %f - %f, Im: %f - %f\n",
+	       i,
+	       toptions[i].foptions.plot.re_min, toptions[i].foptions.plot.re_max,
+	       toptions[i].foptions.plot.im_min, toptions[i].foptions.plot.im_max);*/
+	
+	do_range_options(&toptions[i].foptions, 1);
+    }
 
-    toptions2->ioptions = ioptions;
-    toptions2->foptions = foptions;
+    for(i = 0; i < threads; ++i)
+    {
+	init_gd(&toptions[i].ioptions);
+	pthread_create(&threadid[i], NULL, spawn_fractal_generator, (thread_options_t*)&toptions[i]);
+    }
 
-    toptions2->ioptions.image.width  = toptions2->ioptions.image.width / 2;
-    toptions2->foptions.plot.re_min += (float)toptions2->foptions.plot.re_range / 2.0;
+    for(i = 0; i < threads; ++i) pthread_join(threadid[i], NULL);
 
-    do_range_options(&toptions2->foptions, 1);
-
-    /* Not an ideal solution - have all image handling in the spawn_fractal_generator function when gd stops being funky */
-    pthread_t threadid1, threadid2;
-
-    init_gd(&toptions1->ioptions);
-    init_gd(&toptions2->ioptions);
-
-    pthread_create(&threadid1, NULL, spawn_fractal_generator, (thread_options_t*)toptions1);
-    pthread_create(&threadid2, NULL, spawn_fractal_generator, (thread_options_t*)toptions2);
-
-    pthread_join(threadid1, NULL);
-    pthread_join(threadid2, NULL);
-
-    merge_and_save_sets(toptions1->ioptions, toptions2->ioptions);
+    merge_and_save_sets(toptions, threads, toptions[0].ioptions.image.file);
 
     return 0;
 }

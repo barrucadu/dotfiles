@@ -80,7 +80,7 @@ typedef struct
     char* bluescales;
 } float_options_t;
 
-typedef struct
+typedef struct topt
 {
     image_options_t   ioptions;
     fractal_options_t foptions;

@@ -24,28 +24,25 @@ void put_pixel(coord p, colour c, image_options_t ioptions)
     gdImageSetPixel(ioptions.gd.im, p[0], p[1], gdTrueColor(c[0], c[1], c[2]));
 }
 
-void merge_and_save_sets(image_options_t ioptions1, image_options_t ioptions2) /* Note: This needs support for an arbitrary number of pieces, adding up to an image of any size */
+void merge_and_save_sets(thread_options_t *toptions, int threads, char* file)
 {
-    int width  = ioptions1.image.width  + ioptions2.image.width;
-    int height = ioptions1.image.height;
+    int swidth = toptions[0].ioptions.image.width;
+    int width  = swidth * threads;
+    int height = toptions[0].ioptions.image.height;
 
     gdImagePtr im;
     im = gdImageCreateTrueColor(width, height);
 
-    gdImageCopy(im, ioptions1.gd.im, 0, 0, 0, 0, ioptions1.image.width, ioptions1.image.height);
-    gdImageCopy(im, ioptions2.gd.im, ioptions1.image.width, 0, 0, 0, ioptions2.image.width, ioptions2.image.height);
+    int i;
+    for(i = 0; i < threads; ++i)
+    {
+	gdImageCopy(im, toptions[i].ioptions.gd.im, swidth * i, 0, 0, 0, swidth, height);
+	gdImageDestroy(toptions[i].ioptions.gd.im);
+    }
     
-    FILE * pngout = fopen(ioptions1.image.file, "wb");
+    FILE * pngout = fopen(file, "wb");
     gdImagePngEx(im, pngout, 0);
     gdImageDestroy(im);
-    fclose(pngout);
-}
-
-void save_set(image_options_t ioptions)
-{
-    FILE * pngout = fopen(ioptions.image.file, "wb");
-    gdImagePngEx(ioptions.gd.im, pngout, 0);
-    gdImageDestroy(ioptions.gd.im);
     fclose(pngout);
 }
 
