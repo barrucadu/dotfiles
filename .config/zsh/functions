@@ -317,3 +317,45 @@ function ahurd()
 	done
     fi
 }
+
+function nbd()
+{
+    device=""
+    port=2000
+    host=""
+
+    if [[ -z "$3" ]]; then
+	if ifconfig wlan0 &>/dev/null; then # On my laptop
+	    host=eihort
+	else                                # Not on my laptop
+	    host=cthulhu
+	fi
+    else
+	host=$3
+    fi
+
+    # Allow specifying a device file, name, label, or UUID.
+    if [[ -e "$2" ]]; then
+	device=$2
+    elif [[ -e "/dev/$2" ]]; then
+	device="/dev/$2"
+    elif [[ -e "/dev/disk/by-label/$2" ]]; then
+	device="/dev/disk/by-label/$2"
+    elif [[ -e "/dev/disk/by-uuid/$2" ]]; then
+	device="/dev/disk/by-uuid/$2"
+    else
+	echo "Unknown device '$2'" 1>&2
+	return 1
+    fi
+
+    if [[ "$1" == "share" ]]; then
+	sudo nbd-server $port $device
+    elif [[ "$1" == "gain" ]]; then
+	sudo nbd-client $host $port $device
+    elif [[ "$1" == "free" ]]; then
+	sudo nbd-client -d $device
+    else
+	echo "Unknown method '$1'." 1>&2
+	return 2
+    fi
+}

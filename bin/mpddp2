@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+if [[ "$1" == "refresh" ]]; then
+    echo "Reloading configuration and rules..."
+
+    kill -SIGUSR1 `pgrep -fl mpddp2-bin | awk '{print $1}'`
+    kill -SIGUSR2 `pgrep -fl mpddp2-bin | awk '{print $1}'`
+else
+    kill `pgrep -f mpddp2-bin` &>/dev/null
+    result=$?
+
+    if [[ "$1" != "kill" ]]; then
+        if [[ "$result" == "0" ]]; then
+                echo "Restarting MPDDP2..."
+        else
+                echo "Starting MPDDP2..."
+        fi
+
+        mpddp2-bin -c /home/barrucadu/mpddp2.conf &>/dev/null &
+    else
+        echo "MPDDP2 killed."
+    fi
+fi

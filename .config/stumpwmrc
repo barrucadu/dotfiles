@@ -64,7 +64,7 @@
 
 ; Misc Keys
 (define-key *top-map*  (kbd "M-Print")   "exec urxvtc -e screenshot")
-(define-key *top-map*  (kbd "Print")     "exec import -window root ~/screenshot.png")
+(define-key *top-map*  (kbd "Print")     "exec scrot ~/screenshot.png")
 (define-key *top-map*  (kbd "M-F9")      "loadrc")
 (define-key *root-map* (kbd "m")         "exec ~/bin/menu")
 (define-key *root-map* (kbd "M")         "exec ~/bin/moviedb-menu")

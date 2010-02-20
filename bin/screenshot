@@ -9,7 +9,7 @@ echo "Taking screenshot in 5 seconds."
 sleep 5
 echo "Taking screenshot \"$shot.png\""
 
-import -window root $screenshotpath
+scrot $screenshotpath
 cp $screenshotpath $websitepath/screenshots/
 cp $screenshotpath $websitepath/screenshots/thumb/
 cp $screenshotpath $websitepath/screenshots/thumb-big/
