@@ -100,16 +100,19 @@ begin
 
    { Now grab all the numbers we're using }
    if instr = 'I' then
-      nth := readint('Which prime do you want to find?', 1, 1000)
+      nth := readint('Which prime do you want to find?', 1, NUM_PRIMES)
    else
    begin
-      st := readint('Enter start number.', 1, 1000);
-      en := readint('Enter end number.', 1, 1000);
+      st := readint('Enter start number.', 1, NUM_PRIMES);
+      en := readint('Enter end number.', 1, NUM_PRIMES);
       
       if (st > en) then
       begin
-	 writeln('Start value too big (', st, ', ', en, ')'); { Fool. }
-	 exit;
+	 write('Start value too big (', st, ' > ', en, '). '); { Fool. }
+	 writeln('I shall assume you meant to have the numbers the other way around. Do not do it again.');
+	 en := en + st;
+	 st := en - st;
+	 en := en - st;
       end;   
    end;
 
