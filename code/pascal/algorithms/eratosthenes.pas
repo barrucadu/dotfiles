@@ -1,4 +1,5 @@
 program Eratosthenes;
+{ An implementation of the Sieve of Eratosthenes to find all primes up to, and including, PRIME_MAX. }
 
 const
    PRIME_MAX  = 8000; { No prime gets bigger than this. This is the size of the sieve. 1000th prime is 7919, 8000 is a nice round number. }
@@ -26,16 +27,11 @@ begin
       
       { Check if the user did something stupid }
       if err <> 0 then
-      begin
 	 writeln('Something bad happened. Shall we try that again?');
-      end;
    
       { Check if the user actually paid any attention whatsoever to the range }
       if (tmpint > max) or (tmpint < min) then
-      begin
 	 writeln('Value out of range [', min, '-', max, ']');
-	 exit;
-      end;
    end;
    
    readint := tmpint;
@@ -110,6 +106,8 @@ begin
       begin
 	 write('Start value too big (', st, ' > ', en, '). '); { Fool. }
 	 writeln('I shall assume you meant to have the numbers the other way around. Do not do it again.');
+
+	 { Swap st and en without using a third variable as a temporary store. }
 	 en := en + st;
 	 st := en - st;
 	 en := en - st;
