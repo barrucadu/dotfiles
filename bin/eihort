@@ -1,31 +1,15 @@
 #!/bin/zsh
 
-mhd=true
-m2hd=false
-m2hdb=false
-archos5=true
 media=true
 share=true
 torrents=true
 http=true
-up=true
 sshfs=false
 
 function parsearg()
 {
     case $1 in
-        "nomhd")
-            mhd=false;;
-        "m2hd")
-            m2hd=true;;
-        "m2hdb")
-            m2hd=true;;
-        "noarchos5")
-            archos5=false;;
         "nomedia")
-            mhd=false
-            m2hd=false
-            archos5=false
             media=false;;
         "noshare")
             share=false;;
@@ -33,81 +17,45 @@ function parsearg()
             torrents=false;;
         "nohttp")
             http=false;;
-        "down")
-            up=false;;
         "sshfs")
             sshfs=true;;
     esac
 }
 
-function emount ()
-{
-    rmdir /media/$1
-    ln -s /share/eihort-media/$1 /media/$1
-}
-
-function eumount ()
-{
-    rm /media/$1
-    mkdir /media/$1
-    chmod 777 /media/$1
-}
-
-function emounted ()
+function eimounted ()
 {
     mount | grep -q //eihort/$1
 }
 
-function emedia ()
+function eimount ()
 {
-    file /media/$1 | grep -q /share/eihort-media/$1
+    $1 && \
+	sshfs barrucadu@network.barrucadu.co.uk:/srv/$2 /share/$3 -C -p 2222 || \
+	mount -t cifs -o username=share,password=share //eihort/$2 /share/$3
+}
+
+function eiumount ()
+{
+    $1 && \
+	fusermount -u /share/$2 || \
+	umount /share/$2
 }
 
 for arg in "${*[@]}"; do
     parsearg $arg
 done
 
-mount | grep -q eihort
-eihortcheck=$?
-
-[ "$1" = "" ] && [ "$eihortcheck" = 1 ] && 1=true
-[ "$1" = "" ] && [ "$eihortcheck" = 0 ] && 1=false
-
 if ping -c1 eihort &>/dev/null; then
-    if $up && [[ $eihortcheck == 1 ]]; then
-	$mhd      && emount MHD
-	$m2hd     && emount M2HD
-	$m2hdb    && emount M2HDb
-	$archos5  && emount ARCHOS5
-	
-	if $sshfs; then
-	    $share    && sshfs barrucadu@network.barrucadu.co.uk:/srv/share    /share/eihort          -C -p 2222
-	    $media    && sshfs barrucadu@network.barrucadu.co.uk:/media        /share/eihort-media    -C -p 2222
-	    $torrents && sshfs barrucadu@network.barrucadu.co.uk:/srv/torrents /share/eihort-torrents -C -p 2222
-	    $http     && sshfs barrucadu@network.barrucadu.co.uk:/srv/http      /share/eihort-http      -C -p 2222
-	else
-	    $share    && mount -t cifs -o username=share,password=share //eihort/share    /share/eihort
-	    $media    && mount -t cifs -o username=share,password=share //eihort/media    /share/eihort-media
-	    $torrents && mount -t cifs -o username=share,password=share //eihort/torrents /share/eihort-torrents
-	    $http     && mount -t cifs -o username=share,password=share //eihort/http      /share/eihort-http
-	fi
+    if ! mount | grep -q eihort; then
+	$share    && eimount $sshfs share    eihort
+	$media    && eimount $sshfs media    eihort-media
+	$torrents && eimount $sshfs torrents eihort-torrents
+	$http     && eimount $sshfs http     eihort-http
     else
-	if $sshfs; then
-	    emounted share    && fusermount -u /share/eihort
-	    emounted media    && fusermount -u /share/eihort-media
-	    emounted torrents && fusermount -u /share/eihort-torrents
-	    emounted http     && fusermount -u /share/eihort-http
-	else
-	    emounted share    && umount /share/eihort
-	    emounted media    && umount /share/eihort-media
-	    emounted torrents && umount /share/eihort-torrents
-	    emounted http     && umount /share/eihort-http
-	fi
-	
-	emedia MHD        && eumount MHD
-	emedia M2HD       && eumount M2HD
-	emedia M2HDb      && eumount M2HDb
-	emedia ARCHOS5    && eumount ARCHOS5
+	$share    && eiumount $sshfs eihort
+	$media    && eiumount $sshfs eihort-media
+	$torrents && eiumount $sshfs eihort-torrents
+	$http     && eiumount $sshfs eihort-http
     fi
 else
     echo "Eihort not found."

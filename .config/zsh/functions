@@ -325,10 +325,10 @@ function nbd()
     host=""
 
     if [[ -z "$3" ]]; then
-	if ifconfig wlan0 &>/dev/null; then # On my laptop
+	if ifconfig wlan0 &>/dev/null; then # On my desktop
 	    host=eihort
 	else                                # Not on my laptop
-	    host=cthulhu
+	    host=azathoth
 	fi
     else
 	host=$3
