@@ -49,6 +49,7 @@ clock_display_seconds            = "yes"
 enable_window_title              = "yes"
 user_interface                   = "alternative"
 progressbar_look                 = "-)"
+display_volume_level             = "no"
 
 ##### visualisation #####
 visualizer_fifo_path = "/share/eihort/mpd/mpd.fifo"

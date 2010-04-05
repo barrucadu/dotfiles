@@ -19,7 +19,7 @@ cd $websitepath/screenshots/thumb/
 convert $websitepath/screenshots/$shot.png -thumbnail 160x100 -background black $shot.png
 
 cd ../thumb-big/
-convert $websitepath/screenshots/$shot.png -thumbnail 461x288 -background black $shot.png
+convert $websitepath/screenshots/$shot.png -thumbnail 461x300 -background black -polaroid -1 $shot.png
 
 cd ../info/
 

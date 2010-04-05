@@ -8,13 +8,6 @@ setxkbmap -option compose:menu
 setxkbmap -option terminate:ctrl_alt_bksp
 xmodmap -e "clear Mod4"
 
-# Touchpad
-synclient MinSpeed=0.10
-synclient MaxSpeed=0.80
-synclient AccelFactor=0.50
-synclient VertEdgeScroll=1
-synclient HorizEdgeScroll=1
-
 # Screensaver
 xset s noblank
 xset s off
@@ -29,12 +22,7 @@ xrdb -load ~/.config/xorg/Xdefaults
 
 urxvtd -q -f -o
 ucron &>/dev/null &
-
-if grep -q school /proc/cmdline; then
-    feh --bg-scale "/usr/share/wallpapers/Linux/Archstone Blue.png"
-else
-    randombg
-fi
+randombg
 
 # /APPS
 

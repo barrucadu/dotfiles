@@ -251,58 +251,6 @@ function calc()
     echo "print($1)" | python3
 }
 
-function backup()
-{
-    DEST=/media/M2HDb/cthulhu
-
-    # Copy over stuff - note to self: get a bigger backup drive so I can fit on my 32-bit chroot
-    sudo rsync -azv --delete --exclude=/share \
-	--exclude=/tmp \
-	--exclude=/dev \
-	--exclude=/sys \
-	--exclude=/proc \
-	--exclude=/media \
-	--exclude=/mnt \
-	--exclude=/home/barrucadu/tmp \
-	--exclude=.git \
-	--exclude=/var/abs \
-	--exclude=/opt/arch32 \
-	/ $DEST
-
-    # Remake ignored directories
-    sudo mkdir -p $DEST/share/dad
-    sudo mkdir -p $DEST/share/eihort
-    sudo mkdir -p $DEST/share/eihort-media
-    sudo mkdir -p $DEST/share/eihort-torrents
-    sudo mkdir -p $DEST/share/eihort-www
-    sudo mkdir -p $DEST/share/mason
-
-    sudo mkdir -p $DEST/tmp
-    sudo mkdir -p $DEST/dev
-    sudo mkdir -p $DEST/sys
-    sudo mkdir -p $DEST/mnt
-    sudo mkdir -p $DEST/proc
-
-    sudo mkdir -p $DEST/media/cd
-    sudo mkdir -p $DEST/media/dvd
-    sudo mkdir -p $DEST/media/fl
-
-    sudo mkdir -p $DEST/home/barrucadu/tmp/downloads
-    sudo mkdir -p $DEST/home/barrucadu/tmp/misc
-    sudo mkdir -p $DEST/home/barrucadu/tmp/to-be-sorted
-    sudo mkdir -p $DEST/home/barrucadu/tmp/uzbl
-    sudo mkdir -p $DEST/home/barrucadu/tmp/vlc
-    sudo mkdir -p $DEST/home/barrucadu/tmp/working
-
-    # Fix permissions of aforementioned directories.
-    sudo chown -R 777 $DEST/share
-    sudo chown -R 777 $DEST/tmp
-    sudo chmod -R 777 $DEST/home/barrucadu/tmp/*
-
-    # Recreate some devices.
-    sudo cp -a /lib/udev/devices/* $DEST/dev/
-}
-
 function ahurd()
 {
     remotes=(files wiki)

@@ -42,7 +42,7 @@
   (interactive)
   (save-excursion
 	(let ((cb (current-buffer)))
-	  (call-process "zathura" nil nil nil (concat (substring (buffer-file-name cb) 0 -4) ".pdf" )))))
+	  (call-process "epdfview" nil nil nil (concat (substring (buffer-file-name cb) 0 -4) ".pdf" )))))
 
 ; Insert a table
 (defun latex-insert-table ()
