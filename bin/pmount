@@ -15,6 +15,10 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "" ]]; then
     echo "      - /dev"
     echo "    The first matching path found is passed to mount."
     echo
+    echo "fstab:"
+    echo "    If a device is foud in /etc/fstab, it will be (un)mounted with those options."
+    echo "    If not, it will be (un)mounted to /media/DEVICE owned by the current user, and -s is implied."
+    echo
     echo "Michael Walker (Barrucadu) <mike@barrucadu.co.uk>"
     exit
 fi
@@ -31,6 +35,9 @@ elif  [[ -e /media/$1 ]]; then
     device="/media/$1"
 elif  [[ -e /dev/$1 ]]; then
     device="/dev/$1"
+else
+    echo " => Device not found. Mount manually." 1>&2
+    exit 1
 fi
 
 if [[ "$*" =~ "-u" ]]; then
@@ -41,4 +48,24 @@ if [[ "$*" =~ "-s" ]]; then
     sudocmd=sudo
 fi
 
-$sudocmd $mountcmd $device
+if ! grep -q $device /etc/fstab; then
+    if [[ $mountcmd == "mount" ]]; then
+	if [[ -e "/media/$1" ]]; then
+	    echo " => /media/$1 already exists. Mount manually." 1>&2
+	    exit 2
+	else
+	    sudo mkdir /media/$1
+	    sudo mount $device /media/$1 -o uid=$EUID,gid=$EGID
+	fi
+    else
+	if [[ -e "/media/$1" ]]; then
+	    sudo umount /media/$1
+	    sudo rmdir /media/$1
+	else
+	    echo " => /media/$1 not found. Unmount manually." 1>&2
+	    exit 2
+	fi
+    fi
+else
+    $sudocmd $mountcmd $device
+fi

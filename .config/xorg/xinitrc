@@ -8,13 +8,12 @@ setxkbmap -option compose:menu
 setxkbmap -option terminate:ctrl_alt_bksp
 xmodmap -e "clear Mod4"
 
-# Screensaver
-xset s noblank
-xset s off
-
-# Other
+# Resources
 xsetroot -cursor_name left_ptr
 xrdb -load ~/.config/xorg/Xdefaults
+
+# Screensaver
+xscreensaver -no-splash &
 
 # /X
 
