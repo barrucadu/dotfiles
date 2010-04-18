@@ -1,0 +1,84 @@
+#!/bin/bash
+#
+# /etc/rc.multi
+#
+
+# terminal is not actually dumb
+export TERM=mach-color
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+# Signals that we should pass down to runttys.
+runttys_sigs='TERM INT HUP TSTP'
+
+run_hook multi_start
+
+
+# Load sysctl variables if sysctl.conf is present
+[ -r /etc/sysctl.conf ] && /sbin/sysctl -q -p &>/dev/null
+
+# Start daemons
+for daemon in "${DAEMONS[@]}"; do
+	if [ "$daemon" = "${daemon#!}" ]; then
+		if [ "$daemon" = "${daemon#@}" ]; then
+			start_daemon $daemon
+		else
+			start_daemon_bkgd ${daemon:1}
+		fi
+	fi
+done
+
+
+if [ -x /etc/rc.local ]; then
+	/etc/rc.local
+fi
+
+run_hook multi_end
+
+# Now that we are done starting up, setup the ttys and console
+printhl "Starting ttys"
+
+settrans -fg /dev/vcs
+CHARMAP=`echo $LOCALE | grep "\." | sed 's/.*\.\(.*$\)/\1/'`
+[ -z $CHARMAP ] && CHARMAP="ISO-8859-1"
+st /dev/vcs  root 600 /hurd/console --encoding=$CHARMAP
+
+st /dev/tty1 root 666 /hurd/term /dev/tty1 hurdio /dev/vcs/1/console
+st /dev/tty2 root 666 /hurd/term /dev/tty2 hurdio /dev/vcs/2/console
+st /dev/tty3 root 666 /hurd/term /dev/tty3 hurdio /dev/vcs/3/console
+st /dev/tty4 root 666 /hurd/term /dev/tty4 hurdio /dev/vcs/4/console
+st /dev/tty5 root 666 /hurd/term /dev/tty5 hurdio /dev/vcs/5/console
+st /dev/tty6 root 666 /hurd/term /dev/tty6 hurdio /dev/vcs/6/console
+
+# Trap certain signals and send them on to runttys.  For this to work, we
+# must run it asynchronously and wait for it with the `wait' built-in.
+runttys_pid=0
+for sig in $runttys_sigs; do
+	trap "kill -$sig \${runttys_pid}" $sig
+done
+
+# This program reads /etc/ttys and starts the programs it says to.
+/libexec/runttys &
+runttys_pid=$!
+
+#Start up console with variables from rc.conf
+if [ -n "$CONSOLEDISPLAY" ]; then
+	CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLEDISPLAY"
+	if [ -n "$CONSOLEFONT" ]; then
+		CONSOLEOPTS="$CONSOLEOPTS --font $CONSOLEFONT"
+	fi
+fi
+if [ -n "$CONSOLEMOUSE" ]; then
+	CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLEMOUSE --repeat=mouse"
+fi
+if [ -n "$CONSOLEKBD" ]; then	
+	CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLEKBD --repeat=kbd"
+fi
+CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLESPEAKER"
+
+console $CONSOLEOPTS /dev/vcs
+
+wait
+
+# vim: set ts=2 noet:

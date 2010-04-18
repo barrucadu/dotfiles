@@ -1,0 +1,167 @@
+#!/bin/bash
+
+# terminal is not actually dumb
+export TERM=mach-color
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+PATH=/bin:/sbin
+
+echo " "
+printhl "Arch Hurd\n"
+printhl "${C_H2}http://www.archhurd.org"
+printhl "Distributed under the GNU General Public License (GPL)"
+printsep
+
+run_hook sysinit_start
+
+# Start the default pager.  It will bail if there is already one running.
+status "Starting the default pager" /hurd/mach-defpager
+
+# Set up swap space.  This will complain if no default pager is functioning.
+status "Activating Swap" swapon -a
+
+stat_busy "Check filesystems"
+if [ -r /fastboot ]
+then
+	# ... or don't.
+	rm -f /fastboot
+    echo Fast boot ... skipping disk checks
+elif [ $1x = autobootx ]
+then
+    # Ignore checks if we don't have fsck
+    if [ -x /sbin/fsck ]; then
+        
+        fsysopts / --update --readonly
+        /sbin/fsck -p -A
+      	run_hook sysinit_postfsck
+      	
+        case $? in
+	    # Successful completion
+	    0)
+    	    fsysopts / --update --writable
+		    ;;
+	    # Filesystem modified (but ok now)
+	    1 | 2)
+    	    fsysopts / --update --writable
+		    ;;
+	    # Fsck couldn't fix it.
+	    4 | 8)
+		    echo
+    		echo "*****************  FILESYSTEM CHECK FAILED  ****************"
+	    	echo "*                                                          *"
+	    	echo "*  Please repair manually and reboot. Note that the root   *"
+	    	echo "*  file system is currently mounted read-only. To remount  *"
+	    	echo "*  it read-write type: fsysopts / --writable               *"
+	    	echo "*  When you exit the maintenance shell the system will     *"
+	    	echo "*  reboot automatically.                                   *"
+	    	echo "*                                                          *"
+	    	echo "************************************************************"
+	    	echo
+	    	stat_fail
+		    exit 1
+		    ;;
+	    # Signal that really interrupted something
+	    20 | 130 | 131)
+		    echo "Boot interrupted"
+		    stat_fail
+		    exit 1
+		    ;;
+	    # Special `let fsck finish' interruption (SIGQUIT)
+	    12)
+		    echo "Boot interrupted (filesystem checks complete)"
+		    stat_fail
+		    exit 1
+		    ;;
+	    # Oh dear.
+	    *)
+		    echo "Unknown error during fsck (exit status $?)"
+		    stat_fail
+		    exit 1
+		    ;;
+	    esac
+    else
+        echo "Could not find /sbin/fsck on system"
+    fi
+fi
+stat_done
+
+
+
+stat_busy "Starting basic translators"
+
+# seriously important
+st /servers/socket/1 root 666 /hurd/pflocal
+st /dev/null root 666 /hurd/null
+st /dev/full root 666 /hurd/null --full
+st /dev/zero root 666 /hurd/storeio -Tzero
+st /dev/time root 644 /hurd/storeio --no-cache time
+st /dev/mem  root 660 /hurd/storeio --no-cache mem
+st /dev/klog root 660 /hurd/streamio kmsg
+st /dev/shm  root 644 /hurd/tmpfs --mode=1777 50%
+#st /dev/tty  root 666 /hurd/magic tty
+st /dev/fd   root 666 /hurd/magic --directory fd
+ln -f -s fd/0 /dev/stdin
+ln -f -s fd/1 /dev/stdout
+ln -f -s fd/2 /dev/stderr
+stat_done
+
+
+stat_busy "cleaning up left over files..."
+rm -f /etc/nologin
+rm -f /var/lock/LCK.*
+if test -d /tmp; then
+
+  # Forcibly remove all translators in the directory.
+  # It is then safe to attempt to remove files and descend directories.
+  # All parameters must begin with "./".
+  function remove_translators() {
+    local f
+    for f; do
+      settrans -pagfS "$f"
+      if [ -L "$f" ] || [ ! -d "$f" ]; then
+	rm "$f"
+      else
+	remove_translators "$f"/* "$f"/.[!.] "$f"/.??*
+	rmdir "$f"
+      fi
+    done
+  }
+
+  (cd /tmp
+   shopt -s nullglob
+   for f in * .[!.] .??*; do
+     case "$f" in
+     'lost+found'|'quotas') ;;
+     *) remove_translators "./$f"
+     esac
+   done)
+
+  unset -f remove_translators  # because it relies on nullglob
+
+fi
+if test -d /var/run; then
+  (cd /var/run && { rm -rf -- *; cp /dev/null utmp; chmod 644 utmp; })
+fi
+stat_done
+
+
+if [ "$HOSTNAME" != "" ]; then
+	status "Setting Hostname: $HOSTNAME" /bin/hostname $HOSTNAME
+fi
+
+
+# Flush old locale settings
+: >| /etc/profile.d/locale.sh
+/bin/chmod 755 /etc/profile.d/locale.sh
+# Set user defined locale
+[ -z "$LOCALE" ] && LOCALE="en_US"
+stat_busy "Setting Locale: $LOCALE"
+echo "export LANG=$LOCALE" >>/etc/profile.d/locale.sh
+stat_done
+
+
+run_hook sysinit_end
+
+# vim: set ts=2 sw=2 noet:
