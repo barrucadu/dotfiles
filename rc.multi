@@ -39,11 +39,14 @@ run_hook multi_end
 # Now that we are done starting up, setup the ttys and console
 printhl "Starting ttys"
 
-settrans -fg /dev/vcs
+if [ -e /dev/vcs ]
+	settrans -fg /dev/vcs
+fi
 CHARMAP=`echo $LOCALE | grep "\." | sed 's/.*\.\(.*$\)/\1/'`
 [ -z $CHARMAP ] && CHARMAP="ISO-8859-1"
 st /dev/vcs  root 600 /hurd/console --encoding=$CHARMAP
 
+st /dev/console root 600 /hurd/term /dev/console device console
 st /dev/tty1 root 666 /hurd/term /dev/tty1 hurdio /dev/vcs/1/console
 st /dev/tty2 root 666 /hurd/term /dev/tty2 hurdio /dev/vcs/2/console
 st /dev/tty3 root 666 /hurd/term /dev/tty3 hurdio /dev/vcs/3/console

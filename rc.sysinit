@@ -92,7 +92,6 @@ stat_done
 stat_busy "Starting basic translators"
 
 # seriously important
-st /servers/socket/1 root 666 /hurd/pflocal
 st /servers/password root 666 /hurd/password
 st /dev/null root 666 /hurd/null
 st /dev/full root 666 /hurd/null --full

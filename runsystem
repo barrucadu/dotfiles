@@ -5,6 +5,11 @@
 # normal system.  This includes running the single-user shell as well as a
 # multi-user system.  This program is expected never to exit.
 #
+
+if [ ! -e /servers/socket/1 ]
+  settrans -c /servers/socket/1 /hurd/pflocal
+fi
+
 . /etc/rc.conf
 . /etc/rc.d/functions
 
@@ -56,7 +61,7 @@ function singleuser ()
 # other than a normal /dev/console.
 
 if [ "${FALLBACK_CONSOLE+set}" = set ]; then
-  singleuser "Running on fallback console ${FALLBACK_CONSOLE}"
+  printhl "Running on fallback console ${FALLBACK_CONSOLE}"
 fi
 
 
