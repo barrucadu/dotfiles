@@ -16,12 +16,6 @@ printsep
 
 run_hook sysinit_start
 
-# Start the default pager.  It will bail if there is already one running.
-status "Starting the default pager" /hurd/mach-defpager
-
-# Set up swap space.  This will complain if no default pager is functioning.
-status "Activating Swap" swapon -a
-
 stat_busy "Check filesystems"
 if [ -r /fastboot ]
 then
@@ -87,6 +81,11 @@ then
 fi
 stat_done
 
+# Start the default pager.  It will bail if there is already one running.
+status "Starting the default pager" /hurd/mach-defpager
+
+# Set up swap space.  This will complain if no default pager is functioning.
+status "Activating Swap" swapon -a
 
 
 stat_busy "Starting basic translators"

@@ -6,6 +6,11 @@
 . /etc/rc.conf
 . /etc/rc.d/functions
 
+if [ `whoami` != "root" ]
+	echo "Only superuser can do this"
+	exit 1
+fi
+
 run_hook shutdown_start
 
 # avoid staircase effect
