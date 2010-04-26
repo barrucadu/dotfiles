@@ -153,6 +153,28 @@ function pkginfo ()
     pacman -Qi $1 || pacman -Si $1
 }
 
+function hrepo-add ()
+{
+    del=false
+    
+    if [[ "$1" == "-d" ]]; then
+	del=true
+	shift
+    fi
+    
+    repo=$1
+    shift
+
+    while [[ "$1" != "" ]]; do
+	scp $1 barrucadu@nitti.dreamhost.com:~/archhurd/files.archhurd.org/repo/$repo/
+	ssh barrucadu@nitti.dreamhost.com "PATH=$PATH:~/archhurd/bin/ repo-add ~/archhurd/files.archhurd.org/repo/$repo/$repo.db.tar.gz ~/archhurd/files.archhurd.org/repo/$repo/$(basename $1)"
+
+	$del && rm -v $1
+
+	shift
+    done
+}
+
 # RFCs / Manpages
 
 function rfc()
@@ -249,21 +271,6 @@ function prod()
 function calc()
 {
     echo "print($1)" | python3
-}
-
-function ahurd()
-{
-    remotes=(files wiki)
-
-    if [[ "$1" == "down" ]]; then
-	for i in $remotes; do
-	    fusermount -u /hurd/$i
-	done
-    else
-	for i in $remotes; do
-	    sshfs archhurd@nitti.dreamhost.com:/home/archhurd/$i.archhurd.org/ /hurd/$i -o uid=1000,gid=100
-	done
-    fi
 }
 
 function nbd()

@@ -1,18 +1,18 @@
 #!/bin/zsh
 
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "" ]]; then
-    echo "Usage: pmount [device] [options]"
+    echo "Usage: pmount [options] [device1] [device2] ... [devicen]"
     echo
     echo "Options:"
+    echo "    -m = mount (implied if no -u is given)"
     echo "    -u = unmount"
     echo "    -s = use sudo"
     echo
     echo "Device:"
-    echo "    A file or directory with the name given in \$1 is looked for in these locations:"
-    echo "      - /dev/disk/by-label"
-    echo "      - /dev/disk/by-uuid"
-    echo "      - /media"
-    echo "      - /dev"
+    echo "    A file with the name given as the device is looked for in these locations:"
+    echo "      - /dev/disk/by-label/"
+    echo "      - /dev/disk/by-uuid/"
+    echo "      - /dev/"
     echo "    The first matching path found is passed to mount."
     echo
     echo "fstab:"
@@ -27,45 +27,72 @@ sudocmd=""
 mountcmd=mount
 device="$1"
 
-if [[ -e /dev/disk/by-label/$1 ]]; then
-    device="/dev/disk/by-label/$1"
-elif [[ -e /dev/disk/by-uuid/$1 ]]; then
-    device="/dev/disk/by-uuid/$1"
-elif  [[ -e /media/$1 ]]; then
-    device="/media/$1"
-elif  [[ -e /dev/$1 ]]; then
-    device="/dev/$1"
-else
-    echo " => Device not found. Mount manually." 1>&2
-    exit 1
-fi
+arging=true
+deving=true
 
-if [[ "$*" =~ "-u" ]]; then
-    mountcmd=umount
-fi
+# Parse arguments
+while $arging; do
+    case "$1" in
+	"-s")
+	    sudocmd=sudo
+	    shift
+	    ;;
+	"-u")
+	    mountcmd=umount
+	    shift
+	    ;;
+	"-m")
+	    mountcmd=mount
+	    shift
+	    ;;
+	*)
+	    arging=false
+	    ;;
+    esac
+done
 
-if [[ "$*" =~ "-s" ]]; then
-    sudocmd=sudo
-fi
-
-if ! grep -q $device /etc/fstab; then
-    if [[ $mountcmd == "mount" ]]; then
-	if [[ -e "/media/$1" ]]; then
-	    echo " => /media/$1 already exists. Mount manually." 1>&2
-	    exit 2
-	else
-	    sudo mkdir /media/$1
-	    sudo mount $device /media/$1 -o uid=$EUID,gid=$EGID
-	fi
+# (Un)mount devices
+while $deving; do
+    if [[ "$1" == "" ]]; then
+	deving=false
     else
-	if [[ -e "/media/$1" ]]; then
-	    sudo umount /media/$1
-	    sudo rmdir /media/$1
+	# Get device name
+	if [[ -e /dev/disk/by-label/$1 ]]; then
+	    device="/dev/disk/by-label/$1"
+	elif [[ -e /dev/disk/by-uuid/$1 ]]; then
+	    device="/dev/disk/by-uuid/$1"
+	elif  [[ -e /dev/$1 ]]; then
+	    device="/dev/$1"
 	else
-	    echo " => /media/$1 not found. Unmount manually." 1>&2
-	    exit 2
+	    echo " => Device not found. Mount manually." 1>&2
+	    exit 1
 	fi
+
+	# Check for fstab entry
+	if ! grep -q $device /etc/fstab; then
+            # Use a temporary directory in /media for (un)mounting
+	    if [[ $mountcmd == "mount" ]]; then
+		if [[ -e "/media/$1" ]]; then
+		    echo " => /media/$1 already exists. Mount manually." 1>&2
+		    exit 2
+		else
+		    sudo mkdir /media/$1
+		    sudo mount $device /media/$1 -o uid=$EUID,gid=$EGID
+		fi
+	    else
+		if [[ -e "/media/$1" ]]; then
+		    sudo umount /media/$1
+		    sudo rmdir /media/$1
+		else
+		    echo " => /media/$1 not found. Unmount manually." 1>&2
+		    exit 2
+		fi
+	    fi
+	else
+            # Use the directory specified in fstab
+	    $sudocmd $mountcmd $device
+	fi
+
+	shift
     fi
-else
-    $sudocmd $mountcmd $device
-fi
+done

@@ -29,6 +29,9 @@ randombg
 
 if [[ "$WM" != "" ]]; then
     exec $WM
+elif [[ -e /tmp/notile ]]; then
+    urxvt &
+    exec openbox
 else
     exec stumpwm
 fi

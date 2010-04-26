@@ -73,6 +73,6 @@ put $websitepath/screenshots/info/$shot.txt
 exit
 EOF
 
-echo "[url=\"http://www.barrucadu.co.uk/screenshot-$shot.php\"][img]http://www.barrucadu.co.uk/screenshots/thumb-big/$shot.png[/img][/url]" | xclip
+echo "[url=\"http://www.barrucadu.co.uk/gallery/$shot/\"][img]http://www.barrucadu.co.uk/screenshots/thumb-big/$shot.png[/img][/url]" | xclip
 
 cd $dir
