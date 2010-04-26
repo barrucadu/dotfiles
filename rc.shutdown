@@ -6,7 +6,7 @@
 . /etc/rc.conf
 . /etc/rc.d/functions
 
-if [ `whoami` != "root" ]
+if [ `whoami` != "root" ]; then
 	echo "Only superuser can do this"
 	exit 1
 fi

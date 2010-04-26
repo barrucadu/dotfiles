@@ -39,7 +39,7 @@ run_hook multi_end
 # Now that we are done starting up, setup the ttys and console
 printhl "Starting ttys"
 
-if [ -e /dev/vcs ]
+if [ -e /dev/vcs ]; then
 	settrans -fg /dev/vcs
 fi
 CHARMAP=`echo $LOCALE | grep "\." | sed 's/.*\.\(.*$\)/\1/'`

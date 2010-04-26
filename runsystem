@@ -6,7 +6,7 @@
 # multi-user system.  This program is expected never to exit.
 #
 
-if [ ! -e /servers/socket/1 ]
+if [ ! -e /servers/socket/1 ]; then
   settrans -c /servers/socket/1 /hurd/pflocal
 fi
 
