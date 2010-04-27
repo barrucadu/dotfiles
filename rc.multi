@@ -80,7 +80,7 @@ if [ -n "$CONSOLEKBD" ]; then
 fi
 CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLESPEAKER"
 
-console $CONSOLEOPTS /dev/vcs
+console $CONSOLEOPTS -c /dev/vcs
 
 wait
 
