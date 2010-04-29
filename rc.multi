@@ -14,29 +14,10 @@ runttys_sigs='TERM INT HUP TSTP'
 
 run_hook multi_start
 
-
 # Load sysctl variables if sysctl.conf is present
 [ -r /etc/sysctl.conf ] && /sbin/sysctl -q -p &>/dev/null
 
-# Start daemons
-for daemon in "${DAEMONS[@]}"; do
-	if [ "$daemon" = "${daemon#!}" ]; then
-		if [ "$daemon" = "${daemon#@}" ]; then
-			start_daemon $daemon
-		else
-			start_daemon_bkgd ${daemon:1}
-		fi
-	fi
-done
 
-
-if [ -x /etc/rc.local ]; then
-	/etc/rc.local
-fi
-
-run_hook multi_end
-
-# Now that we are done starting up, setup the ttys and console
 printhl "Starting ttys"
 
 if [ -e /dev/vcs ]; then
@@ -80,7 +61,26 @@ if [ -n "$CONSOLEKBD" ]; then
 fi
 CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLESPEAKER"
 
-console $CONSOLEOPTS -c /dev/vcs
+console $CONSOLEOPTS /dev/vcs
+
+
+# Start daemons.
+for daemon in "${DAEMONS[@]}"; do
+	if [ "$daemon" = "${daemon#!}" ]; then
+		if [ "$daemon" = "${daemon#@}" ]; then
+			start_daemon $daemon
+		else
+			start_daemon_bkgd ${daemon:1}
+		fi
+	fi
+done
+
+
+if [ -x /etc/rc.local ]; then
+	/etc/rc.local
+fi
+
+run_hook multi_end
 
 wait
 

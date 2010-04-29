@@ -29,7 +29,7 @@ if [ -r /fastboot ]
 then
 	# ... or don't.
 	rm -f /fastboot
-    echo Fast boot ... skipping disk checks
+  echo Fast boot ... skipping disk checks
 elif [ $1x = autobootx ]
 then
     # Ignore checks if we don't have fsck
@@ -37,9 +37,10 @@ then
         
         fsysopts / --update --readonly
         /sbin/fsck -p -A
+   			fsckresult=$?
       	run_hook sysinit_postfsck
       	
-        case $? in
+        case $fsckresult in
 	    # Successful completion
 	    0)
     	    fsysopts / --update --writable
