@@ -21,3 +21,16 @@ install -D -m755 minilogd ${DESTDIR}/sbin/minilogd || exit 1
 
 ln -s /libexec/rc.shutdown ${DESTDIR}/sbin/halt
 ln -s /libexec/rc.shutdown ${DESTDIR}/sbin/reboot
+
+# Create livecd-specific init stuff:
+install -dm1777 ${DESTDIR}/tmp/
+install -dm755 ${DESTDIR}/dev/
+install -dm755 ${DESTDIR}/boot/
+install -dm755 ${DESTDIR}/servers/
+install -dm755 ${DESTDIR}/servers/socket/
+
+touch ${DESTDIR}/tmp/console
+touch ${DESTDIR}/dev/time
+touch ${DESTDIR}/dev/ramdisk
+touch ${DESTDIR}/servers/socket/1
+touch ${DESTDIR}/boot/tmpfs

@@ -6,6 +6,51 @@
 # multi-user system.  This program is expected never to exit.
 #
 
+# Get a ramdisk running so boot can continue as normal
+
+# Set up what we need to mount the image
+/bin/settrans -a /dev/time /hurd/storeio --no-cache time
+/bin/settrans -a /servers/socket/1 /hurd/pflocal
+
+echo -n "Making filesystem segments writable..."
+# /boot/ramdisk.ext2fs is just a 32MB ext2 image
+/bin/settrans -a /dev/ramdisk /hurd/storeio -Tcopy /boot/ramdisk.ext2fs
+/bin/settrans -a /boot/tmpfs /hurd/ext2fs.static /dev/ramdisk
+
+dirscp=(var home root etc)
+dirsln=(dev tmp mnt var home root etc)
+
+# These directories we want to preserve the contents of
+for dir in "${dirscp[@]}"; do
+    cp -a /$dir /boot/tmpfs/
+done
+
+for dir in "${dirsln[@]}"; do
+    echo -n " /$dir "
+    
+    if [[ ! -d /boot/tmpfs/$dir ]]; then
+        mkdir /boot/tmpfs/$dir
+    fi
+
+    /bin/settrans -a /$dir /hurd/firmlink /boot/tmpfs/$dir
+
+    if [[ "$dir" == "dev" ]]; then
+        /bin/settrans -ac /dev/MAKEDEV /hurd/firmlink /sbin/MAKEDEV
+        /bin/settrans -c /dev/fd /hurd/magic --directory fd
+    fi
+done
+
+echo "done."
+
+echo -n "Setting up basic devices..."
+
+devs=(fd tty null zero full time mem klog shm)
+cd /dev
+for dev in "${devs[@]}"; do
+    echo -n " $dev "
+    MAKEDEV $dev
+done
+
 if [ ! -e /servers/socket/1 ]; then
   settrans -c /servers/socket/1 /hurd/pflocal
 fi
