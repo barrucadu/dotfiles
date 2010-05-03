@@ -20,76 +20,6 @@ run_hook sysinit_start
 # Start the default pager.  It will bail if there is already one running.
 status "Starting the default pager" /hurd/mach-defpager
 
-# Set up swap space.  This will complain if no default pager is functioning.
-status "Activating Swap" swapon -a
-
-
-stat_busy "Check filesystems"
-if [ -r /fastboot ]
-then
-	# ... or don't.
-	rm -f /fastboot
-  echo Fast boot ... skipping disk checks
-elif [ $1x = autobootx ]
-then
-    # Ignore checks if we don't have fsck
-    if [ -x /sbin/fsck ]; then
-        
-        fsysopts / --update --readonly
-        /sbin/fsck -p -A
-   			fsckresult=$?
-      	run_hook sysinit_postfsck
-      	
-        case $fsckresult in
-	    # Successful completion
-	    0)
-    	    fsysopts / --update --writable
-		    ;;
-	    # Filesystem modified (but ok now)
-	    1 | 2)
-    	    fsysopts / --update --writable
-		    ;;
-	    # Fsck couldn't fix it.
-	    4 | 8)
-		    echo
-    		echo "*****************  FILESYSTEM CHECK FAILED  ****************"
-	    	echo "*                                                          *"
-	    	echo "*  Please repair manually and reboot. Note that the root   *"
-	    	echo "*  file system is currently mounted read-only. To remount  *"
-	    	echo "*  it read-write type: fsysopts / --writable               *"
-	    	echo "*  When you exit the maintenance shell the system will     *"
-	    	echo "*  reboot automatically.                                   *"
-	    	echo "*                                                          *"
-	    	echo "************************************************************"
-	    	echo
-	    	stat_fail
-		    exit 1
-		    ;;
-	    # Signal that really interrupted something
-	    20 | 130 | 131)
-		    echo "Boot interrupted"
-		    stat_fail
-		    exit 1
-		    ;;
-	    # Special `let fsck finish' interruption (SIGQUIT)
-	    12)
-		    echo "Boot interrupted (filesystem checks complete)"
-		    stat_fail
-		    exit 1
-		    ;;
-	    # Oh dear.
-	    *)
-		    echo "Unknown error during fsck (exit status $?)"
-		    stat_fail
-		    exit 1
-		    ;;
-	    esac
-    else
-        echo "Could not find /sbin/fsck on system"
-    fi
-fi
-stat_done
-
 stat_busy "Starting basic translators"
 
 # seriously important
@@ -107,7 +37,6 @@ ln -f -s fd/0 /dev/stdin
 ln -f -s fd/1 /dev/stdout
 ln -f -s fd/2 /dev/stderr
 stat_done
-
 
 stat_busy "cleaning up left over files..."
 rm -f /etc/nologin
@@ -161,7 +90,6 @@ fi
 stat_busy "Setting Locale: $LOCALE"
 echo "export LANG=$LOCALE" >>/etc/profile.d/locale.sh
 stat_done
-
 
 run_hook sysinit_end
 
