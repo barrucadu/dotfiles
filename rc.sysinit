@@ -101,7 +101,6 @@ st /dev/time root 644 /hurd/storeio --no-cache time
 st /dev/mem  root 660 /hurd/storeio --no-cache mem
 st /dev/klog root 660 /hurd/streamio kmsg
 st /dev/shm  root 644 /hurd/tmpfs --mode=1777 50%
-#st /dev/tty  root 666 /hurd/magic tty
 st /dev/fd   root 666 /hurd/magic --directory fd
 ln -f -s fd/0 /dev/stdin
 ln -f -s fd/1 /dev/stdout
