@@ -32,6 +32,11 @@ st /dev/mem  root 660 /hurd/storeio --no-cache mem
 st /dev/klog root 660 /hurd/streamio kmsg
 st /dev/shm  root 644 /hurd/tmpfs --mode=1777 50%
 st /dev/fd   root 666 /hurd/magic --directory fd
+
+# Any fairly random file will do for a seed, I used a dump of /dev/urandom from Linux.
+st /dev/random  root 644 /hurd/random --seed-file /var/run/random-seed --secure
+st /dev/urandom root 644 /hurd/random --seed-file /var/run/random-seed --fast
+
 ln -f -s fd/0 /dev/stdin
 ln -f -s fd/1 /dev/stdout
 ln -f -s fd/2 /dev/stderr

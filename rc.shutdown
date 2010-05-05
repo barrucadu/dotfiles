@@ -20,10 +20,6 @@ echo " "
 printhl "Initiating Shutdown..."
 echo " "
 
-if [ -x /etc/rc.local.shutdown ]; then
-	/etc/rc.local.shutdown
-fi
-
 # Find daemons NOT in the DAEMONS array. Shut these down first
 if [ -d /var/run/daemons ]; then
 	for daemon in $(/bin/ls -1t /var/run/daemons); do
