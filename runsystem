@@ -26,7 +26,7 @@ function dodir()
         #/bin/settrans -c /dev/fd /hurd/magic --directory fd
         /bin/settrans -pck /dev/console /hurd/term /dev/console device console
     elif [[ "$dir" == "servers" ]]; then
-        /bin/settrans -a /servers/socket/1 /hurd/pflocal 
+        /bin/settrans -acp /servers/socket/1 /hurd/pflocal 
     fi
 }
 
