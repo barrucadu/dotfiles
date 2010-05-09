@@ -30,6 +30,7 @@ then
 	# ... or don't.
 	rm -f /fastboot
   echo Fast boot ... skipping disk checks
+  fsysopts / --update --writable
 elif [ $1x = autobootx ]
 then
     # Ignore checks if we don't have fsck
@@ -86,6 +87,7 @@ then
 	    esac
     else
         echo "Could not find /sbin/fsck on system"
+        fsysopts / --update --writable
     fi
 fi
 stat_done

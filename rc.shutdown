@@ -59,11 +59,17 @@ run_hook shutdown_postkillall
 if [ -e /dev/urandom ]; then
   stat_busy "Saving Random Seed"
   RANDOM_SEED=/var/run/random-seed
+  URANDOM_SEED=/var/run/urandom-seed
+  
   [ -d $(dirname $RANDOM_SEED) ] || mkdir -p $(dirname $RANDOM_SEED)
   : > $RANDOM_SEED
+  : > $URANDOM_SEED
   /bin/chmod 0600 $RANDOM_SEED
+  /bin/chmod 0600 $URANDOM_SEED
+  
   POOL_SIZE=600
   /bin/dd if=/dev/urandom of=$RANDOM_SEED count=1 bs=$POOL_SIZE &> /dev/null
+  /bin/dd if=/dev/urandom of=$URANDOM_SEED count=1 bs=$POOL_SIZE &> /dev/null
   stat_done
 fi
 
@@ -81,5 +87,4 @@ else
 	/sbin/internal_reboot
 fi
 
-# End of file
 # vim: set ts=2 sw=2 noet:
