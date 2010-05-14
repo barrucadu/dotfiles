@@ -10,7 +10,7 @@
       *normal-border-width*    0
       *maxsize-border-width*   0
       *transient-border-width* 0)
-(run-commands "grename Main" "gnewbg Term" "gnewbg Misc-1" "gnewbg Misc-2" "gnewbg Misc-3")
+(run-commands "grename Web" "gnewbg Work" "gnewbg Misc-1" "gnewbg Misc-2" "gnewbg Misc-3")
 
 ;; Mode line et al
 (set-font "-Misc-Fixed-Medium-R-SemiCondensed--13-120-75-75-C-60-ISO8859-1")

@@ -4,7 +4,7 @@ media=true
 share=true
 torrents=true
 http=true
-sshfs=false
+remote=false
 
 function parsearg()
 {
@@ -17,10 +17,13 @@ function parsearg()
             torrents=false;;
         "nohttp")
             http=false;;
-        "sshfs")
-            sshfs=true;;
+        "remove")
+            remove=true;;
     esac
 }
+
+$remote && host='network.barrucadu.co.uk' || host='eihort'
+$remote && port=2222 || port=22
 
 function eimounted ()
 {
@@ -29,35 +32,26 @@ function eimounted ()
 
 function eimount ()
 {
-    $1 && \
-	sshfs barrucadu@network.barrucadu.co.uk:/srv/$2 /share/$3 -C -p 2222 || \
-	mount -t cifs -o username=share,password=share //eihort/$2 /share/$3
+    sshfs barrucadu@$host:/srv/$1 /share/$2 -C -p $port
 }
 
 function eiumount ()
 {
-    $1 && \
-	fusermount -u /share/$2 || \
-	umount /share/$2
+    fusermount -u /share/$1
 }
 
 for arg in "${*[@]}"; do
     parsearg $arg
 done
 
-if ping -c1 eihort &>/dev/null; then
-    if ! mount | grep -q eihort; then
-	$share    && eimount $sshfs share    eihort
-	$media    && eimount $sshfs media    eihort-media
-	$torrents && eimount $sshfs torrents eihort-torrents
-	$http     && eimount $sshfs http     eihort-http
-    else
-	$share    && eiumount $sshfs eihort
-	$media    && eiumount $sshfs eihort-media
-	$torrents && eiumount $sshfs eihort-torrents
-	$http     && eiumount $sshfs eihort-http
-    fi
+if ! mount | grep -q $host; then
+    $share    && eimount share    eihort
+    $media    && eimount media    eihort-media
+    $torrents && eimount torrents eihort-torrents
+    $http     && eimount http     eihort-http
 else
-    echo "Eihort not found."
-    return 2
+    $share    && eiumount eihort
+    $media    && eiumount eihort-media
+    $torrents && eiumount eihort-torrents
+    $http     && eiumount eihort-http
 fi
