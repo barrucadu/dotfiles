@@ -76,7 +76,7 @@ fi
 run_hook shutdown_poweroff
 
 # Power off or reboot
-CALLEDAS= echo $0 | sed 's@.*/\(.*$\)@\1@'
+CALLEDAS=`basename "$0"`
 if [ "$CALLEDAS" = "halt" ]; then
 	printsep
 	printhl "${C_H2}POWER OFF"
