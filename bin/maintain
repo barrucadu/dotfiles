@@ -1,19 +1,11 @@
 #!/bin/zsh
 
-# Aliases and stuff...
-. ~/.config/zsh/aliases
-. ~/.config/zsh/functions
-
 # Update
 sudo pacman -Syu
 abs
 
-# Git repositories
-gith
-gitbar
-
 # Clean up
-deorphan
+sudo pacman -Rsc $(pacman -Qtdq)
 sudo /etc/cron.weekly/packagecache.sh
 sudo localepurge
 sudo pacman -Sc --cachedir /share/eihort/pacman-cache

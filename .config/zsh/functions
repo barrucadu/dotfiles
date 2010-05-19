@@ -166,8 +166,8 @@ function hrepo-add ()
     shift
 
     while [[ "$1" != "" ]]; do
-	scp $1 barrucadu@nitti.dreamhost.com:~/archhurd/files.archhurd.org/repo/$repo/
-	ssh barrucadu@nitti.dreamhost.com "PATH=$PATH:~/archhurd/bin/ repo-add ~/archhurd/files.archhurd.org/repo/$repo/$repo.db.tar.gz ~/archhurd/files.archhurd.org/repo/$repo/$(basename $1)"
+	scp $1 barrucadu@archhurd.org:/srv/http/files/repo/$repo/
+	ssh barrucadu@archhurd.org "repo-add /srv/http/files/repo/$repo/$repo.db.tar.gz /srv/http/files/repo/$repo/$(basename $1)"
 
 	$del && rm -v $1
 

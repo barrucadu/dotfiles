@@ -83,14 +83,14 @@ if [[ "$terminfo[colors]" -ge 8 ]]; then
 fi
 
 for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-	eval PR_$color='$terminfo[bold]$fg[${(L)color}]'
-	eval PR_LIGHT_$color='$fg[${(L)color}]'
+	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+	eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
 
 	export PR_$color
 	export PR_LIGHT_$color
 done
 
-export PR_NO_COLOR="$terminfo[sgr0]"
+export PR_NO_COLOR="%{$terminfo[sgr0]%}"
 
 # pre/post commands
 
