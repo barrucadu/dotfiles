@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+export LD_PRELOAD=libetc.so
+
 # X
 
 # Keyboard
