@@ -26,16 +26,8 @@ if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
     cmd=$1
 
     case $cmd in
-        "add")
-            shift && moviedb-add $*;;
-        "lists")
-            shift && moviedb-lists $*;;
-        "menu")
-            shift && moviedb-menu $*;;
-        "play")
-            shift && moviedb-play $*;;
-        "query")
-            shift && moviedb-query $*;;
+        "add" | "lists" | "menu" | "play" | "query")
+            shift && moviedb-$cmd $*;;
         "" | "help")
             help;;
         *)
