@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
 
