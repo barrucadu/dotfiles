@@ -1,0 +1,36 @@
+#!/bin/zsh
+
+MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
+
+function play ()
+{
+    vlc "`moviedb-query file $1`" &>/dev/null &
+}
+
+function help ()
+{
+    echo "moviedb-play: A tool to play movies in the filesystem database."
+    echo
+    echo "Usage: moviedb-play <movie>"
+    echo
+    echo "Arguments:"
+    echo "    -f = fuzzy matching. Less accurate."
+    echo
+    echo "Return codes:"
+    echo "    1 = Missing movie folder(s)."
+    echo
+    echo "Maintainer: Michael Walker"
+}
+
+if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
+    case $1 in
+        "" | "help")
+            help;;
+        *)
+            play $1
+    esac
+else
+    echo "\$MOVIEPATH = $MOVIEPATH"
+    echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
+    return 1
+fi

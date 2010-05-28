@@ -1,0 +1,175 @@
+#!/bin/zsh
+
+MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
+
+function args2str ()
+{  
+    string=$1
+    while [[ $2 != "" ]]; do
+        shift
+        string="$string $1"
+    done
+    echo $string
+}
+
+function match ()
+{
+    string=$1
+
+    prefix="^"
+    suffix="\(, The\|\)\..*$"
+
+    [ "$2" = "1" ] && prefix="" && suffix=""
+
+    grep "$prefix$string$suffix" -m 1 -i $3
+}
+
+function director ()
+{
+    returncode=2
+
+    for name in $MOVIEPATH/by-director/*; do
+        ls $name | match $1 $fuzzy -q && echo -n "$name, " | sed "s/^.*\///" && returncode=0
+    done | sed "s/, $//"
+    echo
+    
+    return $returncode
+}
+
+function file ()
+{
+    name=`director $f "$1"`
+    file=`ls "$MOVIEPATH/by-director/$name" | match $args $fuzzy`
+    filepath="$MOVIEPATH/by-director/$name/$file"
+
+    [[ -f $filepath ]] && echo $filepath || return 2
+}
+
+function genre ()
+{
+    returncode=2
+
+    for name in $MOVIEPATH/by-genre/*; do
+        ls $name | match $1 $fuzzy -q && echo -n "$name, " | sed "s/^.*\///" && returncode=0
+    done | sed "s/, $//"
+    echo
+    
+    return $returncode
+}
+
+function list ()
+{
+    folder=by-director
+
+    if [[ "$1" != "" ]]; then
+        if ls $MOVIEPATH/by-genre/ | grep -q -i $1; then
+            genre=`ls $MOVIEPATH/by-genre/ | grep -i $1`
+            folder="by-genre/$genre"
+        elif ls $MOVIEPATH/by-director/ | grep -q -i $1; then
+            director=`ls $MOVIEPATH/by-director/ | grep -i $1`
+            folder="by-director/$director"
+        else
+            return 2
+        fi
+
+	if [[ "$2" != "f" ]]; then
+            ls $MOVIEPATH/$folder/* | \
+		sed "/^.*\.\(srt\|idx\|sub\)$/d" | \
+		sed "s/^.*\/\(.*\)\..*$/\\1/"
+	else
+	    ls $MOVIEPATH/$folder/* | \
+		sed "/^.*\.\(srt\|idx\|sub\)$/d"
+	fi
+    else
+	if [[ "$2" != "f" ]]; then
+            ls $MOVIEPATH/by-director/*/* | \
+		sed "/^.*\.\(srt\|idx\|sub\)$/d" | \
+		sed "s/^.*\/\(.*\)\..*$/\\1/"
+	else
+	    ls $MOVIEPATH/by-director/*/* | \
+		sed "/^.*\.\(srt\|idx\|sub\)$/d"
+	fi
+    fi | sort
+}
+
+function random ()
+{
+    if [[ "$1" != "" ]]; then
+        if ls $MOVIEPATH/by-genre/ | grep -q -i $1; then
+            genre=`ls $MOVIEPATH/by-genre/ | grep -i $1`
+            ls $MOVIEPATH/by-genre/$genre | \
+                shuf -n1 | \
+                sed "s/^\(.*\)\..*$/\\1/"
+        elif ls $MOVIEPATH/by-director/ | grep -q -i $1; then
+            director=`ls $MOVIEPATH/by-director/ | grep -i $1`
+            ls $MOVIEPATH/by-director/$director | \
+                shuf -n1 | \
+                sed "s/^\(.*\)\..*$/\\1/"
+        else
+            return 2
+        fi
+    else
+        list | \
+            shuf -n1
+    fi
+}
+
+function help ()
+{
+    echo "moviedb-query: A tool to query the filesystem movie database."
+    echo
+    echo "Usage: moviedb <command> [-f] <arg1> <arg2> <arg3> ... <argn>"
+    echo
+    echo "Commands:"
+    echo "    director <movie>: Find the director of a movie."
+    echo "    file     <movie>: Find the file path of a movie."
+    echo "    genre    <movie>: Find the genres of a movie."
+    echo "    random   <query>: Select a random movie of the (optional) specified genre / director."
+    echo "    list     <query>: List all movies of the (optional) specified genre / director."
+    echo "    files    <query>: Same as list, but return file paths."
+    echo
+    echo "Arguments:"
+    echo "    -f = fuzzy matching. Less accurate."
+    echo
+    echo "Return codes:"
+    echo "    1 = Unknown command."
+    echo "    2 = Nonexistant movie/genre/director."
+    echo "    3 = Missing movie folder(s)."
+    echo
+    echo "Maintainer: Michael Walker"
+}
+
+if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
+    fuzzy=0
+    vlc=0
+    f=""
+
+    [ "$1" != "" ]  && cmd=$1            && shift
+    [ "$1" = "-f" ] && fuzzy=1 && f="-f" && shift
+
+    args=`args2str $*`
+
+    case $cmd in
+        "director")
+            director $args;;
+        "file")
+            file $args;;
+        "genre")
+            genre $args;;
+        "list")
+            list $args;;
+        "files")
+            list "$args" "f";;
+        "random")
+            random $args;;
+        "" | "help")
+            help;;
+        *)
+            echo "Unknown command $cmd"
+            return 1;;
+    esac
+else
+    echo "\$MOVIEPATH = $MOVIEPATH"
+    echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
+    return 3
+fi
