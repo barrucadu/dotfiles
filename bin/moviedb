@@ -6,12 +6,13 @@ function help ()
 {
     echo "moviedb: A tool to manage and query the filesystem movie database"
     echo
-    echo "Usage: moviedb <command> <arg1> <arg2> <arg3> ... <argn>"
+    echo "Usage: moviedb <command> <args>"
     echo
     echo "Commands:"
     echo "    add   : Add a new movie to the database."
     echo "    lists : Manage and use movie playlists."
     echo "    menu  : Launch the dmenu-based movie menu."
+    echo "    misc  : Backup or restore the database."
     echo "    play  : Play movies."
     echo "    query : Search for movies."
     echo "See the individual command help for more details."

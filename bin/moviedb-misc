@@ -1,0 +1,147 @@
+#!/bin/zsh
+
+MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
+
+function exportdb()
+{
+    # Note: This is very slow; look at speeding up moviedb-query at some point
+
+    moviedb-query list | \
+    while read movie; do
+	file=`moviedb-query file "$movie" | sed 's:.*/::'`
+	director=`moviedb-query file "$movie" | sed 's:.*/\(.*\)/.*:\1:'`
+	genres=`moviedb-query genre "$movie" | sed 's:, :\::g'`
+
+	echo "$file:$director:$genres"
+    done
+
+    return 0
+}
+
+function makedir()
+{
+    dir=$1
+
+    if [[ ! -e "$dir" ]]; then
+	mkdir -p $dir
+    fi
+
+    if [[ ! -d "$dir" ]]; then
+	rm $dir
+	mkdir $dir
+    fi
+}
+
+function importfile()
+{
+    file=$1
+    director=$2
+    genres=$3
+    
+    makedir $MOVIEPATH/by-director/$director
+    mv $file $MOVIEPATH/by-director/$director
+
+    echo $genres | tr ':' "\n" | \
+    while read genre; do
+	makedir $MOVIEPATH/by-genre/$genre
+	ln -s $MOVIEPATH/by-director/$director/$file $MOVIEPATH/by-genre/$genre/$file
+    done
+}
+
+function importdb()
+{
+    backup=$1
+    retcode=4
+
+    if [[ -f $backup ]]; then
+	for file in *; do
+	    if [[ -f $file ]]; then
+		if grep -q "^$file:" $backup; then
+		    retcode=0
+		    director=`grep "^$file:" $backup | cut -d':' -f2`
+		    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:::'`
+		    
+		    importfile "$file" "$director" "$genres"
+		else
+		    echo "'$file' not found in backup."
+		fi
+	    fi
+	done
+	
+	if [[ "$retcode" == "4" ]]; then
+	    echo "No files in the current directory found in the backup, bad backup?"
+	fi
+    else
+	retcode=2
+    fi
+
+    return $retcode
+}
+
+function add()
+{
+    file=$1
+    backup=$2
+    retcode=0
+
+    if [[ -f $file ]] && [[ -f $backup ]]; then
+	if grep -q "^$file:" $backup; then
+	    director=`grep "^$file:" $backup | cut -d':' -f2`
+	    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:::'`
+	    
+	    importfile "$file" "$director" "$genres"
+	else
+	    retcode=4
+	    echo "'$file' not found in backup, back backup?"
+	fi
+    else
+	retcode=2
+    fi
+
+    return $retcode
+}
+
+function help ()
+{
+    echo "moviedb-misc: A tool for backing up and restoring the filesystem movie database."
+    echo
+    echo "Usage: moviedb-misc <command> <arg1> <arg2> <arg3> ... <argn>"
+    echo
+    echo "Commands:"
+    echo "    export                : Exports the filename, director, and genres of every movie in the database."
+    echo "    import <backup>       : Imports all of the files in the current directory into the database, using a backup for metadata."
+    echo "    add    <file> <backup>: Imports one file into the database, using a backup for metadata."
+    echo
+    echo "Return codes:"
+    echo "    1 = Unknown command."
+    echo "    2 = Nonexistant file/backup."
+    echo "    3 = Bad backup."
+    echo "    4 = Missing movie folder(s)."
+    echo
+    echo "Maintainer: Michael Walker"
+}
+
+if [[ -d $MOVIEPATH ]]; then
+    [ "$1" != "" ]  && cmd=$1            && shift
+
+    case $cmd in
+        "export")
+            exportdb
+	    return $?;;
+        "import")
+            importdb $1
+	    return $?;;
+        "add")
+            add $1 $2
+	    return $?;;
+        "" | "help")
+            help;;
+        *)
+            echo "Unknown command $cmd"
+            return 1;;
+    esac
+else
+    echo "\$MOVIEPATH = $MOVIEPATH"
+    echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
+    return 4
+fi

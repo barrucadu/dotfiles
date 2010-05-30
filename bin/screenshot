@@ -3,7 +3,6 @@
 shot=`date +%F`
 screenshotpath=/home/barrucadu/$shot.png
 websitepath=/home/barrucadu/websites/barrucadu.co.uk/www
-dir=`pwd`
 
 echo "Taking screenshot in 5 seconds."
 sleep 5
@@ -44,7 +43,8 @@ case "$WM" in
 esac
 
 niceOS="Arch Linux `uname -m`"
-niceFont=`grep "gtk-font-name" ~/.config/gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
+niceGTKFont=`grep "gtk-font-name" ~/.config/gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
+niceXFont=`grep FONT .config/xorg/Xdefaults | head -n1 | sed 's/.*xft:\(.*\):pixelsize.*/\1/'`
 niceIcons=`grep icon-theme-name ~/.config/gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
 niceGtk="Shiki Noble" # Yes, I do change my GTK theme so little I decided it'd be easier to just hardcode it…
 
@@ -52,7 +52,8 @@ echo "<li><strong>OS:</strong> $niceOS</li>"                   > $shot.txt
 echo "<li><strong>GTK:</strong> $niceGtk</li>"                >> $shot.txt
 echo "<li><strong>Icons:</strong> $niceIcons</li>"            >> $shot.txt
 echo "<li><strong>WM:</strong> $niceWM</li>"                  >> $shot.txt
-echo "<li><strong>GTK Font:</strong> $niceFont</li>"          >> $shot.txt
+echo "<li><strong>GTK Font:</strong> $niceGTKFont</li>"       >> $shot.txt
+echo "<li><strong>Terminal Font:</strong> $niceXFont</li>"    >> $shot.txt
 echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> $shot.txt
 echo "<li><strong>Other:</strong> </li>"                      >> $shot.txt
 emacs -nw $shot.txt
@@ -74,5 +75,3 @@ exit
 EOF
 
 echo "[url=\"http://www.barrucadu.co.uk/gallery/$shot/\"][img]http://www.barrucadu.co.uk/screenshots/thumb-big/$shot.png[/img][/url]" | xclip
-
-cd $dir
