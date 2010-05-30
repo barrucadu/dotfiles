@@ -105,7 +105,7 @@ function help ()
 {
     echo "moviedb-misc: A tool for backing up and restoring the filesystem movie database."
     echo
-    echo "Usage: moviedb-misc <command> <arg1> <arg2> <arg3> ... <argn>"
+    echo "Usage: moviedb-misc <command> <args>"
     echo
     echo "Commands:"
     echo "    export                : Exports the filename, director, and genres of every movie in the database."

@@ -118,7 +118,7 @@ function help ()
 {
     echo "moviedb-query: A tool to query the filesystem movie database."
     echo
-    echo "Usage: moviedb-query <command> [-f] <arg1> <arg2> <arg3> ... <argn>"
+    echo "Usage: moviedb-query <command> [-f] <args>"
     echo
     echo "Commands:"
     echo "    director <movie>: Find the director of a movie."

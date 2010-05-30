@@ -60,7 +60,7 @@ function help()
 {
     echo "moviedb-lists: A tool to manage movie playlists."
     echo
-    echo "Usage: moviedb-lists <command> <arg1> <arg2>"
+    echo "Usage: moviedb-lists <command> <args>"
     echo
     echo "Commands:"
     echo "    play          <list>:  Play the specified list."
@@ -71,7 +71,7 @@ function help()
     echo
     echo "Return codes:"
     echo "    1 = Unknown command."
-    echo "    2 = Nonexistant playlist (or existant, with create)."
+    echo "    2 = Nonexistant playlist (or existing, with create)."
     echo
     echo "Maintainer: Michael Walker"
 }
