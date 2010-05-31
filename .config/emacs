@@ -6,10 +6,16 @@
 ; Interface
 (require 'color-theme)
 
-(load "zenburn.el" nil t t)
+(load "zenburn.el"             nil t t)
+(load "zenburn-transparent.el" nil t t) ; to-do: make it so that loading zenburn-transparent after zenburn sets the background transparent again
+                                        ; currently this simply just doesn't set the background at all, giving a transparent emacs in a transparent
+                                        ; terminal.
 
 (color-theme-initialize)
-(color-theme-zenburn)
+
+(if (string= "x" window-system)
+    (color-theme-zenburn)              ; If in X
+    (color-theme-zenburn-transparent)) ; If in a terminal
 
 (menu-bar-mode         0)
 (column-number-mode    t)

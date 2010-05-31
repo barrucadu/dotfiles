@@ -1,49 +1,45 @@
-Program Hanoi;
+Program HanoiSolver;
 
 { A Towers of Hanoi solver:
   * Generates a tower of random height between 3 and 10 blocks
   * Saves solution to "soln.txt"
   * Prints info to STDOUT }
 
-Const
-   SOLNFILE  = 'soln.txt';
+{ Include maths lib }
+Uses Math;
 
 Type
    Tower = Array [0..10] of Integer;
+   Hanoi = Array [0 .. 2] of Tower;
 
 Var 
-   disks : Integer;
-   moves : Integer;
-   ltr	 : Boolean;
+   disks : LongInt;
 
-Function pow(base, exponent : Integer) : Integer; { Raise base to power exponent }
-begin
-   pow := Round(exp(exponent * ln(base)));
-end; { pow }
-
-Procedure printinfo(); { Print information about the puzzle generated }
+Procedure printinfo(disks : LongInt); { Print information about the puzzle generated }
 begin
    writeln('Towers of Hanoi Solver.');
    writeln('    ', disks, ' disks.');
-   writeln('    ', moves, ' moves required.');
+   writeln('    ', round(power(2, disks) - 1.0), ' moves required.');
 
-   if ltr then
+   if disks mod 2 = 0 then
       writeln('    L->R move direction.')
    else
       writeln('    R->L move direction.')
 end; { printinfo }
 
-Procedure inittower(Var tow : Tower; ndisks : Integer); { Initialises the tower variables }
+Procedure inithanoi(Var towers : Hanoi; disks : Integer); { Initialises the tower variables }
 var
+   tow	 : Integer;
    count : Integer;
 begin
-   for count := 0 to 10 do
-   begin
-      if ndisks - count >= 0 then
-	 tow[count] := ndisks - count
-      else
-	 tow[count] := 0
-   end;
+   for tow := 0 to 2 do
+      for count := 0 to 10 do
+      begin
+	 if (disks - count >= 0) and (tow = 0) then
+	    towers[tow][count] := disks - count
+	 else
+	    towers[tow][count] := 0
+      end;
 end; { inittower }
 
 Procedure makemove(Var towa, towb : Tower); { Move the top disk from one tower to another }
@@ -78,7 +74,7 @@ begin
    end;
 end; { getmoveorder }
 
-Procedure findmove(Var towa, towb, towc	: Tower; Var towerbegin, towerend : Integer; smallest : Boolean); { Find the next move that either does or does not involve moving the smallest disk }
+Procedure findmove(disks : Integer; Var towers : Hanoi; Var towerbegin, towerend : Integer; smallest : Boolean); { Find the next move that either does or does not involve moving the smallest disk }
 var
    i, j, k : Integer;
    dir	   : Integer;
@@ -88,26 +84,26 @@ begin
    j := 0;
    k := 0;
    
-   while towa[i + 1] <> 0 do
+   while towers[0][i + 1] <> 0 do
       i := i + 1;
 
-   while towb[j + 1] <> 0 do
+   while towers[1][j + 1] <> 0 do
       j := j + 1;
 
-   while towc[k + 1] <> 0 do
+   while towers[2][k + 1] <> 0 do
       k := k + 1;
 
    if smallest then
    begin
-      if ltr then
+      if disks mod 2 = 0 then
 	 dir := 1
       else
 	 dir := -1;
 
-      if towa[i] = 1 then
+      if towers[0][i] = 1 then
 	 towerbegin := 0
       else
-	 if towb[j] = 1 then
+	 if towers[1][j] = 1 then
 	    towerbegin := 1
 	 else
 	    towerbegin := 2;
@@ -122,87 +118,54 @@ begin
    end
    else
    begin
-      if towa[i] = 1 then
-	 getmoveorder(1, 2, towb[j], towc[k], towerbegin, towerend)
+      if towers[0][i] = 1 then
+	 getmoveorder(1, 2, towers[1][j], towers[2][k], towerbegin, towerend)
       else
-	 if towb[j] = 1 then
-	    getmoveorder(0, 2, towa[i], towc[k], towerbegin, towerend)
+	 if towers[1][j] = 1 then
+	    getmoveorder(0, 2, towers[0][i], towers[2][k], towerbegin, towerend)
 	 else
-	    getmoveorder(0, 1, towa[i], towb[j], towerbegin, towerend);
+	    getmoveorder(0, 1, towers[0][i], towers[1][j], towerbegin, towerend);
    end;
 end; { findmove }
 
-Procedure solve(); { Solve the puzzle }
+Procedure solve(disks : Integer); { Solve the puzzle }
 var
-   fh	      : TextFile;
-   move	      : Integer;
-   towa	      : Tower;
-   towb	      : Tower;
-   towc	      : Tower;
+   moves      : LongInt;
+   move	      : LongInt;
    towerbegin : Integer;
    towerend   : Integer;
+   towers     : Hanoi;
 begin
-   { Open solution file for writing }
-   Assign(fh, SOLNFILE);
-   Rewrite(fh);
-
+   moves := round(power(2, disks) - 1.0); { Calculate the number of moves }
+   
    move := 0;
-   writeln(fh, move:3, ': Build a tower of ', disks, ' disks.');
+   writeln(move:3, ': Build a tower of ', disks, ' disks.');
 
    { Keep track of which tower has what }
-   inittower(towa, disks);
-   inittower(towb, 0);
-   inittower(towc, 0);
+   inithanoi(towers, disks);
    
    for move := 1 to moves do
    begin
-      if (move - 1) mod 2 = 0 then
-	 { Move smallest disk }
-	 findmove(towa, towb, towc, towerbegin, towerend, True)
-      else
-	 { Move other disk }
-	 findmove(towa, towb, towc, towerbegin, towerend, False);
+      { Get the next move }
+      findmove(disks, towers, towerbegin, towerend, ((move - 1) mod 2 = 0));
+      
+      { And make it }
+      makemove(towers[towerbegin], towers[towerend]);
 
-      if towerbegin = 0 then
-      begin
-	 if towerend = 1 then
-	    makemove(towa, towb)
-	 else
-	    makemove(towa, towc)
-      end
-      else
-	 if towerbegin = 1 then
-	 begin
-	    if towerend = 0 then
-	       makemove(towb, towa)
-	    else
-	       makemove(towb, towc)
-	 end
-	 else
-	 begin
-	    if towerend = 1 then
-	       makemove(towc, towb)
-	    else
-	       makemove(towc, towa)
-	 end;
-
-      writeln(fh, move:3, ': Move disk from tower ', towerbegin, ' to tower ', towerend, '.');
+      writeln(move:3, ': Move disk from tower ', towerbegin, ' to tower ', towerend, '.');
    end;
-   
-   close(fh);
 end; { solve }
 
 begin
-   { Do some set up }
-   Randomize;
-   disks := 3 + Random(8); { Generate random number between 3 and 10 }
+   { Get the number of disks }
+   write('Enter the number of disks: ');
+   readln(disks);
+   writeln;
    
-   moves := pow(2, disks) - 1; { Figure out the number of moves required, and the move direction. }
-   ltr := (disks mod 2 = 0);
-
    { Information about the puzzle generated }
-   printinfo;
+   printinfo(disks);
+   writeln;
    
    { Now solve }
-   solve;
+   solve(disks);
 end.
