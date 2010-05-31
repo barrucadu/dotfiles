@@ -97,17 +97,25 @@ export PR_NO_COLOR="%{$terminfo[sgr0]%}"
 
 # pre/post commands
 
-function precmd() # Uses: setting user/root PROMPT1, PROMPT2, and PROMPT3 variables.
+function precmd() # Uses: setting user/root PROMPT1 variable and rehashing commands list
 {
     # Last command failed:    red :(
+    lastcmdstatus=`[ $? != 0 ] && echo "$PR_RED%B:(%b "`
+
+    # Package updates:        blue update count
+    pacupgrades=`pacman -Qu &>/dev/null && echo "${PR_BLUE}[\`pacman -Qu | wc -l\`]$PR_NO_COLOR "`
+
     # Working dir unwritable: red pwd, else cyan pwd
+    cwdcolour=`[ -w "\`pwd\`" ] && echo "$PR_CYAN" || echo "$PR_RED"`
+    cwdname="%B%2~%b"
+
     # Running as root:        red #, red time, else green %, green time
+    prompttime=`[ $UID != 0 ] && echo "$PR_LIGHT_GREEN%*" || echo "$PR_RED%*"`
+    amiroot=`[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`
 
-    export PROMPT="`[ $? != 0 ] && echo "$PR_RED%B:(%b "``[ $UID != 0 ] && echo "$PR_LIGHT_GREEN%*" || echo "$PR_RED%*"` `[ -w "\`pwd\`" ] && echo "$PR_CYAN" || echo "$PR_RED"`%B%2~%b `[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`$PR_NO_COLOR "
-}
+    export PROMPT="${lastcmdstatus}${pacupgrades}${prompttime} ${cwdcolour}${cwdname} ${amiroot}${PR_NO_COLOR} "
 
-function postcmd() # Uses: rehashing command completion.
-{
+    # Rehash the command completion lists
     rehash
 }
 
