@@ -63,7 +63,6 @@ alias mkdir='mkdir -p'
 alias tree='tree -L 2 -d -l'
       # Root
 if [[ $UID != 0 ]]; then
-    alias wifi='sudo wifi-select wlan0'
     alias abs='sudo abs'
     alias updatedb='sudo updatedb'
     alias sync='sudo sync'
@@ -73,28 +72,24 @@ if [[ $UID != 0 ]]; then
 fi
 
 # Package management
-alias yaourt='LD_PRELOAD= yaourt'
-alias fullupgrade='sudo abs && LD_PRELOAD= yaourt -Syu --aur --devel'
-alias upgrade='LD_PRELOAD= yaourt -Syu --aur'
-alias orphans='pacman -Qtdq'
-alias paclist='pacman -Ql'
-alias pacfile='pacman -Qo'
-alias install='sudo pacman -S --needed'
-alias remove='sudo pacman -Rsc'
-alias synchronise='sudo pacman -Syyuw && sudo abs'
-alias upgrades='pacman -Qu'
-alias deorphan='sudo pacman -Rsc $(pacman -Qtdq)'
+alias yaourt='LD_PRELOAD= clyde'
+alias fullupgrade='sudo abs && LD_PRELOAD= clyde -Syua'
+alias upgrade='LD_PRELOAD= clyde -Syua'
+alias orphans='clyde -Qtdq'
+alias paclist='clyde -Ql'
+alias pacfile='clyde -Qo'
+alias install='sudo clyde -S --needed'
+alias remove='sudo clyde -Rsc'
+alias synchronise='sudo clyde -Syyuw && sudo abs'
+alias upgrades='clyde -Qu'
+alias deorphan='sudo clyde -Rsc $(clyde -Qtdq)'
 alias pacgraph='pacgraph -b \#111111 -l \#ffffff -t \#eeeeee -d \#aaaaaa'
-alias pacgroup='pacman -Qg'
-alias pacgroups='pacman -Qg | sed "s/ .*//" | sort | uniq'
+alias pacgroup='clyde -Qg'
+alias pacgroups='clyde -Qg | sed "s/ .*//" | sort | uniq'
 
 # Security
 alias gpgasc='gpg -a --detach-sign'
 alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
-
-# Maintenance
-alias fixopera='rm -r ~/.config/opera/{mail,lock}'
-alias backup='rsync -avz --delete --exclude=/dev --exclude=/proc --exclude=/sys --exclude=/mnt --exclude=/media --exclude=/share / /media/M2HDb/azathoth/'
 
 # Servers
 alias sql='mysql -p -u root'
