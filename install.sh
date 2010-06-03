@@ -29,8 +29,11 @@ install -dm755 ${DESTDIR}/boot/
 install -dm755 ${DESTDIR}/servers/
 install -dm755 ${DESTDIR}/servers/socket/
 
+rmdir ${DESTDIR}/mnt/
+
 touch ${DESTDIR}/tmp/console
 touch ${DESTDIR}/dev/time
 touch ${DESTDIR}/dev/ramdisk
 touch ${DESTDIR}/servers/socket/1
 touch ${DESTDIR}/boot/tmpfs
+touch ${DESTDIR}/mnt

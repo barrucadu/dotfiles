@@ -27,6 +27,7 @@ function dodir()
         /bin/settrans -pck /dev/console /hurd/term /dev/console device console
     elif [[ "$dir" == "servers" ]]; then
         /bin/settrans -acp /servers/socket/1 /hurd/pflocal 
+	/bin/settrans -acp /servers/exec /hurd/exec
     fi
 }
 
@@ -39,7 +40,7 @@ echo -n "Making filesystem segments writable... "
 /bin/settrans -a /boot/tmpfs /hurd/ext2fs.static /dev/ramdisk
 
 dirscp=(var etc servers)
-dirsln=(dev tmp mnt home root)
+dirsln=(dev tmp root)
 
 # These directories we want to preserve the contents of
 for dir in "${dirscp[@]}"; do
