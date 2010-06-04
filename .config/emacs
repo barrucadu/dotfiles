@@ -134,12 +134,10 @@
 (autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."     t)
 (autoload 'hide-mode-line "hide-mode-line"                    nil t)
 
+(setq-default indent-tabs-mode nil)
 (setq ispell-program-name  "aspell"
-      tab-width             4
-      tab-stop-list         '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80)
       indent-tabs-mode      nil
       make-backup-files     nil
-      indent-tabs-mode      t
       kill-whole-line       t
       inhibit-splash-screen t
       ffap-require-prefix   t

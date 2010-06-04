@@ -314,3 +314,27 @@ function nbd()
 	return 2
     fi
 }
+
+function mget()
+{
+    file=$2
+    name=`basename $file .mp3`
+    dest=$1
+
+    # Get OGG file
+    wget $file
+    mp32ogg ${name}.mp3
+    rm ${name}.mp3
+
+    # Check tags
+    easytag .
+
+    # Copy to Archos
+    mkdir -p /media/ARCHOS5/Music/$dest
+    cp ${name}.ogg /media/ARCHOS5/Music/$dest
+
+    # Copy to Eihort & update MPD
+    mkdir -p /share/eihort/music/$dest
+    mv ${name}.ogg /share/eihort/music/$dest
+    nmpc update
+}

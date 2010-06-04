@@ -72,9 +72,8 @@ if [[ $UID != 0 ]]; then
 fi
 
 # Package management
-alias yaourt='LD_PRELOAD= clyde'
-alias fullupgrade='sudo abs && LD_PRELOAD= clyde -Syua'
-alias upgrade='LD_PRELOAD= clyde -Syua'
+alias fullupgrade='sudo abs && LD_PRELOAD= sudo clyde -Syua'
+alias upgrade='LD_PRELOAD= sudo clyde -Syua'
 alias orphans='clyde -Qtdq'
 alias paclist='clyde -Ql'
 alias pacfile='clyde -Qo'
