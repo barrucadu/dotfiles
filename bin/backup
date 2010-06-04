@@ -1,0 +1,91 @@
+#!/bin/zsh
+
+# Backup script:
+#   Takes full and incremental backups, to a remote or local directory, using
+#   rsync. SSH transfer requires root login be allowed on the server, and SSH
+#   keys be exchanged for passwordless login. This script should be run as root.
+
+################################## VARIABLES ###################################
+
+# Generla-purpose variables:
+#  COMPUTER:   hostname of current computer (used in the backup dest path)
+#  BACKUPHOST: username/hostname of the backup destination (if using ssh)
+#  BACKUPDIR:  directory to store the backup in
+#  TYPE:       the type of backup (full, inc)
+#  SSH:        whether backing up over SSH or not (ssh, nosh)
+COMPUTER=`hostname`
+BACKUPHOST=root@eihort
+BACKUPDIR=/media/BackupHDD
+TYPE=$1
+SSH=$2
+
+# rsync-related variables:
+#  FULLDIR:   directory for last full backup
+#  DIR:       directory to store current backup
+#  EXCLUDE:   path of rsync excludes file
+#  RSYNCARGS: arguments passed to rsync
+#  FULLARGS:  arguments passed to rsync in a full backup
+#  INCARGS:   arguments passed to rsync in an incremental backup
+#  SSHARGS:   arguments passed to rsync when using ssh
+#  RSYNCDIRS: dirs to sync
+FULLDIR=`date +%Y-%m`
+DIR=`date +%Y-%m-%d`
+
+if [[ "$TYPE" == "full" ]]; then
+    DIR=$FULLDIR
+fi
+
+EXCLUDE=/etc/backup.exclude
+RSYNCARGS=(-avz --numeric-ids --delete --exclude-from=$EXCLUDE --stats)
+FULLARGS=()
+INCARGS=(--link-dest=../$FULLDIR/)
+SSHARGS=()
+RSYNCDIRS=(/ $BACKUPDIR/$COMPUTER/$DIR/)
+
+if [[ "$SSH" == "ssh" ]]; then
+    SSHARGS=(-e ssh)
+    RSYNCDIRS[2]=$BACKUPHOST:$BACKUPDIR/$COMPUTER/$DIR/
+fi
+
+################################# MAIN SCRIPT ##################################
+
+function startbackup()
+{
+    if [[ "$SSH" == "ssh" ]]; then
+	ssh $BACKUPHOST "mkdir -p $BACKUPDIR/$COMPUTER/$DIR/"
+	ssh $BACKUPHOST "touch /tmp/backup-$COMPUTER"
+    else
+	mkdir -p $BACKUPDIR/$COMPUTER/$DIR/
+	touch /tmp/backup-$COMPUTER
+    fi
+}
+
+function endbackup()
+{
+    if [[ "$SSH" == "ssh" ]]; then
+	ssh $BACKUPHOST "rm /tmp/backup-$COMPUTER"
+    else
+	rm /tmp/backup-$COMPUTER
+    fi
+}
+
+if [[ $UID != 0 ]]; then
+    echo 'Must be root!'
+    return 1
+fi
+
+if [[ "$TYPE" == "full" ]]; then
+    # Take a full backup
+    startbackup
+    rsync $RSYNCARGS $FULLARGS $SSHARGS $RSYNCDIRS
+    endbackup
+elif [[ "$TYPE" == "inc" ]]; then
+    # Take an incremental backup
+    startbackup
+    rsync $RSYNCARGS $INCARGS $SSHARGS $RSYNCDIRS
+    endbackup
+else
+    # wtf?
+    echo "Usage: backup [full|inc] [ssh|nossh]"
+    return 1
+fi
