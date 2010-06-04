@@ -52,20 +52,20 @@ fi
 function startbackup()
 {
     if [[ "$SSH" == "ssh" ]]; then
-	ssh $BACKUPHOST "mkdir -p $BACKUPDIR/$COMPUTER/$DIR/"
-	ssh $BACKUPHOST "touch /tmp/backup-$COMPUTER"
+        ssh $BACKUPHOST "mkdir -p $BACKUPDIR/$COMPUTER/$DIR/"
+        ssh $BACKUPHOST "touch /tmp/backup-$COMPUTER"
     else
-	mkdir -p $BACKUPDIR/$COMPUTER/$DIR/
-	touch /tmp/backup-$COMPUTER
+        mkdir -p $BACKUPDIR/$COMPUTER/$DIR/
+        touch /tmp/backup-$COMPUTER
     fi
 }
 
 function endbackup()
 {
     if [[ "$SSH" == "ssh" ]]; then
-	ssh $BACKUPHOST "rm /tmp/backup-$COMPUTER"
+        ssh $BACKUPHOST "rm /tmp/backup-$COMPUTER"
     else
-	rm /tmp/backup-$COMPUTER
+        rm /tmp/backup-$COMPUTER
     fi
 }
 
