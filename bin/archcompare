@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ARCHCOMPAREDIR=/var/lib/archcompare
+EXCLUDESFILE=/etc/archcompare.exclude
 
 function getpaccfg()
 {
@@ -51,6 +52,13 @@ function genpkglist()
 {
     pacman -Sl $1 --config $ARCHCOMPAREDIR/linux/pacman.conf | sort | sed 's/-[0-9]*$//' >> $ARCHCOMPAREDIR/linux/packages.list
     pacman -Sl $1 --config $ARCHCOMPAREDIR/hurd/pacman.conf  | sort | sed 's/-[0-9]*$//' >> $ARCHCOMPAREDIR/hurd/packages.list
+
+    if [[ -f $EXCLUDESFILE ]]; then
+        while read exclude; do
+            sed -i "/^\(core\|extra\) $exclude .*$/d" $ARCHCOMPAREDIR/linux/packages.list
+            sed -i "/^\(core\|extra\) $exclude .*$/d" $ARCHCOMPAREDIR/hurd/packages.list
+        done < $EXCLUDESFILE
+    fi
 }
 
 function prepinfo()
