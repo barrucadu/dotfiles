@@ -167,7 +167,7 @@ function hrepo-add ()
 
     while [[ "$1" != "" ]]; do
 	scp $1 barrucadu@archhurd.org:/srv/http/files/repo/$repo/
-	ssh barrucadu@archhurd.org "repo-add /srv/http/files/repo/$repo/$repo.db.tar.gz /srv/http/files/repo/$repo/$(basename $1)"
+	ssh barrucadu@archhurd.org "/usr/local/bin/repo-add /srv/http/files/repo/$repo/$repo.db.tar.gz /srv/http/files/repo/$repo/$(basename $1)"
 
 	$del && rm -v $1
 
