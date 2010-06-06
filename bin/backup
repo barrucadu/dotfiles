@@ -76,6 +76,10 @@ function backuphost()
     if $ssh; then
         source="root@$host:/"
         args2=$SSHARGS
+
+        ssh root@$host -t 'sfdisk -d $(ls /dev/sd[a-z])' > $BACKUPDIR/$host/partitions-$DIR
+    else
+        sfdisk -d $(ls /dev/sd[a-z]) > $BACKUPDIR/$host/partitions-$DIR
     fi
 
     if [[ "$TYPE" == "inc" ]]; then
