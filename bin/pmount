@@ -6,7 +6,6 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "" ]]; then
     echo "Options:"
     echo "    -m = mount (implied if no -u is given)"
     echo "    -u = unmount"
-    echo "    -s = use sudo"
     echo
     echo "Device:"
     echo "    A file with the name given as the device is looked for in these locations:"
@@ -17,13 +16,12 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "" ]]; then
     echo
     echo "fstab:"
     echo "    If a device is foud in /etc/fstab, it will be (un)mounted with those options."
-    echo "    If not, it will be (un)mounted to /media/DEVICE owned by the current user, and -s is implied."
+    echo "    If not, it will be (un)mounted to /media/DEVICE owned by the current user."
     echo
     echo "Michael Walker (Barrucadu) <mike@barrucadu.co.uk>"
     exit
 fi
 
-sudocmd=""
 mountcmd=mount
 device="$1"
 
@@ -33,10 +31,6 @@ deving=true
 # Parse arguments
 while $arging; do
     case "$1" in
-	"-s")
-	    sudocmd=sudo
-	    shift
-	    ;;
 	"-u")
 	    mountcmd=umount
 	    shift
@@ -98,7 +92,7 @@ while $deving; do
 	    fi
 	else
             # Use the directory specified in fstab
-	    $sudocmd $mountcmd $device
+	    sudo $mountcmd $device
 	fi
 
 	shift
