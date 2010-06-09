@@ -4,6 +4,12 @@
 #   Takes full and incremental backups, to a local directory, using rsync.
 #   SSH transfer requires root login be allowed on the client, and SSH keys
 #   be exchanged for passwordless login. This script should be run as root.
+#
+# To set up a new host:
+#   * Update the COMPUTERS list with the hostname.
+#   * Set up client SSHD to allow passwordless restricted login from Eihort.
+#   * Copy validate-ssh script to new client
+#   * Copy getparts script to new client
 
 ################################## VARIABLES ###################################
 
@@ -18,6 +24,7 @@ COMPUTERS=(azathoth)
 BACKUPDEV=/dev/disk/by-label/BackupHDD
 BACKUPDIR=/media/BackupHDD
 TYPE=$1
+LOGFILE=/var/log/backup.log
 
 # sendxmpp-related variables:
 #  SENDXMPP: path to sendxmpp
@@ -48,10 +55,21 @@ SSHARGS=(-e ssh)
 
 ################################# MAIN SCRIPT ##################################
 
-function senderr()
+function sendmsg()
 {
     msg=$1
-    echo "[backup] $1" | $SENDXMPP $SRVADMIN
+    echo "[backup] $msg" | $SENDXMPP $SRVADMIN
+    echo "`date --rfc-3339=seconds` $msg" >> $LOGFILE
+}
+
+function sendnotice()
+{
+    sendmsg "notice: $1"
+}
+
+function senderr()
+{
+    sendmsg "error: $1"
 }
 
 function checkhost()
@@ -77,16 +95,19 @@ function backuphost()
         source="root@$host:/"
         args2=$SSHARGS
 
-        ssh root@$host -t 'sfdisk -d $(ls /dev/sd[a-z])' > $BACKUPDIR/$host/partitions-$DIR
+        ssh root@$host -t '/root/getparts' > $BACKUPDIR/$host/partitions-$DIR && \
+        sendnotice "$host partitions backed up"
     else
-        sfdisk -d $(ls /dev/sd[a-z]) > $BACKUPDIR/$host/partitions-$DIR
+        sfdisk -d $(ls /dev/sd[a-z]) > $BACKUPDIR/$host/partitions-$DIR && \
+        sendnotice "$host partitions backed up"
     fi
 
     if [[ "$TYPE" == "inc" ]]; then
         args=$INCARGS
     fi
 
-    rsync $RSYNCARGS $args $args2 --exclude-from=${EXCLUDE}${host} $source $BACKUPDIR/$host/$DIR/
+    rsync $RSYNCARGS $args $args2 --exclude-from=${EXCLUDE}${host} $source $BACKUPDIR/$host/$DIR/ && \
+    sendnotice "$host data backed up"
 }
 
 if [[ "$TYPE" != "full" ]] && [[ "$TYPE" != "inc" ]]; then
@@ -106,9 +127,11 @@ else
     return 1
 fi
 
+sendnotice "Backup started."
 backuphost $COMPUTER false
 for host in $COMPUTERS; do
     checkhost $host && backuphost $host true
 done
+sendnotice "Backup ended."
 
 mount -o remount,ro $BACKUPDEV
