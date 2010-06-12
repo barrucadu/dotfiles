@@ -1,0 +1,27 @@
+## -*- shell-script -*-
+# Additional files - I like splitting things up.
+. ~/.config/zsh/functions
+. ~/.config/zsh/aliases
+. ~/.config/zsh/profile
+
+if [[ ! $(tty) == *pts* ]]; then
+    if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
+        # Start X
+        while true; do
+            echo "Starting X11 at `ddate +\"%{%A, the %e of %B%}, %Y. %N%n    Celebrate %H\"`"
+            LD_PRELOAD= startx ~/.config/xorg/xinitrc &> /dev/null # Xorg 1.8 doesn't like libetc...
+            source ~/.config/zsh/profile
+        done
+    fi
+else
+    if [[ $DVTM == "" ]] && [[ $SSH_TTY == "" ]]; then
+	# Not in dvtm or sshing? Madness!
+	dvtm
+	exit
+    else
+        # Welcome message
+	clear
+	ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
+	echo
+    fi
+fi
