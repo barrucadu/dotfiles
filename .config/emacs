@@ -82,10 +82,27 @@
 (load "phpxhtml.el" nil t t)
 (autoload 'php-mode "php-mode.el" "PHP Mode." t)
 
-(setq auto-mode-alist (append '(("/*..php$" . php-mode)
-                                ("/*..inc$" . php-mode)
-                                ("/*..rdf$" . xml-mode)
-                                ("/*..xsl$" . xml-mode))
+(require 'haml-mode)
+(add-hook 'haml-mode-hook
+  '(lambda () (add-hook 'local-write-file-hooks
+    '(lambda () (save-excursion (untabify (point-min) (point-max)))))))
+
+(require 'sass-mode)
+(add-hook 'sass-mode-hook
+  '(lambda () (add-hook 'local-write-file-hooks
+    '(lambda () (save-excursion (untabify (point-min) (point-max)))))))
+
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+
+(setq auto-mode-alist (append '(("/*..php$"  . php-mode)
+                                ("/*..inc$"  . php-mode)
+                                ("/*..rdf$"  . xml-mode)
+                                ("/*..xsl$"  . xml-mode)
+                                ("/*..haml$" . haml-mode)
+                                ("/*..sass$" . sass-mode)
+                                ("/*..scss$" . sass-mode)
+                                ("/*..md$"   . markdown-mode))
                               auto-mode-alist))
 
 ; C

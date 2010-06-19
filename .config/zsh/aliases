@@ -92,21 +92,8 @@ alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Servers
 alias sql='mysql -p -u root'
-alias bssh='ssh barrucadu@nitti.dreamhost.com'
-alias ussh='ssh uzbl@nitti.dreamhost.com'
-alias pssh='ssh ofearcom@host181.hostmonster.com'
-alias essh='ssh barrucadu@eihort'
-alias dssh='ssh barrucadu@hoyes.dyndns.org'
-alias bftp='ncftp barrucadu'
-alias uftp='ncftp uzbl'
-alias pftp='ncftp ofear'
 alias rtorrent='ssh -t rtorrent@eihort "screen -r rtorrent"'
 alias fttps='ssh -t rtorrent@eihort "screen -r fttps"'
-
-# Git
-alias g-='git rm'
-alias g+='git add'
-alias gc='git commit'
 
 # Coding
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'

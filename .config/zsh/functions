@@ -45,64 +45,45 @@ function re()
 }
 
 # Git
-function commit()
+function gc()
 {
-    git add .
+    REPOS=(  home   uzbl                bar                            devsite            initscripts            packages            setup            website)
+    DIRS=(   ~      ~/websites/uzbl.org ~/websites/barrucadu.co.uk/www ~/hurd/git/devsite ~/hurd/git/initscripts ~/hurd/git/packages ~/hurd/git/setup ~/hurd/git/website)
+    REMOTES=(origin uzbl-website        github                         devsite            initscripts            packages            setup            website)
 
-    if [[ ! -z "$1" ]]; then
-        git commit -m "$1"
-    else
-        git commit
+    repo=$1
+    branch=$2
+    msg=$3
+
+    if [[ "$repo" == "" ]]; then
+        echo "Usage: gc repo [branch] [message]"
     fi
-}
 
-function gith()
-{
-    pushd ~
-    commit $1
-    pushd .git
-    git push origin master
-    popd
-    popd
-}
+    if [[ "$branch" == "" ]]; then
+        echo "Using master branch by default."
+        branch=master
+    fi
 
-function giter()
-{
-    pushd ~/projects/erasmus
-    commit $1
-    git push github master
-    popd
-}
+    dir=$DIRS[${REPOS[(I)$repo]}]
+    remote=$REMOTES[${REPOS[(I)$repo]}]
+    
+    if [[ -d $dir ]]; then
+        pushd $dir
+        git add .
 
-function gituw()
-{
-    pushd ~/websites/uzbl.org
-    commit $1
-    git push uzbl-website master
-    popd
-}
+        if [[ ! -z "$msg" ]]; then
+            git commit -m "$msg"
+        else
+            git commit
+        fi
 
-function gitwii()
-{
-    pushd ~/projects/wiipen
-    commit $1
-    git push wiipen master
-    popd
-}
-
-function gitbar()
-{
-    pushd ~/websites/barrucadu.co.uk/www
-    commit $1
-    git push github master
-    popd
-}
-
-function gitei()
-{
-    cd /share/eihort-www
-    commit $1
-    git push github master
+        pushd .git
+        git push $remote $branch
+        popd
+        popd
+    else
+        echo "Cannot find '$dir'."
+    fi
 }
 
 # FTP

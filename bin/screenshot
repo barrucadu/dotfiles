@@ -2,23 +2,23 @@
 
 shot=`date +%F`
 screenshotpath=/home/barrucadu/$shot.png
-websitepath=/home/barrucadu/websites/barrucadu.co.uk/www
+websitepath=/home/barrucadu/websites/barrucadu.co.uk/www/screenshots/Azathoth
 
 echo "Taking screenshot in 5 seconds."
 sleep 5
 echo "Taking screenshot \"$shot.png\""
 
 scrot $screenshotpath
-cp $screenshotpath $websitepath/screenshots/
-cp $screenshotpath $websitepath/screenshots/thumb/
-cp $screenshotpath $websitepath/screenshots/thumb-big/
+cp $screenshotpath $websitepath/
+cp $screenshotpath $websitepath/thumb/
+cp $screenshotpath $websitepath/thumb-big/
 rm $screenshotpath
 
-cd $websitepath/screenshots/thumb/
-convert $websitepath/screenshots/$shot.png -thumbnail 160x100 -background black $shot.png
+cd $websitepath/thumb/
+convert $websitepath/$shot.png -thumbnail 160x100 -background black $shot.png
 
 cd ../thumb-big/
-convert $websitepath/screenshots/$shot.png -thumbnail 461x300 -background black -polaroid -1 $shot.png
+convert $websitepath/$shot.png -thumbnail 461x300 -background black -polaroid -1 $shot.png
 
 cd ../info/
 
@@ -58,20 +58,9 @@ echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> $shot.txt
 echo "<li><strong>Other:</strong> </li>"                      >> $shot.txt
 emacs -nw $shot.txt
 
-ncftp barrucadu <<EOF
-cd /barrucadu.co.uk/screenshots/
-put $websitepath/screenshots/$shot.png
+scp $websitepath/$shot.png           barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/
+scp $websitepath/thumb/$shot.png     barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/thumb/
+scp $websitepath/thumb-big/$shot.png barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/thumb-big/
+scp $websitepath/info/$shot.txt      barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/info/
 
-cd /barrucadu.co.uk/screenshots/thumb/
-put $websitepath/screenshots/thumb/$shot.png
-
-cd /barrucadu.co.uk/screenshots/thumb-big/
-put $websitepath/screenshots/thumb-big/$shot.png
-
-cd /barrucadu.co.uk/screenshots/info/
-put $websitepath/screenshots/info/$shot.txt
-
-exit
-EOF
-
-echo "[url=\"http://www.barrucadu.co.uk/gallery/$shot/\"][img]http://www.barrucadu.co.uk/screenshots/thumb-big/$shot.png[/img][/url]" | xclip
+echo "[url=\"http://www.barrucadu.co.uk/gallery/Azathoth/$shot/\"][img]http://www.barrucadu.co.uk/screenshots/Azathoth/thumb-big/$shot.png[/img][/url]" | xclip
