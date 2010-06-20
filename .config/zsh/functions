@@ -86,49 +86,7 @@ function gc()
     fi
 }
 
-# FTP
-function upload()
-{
-    ncftp barrucadu <<EOF
-cd $2
-put $1
-exit
-EOF
-}
-
-function download()
-{
-    pushd /tmp
-    ncftp barrucadu <<EOF
-get $1
-exit
-EOF
-    mv $(basename $1) $2
-    popd $dir
-}
-
-function ou()
-{
-    emacs -nw $1
-    ncftp barrucadu <<EOF
-cd $2
-put $1
-exit
-EOF
-}
-
 # Package Management
-function pkgroot ()
-{
-    pkginfo=`pacman -Qi $1`
-    echo $pkginfo \
-        | grep -q "Explicitly installed" \
-            && echo $1 \
-            || pkgroot "`echo $pkginfo | sed "/Required By.*/!d" | sed "s/.*: \([a-z\-\+\.0-9]*\).*/\\1/"`"
-
-}
-
-
 function pkginfo ()
 {
     pacman -Qi $1 || pacman -Si $1
@@ -186,29 +144,17 @@ function rfcsearch()
 }
 
 # Misc
-function mkd()
-{
-	mkdir -p "$1"
-	cd "$1"
-}
-
-function timer()
-{
-    start=`date +%s`
-    $*
-    stop=`date +%s`
-    
-    duration=$[$stop - $start]
-    echo "Duration: $duration s"
-}
-
 function extract ()
 {
     case $1 in
+        *.tar.xz)
+            tar xvJf $1;;
         *.tar.bz2)
             tar xvjf $1;;
         *.tar.gz)
             tar xvzf $1;;
+        *.xz)
+            unxz $1;;
         *.bz2)
             bunzip2 $1;;
         *.rar)
@@ -230,92 +176,4 @@ function extract ()
         *)
             echo "don't know how to extract '$1'...";;
     esac
-}
-
-function files ()
-{
-    ls -Al $1 | wc -l
-}
-
-function define ()
-{
-    dictionary="english"
-    [[ "$2" != "" ]] && dictionary=$2
-    echo "DEFINE $dictionary $1\nQUIT" | netcat dict.org 2628
-}
-
-function prod()
-{
-    ping $1 | /home/barrucadu/bin/prod
-}
-
-function calc()
-{
-    echo "print($1)" | python3
-}
-
-function nbd()
-{
-    device=""
-    port=2000
-    host=""
-
-    if [[ -z "$3" ]]; then
-	if ifconfig wlan0 &>/dev/null; then # On my desktop
-	    host=eihort
-	else                                # Not on my laptop
-	    host=azathoth
-	fi
-    else
-	host=$3
-    fi
-
-    # Allow specifying a device file, name, label, or UUID.
-    if [[ -e "$2" ]]; then
-	device=$2
-    elif [[ -e "/dev/$2" ]]; then
-	device="/dev/$2"
-    elif [[ -e "/dev/disk/by-label/$2" ]]; then
-	device="/dev/disk/by-label/$2"
-    elif [[ -e "/dev/disk/by-uuid/$2" ]]; then
-	device="/dev/disk/by-uuid/$2"
-    else
-	echo "Unknown device '$2'" 1>&2
-	return 1
-    fi
-
-    if [[ "$1" == "share" ]]; then
-	sudo nbd-server $port $device
-    elif [[ "$1" == "gain" ]]; then
-	sudo nbd-client $host $port $device
-    elif [[ "$1" == "free" ]]; then
-	sudo nbd-client -d $device
-    else
-	echo "Unknown method '$1'." 1>&2
-	return 2
-    fi
-}
-
-function mget()
-{
-    file=$2
-    name=`basename $file .mp3`
-    dest=$1
-
-    # Get OGG file
-    wget $file
-    mp32ogg ${name}.mp3
-    rm ${name}.mp3
-
-    # Check tags
-    easytag .
-
-    # Copy to Archos
-    mkdir -p /media/ARCHOS5/Music/$dest
-    cp ${name}.ogg /media/ARCHOS5/Music/$dest
-
-    # Copy to Eihort & update MPD
-    mkdir -p /share/eihort/music/$dest
-    mv ${name}.ogg /share/eihort/music/$dest
-    nmpc update
 }

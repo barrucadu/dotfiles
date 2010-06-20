@@ -100,7 +100,9 @@ function versions()
             linux=`grep " $pkg " $ARCHCOMPAREDIR/linux/packages.list | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
             hurd=`grep " $pkg " $ARCHCOMPAREDIR/hurd/packages.list   | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
 	    
-            if [[ "$linux" != "$hurd" ]]; then
+            if $([[ "$1" == "o" ]] && [[ $hurd < $linux ]]) || \
+                $([[ "$1" == "n" ]] && [[ $hurd > $linux ]]) || \
+                $([[ "$1" == "d" ]] && [[ $hurd != $linux ]]); then
                 echo "$pkg $hurd [$linux]"
             fi
         done
@@ -122,11 +124,13 @@ function help()
     echo "    Repositories do not need to be specified when syncing."
     echo
     echo "Options:"
-    echo "    --sync      -S: Synchronise the local Arch Linux and Arch Hurd pacman databases."
-    echo "    --linux     -L: Show packages in Arch Linux core and extra that are missing from Arch Hurd."
-    echo "    --hurd      -H: Show packages in Arch Hurd core and extra that are missing from Arch Linux."
-    echo "    --versions  -V: Show package version differences between Arch Hurd and Arch Linux."
-    echo "    --help      -h: Show this text."
+    echo "    --sync          -S: Synchronise the local Arch Linux and Arch Hurd pacman databases."
+    echo "    --linux         -L: Show packages in Arch Linux core and extra that are missing from Arch Hurd."
+    echo "    --hurd          -H: Show packages in Arch Hurd core and extra that are missing from Arch Linux."
+    echo "    --versions      -V: Show package version differences between Arch Hurd and Arch Linux."
+    echo "    --versions-old -Vo: Show package version differences where Arch Hurd has older packages."
+    echo "    --versions-new -Vn: Show package version differences where Arch Hurd has newer packages."
+    echo "    --help          -h: Show this text."
     echo
     echo "Author: Michael Walker (Barrucadu) <mike@barrucadu.co.uk>"
 }
@@ -157,7 +161,11 @@ else
             "--hurd" | "-H")
                 hurd;;
             "--versions" | "-V")
-                versions;;
+                versions d;;
+            "--versions-old" | "-Vo")
+                versions o;;
+            "--versions-new" | "-Vn")
+                versions n;;
             "--help" | "-h")
                 help;;
         esac
