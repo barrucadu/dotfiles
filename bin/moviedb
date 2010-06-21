@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
+export MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
 
 function help ()
 {
@@ -10,6 +10,7 @@ function help ()
     echo
     echo "Commands:"
     echo "    add   : Add a new movie to the database."
+    echo "    fsck  : Check the state of the database and repair errors."
     echo "    lists : Manage and use movie playlists."
     echo "    menu  : Launch the dmenu-based movie menu."
     echo "    misc  : Backup or restore the database."
@@ -23,20 +24,14 @@ function help ()
     echo "Maintainer: Michael Walker"
 }
 
-if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
-    cmd=$1
+cmd=$1
 
-    case $cmd in
-        "add" | "lists" | "menu" | "play" | "query")
-            shift && moviedb-$cmd $*;;
-        "" | "help")
-            help;;
-        *)
-            echo "Unknown command $cmd"
-            return 1;;
-    esac
-else
-    echo "\$MOVIEPATH = $MOVIEPATH"
-    echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
-    return 3
-fi
+case $cmd in
+    "add" | "lists" | "menu" | "play" | "query" | "fsck" | "misc")
+        shift && moviedb-$cmd $*;;
+    "" | "help")
+        help;;
+    *)
+        echo "Unknown command $cmd"
+        return 1;;
+esac

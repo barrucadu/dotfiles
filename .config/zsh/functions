@@ -177,3 +177,14 @@ function extract ()
             echo "don't know how to extract '$1'...";;
     esac
 }
+
+function qemu-real-hdd()
+{
+    sudo chown barrucadu /dev/$1
+    
+    if [[ -e $2 ]]; then
+        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -hdb $2
+    else
+        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1
+    fi
+}

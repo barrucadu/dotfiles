@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
-
 dmenunf="`xrdb -query | grep '*color14:' | sed 's/.*#/#/'`"
 dmenusf="`xrdb -query | grep '*color10:' | sed 's/.*#/#/'`"
 dmenunb="`xrdb -query | grep '*color0:' | sed 's/.*#/#/'`"
@@ -18,15 +16,16 @@ function choice ()
 
 function playfilm ()
 {
-    file=`moviedb file $1`
-    director=`moviedb director $1`
-    genres=`moviedb genre $1`
+    file=`moviedb query file $1`
+    director=`moviedb query director $1`
+    genres=`moviedb query genre $1`
+    year=`moviedb query year $1`
     
-    message="Name:     $1\nFile:     $file\nDirector: $director\nGenre:    $genres\n-\nPress enter to play."
+    message="Name:     $1\nFile:     $file\nDirector: $director\nGenre:    $genres\nYear:     $year\n-\nPress enter to play."
     play=`choice $message true`
     
     if [[ "$play" != "" ]]; then
-	moviedb play $1 &>/dev/null &
+	moviedb query play $1 &>/dev/null &
     fi
 }
 
@@ -38,7 +37,7 @@ function choosefilm ()
 	if [[ "$2" == "p" ]]; then
 	    movies=`echo "-Random-\n-Play All-\n " && moviedb-lists list "$1"`
 	else
-	    movies=`echo "-Random-\n-Play All-\n " && moviedb list "$1"`
+	    movies=`echo "-Random-\n-Play All-\n " && moviedb query list "$1"`
 	fi
 
 	film=`choice $movies true`
@@ -56,7 +55,7 @@ function choosefilm ()
 		else
 		    if [[ "$film" == "-Play All-" ]]; then
 			m3u="/tmp/`date +%s`.m3u"
-			moviedb files $1 > $m3u
+			moviedb query files $1 > $m3u
 			(vlc $m3u && rm $m3u) &>/dev/null &
 		    elif [[ "$film" == "-Random-" ]]; then
 			playfilm "`moviedb random $1`"
@@ -72,10 +71,10 @@ function choosecategory ()
     choice "`ls $MOVIEPATH/by-$1`"
 }
 
-option=`choice "Director\nGenre\nPlaylist\nRandom\nPlay All" false`
+option=`choice "Director\nGenre\nYear\nPlaylist\nRandom\nPlay All" false`
 
 case $option in
-    "Director" | "Genre")
+    "Director" | "Genre" | "Year")
 	category=`choosecategory $option:l`
 	choosefilm $category
 	;;

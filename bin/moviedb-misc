@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
-
 function exportdb()
 {
     # Note: This is very slow; look at speeding up moviedb-query at some point
@@ -10,9 +8,10 @@ function exportdb()
     while read movie; do
 	file=`moviedb-query file "$movie" | sed 's:.*/::'`
 	director=`moviedb-query file "$movie" | sed 's:.*/\(.*\)/.*:\1:'`
+        year=`moviedb-query year "$movie"`
 	genres=`moviedb-query genre "$movie" | sed 's:, :\::g'`
 
-	echo "$file:$director:$genres"
+	echo "$file:$director:$year:$genres"
     done
 
     return 0
@@ -36,15 +35,19 @@ function importfile()
 {
     file=$1
     director=$2
-    genres=$3
+    year=$3
+    genres=$4
     
     makedir $MOVIEPATH/by-director/$director
     mv $file $MOVIEPATH/by-director/$director
 
+    makedir $MOVIEPATH/by-year/$year
+    ln -s "../../by-director/$director/$file" "$MOVIEPATH/by-year/$year/$file"
+
     echo $genres | tr ':' "\n" | \
     while read genre; do
 	makedir $MOVIEPATH/by-genre/$genre
-	ln -s $MOVIEPATH/by-director/$director/$file $MOVIEPATH/by-genre/$genre/$file
+	ln -s "../../by-director/$director/$file" "$MOVIEPATH/by-genre/$genre/$file"
     done
 }
 
@@ -59,9 +62,10 @@ function importdb()
 		if grep -q "^$file:" $backup; then
 		    retcode=0
 		    director=`grep "^$file:" $backup | cut -d':' -f2`
-		    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:::'`
+		    year=`grep "^$file:" $backup | cut -d':' -f3`
+		    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:[^:]*\:::'`
 		    
-		    importfile "$file" "$director" "$genres"
+		    importfile "$file" "$director" "$year" "$genres"
 		else
 		    echo "'$file' not found in backup."
 		fi
@@ -87,9 +91,10 @@ function add()
     if [[ -f $file ]] && [[ -f $backup ]]; then
 	if grep -q "^$file:" $backup; then
 	    director=`grep "^$file:" $backup | cut -d':' -f2`
-	    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:::'`
+	    year=`grep "^$file:" $backup | cut -d':' -f3`
+	    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:[^:]*\:::'`
 	    
-	    importfile "$file" "$director" "$genres"
+	    importfile "$file" "$director" "$year" "$genres"
 	else
 	    retcode=4
 	    echo "'$file' not found in backup, back backup?"
@@ -108,7 +113,7 @@ function help ()
     echo "Usage: moviedb-misc <command> <args>"
     echo
     echo "Commands:"
-    echo "    export                : Exports the filename, director, and genres of every movie in the database."
+    echo "    export                : Exports the filename, director, year, and genres of every movie in the database."
     echo "    import <backup>       : Imports all of the files in the current directory into the database, using a backup for metadata."
     echo "    add    <file> <backup>: Imports one file into the database, using a backup for metadata."
     echo
@@ -121,8 +126,13 @@ function help ()
     echo "Maintainer: Michael Walker"
 }
 
+if [[ "$1" == "" ]] || [[ "$1" == "help" ]]; then
+    help
+    return 0
+fi
+
 if [[ -d $MOVIEPATH ]]; then
-    [ "$1" != "" ]  && cmd=$1            && shift
+    [ "$1" != "" ]  && cmd=$1 && shift
 
     case $cmd in
         "export")
@@ -134,14 +144,12 @@ if [[ -d $MOVIEPATH ]]; then
         "add")
             add $1 $2
 	    return $?;;
-        "" | "help")
-            help;;
         *)
             echo "Unknown command $cmd"
             return 1;;
     esac
 else
     echo "\$MOVIEPATH = $MOVIEPATH"
-    echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
+    echo "\$MOVIEPATH/ does not appear to exist."
     return 4
 fi

@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
-
 function play ()
 {
     file="`moviedb-query file $*`"
@@ -26,13 +24,14 @@ function help ()
     echo "Maintainer: Michael Walker"
 }
 
-if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
-    case $1 in
-        "" | "help")
-            help;;
-        *)
-            play $*
-    esac
+if [[ "$1" == "" ]] || [[ "$1" == "help" ]]; then
+    help
+    return 0
+fi
+
+if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]] && [[ -d $MOVIEPATH/by-year ]]; then
+    play $*
+    return $?
 else
     echo "\$MOVIEPATH = $MOVIEPATH"
     echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."

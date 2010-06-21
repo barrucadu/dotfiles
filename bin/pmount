@@ -28,6 +28,9 @@ device="$1"
 arging=true
 deving=true
 
+uid=$EUID
+gid=$EGID
+
 # Parse arguments
 while $arging; do
     case "$1" in
@@ -71,7 +74,7 @@ while $deving; do
 		    exit 2
 		else
 		    sudo mkdir /media/$1
-		    if sudo mount $device /media/$1 -o uid=$EUID,gid=$EGID &>/dev/null; then
+		    if sudo mount $device /media/$1 -o uid=$uid,gid=$gid &>/dev/null; then
 			echo " => Mounted at /media/$1"
 		    else
 			if sudo mount $device /media/$1 &>/dev/null; then
