@@ -47,7 +47,7 @@ mv "$movie" "$MOVIEPATH/by-director/$director"
 
 echo "Adding movie to year $year..."
 chkdir "$MOVIEPATH/by-year/$year"
-ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-genre/$year/$movie"
+ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-year/$year/$movie"
 
 while [[ "$1" != "" ]]; do
     echo "Adding movie to genre $1..."
