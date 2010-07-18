@@ -42,17 +42,11 @@ fi
 export NMPC_DEFCMD="status"
 export NMPC_DEFHELP="all"
 export MPDHOST="eihort"
-    # Proxies
-if [[ -f /tmp/noproxy ]]; then
-    export http_proxy=
-else
-    export http_proxy="eihort:3128"
-fi
     # Misc
 export WEBKIT_IGNORE_SSL_ERRORS=1
 export NETHACKOPTIONS=@/home/barrucadu/.config/nethack/config
 export SCHEME_LIBRARY_PATH=/usr/lib/slib/
-export TODOFILE="$HOME/org/misc.org"
+export TODOFILE="$HOME/docs/org/todo.org"
 export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
     # Prompt
 export PROMPT2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
@@ -114,9 +108,6 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
     amiroot=`[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`
 
     export PROMPT="${lastcmdstatus}${pacupgrades}${prompttime} ${cwdcolour}${cwdname} ${amiroot}${PR_NO_COLOR} "
-
-    # Rehash the command completion lists
-    rehash
 }
 
 # Emacs shell mode

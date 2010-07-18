@@ -2,6 +2,9 @@
 
 # A part of the moviedb set of scripts - for checking and repairing the database
 
+CHEDKDIRS=(by-director by-genre by-year)
+CHECKLINKS=(by-genre by-year)
+
 help()
 {
     echo "moviedb-fsck: A tool to check and repair the filesystem database."
@@ -11,7 +14,6 @@ help()
     echo "Return codes:"
     echo "    1 = All errors found were fixed."
     echo "    2 = Errors found were not fixed."
-    echo "    3 = Missing movie folder(s)."
 }
 
 # Strip the video extension from files
@@ -173,50 +175,26 @@ if [[ "$1" == "help" ]]; then
     return 0
 fi
 
-if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
-    retcode=0
+retcode=0
 
-    # Check by-director hierarchy
-    checkdirs $MOVIEPATH/by-director
-
-    out=$?
-    if [[ $out > $retcode ]]; then
-        retcode=$out
-    fi
-
-    # Check by-genre hierarchy
-    checkdirs $MOVIEPATH/by-genre
+# Check directories
+for dir in $CHECKDIRS; do
+    checkdirs $MOVIEPATH/$dir
 
     out=$?
     if [[ $out > $retcode ]]; then
         retcode=$out
     fi
+done
 
-    checklinks $MOVIEPATH/by-genre
-
-    out=$?
-    if [[ $out > $retcode ]]; then
-        retcode=$out
-    fi
-
-    # Check by-year hierarchy
-    checkdirs $MOVIEPATH/by-year
+# Check links
+for dir in $CHECKDIRS; do
+    checklinks $MOVIEPATH/$dir
 
     out=$?
     if [[ $out > $retcode ]]; then
         retcode=$out
     fi
+done
 
-    checklinks $MOVIEPATH/by-year
-
-    out=$?
-    if [[ $out > $retcode ]]; then
-        retcode=$out
-    fi
-
-    return $retcode
-else
-    echo "\$MOVIEPATH = $MOVIEPATH"
-    echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
-    return 3
-fi
+return $retcode

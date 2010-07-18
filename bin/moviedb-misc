@@ -121,7 +121,6 @@ function help ()
     echo "    1 = Unknown command."
     echo "    2 = Nonexistant file/backup."
     echo "    3 = Bad backup."
-    echo "    4 = Missing movie folder(s)."
     echo
     echo "Maintainer: Michael Walker"
 }
@@ -131,25 +130,19 @@ if [[ "$1" == "" ]] || [[ "$1" == "help" ]]; then
     return 0
 fi
 
-if [[ -d $MOVIEPATH ]]; then
-    [ "$1" != "" ]  && cmd=$1 && shift
+[ "$1" != "" ]  && cmd=$1 && shift
 
-    case $cmd in
-        "export")
-            exportdb
-	    return $?;;
-        "import")
-            importdb $1
-	    return $?;;
-        "add")
-            add $1 $2
-	    return $?;;
-        *)
-            echo "Unknown command $cmd"
-            return 1;;
-    esac
-else
-    echo "\$MOVIEPATH = $MOVIEPATH"
-    echo "\$MOVIEPATH/ does not appear to exist."
-    return 4
-fi
+case $cmd in
+    "export")
+        exportdb
+	return $?;;
+    "import")
+        importdb $1
+	return $?;;
+    "add")
+        add $1 $2
+	return $?;;
+    *)
+        echo "Unknown command $cmd"
+        return 1;;
+esac

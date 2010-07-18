@@ -25,7 +25,6 @@ help()
     echo "Return codes:"
     echo "    1 = Movie file not found."
     echo "    2 = Error using director/genre directories."
-    echo "    3 = Missing movie folder(s)."
 }
 
 if [[ "$1" == "" ]] || [[ "$1" == "--help" ]]; then
@@ -37,36 +36,30 @@ movie="$1"    && shift
 director="$1" && shift
 year="$1"     && shift
 
-if [[ -d $MOVIEPATH/by-director ]] && [[ -d $MOVIEPATH/by-genre ]]; then
-    if [[ ! -e "$movie" ]]; then
-	echo "$movie not found."
-	return 1
-    fi
-
-    echo "Moving $movie to $MOVIEPATH/by-director/$director..."
-    chkdir "$MOVIEPATH/by-director/$director"
-    mv "$movie" "$MOVIEPATH/by-director/$director"
-
-    echo "Adding movie to year $year..."
-    chkdir "$MOVIEPATH/by-year/$year"
-    ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-genre/$year/$movie"
-
-    while [[ "$1" != "" ]]; do
-	echo "Adding movie to genre $1..."
-
-	chkdir "$MOVIEPATH/by-genre/$1"
-        out=$?
-        if [[ $out != 0 ]]; then
-            return $out
-        fi
-
-	ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-genre/$1/$movie"
-	shift
-    done
-
-    echo "Done."
-else
-    echo "\$MOVIEPATH = $MOVIEPATH"
-    echo "\$MOVIEPATH/by-director or \$MOVIEPATH/by-genre does not appear to exist."
-    return 3
+if [[ ! -e "$movie" ]]; then
+    echo "$movie not found."
+    return 1
 fi
+
+echo "Moving $movie to $MOVIEPATH/by-director/$director..."
+chkdir "$MOVIEPATH/by-director/$director"
+mv "$movie" "$MOVIEPATH/by-director/$director"
+
+echo "Adding movie to year $year..."
+chkdir "$MOVIEPATH/by-year/$year"
+ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-genre/$year/$movie"
+
+while [[ "$1" != "" ]]; do
+    echo "Adding movie to genre $1..."
+    
+    chkdir "$MOVIEPATH/by-genre/$1"
+    out=$?
+    if [[ $out != 0 ]]; then
+        return $out
+    fi
+    
+    ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-genre/$1/$movie"
+    shift
+done
+
+echo "Done."

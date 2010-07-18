@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+looping=true
+mplayeropts=(-really-quiet)
+
+xscreensaver-command -exit
+mplayer $mplayeropts $*
+xscreensaver -no-splash &

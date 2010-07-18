@@ -14,14 +14,8 @@ if [[ ! $(tty) == *pts* ]]; then
         done
     fi
 else
-    if [[ $DVTM == "" ]] && [[ $SSH_TTY == "" ]]; then
-	# Not in dvtm or sshing? Madness!
-	dvtm
-	exit
-    else
-        # Welcome message
-	clear
-	ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
-	echo
-    fi
+    # Welcome message
+    clear
+    ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
+    echo
 fi

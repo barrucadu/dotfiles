@@ -86,12 +86,7 @@ function gc()
     fi
 }
 
-# Package Management
-function pkginfo ()
-{
-    pacman -Qi $1 || pacman -Si $1
-}
-
+# Arch Hurd
 function hrepo-add ()
 {
     del=false
@@ -183,8 +178,17 @@ function qemu-real-hdd()
     sudo chown barrucadu /dev/$1
     
     if [[ -e $2 ]]; then
-        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -hdb $2
+        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -hdb $2 -m 1G
     else
-        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1
+        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -m 1G
     fi
+}
+
+function lnmv()
+{
+    from=$1
+    to=$2
+
+    mv $from $to
+    ln -s $to $from
 }

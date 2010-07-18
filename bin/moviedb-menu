@@ -56,7 +56,7 @@ function choosefilm ()
 		    if [[ "$film" == "-Play All-" ]]; then
 			m3u="/tmp/`date +%s`.m3u"
 			moviedb query files $1 > $m3u
-			(vlc $m3u && rm $m3u) &>/dev/null &
+			($MOVIEPLAYER $m3u && rm $m3u) &>/dev/null &
 		    elif [[ "$film" == "-Random-" ]]; then
 			playfilm "`moviedb random $1`"
 		    fi
@@ -91,6 +91,6 @@ case $option in
     "Play All")
 	m3u="/tmp/`date +%s`.m3u"
 	moviedb files > $m3u
-	(vlc $m3u && rm $m3u) &>/dev/null &
+	($MOVIEPLAYER $m3u && rm $m3u) &>/dev/null &
 	;;
 esac

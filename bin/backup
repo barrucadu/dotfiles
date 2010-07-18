@@ -20,7 +20,7 @@
 #  BACKUPDIR:  directory to store the backup in
 #  TYPE:       the type of backup (full, inc)
 COMPUTER=`hostname`
-COMPUTERS=(azathoth)
+COMPUTERS=(azathoth randolph archhurd.org)
 BACKUPDEV=/dev/disk/by-label/BackupHDD
 BACKUPDIR=/media/BackupHDD
 TYPE=$1
@@ -106,6 +106,10 @@ function backuphost()
         args=$INCARGS
     fi
 
+    if [[ ! -d $BACKUPDIR/$host/$DIR/ ]]; then
+        mkdir -p $BACKUPDIR/$host/$DIR/
+    fi
+
     rsync $RSYNCARGS $args $args2 --exclude-from=${EXCLUDE}${host} $source $BACKUPDIR/$host/$DIR/ && \
     sendnotice "$host data backed up"
 }
@@ -116,8 +120,8 @@ if [[ "$TYPE" != "full" ]] && [[ "$TYPE" != "inc" ]]; then
 fi
 
 if [[ -e $BACKUPDEV ]]; then
-    if ! mount -o remount,rw $BACKUPDEV; then
-        if ! mount -o rw $BACKUPDEV; then
+    if ! mount -o remount,rw $BACKUPDEV &>/dev/null; then
+        if ! mount -o rw $BACKUPDEV &>/dev/null; then
             senderr "$BACKUPDEV will not mount."
             return 1
         fi
@@ -128,10 +132,15 @@ else
 fi
 
 sendnotice "Backup started."
-backuphost $COMPUTER false
-for host in $COMPUTERS; do
-    checkhost $host && backuphost $host true
-done
+
+if [[ "$2" != "" ]]; then
+    backuphost $2 $3
+else
+    backuphost $COMPUTER false
+    for host in $COMPUTERS; do
+        checkhost $host && backuphost $host true
+    done
+fi
 sendnotice "Backup ended."
 
 mount -o remount,ro $BACKUPDEV
