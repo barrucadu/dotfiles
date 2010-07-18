@@ -1,0 +1,7 @@
+# Write your default config options here!
+ass=yes
+embeddedfonts=yes
+fontconfig=yes
+aid=1
+sid=1
+
