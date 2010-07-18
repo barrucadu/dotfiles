@@ -6,9 +6,7 @@
 # Unignore some directories
 !bin/
 !code/
-!cron/
-!docs/
-!.config/
+!config/
 !.data/
 
 # GIT stuff

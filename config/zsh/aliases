@@ -102,10 +102,10 @@ else
 fi
 alias mp3ogg='mp32ogg-bash *.mp3 && rm *.mp3'
 alias reload='source ~/.zshrc'
-alias xreload='xrdb -load ~/.config/xorg/Xdefaults'
+alias xreload='xrdb -load ~/config/xorg/Xdefaults'
 alias myman='myman -z big -i'
 alias pydmx='LD_PRELOAD= pydmx'
-alias nicklist='clear;cat ~/.config/irssi/nicklistfifo'
+alias nicklist='clear;cat ~/config/irssi/nicklistfifo'
 alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm'
 alias mklive='mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V "Arch Hurd" -o ahurd.iso ~/hurd/livecd/'
 alias units='units --verbose -1'

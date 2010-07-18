@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-export LD_PRELOAD=libetc.so
-
 # X
 
 # Keyboard
@@ -12,7 +10,7 @@ xmodmap -e "clear Mod4"
 
 # Resources
 xsetroot -cursor_name left_ptr
-xrdb -load ~/.config/xorg/Xdefaults
+xrdb -load ~/config/xorg/Xdefaults
 
 # Screensaver
 xscreensaver -no-splash &
