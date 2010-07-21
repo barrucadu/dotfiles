@@ -18,6 +18,12 @@ function stripext()
             echo $(basename $fname ".ogm");;
         *.mp4)
             echo $(basename $fname ".mp4");;
+        *.srt)
+            echo $(basename $fname ".srt");;
+        *.idx)
+            echo $(basename $fname ".idx");;
+        *.sub)
+            echo $(basename $fname ".sub");;
     esac
 }
 
@@ -77,7 +83,7 @@ function checkdirs()
 
 	    if $deldirs; then
 		echo "$dir/$subdir is empty, deleting."
-		rm "$dir/$subdir"
+		rmdir "$dir/$subdir"
 	    else
 		while [[ "$answer" != "d" ]] && [[ "$answer" != "i" ]]; do
                     echo -n "$dir/$subdir is empty, delete or ignore? [di] "
