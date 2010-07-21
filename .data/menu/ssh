@@ -1,5 +1,0 @@
-Eihort               [urxvtc -e "ssh barrucadu@eihort"]
-Eihort (Remote)      [urxvtc -e "ssh barrucadu@network.barrucadu.co.uk"]
-Nitti                [urxvtc -e "ssh barrucadu@nitti.dreamhost.com"]
-Hoyesserver          [urxvtc -e "ssh barrucadu@hoyesserver"]
-Hoyesserver (Remote) [urxvtc -e "ssh barrucadu@network.barrucadu.co.uk"]
