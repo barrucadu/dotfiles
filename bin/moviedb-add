@@ -2,7 +2,7 @@
 
 # A part of the moviedb set of scripts - for adding new movies to the database.
 
-chkdir()
+function chkdir()
 {
     dir="$1"
 
@@ -16,11 +16,35 @@ chkdir()
     fi
 }
 
-help()
+function mvfiles()
+{
+    destdir=$1 && shift
+
+    chkdir $destdir || return 2
+
+    for file in $*; do
+        echo "Moving $file to $destdir..."
+        mv $file $destdir
+    done
+}
+
+function lnfiles()
+{
+    srcdir=$1 && shift
+    destdir=$1 && shift
+
+    chkdir $destdir || return 2
+
+    for file in $*; do
+        ln -s $srcdir/$file $destdir/$file
+    done
+}
+
+function help()
 {
     echo "moviedb-add: A tool to add a movie to the filesystem database."
     echo
-    echo "Usage: moviedb-add <file> [additional files] <director> <year> <genre1> <genre2> <genre3> ... <genren>"
+    echo "Usage: moviedb-add <file> [additional files] <director> <year> <genre> [additional genres]"
     echo
     echo "Return codes:"
     echo "    1 = Movie file not found."
@@ -32,12 +56,10 @@ if [[ "$1" == "" ]] || [[ "$1" == "--help" ]]; then
     return 0
 fi
 
-movie="$1"    && shift
-files=()
+files=($1)
 
-
-if [[ ! -e "$movie" ]]; then
-    echo "$movie not found."
+if [[ ! -e "$files[1]" ]]; then
+    echo "$files[1] not found."
     return 1
 fi
 
@@ -55,37 +77,14 @@ while [[ "$1" != "" ]]; do
     shift
 done
 
-echo "Moving $movie to $MOVIEPATH/by-director/$director..."
-chkdir "$MOVIEPATH/by-director/$director"
-mv "$movie" "$MOVIEPATH/by-director/$director"
-
-for file in $files; do
-    echo "Moving $file to $MOVIEPATH/by-director/$director..."
-    mv "$file" "$MOVIEPATH/by-director/$director"
-done
+mvfiles $MOVIEPATH/by-director/$director $files || return 2
 
 echo "Adding movie to year $year..."
-chkdir "$MOVIEPATH/by-year/$year"
-ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-year/$year/$movie"
-
-for file in $files; do
-    ln -s "../../by-director/$director/$file" "$MOVIEPATH/by-year/$year/$file"
-done
+lnfiles "../../by-director/$director/" "$MOVIEPATH/by-year/$year/" $files || return 2
 
 for genre in $genres; do
     echo "Adding movie to genre $genre..."
-    
-    chkdir "$MOVIEPATH/by-genre/$genre"
-    out=$?
-    if [[ $out != 0 ]]; then
-        return $out
-    fi
-    
-    ln -s "../../by-director/$director/$movie" "$MOVIEPATH/by-genre/$genre/$movie"
-
-    for file in $files; do
-        ln -s "../../by-director/$director/$file" "$MOVIEPATH/by-genre/$genre/$file"
-    done
+    lnfiles "../../by-director/$director/" "$MOVIEPATH/by-genre/$genre/" $files || return 2
 done
 
 echo "Done."
