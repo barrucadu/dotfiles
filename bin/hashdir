@@ -1,0 +1,164 @@
+#!/bin/zsh
+
+# hashdir - recursively generate hashes for files in a directory structure.
+
+HASHTYPE="sha1"
+HASHFILE="files.$HASHTYPE"
+
+function gethash()
+{
+    file=$1
+    hashfunc="${HASHTYPE}sum"
+
+    $hashfunc $file | sed 's: .*::'
+}
+
+function gettype()
+{
+    file=$1
+
+    if file $file | grep -q "symbolic link"; then
+        if [[ -f $file ]]; then
+            return 0
+        else
+            return 1
+        fi
+    else
+        if [[ -f $file ]]; then
+            return 2
+        else
+            return 3
+        fi
+    fi
+}
+
+function hashdir()
+{
+    dir=$1
+    recursive=$2
+    create=$3
+    update=$4
+    fastupdate=$5
+    dirlink=$6
+    filelink=$7
+    verbose=$8
+
+    ret=0
+    type=0
+
+    if $verbose; then
+        echo "Descending into $dir"
+    fi
+
+    pushd $dir
+    if $create && [[ -e $HASHFILE ]]; then
+        rm $HASHFILE
+    fi
+
+    for file in *; do
+        gettype $file
+        type=$?
+
+        if [[ "$file" != "$HASHFILE" ]]; then
+            if $filelink && [[ "$type" == "0" ]] || [[ "$type" == "2" ]]; then
+                if $fastupdate; then
+                    if [[ ! -e $HASHFILE ]] || ! grep -q " $file" $HASHFILE; then
+                        echo "=> Hash for $file not found, adding..."
+                        hash=`gethash $file`
+                        echo "$hash $file" >> $HASHFILE
+                    fi
+                else
+                    if $verbose; then
+                        echo "Hashchecking $file"
+                    fi
+                    hash=`gethash $file`
+                    if $create; then
+                        echo "$hash $file" >> $HASHFILE
+                    else
+                        if [[ ! -e $HASHFILE ]] || ! grep -q " $file" $HASHFILE; then
+                            if $update; then
+                                echo "=> Hash for $file not found, adding..."
+                                echo "$hash $file" >> $HASHFILE
+                            else
+                                echo "=> Hash for $file not found."
+                                ret=1
+                            fi
+                        elif ! grep -q "$hash $file" $HASHFILE; then
+                            echo "=> Hash for $file does not match."
+                            ret=1
+                        fi
+                    fi
+                fi
+            elif $recursive && $dirlink && [[ "$type" == "1" ]] || $recursive && [[ "$type" == "3" ]]; then
+                newdir=$file
+                hashdir $newdir $recursive $create $update $fastupdate $dirlink $filelink $verbose
+                ret2=$?
+                if [[ $ret2 > $ret ]]; then
+                    ret=$ret2
+                fi
+            else
+                if $verbose; then
+                    echo "Ignoring $file"
+                fi
+            fi
+        fi
+    done
+    popd
+
+    if $verbose; then
+        echo "Emerging from $dir"
+    fi
+
+    return $ret
+}
+
+function help()
+{
+    echo "hashdir [-r] [-c] [-u] [-U] [-l] [-L] [-v] <directory>"
+    echo
+    echo "Parameters:"
+    echo "    -r: Recursively descend into subdirectories."
+    echo "    -c: Create the hashes (default to check them)."
+    echo "    -u: Update the hash list by adding hashes for new files."
+    echo "    -U: Fast update, skip integrity checking and just add new files."
+    echo "    -l: Follow directory symlinks."
+    echo "    -L: Follow file symlinks."
+    echo "    -v: Be verbose."
+}
+
+recursive=false
+create=false
+update=false
+fastupdate=false
+dirlink=false
+filelink=false
+verbose=false
+dirs=()
+
+for arg in $*; do
+    case $arg in
+        "--help") help && return 0;;
+
+        "-r") recursive=true;;
+        "-c") create=true;;
+        "-u") update=true;;
+        "-U") update=true;
+              fastupdate=true;;
+        "-l") dirlinke=true;;
+        "-L") filelink=true;;
+        "-v") verbose=true;;
+
+        *)    dirs+=$arg;;
+    esac
+done
+
+if [[ ! -d "$dirs[1]" ]]; then
+    help
+    return 0
+fi
+
+for dir in $dirs; do
+    if [[ -d "$dir" ]]; then
+        hashdir $dir $recursive $create $update $fastupdate $dirlink $filelink $verbose
+    fi
+done
