@@ -68,9 +68,9 @@
 (define-key *top-map*  (kbd "M-space")   "exec emelfm2")
 (define-key *root-map* (kbd "x")         "exec xscreensaver -no-splash")
 (define-key *root-map* (kbd "X")         "exec xscreensaver-command -exit")
+(define-key *root-map* (kbd "c")         "exec xclip -selection clipboard -o | xclip")
 
 ; Rebind some default bindings
-(define-key *root-map* (kbd "c")     "exec urxvt")
 (define-key *root-map* (kbd "C-c")   "exec urxvt")
 (define-key *root-map* (kbd "e")     "exec urxvt -e emacs")
 (define-key *root-map* (kbd "C-e")   "exec urxvt -e emacs")
