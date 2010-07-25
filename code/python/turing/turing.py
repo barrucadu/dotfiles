@@ -17,7 +17,7 @@ class Turing:
     tapeblank   = "" # The symbol used to fill in the gap when extending the tape
     symbols     = 0  # Number of symbols read since starting the last tape
 
-    def __init__(self, tape="", states=[], haltstates=["halt"], initialstate="", transitions=[], alphabet=[], tapepos=0, blanksymbol=" "):
+    def __init__(self, tape="", states=[], haltstates=["halt"], initialstate="", transitions={}, alphabet=[], tapepos=0, blanksymbol=" "):
         self.tape        = tape
         self.states      = states
         self.haltstates  = haltstates

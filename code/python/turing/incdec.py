@@ -7,50 +7,45 @@ from turing import *
 # Alphabet:
 #    0 = binary zero
 #    1 = binary one
-#    > = lower end of number
-#    < = upper end of number
 #    + = increment number
 #    - = decrement number
 #    / = no operation
-#    # = halt
 
-# It is assumed that the starting tape position is the index of the '>'
+# It is assumed that the starting tape position is the right end of the number
 
 # Example:
-#  '<10>+++-#' = 2 + 3 - 1 = 4 (= '<100>////#')
+#  '10+++-' = 2 + 3 - 1 = 4 (= '100////')
 
 #### Begin machine definition ####
-states      = ["ready", "inc", "dec", "grow", "reset", "halt"]
-haltstates  = ["halt"]
-alphabet    = ["0", "1", "<", ">", "+", "-", "/", "#"]
-transitions = {"ready->" : [">", "ready", "R"],
-               "ready-/" : ["/", "ready", "R"],
-               "ready-#" : ["#", "halt",  "L"],
-               "ready-+" : ["/", "inc",   "L"],
-               "ready--" : ["/", "dec",   "L"],
+states      = ["ready", "inc", "dec", "grow", "reset", "done", "ovrflw"]
+haltstates  = ["done", "ovrflw"]
+alphabet    = ["0", "1", "+", "-", "/"]
+transitions = {"ready-1" : ["1", "ready",  "R"],
+               "ready-0" : ["0", "ready",  "R"],
+               "ready-/" : ["/", "ready",  "R"],
+               "ready-+" : ["/", "inc",    "L"],
+               "ready--" : ["/", "dec",    "L"],
+               "ready-"  : ["/", "done",   "L"],
 
-               "inc->"   : [">", "inc",   "L"],
-               "inc-<"   : ["1", "grow",  "L"],
-               "inc-/"   : ["/", "inc",   "L"],
-               "inc-0"   : ["1", "reset", "R"],
-               "inc-1"   : ["0", "inc",   "L"],
+               "inc-/"   : ["/", "inc",    "L"],
+               "inc-0"   : ["1", "reset",  "R"],
+               "inc-1"   : ["0", "inc",    "L"],
+               "inc-"    : ["1", "reset",  "R"],
 
-               "dec->"   : [">", "dec",   "L"],
-               "dec-<"   : ["<", "halt",  "R"],
-               "dec-/"   : ["/", "dec",   "L"],
-               "dec-0"   : ["1", "dec",   "L"],
-               "dec-1"   : ["0", "reset", "R"],
+               "dec-/"   : ["/", "dec",    "L"],
+               "dec-0"   : ["1", "dec",    "L"],
+               "dec-1"   : ["0", "reset",  "R"],
+               "dec-"    : ["1", "ovrflw", "R"],
 
-               "grow-"   : ["<", "reset", "R"],
-
-               "reset-0" : ["0", "reset", "R"],
-               "reset-1" : ["1", "reset", "R"],
-               "reset->" : [">", "ready", "R"]}
+               "reset-0" : ["0", "reset",  "R"],
+               "reset-1" : ["1", "reset",  "R"],
+               "reset-/" : ["/", "ready",  "R"],
+               "reset-"  : ["/", "done",   "L"]}
 #### End machine definition ####
 
-tape = "<10>+++-#"
+tape = input("")
 
-incdec = Turing(tape, states, haltstates, "ready", transitions, alphabet, tape.index(">"))
+incdec = Turing(tape, states, haltstates, "ready", transitions, alphabet, 0)
 incdec.run()
 
 print("Input tape:   " + tape)
