@@ -81,7 +81,7 @@ fi
 if [ -n "$CONSOLEKBD" ]; then	
 	CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLEKBD --repeat=kbd"
 fi
-if [ -n $CONSOLESPEAKER]; then
+if [ -n "$CONSOLESPEAKER" ]; then
  CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLESPEAKER"
 fi
 
