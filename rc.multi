@@ -48,6 +48,24 @@ done
 /libexec/runttys &
 runttys_pid=$!
 
+# Start daemons.
+for daemon in "${DAEMONS[@]}"; do
+	if [ "$daemon" = "${daemon#!}" ]; then
+		if [ "$daemon" = "${daemon#@}" ]; then
+			start_daemon $daemon
+		else
+			start_daemon_bkgd ${daemon:1}
+		fi
+	fi
+done
+
+
+if [ -x /etc/rc.local ]; then
+	/etc/rc.local
+fi
+
+run_hook multi_end
+
 #Start up console with variables from rc.conf
 if [ -n "$CONSOLEDISPLAY" ]; then
 	CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLEDISPLAY"
@@ -67,24 +85,6 @@ fi
 
 console $CONSOLEOPTS /dev/vcs
 
-
-# Start daemons.
-for daemon in "${DAEMONS[@]}"; do
-	if [ "$daemon" = "${daemon#!}" ]; then
-		if [ "$daemon" = "${daemon#@}" ]; then
-			start_daemon $daemon
-		else
-			start_daemon_bkgd ${daemon:1}
-		fi
-	fi
-done
-
-
-if [ -x /etc/rc.local ]; then
-	/etc/rc.local
-fi
-
-run_hook multi_end
 
 wait
 
