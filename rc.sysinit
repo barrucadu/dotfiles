@@ -25,7 +25,7 @@ status "Activating Swap" swapon -a
 
 
 stat_busy "Check filesystems"
-if [ -r /fastboot ]
+if [ $1x = fastbootx || -r /fastboot ]
 then
 	# ... or don't.
 	rm -f /fastboot
