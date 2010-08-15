@@ -14,6 +14,8 @@ for i in rc.multi rc.shutdown rc.sysinit runsystem; do
   install -D -m755 $i ${DESTDIR}/libexec/$i || exit 1
 done
 
+install -D -m644 dirs ${DESTDIR}/libexec/dirs || exit 1
+
 install -D -m644 functions ${DESTDIR}/etc/rc.d/functions || exit 1
 
 gcc $CFLAGS -o minilogd minilogd.c || exit 1
