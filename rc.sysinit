@@ -13,11 +13,13 @@ printhl "Arch Hurd\n"
 printhl "${C_H2}http://www.archhurd.org"
 printhl "Distributed under the GNU General Public License (GPL)"
 printsep
+
 run_hook sysinit_start
 
 
 # Start the default pager.  It will bail if there is already one running.
 status "Starting the default pager" /hurd/mach-defpager
+
 stat_busy "Starting basic translators"
 
 # seriously important
@@ -25,6 +27,7 @@ st /servers/password root 666 /hurd/password
 st /dev/null root 666 /hurd/null
 st /dev/full root 666 /hurd/null --full
 st /dev/zero root 666 /hurd/storeio -Tzero
+st /dev/time root 644 /hurd/storeio --no-cache time
 st /dev/mem  root 660 /hurd/storeio --no-cache mem
 st /dev/klog root 660 /hurd/streamio kmsg
 st /dev/shm  root 644 /hurd/tmpfs --mode=1777 50%
@@ -34,11 +37,11 @@ st /dev/fd   root 666 /hurd/magic --directory fd
 st /dev/random  root 644 /hurd/random --seed-file /var/run/random-seed --secure
 st /dev/urandom root 644 /hurd/random --seed-file /var/run/random-seed --fast
 
-ln -f -s /dev/fd/0 /dev/stdin
-ln -f -s /dev/fd/1 /dev/stdout
-ln -f -s /dev/fd/2 /dev/stderr
+ln -f -s fd/0 /dev/stdin
+ln -f -s fd/1 /dev/stdout
+ln -f -s fd/2 /dev/stderr
 stat_done
-read
+
 stat_busy "cleaning up left over files..."
 rm -f /etc/nologin
 rm -f /var/lock/LCK.*
