@@ -147,7 +147,7 @@ case "$flags" in
   rc=false			# force single-user
   ;;
 *f*)
-  rc="${RUNSYSINIT}"		# fastboot
+  rc="${RUNSYSINIT} fastboot"		# fastboot
   ;;
 *)
   rc="${RUNSYSINIT} autoboot"	# multi-user default

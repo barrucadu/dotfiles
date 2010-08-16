@@ -37,6 +37,26 @@ st /dev/tty6 root 666 /hurd/term /dev/tty6 hurdio /dev/vcs/6/console
 
 settrans -kc /dev/tty /hurd/magic tty
 
+# Start daemons.
+for daemon in "${DAEMONS[@]}"; do
+	if [ "$daemon" = "${daemon#!}" ]; then
+		if [ "$daemon" = "${daemon#@}" ]; then
+			start_daemon $daemon
+		else
+			start_daemon_bkgd ${daemon:1}
+		fi
+	fi
+done
+
+
+if [ -x /etc/rc.local ]; then
+	/etc/rc.local
+fi
+
+run_hook multi_end
+
+
+
 # Trap certain signals and send them on to runttys.  For this to work, we
 # must run it asynchronously and wait for it with the `wait' built-in.
 runttys_pid=0
@@ -61,7 +81,9 @@ fi
 if [ -n "$CONSOLEKBD" ]; then	
 	CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLEKBD --repeat=kbd"
 fi
-CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLESPEAKER"
+if [ -n "$CONSOLESPEAKER" ]; then
+ CONSOLEOPTS="$CONSOLEOPTS -d $CONSOLESPEAKER"
+fi
 
 console $CONSOLEOPTS /dev/vcs
 
@@ -78,7 +100,6 @@ for daemon in "${DAEMONS[@]}"; do
 done
 
 run_hook multi_end
-
 wait
 
 # vim: set ts=2 noet:
