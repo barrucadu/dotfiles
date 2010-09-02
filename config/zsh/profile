@@ -41,6 +41,7 @@ export NETHACKOPTIONS=@/home/barrucadu/config/nethack/config
 export SCHEME_LIBRARY_PATH=/usr/lib/slib/
 export TODOFILE="$HOME/docs/org/todo.org"
 export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
+export CVS_RSH=ssh
     # Prompt
 export PROMPT2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
 export PROMPT3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "

@@ -3,7 +3,7 @@
 function play ()
 {
     file="`moviedb-query file $*`"
-
+    
     if [[ -e $file ]]; then
 	$MOVIEPLAYER $file &>/dev/null &
     else

@@ -86,20 +86,20 @@ function list ()
 
 	if [[ "$2" != "f" ]]; then
             ls $MOVIEPATH/$folder/* | \
-		sed "/^.*\.\(srt\|idx\|sub\)$/d" | \
+		sed "/^.*\.\(srt\|idx\|sub\|sha1\|md5\)$/d" | \
 		sed "s/^.*\/\(.*\)\..*$/\\1/"
 	else
 	    ls $MOVIEPATH/$folder/* | \
-		sed "/^.*\.\(srt\|idx\|sub\)$/d"
+		sed "/^.*\.\(srt\|idx\|sub\|sha1\|md5\)$/d"
 	fi
     else
 	if [[ "$2" != "f" ]]; then
             ls $MOVIEPATH/by-director/*/* | \
-		sed "/^.*\.\(srt\|idx\|sub\)$/d" | \
+		sed "/^.*\.\(srt\|idx\|sub\|sha1\|md5\)$/d" | \
 		sed "s/^.*\/\(.*\)\..*$/\\1/"
 	else
 	    ls $MOVIEPATH/by-director/*/* | \
-		sed "/^.*\.\(srt\|idx\|sub\)$/d"
+		sed "/^.*\.\(srt\|idx\|sub\|sha1\|md5\)$/d"
 	fi
     fi | sort
 }

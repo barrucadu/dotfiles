@@ -47,16 +47,13 @@ function re()
 # Git
 function gc()
 {
-    REPOS=(  home   uzbl                bar                            devsite            initscripts            packages            setup            website)
-    DIRS=(   ~      ~/websites/uzbl.org ~/websites/barrucadu.co.uk/www ~/hurd/git/devsite ~/hurd/git/initscripts ~/hurd/git/packages ~/hurd/git/setup ~/hurd/git/website)
-    REMOTES=(origin uzbl-website        github                         devsite            initscripts            packages            setup            website)
-
     repo=$1
     branch=$2
     msg=$3
 
     if [[ "$repo" == "" ]]; then
         echo "Usage: gc repo [branch] [message]"
+        echo "gc adds, commits, and pushes, the various Arch Hurd repos"
     fi
 
     if [[ "$branch" == "" ]]; then
@@ -64,8 +61,8 @@ function gc()
         branch=master
     fi
 
-    dir=$DIRS[${REPOS[(I)$repo]}]
-    remote=$REMOTES[${REPOS[(I)$repo]}]
+    dir=~/hurd/git/$repo
+    remote=$repo
     
     if [[ -d $dir ]]; then
         pushd $dir

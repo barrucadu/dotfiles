@@ -15,11 +15,11 @@ really-quiet=1
 stop-xscreensaver=1
 
 [anime]
-# Most anime uses the second audio and subtitle tracks (first subtitle track usually just being music lyrics)
+# Most anime uses the second audio (for Japanese) and first subtitle tracks (though many use the first subtitle track for audio lyrics, and the second for everything)
 aid=1
-sid=1
+sid=0
 
 [dvd]
 # Basic DVD settings
 dvd-device=/dev/hda
-nocahe=1
+nocache=1

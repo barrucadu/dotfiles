@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 export MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
-export MOVIEPLAYER=`[ "$MOVIEPLAYER" = "" ] && echo "/home/barrucadu/bin/mplay" || echo $MOVIEPLAYER`
+export MOVIEPLAYER=`[ "$MOVIEPLAYER" = "" ] && echo "mplayer" || echo $MOVIEPLAYER`
 
 function help ()
 {
@@ -28,11 +28,6 @@ function help ()
 }
 
 cmd=$1
-
-if [[ ! -e $MOVIEPLAYER ]] || [[ ! -x $MOVIEPLAYER ]]; then
-    echo "Missing movie player."
-    return 8
-fi
 
 if [[ ! -d $MOVIEPATH/ ]] || [[ ! -d $MOVIEPATH/by-director ]] || [[ ! -d $MOVIEPATH/by-genre ]] || [[ ! -d $MOVIEPATH/by-year ]]; then
     echo "Missing movie directories."
