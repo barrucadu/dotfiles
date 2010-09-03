@@ -43,9 +43,9 @@ case "$WM" in
 esac
 
 niceOS="Arch Linux `uname -m`"
-niceGTKFont=`grep "gtk-font-name" ~/.config/gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
-niceXFont=`grep FONT .config/xorg/Xdefaults | head -n1 | sed 's/.*xft:\(.*\):pixelsize.*/\1/'`
-niceIcons=`grep icon-theme-name ~/.config/gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
+niceGTKFont=`grep "gtk-font-name" ~/.gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
+niceXFont=`grep FONT ~/config/xorg/Xdefaults | head -n1 | sed 's/.*xft:\(.*\):pixelsize.*/\1/'`
+niceIcons=`grep icon-theme-name ~/.gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
 niceGtk="Shiki Noble" # Yes, I do change my GTK theme so little I decided it'd be easier to just hardcode it…
 
 echo "<li><strong>OS:</strong> $niceOS</li>"                   > $shot.txt
@@ -58,9 +58,9 @@ echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> $shot.txt
 echo "<li><strong>Other:</strong> </li>"                      >> $shot.txt
 emacs -nw $shot.txt
 
-scp $websitepath/$shot.png           barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/
-scp $websitepath/thumb/$shot.png     barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/thumb/
-scp $websitepath/thumb-big/$shot.png barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/thumb-big/
-scp $websitepath/info/$shot.txt      barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/screenshots/Azathoth/info/
+scp $websitepath/$shot.png           barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/
+scp $websitepath/thumb/$shot.png     barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/thumb/
+scp $websitepath/thumb-big/$shot.png barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/thumb-big/
+scp $websitepath/info/$shot.txt      barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www.screenshots/Azathoth/info/
 
 echo "[url=\"http://www.barrucadu.co.uk/gallery/Azathoth/$shot/\"][img]http://www.barrucadu.co.uk/screenshots/Azathoth/thumb-big/$shot.png[/img][/url]" | xclip
