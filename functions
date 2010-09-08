@@ -224,7 +224,7 @@ st() {
   local OWNER="$2"
   local PERM="$3"
   shift 3
-  if settrans -ck "$NODE" "$@"; then
+  if (!(showtrans -s "$NODE") && (settrans -ck "$NODE" "$@")); then
     chown "$OWNER" "$NODE"
     chmod "$PERM" "$NODE"
   fi
