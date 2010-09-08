@@ -35,9 +35,11 @@ function dodir()
 /bin/settrans -a /dev/time /hurd/storeio --no-cache time
 /bin/settrans -a /servers/socket/1 /hurd/pflocal
 
-echo -n "Making filesystem segments writable... "
-/bin/settrans -a /dev/ramdisk /hurd/storeio -Tcopy /boot/ramdisk.ext2fs
+/bin/settrans -a /dev/ramdisk /hurd/storeio -Tcopy zero:64M
+/sbin/mkfs.ext2 -F -b 4096 /dev/ramdisk
 /bin/settrans -a /boot/tmpfs /hurd/ext2fs.static /dev/ramdisk
+
+echo -n "Making filesystem segments writable... "
 
 dirscp=(var etc servers)
 dirsln=(dev tmp root)
