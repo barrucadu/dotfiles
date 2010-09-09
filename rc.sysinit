@@ -42,7 +42,7 @@ ln -f -s fd/1 /dev/stdout
 ln -f -s fd/2 /dev/stderr
 
 #luxury follows
-st /procfs  root 644 /hurd/procfs -c
+settrans -a /proc /hurd/procfs -c
 stat_done
 
 stat_busy "cleaning up left over files..."

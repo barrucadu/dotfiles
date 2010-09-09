@@ -38,3 +38,4 @@ touch ${DESTDIR}/dev/ramdisk
 touch ${DESTDIR}/servers/socket/1
 touch ${DESTDIR}/boot/tmpfs
 touch ${DESTDIR}/mnt
+touch ${DESTDIR}/proc

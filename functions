@@ -224,6 +224,7 @@ st() {
   local OWNER="$2"
   local PERM="$3"
   shift 3
+  [[ ! -e "$NODE" ]] && touch "$NODE"
   if (!(showtrans -s "$NODE") && (settrans -ck "$NODE" "$@")); then
     chown "$OWNER" "$NODE"
     chmod "$PERM" "$NODE"
