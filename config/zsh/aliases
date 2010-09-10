@@ -1,0 +1,112 @@
+## -*- shell-script -*-
+
+# Global aliases
+alias -g G='| grep'
+alias -g M='| most'
+alias -g X='| xargs'
+alias -g H='| head'
+alias -g T='| tail'
+alias -g S='| sed'
+alias -g W='| wc -l'
+
+# Suffix aliases
+alias -s conf='editor'
+alias -s pdf='epdfview'
+alias -s doc='soffice'
+    # Images
+alias -s gif='mirage'
+alias -s png='mirage'
+alias -s jpg='mirage'
+alias -s jpeg='mirage'
+alias -s svg='mirage'
+alias -s xcf='gimp'
+alias -s dia='dia'
+    # Media
+alias -s ogg='mplayer'
+alias -s mp3='mplayer'
+alias -s mp4='mplayer'
+alias -s avi='mplayer'
+alias -s mkv='mplayer'
+alias -s ogm='mplayer'
+    # Web
+alias -s com='opera'
+alias -s net='opera'
+alias -s org='opera'
+alias -s uk='opera'
+
+# Short aliases
+alias !='sudo'
+alias @='opera'
+alias c='clear'
+alias e='exit'
+alias o='editor'
+alias O='sudoedit'
+alias t='todo'
+
+# Basic commands
+alias su='su - '
+alias free='free -mt'
+alias grep='grep --color=tty -d skip'
+alias top='htop'
+      # File management
+alias ls='ls --color=auto'
+alias lls='/bin/ls'
+alias la='ls --color=auto -lA'
+alias laa='ls --color=auto -la'
+alias ll='ls --color=auto -l'
+alias cp='cp -rpv'
+alias mv='mv -v'
+alias locate='locate -e -L'
+alias mkdir='mkdir -p'
+alias tree='tree -L 2 -d -l'
+
+# Package management
+alias fullupgrade='sudo abs && LD_PRELOAD= sudo clyde -Syua'
+alias upgrade='LD_PRELOAD= sudo clyde -Syua'
+alias orphans='clyde -Qtdq'
+alias paclist='clyde -Ql'
+alias pacfile='clyde -Qo'
+alias install='sudo clyde -S --needed'
+alias remove='sudo clyde -Rsc'
+alias synchronise='sudo clyde -Syyuw && sudo abs'
+alias upgrades='clyde -Qu'
+alias deorphan='sudo clyde -Rsc $(clyde -Qtdq)'
+alias pacgraph='pacgraph -b \#111111 -l \#ffffff -t \#eeeeee -d \#aaaaaa'
+alias pacgroup='clyde -Qg'
+alias pacgroups='clyde -Qg | sed "s/ .*//" | sort | uniq'
+
+# Security
+alias gpgasc='gpg -a --detach-sign'
+alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
+
+# Servers
+alias sql='mysql -p -u root'
+alias rtorrent='ssh -t rtorrent@eihort "screen -r rtorrent"'
+alias fttps='ssh -t rtorrent@eihort "screen -r fttps"'
+
+# Coding
+alias gcc='gcc -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -pedantic'
+alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
+alias gdb='gdb -ex run -ex backtrace --args'
+
+# Miscellanious
+if [[ $UID != 0 ]]; then
+    alias aliases='cat ~/config/zsh/aliases'
+    alias functions='cat ~/config/zsh/functions'
+    alias shutdown='sudo shutdown -hP now'
+    alias reboot='sudo reboot'
+else
+    alias aliases='cat /home/barrucadu/config/zsh/aliases'
+    alias functions='cat /home/barrucadu/config/zsh/functions'
+fi
+alias mp3ogg='mp32ogg-bash *.mp3 && rm *.mp3'
+alias reload='source ~/.zshrc'
+alias xreload='xrdb -load ~/config/xorg/Xdefaults'
+alias myman='myman -z big -i'
+alias nicklist='clear;cat ~/config/irssi/nicklistfifo'
+alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
+alias mklive='mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V "Arch Hurd" -o ahurd.iso ~/hurd/livecd/'
+alias units='units --verbose -1'
+alias dvdplayer="mplayer -profile dvd dvdnav://"
+alias burniso="wodim -v dev=/dev/cdrom speed=4"
+alias pumount='pmount -u'

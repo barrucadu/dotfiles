@@ -1,0 +1,174 @@
+#!/bin/bash
+
+ARCHCOMPAREDIR=/var/lib/archcompare
+EXCLUDESFILE=/etc/archcompare.exclude
+
+function getpaccfg()
+{
+    if [[ "$1" == "linux" ]]; then
+        core="ftp://ftp.archlinux.org/core/os/i686"
+        extra="ftp://ftp.archlinux.org/extra/os/i686"
+    else
+        core="http://files.archhurd.org/repo/core"
+        extra="http://files.archhurd.org/repo/extra"
+    fi
+
+    echo "[options]"                               >  $ARCHCOMPAREDIR/$1/pacman.conf
+    echo "DBPath  = $ARCHCOMPAREDIR/$1/"           >> $ARCHCOMPAREDIR/$1/pacman.conf
+    echo "LogFile = $ARCHCOMPAREDIR/$1/pacman.log" >> $ARCHCOMPAREDIR/$1/pacman.conf
+
+    echo "[core]"                                  >> $ARCHCOMPAREDIR/$1/pacman.conf
+    echo "Server = $core"                          >> $ARCHCOMPAREDIR/$1/pacman.conf
+
+    echo "[extra]"                                 >> $ARCHCOMPAREDIR/$1/pacman.conf
+    echo "Server = $extra"                         >> $ARCHCOMPAREDIR/$1/pacman.conf
+}
+
+function syncrepos()
+{
+    if [[ "$UID" != "0" ]]; then
+        echo "ERROR: This script must be run as root when synchronising packages."
+        exit 1
+    fi
+
+    if [[ ! -e $ARCHCOMPAREDIR/linux/pacman.conf ]] || [[ ! -e $ARCHCOMPAREDIR/hurd/pacman.conf ]]; then
+        # Make sure we have nothing weird lying around
+        rm -r $ARCHCOMPAREDIR/
+        mkdir -p $ARCHCOMPAREDIR/{linux,hurd}/
+
+        chmod 777 $ARCHCOMPAREDIR/ $ARCHCOMPAREDIR/linux $ARCHCOMPAREDIR/hurd
+	
+        # Make pacman configs
+        getpaccfg linux
+        getpaccfg hurd
+    fi
+
+    # Synchronise and get package lists
+    pacman -Sy --config $ARCHCOMPAREDIR/linux/pacman.conf
+    pacman -Sy --config $ARCHCOMPAREDIR/hurd/pacman.conf
+}
+
+function genpkglist()
+{
+    pacman -Sl $1 --config $ARCHCOMPAREDIR/linux/pacman.conf | sort | sed 's/-[0-9]*$//' >> $ARCHCOMPAREDIR/linux/packages.list
+    pacman -Sl $1 --config $ARCHCOMPAREDIR/hurd/pacman.conf  | sort | sed 's/-[0-9]*$//' >> $ARCHCOMPAREDIR/hurd/packages.list
+
+    if [[ -f $EXCLUDESFILE ]]; then
+        while read exclude; do
+            sed -i "/^\(core\|extra\) $exclude .*$/d" $ARCHCOMPAREDIR/linux/packages.list
+            sed -i "/^\(core\|extra\) $exclude .*$/d" $ARCHCOMPAREDIR/hurd/packages.list
+        done < $EXCLUDESFILE
+    fi
+}
+
+function prepinfo()
+{
+    if [[ -e $ARCHCOMPAREDIR/linux/packages.list ]]; then
+        < $ARCHCOMPAREDIR/linux/packages.list cut -d' ' -f2 | sort > $ARCHCOMPAREDIR/linux/names.list
+        < $ARCHCOMPAREDIR/linux/packages.list cut -d' ' -f3 | sort > $ARCHCOMPAREDIR/linux/versions.list
+	
+        < $ARCHCOMPAREDIR/hurd/packages.list cut -d' ' -f2 | sort > $ARCHCOMPAREDIR/hurd/names.list
+        < $ARCHCOMPAREDIR/hurd/packages.list cut -d' ' -f3 | sort > $ARCHCOMPAREDIR/hurd/versions.list
+    fi
+}
+
+function missing()
+{
+    if [[ -e $ARCHCOMPAREDIR/linux/names.list ]]; then
+        comm $ARCHCOMPAREDIR/$1/names.list $ARCHCOMPAREDIR/$2/names.list -2 -3
+    else
+        echo "You must specify at least one repository."
+        exit 1
+    fi
+}
+
+function linux()
+{
+    missing linux hurd
+}
+
+function hurd()
+{
+    missing hurd linux
+}
+
+function versions()
+{
+    if [[ -e $ARCHCOMPAREDIR/linux/names.list ]]; then
+        comm $ARCHCOMPAREDIR/linux/names.list $ARCHCOMPAREDIR/hurd/names.list -1 -2 | \
+        while read pkg; do
+            linux=`grep " $pkg " $ARCHCOMPAREDIR/linux/packages.list | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
+            hurd=`grep " $pkg " $ARCHCOMPAREDIR/hurd/packages.list   | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
+	    
+            if $([[ "$1" == "o" ]] && [[ $hurd < $linux ]]) || \
+                $([[ "$1" == "n" ]] && [[ $hurd > $linux ]]) || \
+                $([[ "$1" == "d" ]] && [[ $hurd != $linux ]]); then
+                echo "$pkg $hurd [$linux]"
+            fi
+        done
+    else
+        echo "You must specify at least one repository."
+        exit 1
+    fi
+}
+
+function help()
+{
+    echo "archcompare: script to compare Arch Linux and Arch Hurd repositories."
+    echo
+    echo "Usage:"
+    echo "    archcompare [repos] [--sync|-S] [--linux|-L] [--hurd|-H] [--versions|-V]"
+    echo
+    echo "Repositories:"
+    echo "    Both core and extra can be compared, at least one must be specified."
+    echo "    Repositories do not need to be specified when syncing."
+    echo
+    echo "Options:"
+    echo "    --sync          -S: Synchronise the local Arch Linux and Arch Hurd pacman databases."
+    echo "    --linux         -L: Show packages in Arch Linux core and extra that are missing from Arch Hurd."
+    echo "    --hurd          -H: Show packages in Arch Hurd core and extra that are missing from Arch Linux."
+    echo "    --versions      -V: Show package version differences between Arch Hurd and Arch Linux."
+    echo "    --versions-old -Vo: Show package version differences where Arch Hurd has older packages."
+    echo "    --versions-new -Vn: Show package version differences where Arch Hurd has newer packages."
+    echo "    --help          -h: Show this text."
+    echo
+    echo "Author: Michael Walker (Barrucadu) <mike@barrucadu.co.uk>"
+}
+
+if [[ "$1" == "" ]]; then
+    help
+else
+    infoprepped=false
+
+    rm $ARCHCOMPAREDIR/{linux,hurd}/{packages,names,versions}.list &>/dev/null
+
+    while [[ "$1" != "" ]]; do
+        if ! $infoprepped; then
+            case "$1" in
+                "core" | "extra")
+                    genpkglist $1;;
+                *)
+                    infoprepped=true
+                    prepinfo;;
+            esac
+        fi
+
+        case "$1" in
+            "--sync" | "-S")
+                syncrepos;;
+            "--linux" | "-L")
+                linux;;
+            "--hurd" | "-H")
+                hurd;;
+            "--versions" | "-V")
+                versions d;;
+            "--versions-old" | "-Vo")
+                versions o;;
+            "--versions-new" | "-Vn")
+                versions n;;
+            "--help" | "-h")
+                help;;
+        esac
+        shift
+    done
+fi

@@ -1,0 +1,298 @@
+#!/bin/zsh
+
+# A part of the moviedb set of scripts - for checking and repairing the database
+
+CHECKDIRS=(by-director by-genre by-year)
+CHECKLINKS=(by-genre by-year)
+
+# Strip the video extension from files
+function stripext()
+{
+    fname=$1
+    case $fname in
+        *.avi)
+            echo $(basename $fname ".avi");;
+        *.mkv)
+            echo $(basename $fname ".mkv");;
+        *.ogm)
+            echo $(basename $fname ".ogm");;
+        *.mp4)
+            echo $(basename $fname ".mp4");;
+        *.srt)
+            echo $(basename $fname ".srt");;
+        *.idx)
+            echo $(basename $fname ".idx");;
+        *.sub)
+            echo $(basename $fname ".sub");;
+    esac
+}
+
+# Attempt to fix a symlink
+function fixlink()
+{
+    link=$1
+    blink=`stripext $link`
+    file=`moviedb query file "$blink" | sed 's:.*/by-director:../../by-director:'`
+
+    if [[ -f $file ]]; then
+	rm $link
+	ln -s $file $link
+	return 0
+    else
+	return 1
+    fi
+}
+
+# Check for non-directories and empty directories, deleting or ignoring them.
+function checkdirs()
+{
+    dir=$1
+    verbose=$2
+    deldirs=$3
+    ret=0
+
+    pushd $dir
+    for subdir in *; do
+        answer=""
+
+        if [[ ! -d "$subdir" ]]; then
+            if [[ $ret == 0 ]]; then
+                ret=1
+            fi
+
+	    if $deldirs; then
+		echo "$dir/$subdir is not a directory, deleting."
+		rm "$dir/$subdir"
+	    else
+		while [[ "$answer" != "d" ]] && [[ "$answer" != "i" ]]; do
+                    echo -n "$dir/$subdir is not a directory, delete or ignore? [di] "
+                    read answer
+		done
+		
+		case "$answer" in
+                    "d")
+			rm "$dir/$subdir";;
+                    "i")
+			ret=2;;
+		esac
+	    fi
+        elif [[ "`ls "$subdir" | wc -l`" == "0" ]]; then
+            if [[ $ret == 0 ]]; then
+                ret=1
+            fi
+
+	    if $deldirs; then
+		echo "$dir/$subdir is empty, deleting."
+		rmdir "$dir/$subdir"
+	    else
+		while [[ "$answer" != "d" ]] && [[ "$answer" != "i" ]]; do
+                    echo -n "$dir/$subdir is empty, delete or ignore? [di] "
+                    read answer
+		done
+		
+		case "$answer" in
+                    "d")
+			rmdir "$dir/$subdir";;
+                    "i")
+			ret=2;;
+		esac
+	    fi
+	elif $verbose; then
+	    echo "$dir/$subdir OK."
+        fi
+    done
+    popd
+
+    return $ret
+}
+
+# Check for broken and non-relative symbolic links
+function checklinks()
+{
+    dir=$1
+    verbose=$2
+    fixlinks=$3
+    dellinks=$4
+    ret=0
+
+    pushd $dir
+    for subdir in *; do
+        pushd $subdir
+        for link in *; do
+            answer=""
+
+            if file $link | grep -q -v symbolic; then
+                if [[ $ret == 0 ]]; then
+                    ret=1
+                fi
+               
+		if $dellinks; then
+		    echo "$dir/$subdir/$link is not a symbolic link, deleting."
+		    rm "$dir/$subdir/$link"
+		else
+                    while [[ "$answer" != "d" ]] && [[ "$answer" != "i" ]]; do
+			echo -n "$dir/$subdir/$link is not a symbolic link, delete or ignore? [di] "
+			read answer
+                    done
+                    
+                    case "$answer" in
+			"d")
+                            rm "$dir/$subdir/$link";;
+			"i")
+                            ret=2;;
+                    esac
+		fi
+            elif file $link | grep -q "broken symbolic"; then
+                if [[ $ret == 0 ]]; then
+                    ret=1
+                fi
+                
+		if $fixlinks; then
+		    echo "$dir/$subdir/$link is a broken symbolic link, fixing."
+		    if ! fixlink $link; then
+			if $dellinks; then
+			    echo "Could not repair automatically, deleting."
+			    rm "$dir/$subdir/$link"
+			else
+			    echo "Could not repair automatically, fix manually."
+			fi
+                    fi
+		elif $dellinks; then
+		    echo "$dir/$subdir/$link is a broken symbolic link, deleting."
+		    rm "$dir/$subdir/$link"
+		else
+                    while [[ "$answer" != "d" ]] && [[ "$answer" != "i" ]] && [[ "$answer" != "f" ]]; do
+			echo -n "$dir/$subdir/$link is a broken symbolic link, delete, fix or ignore? [dfi] "
+			read answer
+                    done
+                    
+                    case "$answer" in
+			"d")
+                            rm "$dir/$subdir/$link";;
+			"f")
+			    if ! fixlink $link; then
+				echo "Could not repair automatically, fix manually."
+				ret=2
+                            fi;;
+			"i")
+                            ret=2;;
+                    esac
+		fi
+            elif file $link | grep -q -v "../../by-director"; then
+                if [[ $ret == 0 ]]; then
+                    ret=1
+                fi
+                
+		if $fixlinks; then
+		    echo "$dir/$subdir/$link is a non-relative symbolic link, fixing."
+		    if ! fixlink $link; then
+			if $dellinks; then
+			    echo "Could not repair automatically, deleting."
+			    rm "$dir/$subdir/$link"
+			else
+			    echo "Could not repair automatically, fix manually."
+			fi
+                    fi
+		elif $dellinks; then
+		    echo "$dir/$subdir/$link is a non-relative symbolic link, deleting."
+		    rm "$dir/$subdir/$link"
+		else
+                    while [[ "$answer" != "d" ]] && [[ "$answer" != "i" ]] && [[ "$answer" != "f" ]]; do
+			echo -n "$dir/$subdir/$link is a non-relative symbolic link, delete, fix or ignore? [dfi] "
+			read answer
+                    done
+                    
+                    case "$answer" in
+			"d")
+                            rm "$dir/$subdir/$link";;
+			"f")
+			    if ! fixlink $link; then
+				echo "Could not repair automatically, fix manually."
+				ret=2
+                            fi;;
+			"i")
+                            ret=2;;
+                    esac
+		fi
+	    elif $verbose; then
+		echo "$dir/$subdir/$link OK."
+            fi
+        done
+        popd
+    done
+    popd
+
+    return $ret
+}
+
+function help()
+{
+    echo "moviedb-fsck: A tool to check and repair the filesystem database."
+    echo
+    echo "Usage: moviedb-fsck [-v] [-d] [-l] [-f] [-y]"
+    echo
+    echo "Arguments:"
+    echo "    -v = Be verbose."
+    echo "    -d = Delete problematic directories."
+    echo "    -l = Delete problematic links."
+    echo "    -f = Attempt to fix problematic links. If fixed and -l is given, do not delete."
+    echo "    -y = Auto-fix (implies -d -l -f)."
+    echo
+    echo "Return codes:"
+    echo "    1 = All errors found were fixed."
+    echo "    2 = Errors found were not fixed."
+    echo "    3 = Unknown argument."
+}
+
+verbose=false
+deldirs=false
+dellinks=false
+fixlinks=false
+
+while [[ "$1" != "" ]]; do
+    case $1 in
+	"help")
+	    help
+	    return 0;;
+	"-v")
+	    verbose=true;;
+	"-d")
+	    deldirs=true;;
+	"-l")
+	    dellinks=true;;
+	"-f")
+	    fixlinks=true;;
+	"-y")
+	    deldirs=true
+	    dellinks=true
+	    fixlinks=true;;
+	*)
+	    echo "Unknown argument '$1'."
+	    return 3;;
+    esac
+    shift
+done
+
+retcode=0
+
+# Check directories
+for dir in $CHECKDIRS; do
+    checkdirs $MOVIEPATH/$dir $verbose $deldirs
+
+    out=$?
+    if [[ $out > $retcode ]]; then
+        retcode=$out
+    fi
+done
+
+# Check links
+for dir in $CHECKLINKS; do
+    checklinks $MOVIEPATH/$dir $verbose $fixlinks $dellinks
+
+    out=$?
+    if [[ $out > $retcode ]]; then
+        retcode=$out
+    fi
+done
+
+return $retcode

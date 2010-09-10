@@ -1,0 +1,171 @@
+## -*- shell-script -*-
+
+# Environmental Variables
+export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
+    # Programs
+export BROWSER=opera
+export EDITOR=editor
+export VISUAL=editor
+export PAGER=most
+    # History
+export HISTFILE=~/.data/zsh/history
+export HISTSIZE=1000
+export SAVEHIST=1000
+export DIRSTACKSIZE=16
+    # XDG
+export XDG_CACHE_HOME=~/.cache
+export XDG_CONFIG_HOME=~/.config
+export XDG_DATA_HOME=~/.data
+export XDG_DESKTOP_DIR=~/
+export XDG_DOWNLOAD_DIR=~/tmp/downloads
+export XDG_DOCUMENTS_DIR=~/docs
+export XDG_MUSIC_DIR=~/music
+export XDG_PICTURES_DIR=~/graphics
+export XDG_VIDEOS_DIR=~/movies
+    # Input
+export XCOMPOSEFILE=~/config/xorg/XCompose
+export QT_XFT=1
+export GDK_USE_XFT=1
+export GTK_IM_MODULE=xim
+    # Locale
+export LANG=en_GB.UTF-8
+export LC_ALL=en_GB.UTF-8
+export LC_CTYPE=en_GB.UTF-8
+    # NMPC / MPD
+export NMPC_DEFCMD="status"
+export NMPC_DEFHELP="all"
+export MPDHOST="eihort"
+    # Misc
+export WEBKIT_IGNORE_SSL_ERRORS=1
+export NETHACKOPTIONS=@/home/barrucadu/config/nethack/config
+export SCHEME_LIBRARY_PATH=/usr/lib/slib/
+export TODOFILE="$HOME/docs/org/todo.org"
+export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
+export CVS_RSH=ssh
+    # Prompt
+export PROMPT2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
+export PROMPT3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "
+
+# Framebuffer zenburn colours
+if [ "$TERM" = "linux" ]; then
+    echo -en "\e]P01C1C20"
+    echo -en "\e]P84d4d4d"
+    echo -en "\e]P1CE5C00"
+    echo -en "\e]P9F57900"
+    echo -en "\e]P2B7CE42"
+    echo -en "\e]PABDE077"
+    echo -en "\e]P3B88B10"
+    echo -en "\e]PBFFC135"
+    echo -en "\e]P466AABB"
+    echo -en "\e]PCAACCBB"
+    echo -en "\e]P5B7416E"
+    echo -en "\e]PDBB4466"
+    echo -en "\e]P65E7175"
+    echo -en "\e]PEA3BABF"
+    echo -en "\e]P7D6D8D9"
+    echo -en "\e]PF6C887A"
+    clear
+fi
+
+# Terminal colours
+autoload colors zsh/terminfo
+if [[ "$terminfo[colors]" -ge 8 ]]; then
+	colors
+fi
+
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+	eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
+
+	export PR_$color
+	export PR_LIGHT_$color
+done
+
+export PR_NO_COLOR="%{$terminfo[sgr0]%}"
+
+# pre/post commands
+
+function precmd() # Uses: setting user/root PROMPT1 variable and rehashing commands list
+{
+    # Last command failed:    red :(
+    lastcmdstatus=`[ $? != 0 ] && echo "$PR_RED%B:(%b "`
+
+    # Package updates:        blue update count
+    pacupgrades=`pacman -Qu &>/dev/null && echo "${PR_BLUE}[\`pacman -Qu | wc -l\`]$PR_NO_COLOR "`
+
+    # Working dir unwritable: red pwd, else cyan pwd
+    cwdcolour=`[ -w "\`pwd\`" ] && echo "$PR_CYAN" || echo "$PR_RED"`
+    cwdname="%B%2~%b"
+
+    # Running as root:        red #, red time, else green %, green time
+    prompttime=`[ $UID != 0 ] && echo "$PR_LIGHT_GREEN%*" || echo "$PR_RED%*"`
+    amiroot=`[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`
+
+    export PROMPT="${lastcmdstatus}${pacupgrades}${prompttime} ${cwdcolour}${cwdname} ${amiroot}${PR_NO_COLOR} "
+}
+
+# Emacs shell mode
+[[ $EMACS = t ]] && unsetopt zle
+
+# Keybindings - I'm not actually sure which ones are required.
+bindkey "\e[1~"  beginning-of-line
+bindkey "\e[4~"  end-of-line
+bindkey "\e[5~"  beginning-of-history
+bindkey "\e[6~"  end-of-history
+bindkey "\e[3~"  delete-char
+bindkey "\e[2~"  quoted-insert
+bindkey "\e[5C"  forward-word
+bindkey "\eOc"   emacs-forward-word
+bindkey "\e[5D"  backward-word
+bindkey "\eOd"   emacs-backward-word
+bindkey "\e\e[C" forward-word
+bindkey "\e\e[D" backward-word
+bindkey "^H"     backward-delete-word
+bindkey "\e[8~"  end-of-line
+bindkey "\e[7~"  beginning-of-line
+bindkey "\eOH"   beginning-of-line
+bindkey "\eOF"   end-of-line
+bindkey "\e[H"   beginning-of-line
+bindkey "\e[F"   end-of-line
+bindkey '^i'     expand-or-complete-prefix
+
+# Colourful Directory Listings
+eval `dircolors -b`
+
+# Tab Completion
+zle -C complete-file complete-word _generic
+
+zstyle ':completion:*'                 completer _complete _match _approximate
+zstyle ':completion:*:match:*'         original only
+zstyle ':completion:*:approximate:*'   max-errors 1 numeric
+zstyle ':completion:*:*'               original only
+zstyle ':completion:complete-file::::' completer _files
+zstyle ':completion:*'                 completer _complete _ignored _files
+
+autoload -Uz compinit
+compinit
+
+# Misc Settings
+setopt auto_cd # directory navigation
+setopt auto_pushd
+setopt pushd_silent
+setopt pushd_to_home
+setopt chase_links
+
+setopt menu_complete # completion
+setopt hash_list_all
+
+setopt extended_glob # globbing
+setopt glob_dots
+setopt mark_dirs
+setopt multibyte
+setopt null_glob
+
+setopt hist_ignore_dups # history
+setopt hist_no_functions
+setopt hist_reduce_blanks
+setopt hist_verify
+setopt share_history
+
+setopt interactive_comments # miscellanious
+setopt correct

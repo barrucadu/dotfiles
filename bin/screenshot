@@ -1,0 +1,66 @@
+#!/bin/zsh
+
+shot=`date +%F`
+screenshotpath=/home/barrucadu/$shot.png
+websitepath=/home/barrucadu/websites/barrucadu.co.uk/www/screenshots/Azathoth
+
+echo "Taking screenshot in 5 seconds."
+sleep 5
+echo "Taking screenshot \"$shot.png\""
+
+scrot $screenshotpath
+cp $screenshotpath $websitepath/
+cp $screenshotpath $websitepath/thumb/
+cp $screenshotpath $websitepath/thumb-big/
+rm $screenshotpath
+
+cd $websitepath/thumb/
+convert $websitepath/$shot.png -thumbnail 160x100 -background black $shot.png
+
+cd ../thumb-big/
+convert $websitepath/$shot.png -thumbnail 461x300 -background black -polaroid -1 $shot.png
+
+cd ../info/
+
+WM=`grep -E "[^#]exec" ~/.config/xorg/xinitrc`
+niceWM=""
+case "$WM" in
+    *stumpwm*)
+        niceWM=StumpWM
+        ;;
+    *scrotwm*)
+        niceWM=ScrotWM
+        ;;
+    *musca*)
+        niceWM=Musca
+        ;;
+    *xmonad*)
+        niceWM=Xmonad
+        ;;
+    *)
+        niceWM=`echo "$WM" | sed "s/.*exec//"`
+        ;;
+esac
+
+niceOS="Arch Linux `uname -m`"
+niceGTKFont=`grep "gtk-font-name" ~/.gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
+niceXFont=`grep FONT ~/config/xorg/Xdefaults | head -n1 | sed 's/.*xft:\(.*\):pixelsize.*/\1/'`
+niceIcons=`grep icon-theme-name ~/.gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
+niceGtk="Shiki Noble" # Yes, I do change my GTK theme so little I decided it'd be easier to just hardcode it…
+
+echo "<li><strong>OS:</strong> $niceOS</li>"                   > $shot.txt
+echo "<li><strong>GTK:</strong> $niceGtk</li>"                >> $shot.txt
+echo "<li><strong>Icons:</strong> $niceIcons</li>"            >> $shot.txt
+echo "<li><strong>WM:</strong> $niceWM</li>"                  >> $shot.txt
+echo "<li><strong>GTK Font:</strong> $niceGTKFont</li>"       >> $shot.txt
+echo "<li><strong>Terminal Font:</strong> $niceXFont</li>"    >> $shot.txt
+echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> $shot.txt
+echo "<li><strong>Other:</strong> </li>"                      >> $shot.txt
+emacs -nw $shot.txt
+
+scp $websitepath/$shot.png           barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/
+scp $websitepath/thumb/$shot.png     barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/thumb/
+scp $websitepath/thumb-big/$shot.png barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/thumb-big/
+scp $websitepath/info/$shot.txt      barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www.screenshots/Azathoth/info/
+
+echo "[url=\"http://www.barrucadu.co.uk/gallery/Azathoth/$shot/\"][img]http://www.barrucadu.co.uk/screenshots/Azathoth/thumb-big/$shot.png[/img][/url]" | xclip

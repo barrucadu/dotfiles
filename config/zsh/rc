@@ -1,0 +1,20 @@
+## -*- shell-script -*-
+# Additional files - I like splitting things up.
+. ~/config/zsh/functions
+. ~/config/zsh/aliases
+. ~/config/zsh/profile
+
+if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
+    # Start X
+    while true; do
+        echo "Starting X11 at `ddate +\"%{%A, the %e of %B%}, %Y. %N%n    Celebrate %H\"`"
+        startx ~/config/xorg/xinitrc &> /dev/null
+        source ~/config/zsh/profile
+    done
+else
+    # Welcome message
+    clear
+    ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
+    wget -q http://eihort/dom.php -O -
+    echo
+fi

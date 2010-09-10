@@ -1,0 +1,39 @@
+#!/bin/zsh
+
+# X
+
+# Keyboard
+setxkbmap gb
+setxkbmap -option compose:menu
+setxkbmap -option terminate:ctrl_alt_bksp
+xmodmap -e "clear Mod4"
+
+# Resources
+xsetroot -cursor_name left_ptr
+xrdb -load ~/config/xorg/Xdefaults
+
+# Screensaver
+xscreensaver -no-splash &
+
+# /X
+
+# APPS
+
+urxvtd -q -f -o
+ucron &>/dev/null &
+randombg
+
+# /APPS
+
+# WM
+
+if [[ "$WM" != "" ]]; then
+    exec $WM
+elif [[ -e /tmp/notile ]]; then
+    urxvt &
+    exec openbox
+else
+    exec stumpwm
+fi
+
+# /WM

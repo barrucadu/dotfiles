@@ -1,0 +1,169 @@
+#!/bin/zsh
+
+# netstatus - network health script
+
+# Colours:
+autoload colors zsh/terminfo
+if [[ "$terminfo[colors]" -ge 8 ]]; then
+    colors
+fi
+
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+    eval PR_$color='$terminfo[bold]$fg[${(L)color}]'
+    eval PR_LIGHT_$color='$fg[${(L)color}]'
+    
+    export PR_$color
+    export PR_LIGHT_$color
+done
+
+export PR_NO_COLOR="$terminfo[sgr0]"
+
+# HOSTS:   list of hosts to check
+# TEMPS:   list of temperature sensors for hosts
+# COLOURS: list of colours for hosts
+# NETCOL:  colour for network messages
+HOSTS=(azathoth eihort randolph)
+TEMPS=(temp2 temp3 temp1)
+COLOURS=($PR_GREEN $PR_YELLOW $PR_BLUE)
+NETCOL=$PR_MAGENTA
+
+# Checks the status of a particular host
+function check_host()
+{
+    host=$1
+    sensor=$2
+    colour=$3
+
+    # Check online status and skip tests if offline
+    if ping -c1 $host &>/dev/null; then
+        # Get ping time and repots if > 5ms
+        time=`ping -c1 $host | grep time= | sed 's/.*time=\([0-9.]*\).*/\1/'`
+        if [[ $time > 5 ]]; then
+            echo "${colour}${host}${PR_NO_COLOR} ping time is $time"
+        fi
+
+        # Check SSH and skip tests if offline
+        if [[ "$host" == "`hostname`" ]]; then
+            ssh=`[[ -f /var/run/daemons/sshd ]]`
+        else
+            ssh=`ssh $host -o ConnectTimeout=1 true`
+        fi
+
+        if ! $ssh; then
+            echo "${colour}${host}${PR_NO_COLOR} sshd is down"
+        fi
+
+        if $ssh || [[ "$host" == "`hostname`" ]]; then
+            # Check load averages and report if > 0.75
+            if [[ "$host" == "`hostname`" ]]; then
+                load=`uptime | sed 's/.*, //'`
+            else
+                load=`ssh $host "uptime | sed 's/.*, //'"`
+            fi
+
+            if [[ $load > 0.75 ]]; then
+                echo "${colour}${host}${PR_NO_COLOR} load average is $load"
+            fi
+
+            # Check disk usage and report if >= 80%
+            if [[ "$host" == "`hostname`" ]]; then
+                usage=`df -h | grep '[89][0-9]%' | sed 's/\([/a-z0-9]*\).*\(\(8\|9\)[0-9]%\).*/\1 usage is \2/' 2>/dev/null`
+            else
+                usage=`ssh $host "df -h | grep '[89][0-9]%' | sed 's/\([/a-z0-9]*\).*\(\(8\|9\)[0-9]%\).*/\1 usage is \2/'" 2>/dev/null`
+            fi
+
+            if [[ "$usage" != "" ]]; then
+                echo $usage | \
+                while read use; do
+                    echo "${colour}${host}${PR_NO_COLOR} $use";
+                done
+            fi
+
+            # Check RAID arrays and report if a device is failed or missing
+            if [[ "$host" == "`hostname`" ]]; then
+                raid=`[[ -f /proc/mdstat ]] && cat /proc/mdstat | grep "md.*\(F\|raid1 sd[a-z][0-9]\[[0-9]\]$\)"`
+            else
+                raid=`ssh $host "[[ -f /proc/mdstat ]] && cat /proc/mdstat | grep 'md.*\(F\|raid1 sd[a-z][0-9]\[[0-9]\]$\)'"`
+            fi
+
+            if [[ "$raid" != "" ]]; then
+                echo $raid | \
+                while read md; do
+                    if echo $md | grep -q F; then
+                        echo "${colour}${host}${PR_NO_COLOR} `echo $md | sed 's/^\(md[0-9]\).*\(sd[a-z][0-9]\)\[[0-9]\](F).*/\2 in \1 has failed/'`"
+                    else
+                        echo "${colour}${host}${PR_NO_COLOR} `echo $md | sed 's/^\(md[0-9]\).*/\1/'` is missing a device"
+                    fi
+                done
+            fi
+
+            # Check temperature and report if > 50°C
+            if [[ "$host" == "`hostname`" ]]; then
+                temp=`sensors | grep $sensor | sed 's/.*  +\([0-9.]*\).*/\1/'`
+            else
+                temp=`ssh $host "sensors | grep $sensor | sed 's/.*  +\([0-9.]*\).*/\1/'"`
+            fi
+
+            if [[ $temp > 50 ]]; then
+                echo "${colour}${host}${PR_NO_COLOR} CPU temperature is $temp"
+            fi
+
+            # Check upgrades
+            if [[ "$host" == "`hostname`" ]]; then
+                upgrades=`clyde -Qu | sed 's/ .*//'`
+            else
+                upgrades=`ssh $host "clyde -Qu | sed 's/ .*//'"`
+            fi
+
+            if [[ "$upgrades" != "" ]]; then
+                echo $upgrades | \
+                while read upgrade; do
+                    echo "${colour}${host}${PR_NO_COLOR} upgrade $upgrade"
+                done
+            fi
+        fi
+    else
+        echo "${colour}${host}${PR_NO_COLOR} offline."
+    fi
+}
+
+# Checks the status of the network connection
+function check_net()
+{
+    # Check DNS
+    if ! dig google.com +time=1 +tries=1 &>/dev/null; then
+        echo "${NETCOL}DNS${PR_NO_COLOR} lookup failed"
+    fi
+
+    # Check WAN availability
+    if ! ping -c1 google.com &>/dev/null; then
+        echo "${NETCOL}WAN${PR_NO_COLOR} offline"
+    fi
+
+    # Check LAN availability
+    if ! ping -c1 eihort &>/dev/null; then
+        echo "${NETCOL}LAN${PR_NO_COLOR} offline"
+    fi
+}
+
+function do_host()
+{
+    host=$1
+
+    if [[ "$${HOSTS[(I)$host]}" != "" ]]; then
+        temp=$TEMPS[${HOSTS[(I)$host]}]
+        col=$COLOURS[${HOSTS[(I)$host]}]  
+        check_host $host $temp $col
+    fi
+}
+
+if [[ "$1" == "" ]]; then
+    check_net
+    for host in $HOSTS; do
+        do_host $host
+    done
+else
+    for host in $@; do
+        do_host $host
+    done
+fi

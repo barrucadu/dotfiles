@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+myman -z big -i

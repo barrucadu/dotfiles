@@ -1,0 +1,45 @@
+#!/bin/zsh
+
+export MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
+export MOVIEPLAYER=`[ "$MOVIEPLAYER" = "" ] && echo "mplayer" || echo $MOVIEPLAYER`
+
+function help ()
+{
+    echo "moviedb: A tool to manage and query the filesystem movie database"
+    echo
+    echo "Usage: moviedb <command> <args>"
+    echo
+    echo "Commands:"
+    echo "    add   : Add a new movie to the database."
+    echo "    fsck  : Check the state of the database and repair errors."
+    echo "    lists : Manage and use movie playlists."
+    echo "    menu  : Launch the dmenu-based movie menu."
+    echo "    misc  : Backup or restore the database."
+    echo "    play  : Play movies."
+    echo "    query : Search for movies."
+    echo "See the individual command help for more details."
+    echo 
+    echo "Return codes:"
+    echo "    7 = Unknown command."
+    echo "    8 = Missing movie player."
+    echo "    9 = Missing movie directories."
+
+    echo "Maintainer: Michael Walker"
+}
+
+cmd=$1
+
+if [[ ! -d $MOVIEPATH/ ]] || [[ ! -d $MOVIEPATH/by-director ]] || [[ ! -d $MOVIEPATH/by-genre ]] || [[ ! -d $MOVIEPATH/by-year ]]; then
+    echo "Missing movie directories."
+    return 9
+fi
+
+case $cmd in
+    "add" | "lists" | "menu" | "play" | "query" | "fsck" | "misc")
+        shift && moviedb-$cmd $*;;
+    "" | "help")
+        help;;
+    *)
+        echo "Unknown command $cmd"
+        return 7;;
+esac

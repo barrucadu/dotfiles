@@ -1,0 +1,6 @@
+#!/bin/bash
+
+papers=/usr/share/wallpapers/rotation
+image=`ls $papers | shuf -n1`
+
+feh --bg-scale "$papers/$image"

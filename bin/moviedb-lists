@@ -1,0 +1,101 @@
+#!/bin/zsh
+
+PLAYLISTPATH=`[ "$PLAYLISTPATH" = "" ] && echo "$XDG_DATA_HOME/moviedb" || echo $PLAYLISTPATH`
+
+function play()
+{
+    if [[ -f "$PLAYLISTPATH/$1.m3u" ]]; then
+	$MOVIEPLAYER "$PLAYLISTPATH/$1.m3u" &>/dev/null &
+    else
+	return 2
+    fi    
+}
+
+function list()
+{
+    if [[ "$1" != "" ]]; then
+	cat "$PLAYLISTPATH/$1.m3u" | sed "s/^.*\/\(.*\)\..*$/\\1/"
+    else
+	ls $PLAYLISTPATH | sed "s/\.m3u//"
+    fi
+}
+
+function create()
+{
+    if [[ ! -f "$PLAYLISTPATH/$1.m3u" ]]; then
+	touch "$PLAYLISTPATH/$1.m3u"
+    else
+	return 2
+    fi
+}
+
+function add()
+{
+    if [[ -f "$PLAYLISTPATH/$1.m3u" ]]; then
+	echo "`moviedb file $2`" >> "$PLAYLISTPATH/$1.m3u"
+    else
+	return 2
+    fi
+}
+
+function delete()
+{
+    if [[ -f "$PLAYLISTPATH/$1.m3u" ]]; then
+	sed -i "/$2/d" "$PLAYLISTPATH/$1.m3u"
+    else
+	return 2
+    fi
+}
+
+function play()
+{
+    if [[ -f "$PLAYLISTPATH/$1.m3u" ]]; then
+	$MOVIEPLAYER "$PLAYLISTPATH/$1.m3u" &>/dev/null &
+    else
+	return 2
+    fi
+}
+
+function help()
+{
+    echo "moviedb-lists: A tool to manage movie playlists."
+    echo
+    echo "Usage: moviedb-lists <command> <args>"
+    echo
+    echo "Commands:"
+    echo "    play          <list>:  Play the specified list."
+    echo "    list          <list>:  List all playlists, or all movies in the optional specified list."
+    echo "    create        <list>:  Create a new playlist with the specified name."
+    echo "    add    <list> <movie>: Add the movie to the specified list."
+    echo "    delete <list> <movie>: Delete the movie from the specified list."
+    echo
+    echo "Return codes:"
+    echo "    1 = Unknown command."
+    echo "    2 = Nonexistant playlist (or existing, with create)."
+    echo
+    echo "Maintainer: Michael Walker"
+}
+
+case $1 in
+    "play")
+	play $2
+	;;
+    "list")
+	list $2
+	;;
+    "create")
+	create $2
+	;;
+    "add")
+	add $2 $3
+	;;
+    "delete")
+	delete $2 $3
+	;;
+    "" | "help")
+	help
+	;;
+    *)
+        echo "Unknown command $cmd"
+        return 1;;
+esac

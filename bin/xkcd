@@ -1,0 +1,59 @@
+#!/bin/zsh
+
+i=1
+stop=-1
+
+[ "$1" != "" ] && i=$1
+[ "$2" != "" ] && stop=$2
+
+[ -f index.html ] && rm index.html &>/dev/null
+
+wget "http://www.xkcd.com/" &>/dev/null
+endcomic=`md5sum index.html`
+checksum=" "
+rm index.html
+
+while [[ $i != $stop ]] && [[ "$checksum" != "$endcomic" ]]; do
+    if [[ $i != 404 ]]; then # There is no comic 404 ^^
+
+        wget "http://www.xkcd.com/$i" &>/dev/null
+        checksum=`md5sum index.html`
+
+        file=`cat index.html | grep "img src.*comics" | sed "s/\(.*src=\"\|\".*\)//g"`
+        wget "$file" &>/dev/null
+
+        filename=`echo $file | sed "s/.*\///g"`
+        name=`cat index.html | grep "h1" | sed "s/.*>\(.*\)<\/h.*/\\1/"`
+        alt=`cat index.html | grep "img.*title=" | sed "s/\(.*title=\"\|\".*\)//g" | sed "/^christmas banner$/d" | sed "s/&amp;/&/g" | sed "s/&quot;/\"/g"`
+        
+        rm index.html &>/dev/null
+        
+        width=`identify "$filename" | sed "s/.* \([0-9]*\)x.*/\\1/"`
+        height=`identify "$filename" | sed "s/.*x\([0-9]*\).*/\\1/"`
+        
+        convert -background black -fill white -size "$width"x16 -gravity center label:$name name.png
+        convert -background black -fill white -size "$width"x   -gravity center -pointsize 13 caption:$alt alt.png
+        
+        altheight=`identify alt.png | sed "s/.*x\([0-9]*\).*/\\1/"`
+        
+        n=$i
+        if [[ $i -lt 10 ]]; then
+            n="00$i"
+        elif [[ $i -lt 100 ]]; then
+            n="0$i"
+        fi
+        
+        if [[ ! -f "$n-$filename" ]]; then        
+            convert -size "$width"x$[$height +  $altheight + 24] xc:white "$n-$filename"                
+
+            composite -geometry "$width"x16+0+0 name.png "$n-$filename" "$n-$filename"
+            composite -geometry "$width"x"$height"+0+20 $filename "$n-$filename" "$n-$filename"
+            composite -geometry "$width"x"$altheight"+0+$[$height + 24] alt.png "$n-$filename" "$n-$filename"
+
+            echo "Done $n-$filename"
+        fi
+        
+        rm $filename name.png alt.png
+    fi
+    i=$[$i + 1]
+done

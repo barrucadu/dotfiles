@@ -1,0 +1,90 @@
+#!/bin/zsh
+
+# A part of the moviedb set of scripts - for adding new movies to the database.
+
+function chkdir()
+{
+    dir="$1"
+
+    if [[ ! -d "$dir" ]]; then
+	if [[ -e "$dir" ]]; then
+	    echo " => $dir exists but is not a directory."
+	    return 2
+	else
+	    mkdir "$dir"
+	fi
+    fi
+}
+
+function mvfiles()
+{
+    destdir=$1 && shift
+
+    chkdir $destdir || return 2
+
+    for file in $*; do
+        echo "Moving $file to $destdir..."
+        mv $file $destdir
+    done
+}
+
+function lnfiles()
+{
+    srcdir=$1 && shift
+    destdir=$1 && shift
+
+    chkdir $destdir || return 2
+
+    for file in $*; do
+        ln -s $srcdir/$file $destdir/$file
+    done
+}
+
+function help()
+{
+    echo "moviedb-add: A tool to add a movie to the filesystem database."
+    echo
+    echo "Usage: moviedb-add <file> [additional files] <director> <year> <genre> [additional genres]"
+    echo
+    echo "Return codes:"
+    echo "    1 = Movie file not found."
+    echo "    2 = Error using director/genre directories."
+}
+
+if [[ "$1" == "" ]] || [[ "$1" == "--help" ]]; then
+    help
+    return 0
+fi
+
+files=($1) && shift
+
+if [[ ! -e "$files[1]" ]]; then
+    echo "$files[1] not found."
+    return 1
+fi
+
+while [[ -f "$1" ]]; do
+    files+=$1
+    shift
+done
+
+director="$1" && shift
+year="$1"     && shift
+genres=()
+
+while [[ "$1" != "" ]]; do
+    genres+=$1
+    shift
+done
+
+mvfiles $MOVIEPATH/by-director/$director $files || return 2
+
+echo "Adding movie to year $year..."
+lnfiles "../../by-director/$director/" "$MOVIEPATH/by-year/$year/" $files || return 2
+
+for genre in $genres; do
+    echo "Adding movie to genre $genre..."
+    lnfiles "../../by-director/$director/" "$MOVIEPATH/by-genre/$genre/" $files || return 2
+done
+
+echo "Done."

@@ -1,0 +1,191 @@
+## -*- shell-script -*-
+
+# System
+function start()
+{
+    for arg in "${*[@]}"; do
+        sudo /etc/rc.d/$arg start
+    done
+}
+
+function stop()
+{
+    for arg in "${*[@]}"; do
+        sudo /etc/rc.d/$arg stop
+    done
+}
+
+function restart()
+{
+    for arg in "${*[@]}"; do
+	    sudo /etc/rc.d/$arg restart
+    done
+}
+
+function reprobe()
+{
+    for arg in "${*[@]}"; do
+	    sudo modprobe -r $arg
+        sudo modprobe $arg
+    done
+}
+
+# Running programs
+function r()
+{
+	$* &>/dev/null &
+	disown %%
+}
+
+function re()
+{
+	$* &>/dev/null &
+	disown %%
+	exit
+}
+
+# Git
+function gc()
+{
+    repo=$1
+    branch=$2
+    msg=$3
+
+    if [[ "$repo" == "" ]]; then
+        echo "Usage: gc repo [branch] [message]"
+        echo "gc adds, commits, and pushes, the various Arch Hurd repos"
+    fi
+
+    if [[ "$branch" == "" ]]; then
+        echo "Using master branch by default."
+        branch=master
+    fi
+
+    dir=~/hurd/git/$repo
+    remote=$repo
+    
+    if [[ -d $dir ]]; then
+        pushd $dir
+        git add .
+
+        if [[ ! -z "$msg" ]]; then
+            git commit -m "$msg"
+        else
+            git commit
+        fi
+
+        pushd .git
+        git push $remote $branch
+        popd
+        popd
+    else
+        echo "Cannot find '$dir'."
+    fi
+}
+
+# Arch Hurd
+function hrepo-add ()
+{
+    del=false
+    
+    if [[ "$1" == "-d" ]]; then
+	del=true
+	shift
+    fi
+    
+    repo=$1
+    shift
+
+    while [[ "$1" != "" ]]; do
+	scp $1 barrucadu@archhurd.org:/srv/http/files/repo/$repo/
+	ssh barrucadu@archhurd.org "/usr/local/bin/repo-add /srv/http/files/repo/$repo/$repo.db.tar.gz /srv/http/files/repo/$repo/$(basename $1)"
+
+	$del && rm -v $1
+
+	shift
+    done
+}
+
+# RFCs / Manpages
+
+function rfc()
+{
+    rfc=/usr/share/doc/rfc/txt/rfc$1.txt
+
+    if [ -f $rfc ]; then
+	sed 's/\f//' $rfc | $PAGER
+    else
+	echo "RFC $1 not found."
+    fi
+}
+
+function man()
+{
+    rfc=/usr/share/doc/rfc/txt/rfc$*.txt
+
+    if [[ -f $rfc ]]; then
+	rfc $*
+    else
+	/usr/bin/man $@
+    fi
+}
+
+function rfcsearch()
+{
+    grep "$*" -m1 /usr/share/doc/rfc/txt/rfc*.txt
+}
+
+# Misc
+function extract ()
+{
+    case $1 in
+        *.tar.xz)
+            tar xvJf $1;;
+        *.tar.bz2)
+            tar xvjf $1;;
+        *.tar.gz)
+            tar xvzf $1;;
+        *.xz)
+            unxz $1;;
+        *.bz2)
+            bunzip2 $1;;
+        *.rar)
+            rar x $1;;
+        *.gz)
+            gunzip $1;;
+        *.tar)
+            tar xvf $1;;
+        *.tbz2)
+            tar xvjf $1;;
+        *.tgz)
+            tar xvzf $1;;
+        *.zip)
+            unzip $1;;
+        *.Z)
+            uncompress $1;;
+        *.7z)
+            7z x $1;;
+        *)
+            echo "don't know how to extract '$1'...";;
+    esac
+}
+
+function qemu-real-hdd()
+{
+    sudo chown barrucadu /dev/$1
+    
+    if [[ -e $2 ]]; then
+        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -hdb $2 -m 1G
+    else
+        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -m 1G
+    fi
+}
+
+function lnmv()
+{
+    from=$1
+    to=$2
+
+    mv $from $to
+    ln -s $to $from
+}

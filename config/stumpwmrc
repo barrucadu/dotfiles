@@ -1,0 +1,95 @@
+;; -*-lisp-*-
+
+;; StumpWM Config
+(in-package :stumpwm)
+
+;; General Setup
+(set-prefix-key (kbd "C-z"))
+(setf *startup-message*        nil
+      *mouse-focus-policy*     :click
+      *window-border-style*    :none
+      *normal-border-width*    0
+      *maxsize-border-width*   0
+      *transient-border-width* 0)
+(run-commands "grename Web" "gnewbg Work" "gnewbg Misc-1" "gnewbg Misc-2" "gnewbg Misc-3")
+
+;; Mode line et al
+(set-font "-Misc-Fixed-Medium-R-SemiCondensed--13-120-75-75-C-60-ISO8859-1")
+(set-bg-color "grey10")
+(set-fg-color "red")
+(set-border-color "red")
+(set-msg-border-width 2)
+ 
+(setf *message-window-gravity* :top-right
+      *timeout-wait*           5
+      *input-window-gravity*   :center)
+  
+(setf *mode-line-background-color* "black"
+      *mode-line-foreground-color* "red"
+      *mode-line-border-color*  "grey10"
+      *mode-line-timeout*          1
+      *mode-line-position* :top
+      *window-format* "<%n%s%m%30t>"
+      *screen-mode-line-format*
+      (list "[^03%g^n] | "
+       '(:eval (run-shell-command "date +\" [%Y-%m-%d %H:%M:%S]\" | tr -d '[:cntrl:]'" t))))
+
+;; Key bindings
+; Left Hand
+(define-key *top-map* (kbd "M-S-Super_L")   "exec urxvtc -e python")
+(define-key *top-map* (kbd "C-Super_L")     "exec urxvtc -e newtmux")
+(define-key *top-map* (kbd "C-S-Super_L")   "exec urxvtc -sh 0 -e cmatrix -C red -l -b")
+(define-key *top-map* (kbd "C-M-Super_L")   "exec urxvtc -e ypsilon")
+(define-key *top-map* (kbd "C-M-S-Super_L") "exec urxvtc -e clisp")
+(define-key *top-map* (kbd "M-Super_L")     "exec emacs")
+
+; Media keys
+(define-key *top-map* (kbd "XF86HomePage")   "exec opera")
+(define-key *top-map* (kbd "XF86Mail")       "exec claws-mail")
+(define-key *top-map* (kbd "XF86Calculator") "exec urxvtc -e gnuplot")
+(define-key *top-map* (kbd "XF86Sleep")      "exec xscreensaver-command -lock")
+
+; Audio
+(define-key *top-map* (kbd "XF86AudioPlay")        "exec nmpc toggle")
+(define-key *top-map* (kbd "XF86AudioStop")        "exec nmpc stop")
+(define-key *top-map* (kbd "XF86AudioPrev")        "exec nmpc previous")
+(define-key *top-map* (kbd "XF86AudioNext")        "exec nmpc next")
+(define-key *top-map* (kbd "XF86AudioMute")        "exec volchng Master toggle")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec volchng Master 1%-")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec volchng Master 1%+")
+(define-key *top-map* (kbd "C-XF86AudioPlay")      "exec volchng toggle")
+
+; Misc Keys
+(define-key *top-map*  (kbd "M-F9")      "loadrc")
+(define-key *top-map*  (kbd "M-Print")   "exec urxvtc -e screenshot")
+(define-key *top-map*  (kbd "Print")     "exec scrot ~/screenshot.png")
+(define-key *root-map* (kbd "m")         "exec ~/bin/moviedb menu")
+(define-key *root-map* (kbd "C-m")       "mode-line")
+(define-key *top-map*  (kbd "M-space")   "exec emelfm2")
+(define-key *root-map* (kbd "x")         "exec xscreensaver -no-splash")
+(define-key *root-map* (kbd "X")         "exec xscreensaver-command -exit")
+(define-key *root-map* (kbd "c")         "exec xclip -selection clipboard -o | xclip")
+
+; Rebind some default bindings
+(define-key *root-map* (kbd "C-c")   "exec urxvt")
+(define-key *root-map* (kbd "e")     "exec urxvt -e emacs")
+(define-key *root-map* (kbd "C-e")   "exec urxvt -e emacs")
+
+; Group Switching
+(define-key *root-map* (kbd ".")     "gnext")
+(define-key *root-map* (kbd ">")     "gnext-with-window")
+(define-key *root-map* (kbd ",")     "gprev")
+(define-key *root-map* (kbd "<")     "gprev-with-window")
+(define-key *root-map* (kbd "1")     "gselect 1")
+(define-key *root-map* (kbd "2")     "gselect 2")
+(define-key *root-map* (kbd "3")     "gselect 3")
+(define-key *root-map* (kbd "4")     "gselect 4")
+(define-key *root-map* (kbd "5")     "gselect 5")
+(define-key *root-map* (kbd "6")     "gselect 6")
+(define-key *root-map* (kbd "7")     "gselect 7")
+(define-key *root-map* (kbd "8")     "gselect 8")
+(define-key *root-map* (kbd "9")     "gselect 9")
+(define-key *root-map* (kbd "0")     "gselect 10")
+
+;; Extra files
+(load "~/config/stumpwm.d/mplayer")
