@@ -100,12 +100,12 @@ else
     alias functions='cat /home/barrucadu/config/zsh/functions'
 fi
 alias mp3ogg='mp32ogg-bash *.mp3 && rm *.mp3'
+alias flacogg='echo ".\n.\n6" | flac2ogg && rm *.flac'
 alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/config/xorg/Xdefaults'
 alias myman='myman -z big -i'
 alias nicklist='clear;cat ~/config/irssi/nicklistfifo'
 alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
-alias mklive='mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V "Arch Hurd" -o ahurd.iso ~/hurd/livecd/'
 alias units='units --verbose -1'
 alias dvdplayer="mplayer -profile dvd dvdnav://"
 alias burniso="wodim -v dev=/dev/cdrom speed=4"

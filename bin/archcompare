@@ -100,9 +100,9 @@ function versions()
             linux=`grep " $pkg " $ARCHCOMPAREDIR/linux/packages.list | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
             hurd=`grep " $pkg " $ARCHCOMPAREDIR/hurd/packages.list   | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
 	    
-            if $([[ "$1" == "o" ]] && [[ $hurd < $linux ]]) || \
-                $([[ "$1" == "n" ]] && [[ $hurd > $linux ]]) || \
-                $([[ "$1" == "d" ]] && [[ $hurd != $linux ]]); then
+            if $([[ "$1" == "o" ]] && [[ `vercmp $hurd $linux` == -1 ]]) || \
+                $([[ "$1" == "n" ]] && [[ `vercmp $hurd $linux` == 1 ]]) || \
+                $([[ "$1" == "d" ]] && [[ `vercmp $hurd $linux` != 0 ]]); then
                 echo "$pkg $hurd [$linux]"
             fi
         done
