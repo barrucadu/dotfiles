@@ -1,0 +1,238 @@
+#!/bin/zsh
+
+VERBOSE=/bin/false
+
+## Colours
+autoload colors zsh/terminfo
+if [[ "$terminfo[colors]" -ge 8 ]]; then
+    colors
+fi
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+    eval PR_$color='$terminfo[bold]$fg[${(L)color}]'
+    eval PR_LIGHT_$color='$fg[${(L)color}]'
+    
+    export PR_$color
+    export PR_LIGHT_$color
+done
+export PR_NO_COLOR="$terminfo[sgr0]"
+
+function showmsg()
+{
+    echo "${PR_GREEN}==> ${PR_NO_COLOR}${PR_LIGHT_GREEN}$1${PR_NO_COLOR}"
+}
+
+function showerr()
+{
+    echo "${PR_RED}==> ${PR_NO_COLOR}${PR_LIGHT_RED}$1${PR_NO_COLOR}"
+    exit 1
+}
+
+
+function shownote()
+{
+    echo "${PR_YELLOW}> ${PR_NO_COLOR}$1"
+}
+
+function runcmd()
+{
+    err=$1
+    shift
+
+    if $VERBOSE; then
+        $@ || showerr $err
+    else
+        $@ &>/dev/null || showerr $err
+    fi
+}
+
+function livecd()
+{
+    LIVECDDIR=$1
+    REPOS=(core)
+    
+    export LIVECDDIR
+    export REPOS
+    
+    mkdir -p $LIVECDDIR/livecd
+    cd $LIVECDDIR
+    
+    ##### SYNC PACKAGES
+    
+    mkdir -p $LIVECDDIR/livecd/arch/paccache
+    
+    for repo in $REPOS; do
+        showmsg "Downloading contents of $repo..."
+        runcmd "Could not synchronise packages in $repo." rsync -avz archhurd.org::repos/$repo .
+        cp -a $repo $LIVECDDIR/livecd/arch/paccache
+    done
+    
+    ##### INSTALL PACKAGES & INITSCRIPTS
+    
+    showmsg "Installing packages..."
+    
+    mkdir -p livecd/var/lib/pacman/
+    mkdir -p livecd/var/log/
+    
+    echo "[options]
+RootDir     = ${LIVECDDIR}/livecd/
+DBPath      = ${LIVECDDIR}/livecd/var/lib/pacman/
+CacheDir    = ${LIVECDDIR}/livecd/arch/paccache/core/
+LogFile     = ${LIVECDDIR}/livecd/var/log/pacman.log
+[core]
+Server = file://${LIVECDDIR}/livecd/arch/paccache/core" > pacman.conf
+
+    runcmd "Could not install packages." fakeroot pacman --config pacman.conf -Sy base --noconfirm
+
+    echo "[options]
+RootDir     = /mnt/
+DBPath      = /mnt/var/lib/pacman/
+CacheDir    = /mnt/var/cache/pacman/pkg/
+LogFile     = /mnt/var/log/pacman.log" > $LIVECDDIR/livecd/etc/pacman-mnt.conf
+
+    for repo in $REPOS; do
+        echo "[${repo}]
+Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
+    done
+
+    mkdir -p initscripts
+    pushd initscripts/
+    runcmd "Could not pull initscripts.git." git init
+    runcmd "Could not pull initscripts.git." git pull git://archhurd.org/initscripts.git livecd
+    
+    export DESTDIR=$LIVECDDIR/livecd
+    runcmd "Could not install initscripts." ./install.sh
+    popd
+
+    ##### SETUP
+    
+    showmsg "Installing setup script"
+    
+    mkdir -p setup
+    pushd setup/
+    runcmd "Could not pull setup.git." git init
+    runcmd "Could not pull setup.git." git pull git://archhurd.org/setup.git master
+    runcmd "Could not install setup."  cp * ${LIVECDDIR}/livecd/arch/
+    popd
+    
+    ##### BUILD LIVECD
+    
+    showmsg "Building LiveCD..."
+    
+    runcmd "Failed to copy GRUB files." cp ${LIVECDDIR}/livecd/lib/grub/i386-pc/stage2_eltorito ${LIVECDDIR}/livecd/boot/grub/
+    
+    echo "timeout   300
+default   0
+color light-blue/black light-cyan/blue
+
+title Arch Hurd (hit 'e' and edit hd2 to be the device your CD/DVD is)
+root (cd)
+kernel /boot/gnumach root=device:hd2
+module /hurd/iso9660fs.static --multiboot-command-line=\${kernel-command-line} --host-priv-port=\${host-port} --device-master-port=\${device-port} --exec-server-task=\${exec-task} -T typed \${root} \$(task-create) \$(task-resume)
+module /lib/ld-2.11.90.so /hurd/exec \$(exec-task=task-create)" > $LIVECDDIR/livecd/boot/grub/menu.lst
+    
+    runcmd "Failed to build ISO file." mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V "Arch Hurd" -o ahurd.iso $LIVECDDIR/livecd
+    
+    showmsg "Done. ISO built as ${LIVECDDIR}/ahurd.iso."
+
+    shownote "For official livecds, do the following:"
+    shownote "    * Add documentation (installation guide & translator intro)"
+    shownote "    * Set up helpful /etc/motd file"
+}
+
+function qemu()
+{
+    IMAGEDIR=$1
+    PACKAGES=(base base-devel)
+    
+    export IMAGEDIR
+    export REPOS
+    
+    mkdir -p $IMAGEDIR
+    cd $IMAGEDIR
+    
+    ##### MAKE & MOUNT IMAGE
+    
+    showmsg "Creating image..."
+
+    runcmd "Could not set up image" qemu-img create -f raw ahurd.img 10G
+    runcmd "Could not set up image" sudo losetup /dev/loop0 ahurd.img
+
+    runcmd "Could not partition image" sudo bash -c '(echo "unit: sectors"; echo "/dev/loop0p1 : start=       63, size= 20964762, Id=83") | sfdisk /dev/loop0'
+    sudo losetup -d /dev/loop0
+
+    runcmd "Could not set up partition" sudo losetup /dev/loop0 -o 32256 ahurd.img
+    runcmd "Could not format partition" sudo mkfs.ext2 -b 4096 -I 128 -o hurd /dev/loop0 2610480
+
+    mkdir -p mnt
+    runcmd "Could not mount image" sudo mount /dev/loop0 mnt
+    runcmd "Could not mount image" sudo chown $UID mnt
+
+    #### INSTALL PACKAGES
+
+    mkdir -p mnt/var/lib/pacman/
+    mkdir -p mnt/var/cache/pacman/pkg/
+    mkdir -p mnt/var/log/
+    
+    echo "[options]
+RootDir     = ${IMAGEDIR}/mnt/
+DBPath      = ${IMAGEDIR}/mnt/var/lib/pacman/
+CacheDir    = ${IMAGEDIR}/mnt/var/cache/pacman/pkg/
+LogFile     = ${IMAGEDIR}/mnt/var/log/pacman.log
+[core]
+Server = http://files.archhurd.org/repo/core/" > pacman.conf
+
+    runcmd "Could not synchronise pacman database." fakeroot pacman --config pacman.conf -Syy
+
+    for pkg in $PACKAGES; do
+        showmsg "Installing '$pkg'..."
+        runcmd  "Could not install '$pkg'" fakeroot pacman --config pacman.conf -S $pkg --noconfirm
+    done
+
+    #### FINISH
+
+    showmsg "Finishing off..."
+
+    runcmd "Could not copy GRUB files" cp -a mnt/lib/grub/i386-pc/* mnt/boot/grub/
+
+    runcmd "Could not unmount image" sudo umount $IMAGEDIR/mnt
+    sudo losetup -d /dev/loop0
+    showmsg "Done. Image built as ${IMAGEDIR}/ahurd.img."
+
+    shownote "You will need to install GRUB yourself using a GRUB boot image."
+    shownote "No configuration has been performed."
+    shownote "First boot will fail. You will have to MAKEDEV hd0 and hd0s1 when dropped to a recovery console."
+}
+
+function help()
+{
+    echo "USAGE: mkahurd [-v] (--livecd | --qemu) /path/to/working/directory"
+    echo
+    echo "Options:"
+    echo "    -v:       Verbose output (must be first argument)"
+    echo "    --livecd: Generate a livecd"
+    echo "    --qemu:   Generate a 10GB qemu image"
+    echo
+    echo "mkahurd is written and maintained by Michael Walker."
+}
+
+if [[ "$1" == "-v" ]]; then
+    VERBOSE=/bin/true
+    shift
+fi
+export VERBOSE
+
+case $1 in
+    "--livecd")
+        livecd $2
+        ;;
+    "--qemu")
+        qemu $2
+        ;;
+    "--help" | "")
+        help
+        ;;
+    *)
+        showerr "Unknown parameter '$1'"
+        ;;
+esac
+

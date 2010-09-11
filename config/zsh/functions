@@ -149,8 +149,6 @@ function extract ()
             unxz $1;;
         *.bz2)
             bunzip2 $1;;
-        *.rar)
-            rar x $1;;
         *.gz)
             gunzip $1;;
         *.tar)
@@ -159,33 +157,9 @@ function extract ()
             tar xvjf $1;;
         *.tgz)
             tar xvzf $1;;
-        *.zip)
-            unzip $1;;
         *.Z)
             uncompress $1;;
-        *.7z)
-            7z x $1;;
         *)
             echo "don't know how to extract '$1'...";;
     esac
-}
-
-function qemu-real-hdd()
-{
-    sudo chown barrucadu /dev/$1
-    
-    if [[ -e $2 ]]; then
-        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -hdb $2 -m 1G
-    else
-        qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -hda /dev/$1 -m 1G
-    fi
-}
-
-function lnmv()
-{
-    from=$1
-    to=$2
-
-    mv $from $to
-    ln -s $to $from
 }
