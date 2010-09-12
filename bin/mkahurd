@@ -115,8 +115,26 @@ Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
     popd
     
     ##### BUILD LIVECD
-    
+
     showmsg "Building LiveCD..."
+
+    echo "Welcome to Arch Hurd.
+
+If you have never used the Hurd before, do not fear! Superficially, they are
+very similar systems and so much of your existing Linux knowledge will be
+applicable.
+
+Some useful commands for this livecd include:
+    /arch/setup
+        - start the installer
+    less /arch/guide
+        - read the installation guide
+    less /arch/translators
+        - read a short intro to translators
+
+The root user has no password, so simply enter \"login root\" to log in.
+
+Happy Hurding!" > ${LIVECDDIR}/livecd/etc/motd
     
     runcmd "Failed to copy GRUB files." cp ${LIVECDDIR}/livecd/lib/grub/i386-pc/stage2_eltorito ${LIVECDDIR}/livecd/boot/grub/
     
@@ -136,7 +154,6 @@ module /lib/ld-2.11.90.so /hurd/exec \$(exec-task=task-create)" > $LIVECDDIR/liv
 
     shownote "For official livecds, do the following:"
     shownote "    * Add documentation (installation guide & translator intro)"
-    shownote "    * Set up helpful /etc/motd file"
 }
 
 function qemu()

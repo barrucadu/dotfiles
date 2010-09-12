@@ -1,8 +1,9 @@
 [default]
-# Autio/Video settings
+# Audio/Video settings
 ao=alsa
 vo=xv,x11
 fs=1
+zoom=1
 
 # Subtitle settings
 ass=yes
