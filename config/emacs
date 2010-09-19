@@ -182,8 +182,8 @@
 
 ;;;;; ;;;;; ;;;;; C ;;;;; ;;;;; ;;;;;
 
-(setq c-default-style "bsd"
-      c-basic-offset  4)
+(setq c-default-style "gnu"
+      c-basic-offset  2)
 
 ;;;;; ;;;;; ;;;;; PASCAL ;;;;; ;;;;; ;;;;;
 

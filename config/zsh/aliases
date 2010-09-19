@@ -108,5 +108,5 @@ alias nicklist='clear;cat ~/config/irssi/nicklistfifo'
 alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
 alias units='units --verbose -1'
 alias dvdplayer="mplayer -profile dvd dvdnav://"
-alias burniso="wodim -v dev=/dev/cdrom speed=4"
+alias burniso="wodim -v dev=/dev/cdrom speed=1"
 alias pumount='pmount -u'

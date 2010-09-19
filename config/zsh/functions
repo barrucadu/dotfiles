@@ -159,6 +159,8 @@ function extract ()
             tar xvzf $1;;
         *.Z)
             uncompress $1;;
+        *.zip)
+            unzip $1;;
         *)
             echo "don't know how to extract '$1'...";;
     esac
