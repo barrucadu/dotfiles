@@ -62,7 +62,7 @@ alias tree='tree -L 2 -d -l'
 
 # Package management
 alias fullupgrade='sudo abs && LD_PRELOAD= sudo clyde -Syua'
-alias upgrade='LD_PRELOAD= sudo clyde -Syua'
+alias upgrade='sudo clyde -Syua'
 alias orphans='clyde -Qtdq'
 alias paclist='clyde -Ql'
 alias pacfile='clyde -Qo'

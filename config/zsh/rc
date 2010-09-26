@@ -11,10 +11,4 @@ if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty2 ]] && [[ "`runlevel`" == *5* ]];
         startx ~/config/xorg/xinitrc &> /dev/null
         source ~/config/zsh/profile
     done
-else
-    # Welcome message
-    clear
-    ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" | cowsay -f bunny.cow -W 50
-    wget -q http://eihort/dom.php -O -
-    echo
 fi

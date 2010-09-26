@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-screen -r `screen -ls | grep Detached | sed "s/(.*//"` || screen
-
-exit

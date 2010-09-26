@@ -83,25 +83,57 @@ done
 
 export PR_NO_COLOR="%{$terminfo[sgr0]%}"
 
-# pre/post commands
+# prompt
+function prompt_git_dirty() {
+    gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
+    
+    if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
+        echo -n $PR_LIGHT_YELLOW
+    fi
+    
+    if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
+        echo -n $PR_LIGHT_RED
+    fi
+
+    echo -n $PR_LIGHT_MAGENTA
+}
+
+function prompt_current_branch() {
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || return 1
+    echo ${ref#refs/heads/}
+}
+
+function prompt_hostname()
+{
+    case "`hostname`" in
+        "azathoth")
+            echo -n "${PR_LIGHT_BLUE}azathoth${PR_NO_COLOR}";;
+        "randolph")
+            echo -n "${PR_LIGHT_CYAN}randolph${PR_NO_COLOR}";;
+        "eihort")
+            echo -n "${PR_LIGHT_MAGENTA}eihort${PR_NO_COLOR}";;
+        "yuggoth")
+            echo -n "${PR_LIGHT_RED}yuggoth${PR_NO_COLOR}";;
+    esac
+}
 
 function precmd() # Uses: setting user/root PROMPT1 variable and rehashing commands list
 {
-    # Last command failed:    red :(
-    lastcmdstatus=`[ $? != 0 ] && echo "$PR_RED%B:(%b "`
+    # Last command status
+    cmdstatus=$?
+    sadface=`[ "$cmdstatus" != "0" ] && echo "${PR_RED}:(${PR_NO_COLOR} "`
 
-    # Package updates:        blue update count
-    pacupgrades=`pacman -Qu &>/dev/null && echo "${PR_BLUE}[\`pacman -Qu | wc -l\`]$PR_NO_COLOR "`
+    # Colours
+    usercolour=`[ $UID != 0 ]   && echo $PR_GREEN      || echo $PR_RED`
+    usercolour2=`[ $UID != 0 ]  && echo $PR_LIGHT_BLUE || echo $PR_RED`
+    dircolour=`[ -w "\`pwd\`" ] && echo $PR_CYAN       || echo $PR_RED`
 
-    # Working dir unwritable: red pwd, else cyan pwd
-    cwdcolour=`[ -w "\`pwd\`" ] && echo "$PR_CYAN" || echo "$PR_RED"`
-    cwdname="%B%2~%b"
+    # Git branch
+    git="[branch: `prompt_git_dirty``prompt_current_branch`${PR_NO_COLOR}]"
 
-    # Running as root:        red #, red time, else green %, green time
-    prompttime=`[ $UID != 0 ] && echo "$PR_LIGHT_GREEN%*" || echo "$PR_RED%*"`
-    amiroot=`[ $UID != 0 ] && echo "$PR_GREEN%%" || echo "$PR_RED#"`
-
-    export PROMPT="${lastcmdstatus}${pacupgrades}${prompttime} ${cwdcolour}${cwdname} ${amiroot}${PR_NO_COLOR} "
+    export PROMPT="
+${usercolour}%n${PR_NO_COLOR} on `prompt_hostname` in ${dircolour}%~${PR_NO_COLOR} `prompt_current_branch &>/dev/null && echo -n $git`
+ ${sadface}${usercolour2}>>>${PR_NO_COLOR}  "
 }
 
 # Emacs shell mode

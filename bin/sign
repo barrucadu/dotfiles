@@ -1,9 +1,0 @@
-#!/bin/dash
-KEY=$1;
-KEYSERVER='keyserver.ubuntu.com';
-
-[[ "$2" != "" ]] && KEYSERVER=$2
-
-gpg --keyserver $KEYSERVER --recv-keys $KEY
-gpg --yes --ask-cert-level --sign-key $KEY
-gpg --keyserver $KEYSERVER --send-keys $KEY

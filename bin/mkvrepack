@@ -1,6 +1,0 @@
-#!/bin/zsh
-
-for movie in *.mkv; do
-    mkvextract tracks "$movie" $1:"$movie.avi" $2:"$movie.ogg"
-    mkvmerge -o "$movie-final.mkv" "$movie.avi" "$movie.ogg"
-done
