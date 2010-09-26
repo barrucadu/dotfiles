@@ -89,13 +89,11 @@ function prompt_git_dirty() {
     
     if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
         echo -n $PR_LIGHT_YELLOW
-    fi
-    
-    if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
+    elif [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
         echo -n $PR_LIGHT_RED
+    else
+        echo -n $PR_LIGHT_MAGENTA
     fi
-
-    echo -n $PR_LIGHT_MAGENTA
 }
 
 function prompt_current_branch() {
