@@ -1,42 +1,8 @@
 ## -*- shell-script -*-
 
-# Global aliases
-alias -g G='| grep'
-alias -g M='| most'
-alias -g X='| xargs'
-alias -g H='| head'
-alias -g T='| tail'
-alias -g S='| sed'
-alias -g W='| wc -l'
-
-# Suffix aliases
-alias -s conf='editor'
-alias -s pdf='epdfview'
-alias -s doc='soffice'
-    # Images
-alias -s gif='mirage'
-alias -s png='mirage'
-alias -s jpg='mirage'
-alias -s jpeg='mirage'
-alias -s svg='mirage'
-alias -s xcf='gimp'
-alias -s dia='dia'
-    # Media
-alias -s ogg='mplayer'
-alias -s mp3='mplayer'
-alias -s mp4='mplayer'
-alias -s avi='mplayer'
-alias -s mkv='mplayer'
-alias -s ogm='mplayer'
-    # Web
-alias -s com='opera'
-alias -s net='opera'
-alias -s org='opera'
-alias -s uk='opera'
-
 # Short aliases
 alias !='sudo'
-alias @='opera'
+alias @='chromium'
 alias c='clear'
 alias e='exit'
 alias o='editor'
@@ -61,7 +27,7 @@ alias mkdir='mkdir -p'
 alias tree='tree -L 2 -d -l'
 
 # Package management
-alias fullupgrade='sudo abs && LD_PRELOAD= sudo clyde -Syua'
+alias fullupgrade='sudo abs && sudo clyde -Syua'
 alias upgrade='sudo clyde -Syua'
 alias orphans='clyde -Qtdq'
 alias paclist='clyde -Ql'
