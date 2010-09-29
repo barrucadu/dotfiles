@@ -42,7 +42,8 @@ alias pacgroup='clyde -Qg'
 alias pacgroups='clyde -Qg | sed "s/ .*//" | sort | uniq'
 
 # Security
-alias gpgasc='gpg -a --detach-sign'
+alias gpgsig='gpg -a --detach-sign'
+alias gpgasc='gpg -e -r 23C44846 -a'
 alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Servers
