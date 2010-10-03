@@ -4,8 +4,8 @@
 export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
     # Programs
 export BROWSER=chromium
-export EDITOR="emacsclient -t"
-export VISUAL="emacsclient -t"
+export EDITOR="emacsclient -c -t"
+export VISUAL="emacsclient -c -t"
 export PAGER=most
     # History
 export HISTFILE=~/.data/zsh/history
