@@ -3,9 +3,9 @@
 # Environmental Variables
 export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
     # Programs
-export BROWSER=opera
-export EDITOR=editor
-export VISUAL=editor
+export BROWSER=chromium
+export EDITOR="emacsclient -t"
+export VISUAL="emacsclient -t"
 export PAGER=most
     # History
 export HISTFILE=~/.data/zsh/history

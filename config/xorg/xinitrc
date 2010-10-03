@@ -20,8 +20,11 @@ xscreensaver -no-splash &
 # APPS
 
 urxvtd -q -f -o
-ucron &>/dev/null &
 randombg
+
+if ! pgrep -fl "emacs --daemon" &>/dev/null; then
+    emacs --daemon
+fi
 
 # /APPS
 
