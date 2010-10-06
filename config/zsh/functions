@@ -49,6 +49,13 @@ function maintain()
     sudo sync
 }
 
+function shutdownhost()
+{
+    if ping -c1 $1 &>/dev/null; then
+        ssh $1 "sudo shutdown -hP now"
+    fi
+}
+
 # Running programs
 function r()
 {
