@@ -15,8 +15,6 @@
 (require 'wrap-region)
 (require 'color-theme)
 (require 'tex-site)
-(require 'pycomplete)
-(require 'pymacs)
 
 (load "zenburn.el"             nil t t)
 (load "zenburn-transparent.el" nil t t)
@@ -31,7 +29,6 @@
 (autoload 'jython-mode    "python-mode"      "Python editing mode."                                       t)
 (autoload 'py-shell       "python-mode"      "Start an interactive Python interpreter in another window." t)
 (autoload 'doctest-mode   "doctest-mode"     "Editing mode for Python Doctest examples."                  t)
-(autoload 'py-complete    "pycomplete"       "Complete a symbol at point using Pymacs."                   t)
 (autoload 'pymacs-load    "pymacs"           nil                                                          t)
 (autoload 'pymacs-eval    "pymacs"           nil                                                          t)
 (autoload 'pymacs-apply   "pymacs"           nil                                                          t)
