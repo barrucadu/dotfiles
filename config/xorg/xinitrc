@@ -12,9 +12,6 @@ xmodmap -e "clear Mod4"
 xsetroot -cursor_name left_ptr
 xrdb -load ~/config/xorg/Xdefaults
 
-# Screensaver
-xscreensaver -no-splash &
-
 # /X
 
 # APPS

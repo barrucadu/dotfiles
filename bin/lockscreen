@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+# Todo: kill the screensaver after unblanking
+
+if ! pgrep -fl xscreensaver &> /dev/null; then
+    xscreensaver -no-splash &
+fi
+
+xscreensaver-command -lock

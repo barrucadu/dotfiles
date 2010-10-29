@@ -46,7 +46,7 @@
 (define-key *top-map* (kbd "XF86HomePage")   "exec chromium")
 (define-key *top-map* (kbd "XF86Mail")       "exec claws-mail")
 (define-key *top-map* (kbd "XF86Calculator") "exec urxvtc -e gnuplot")
-(define-key *top-map* (kbd "XF86Sleep")      "exec xscreensaver-command -lock")
+(define-key *top-map* (kbd "XF86Sleep")      "exec /home/barrucadu/bin/lockscreen")
 
 ; Audio
 (define-key *top-map* (kbd "XF86AudioPlay")        "exec nmpc toggle")
