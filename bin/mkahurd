@@ -94,10 +94,8 @@ LogFile     = /mnt/var/log/pacman.log" > $LIVECDDIR/livecd/etc/pacman-mnt.conf
 Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
     done
 
-    mkdir -p initscripts
+    runcmd "Could not pull initscripts.git." git clone --branch=livecd git://archhurd.org/initscripts.git
     pushd initscripts/
-    runcmd "Could not pull initscripts.git." git init
-    runcmd "Could not pull initscripts.git." git pull git://archhurd.org/initscripts.git livecd
     
     export DESTDIR=$LIVECDDIR/livecd
     runcmd "Could not install initscripts." ./install.sh
@@ -107,10 +105,8 @@ Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
     
     showmsg "Installing setup script"
     
-    mkdir -p setup
+    runcmd "Could not pull setup.git." git clone git://archhurd.org/setup.git
     pushd setup/
-    runcmd "Could not pull setup.git." git init
-    runcmd "Could not pull setup.git." git pull git://archhurd.org/setup.git master
     runcmd "Could not install setup."  cp * ${LIVECDDIR}/livecd/arch/
     popd
     

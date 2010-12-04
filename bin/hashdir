@@ -10,7 +10,7 @@ function gethash()
     file=$1
     hashfunc="${HASHTYPE}sum"
 
-    $hashfunc $file | sed 's: .*::'
+    [ -e $file ] && $hashfunc $file | sed 's: .*::'
 }
 
 function gettype()
@@ -38,10 +38,12 @@ function checkhash()
     hash=$2
     hashcheck=$3
 
-    if ! grep -q " $file" $HASHFILE; then
-        return 1
-    elif $hashcheck && ! grep -q "$hash $file" $HASHFILE; then
-        return 2
+    if [ -e $HASHFILE ]; then
+        if ! grep -q " $file" $HASHFILE; then
+            return 1
+        elif $hashcheck && ! grep -q "$hash $file" $HASHFILE; then
+            return 2
+        fi
     fi
 
     return 0
@@ -49,6 +51,7 @@ function checkhash()
 
 function hashdir()
 {
+    fulldir=$1/$2
     dir=$2
     recursive=$3
     create=$4
@@ -79,7 +82,7 @@ function hashdir()
                     checkhash $file "" false
                     chash=$?
                     if [[ ! -e $HASHFILE ]] || [[ "$chash" == "1" ]]; then
-                        echo "=> Hash for $file not found, adding..."
+                        echo "=> Hash for $fulldir/$file not found, adding..."
                         hash=`gethash $file`
                         echo "$hash $file" >> $HASHFILE
                     fi
@@ -94,10 +97,10 @@ function hashdir()
                         checkhash $file $hash true
                         chash=$?
                         if [[ ! -e $HASHFILE ]] || [[ "$chash" == "1" ]]; then
-                            echo "=> Hash for $file not found."
+                            echo "=> Hash for $fulldir/$file not found."
                             ret=1
                         elif [[ "$chash" == "2" ]]; then
-                            echo "=> Hash for $file does not match."
+                            echo "=> Hash for $fulldir/$file does not match."
                             ret=1
                         fi
                     fi

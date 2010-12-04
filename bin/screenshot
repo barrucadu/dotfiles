@@ -18,7 +18,7 @@ cd $websitepath/thumb/
 convert $websitepath/$shot.png -thumbnail 160x100 -background black $shot.png
 
 cd ../thumb-big/
-convert $websitepath/$shot.png -thumbnail 461x300 -background black -polaroid -1 $shot.png
+convert $websitepath/$shot.png -thumbnail 461x300 -background black $shot.png
 
 cd ../info/
 
@@ -58,9 +58,9 @@ echo "<li><strong>Wallpaper:</strong> <a href=\"\"></a></li>" >> $shot.txt
 echo "<li><strong>Other:</strong> </li>"                      >> $shot.txt
 emacs -nw $shot.txt
 
-scp $websitepath/$shot.png           barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/
-scp $websitepath/thumb/$shot.png     barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/thumb/
-scp $websitepath/thumb-big/$shot.png barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www/screenshots/Azathoth/thumb-big/
-scp $websitepath/info/$shot.txt      barrucadu@nitti.dreamhost.com:~/barrucadu.co.uk/www.screenshots/Azathoth/info/
+scp $websitepath/$shot.png           barrucadu@yuggoth:/srv/http/barrucadu.co.uk/www/screenshots/Azathoth/
+scp $websitepath/thumb/$shot.png     barrucadu@yuggoth:/srv/http/barrucadu.co.uk/www/screenshots/Azathoth/thumb/
+scp $websitepath/thumb-big/$shot.png barrucadu@yuggoth:/srv/http/barrucadu.co.uk/www/screenshots/Azathoth/thumb-big/
+scp $websitepath/info/$shot.txt      barrucadu@yuggoth:/srv/http/barrucadu.co.uk/www/screenshots/Azathoth/info/
 
 echo "[url=\"http://www.barrucadu.co.uk/gallery/Azathoth/$shot/\"][img]http://www.barrucadu.co.uk/screenshots/Azathoth/thumb-big/$shot.png[/img][/url]" | xclip
