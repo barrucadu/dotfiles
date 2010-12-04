@@ -49,7 +49,7 @@ alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 # Servers
 alias sql='mysql -p -u root'
 alias rtorrent='ssh -t rtorrent@eihort "screen -r rtorrent"'
-alias fttps='ssh -t rtorrent@eihort "screen -r fttps"'
+alias hurd='ssh -p 2222 root@localhost'
 
 # Coding
 alias gcc='gcc -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -pedantic'
