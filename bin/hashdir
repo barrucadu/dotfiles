@@ -34,7 +34,7 @@ function gettype()
 
 function checkhash()
 {
-    file=$1
+    file=`echo $1 | sed 's:\[:\\\[:' | sed 's:\]:\\\]:' | sed 's:!:\\!:'`
     hash=$2
     hashcheck=$3
 
@@ -51,7 +51,7 @@ function checkhash()
 
 function hashdir()
 {
-    fulldir=$1/$2
+    fulldir=$1
     dir=$2
     recursive=$3
     create=$4
@@ -64,7 +64,7 @@ function hashdir()
     type=0
 
     if $verbose; then
-        echo "Entering $1"
+        echo "Entering $fulldir"
     fi
 
     pushd $dir

@@ -14,7 +14,6 @@
 (require 'ffap)
 (require 'wrap-region)
 (require 'color-theme)
-(require 'tex-site)
 
 (load "zenburn.el"             nil t t)
 (load "zenburn-transparent.el" nil t t)
