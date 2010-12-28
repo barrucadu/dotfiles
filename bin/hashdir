@@ -51,7 +51,6 @@ function checkhash()
 
 function hashdir()
 {
-    fulldir=$1
     dir=$2
     recursive=$3
     create=$4
@@ -64,7 +63,7 @@ function hashdir()
     type=0
 
     if $verbose; then
-        echo "Entering $fulldir"
+        echo "Entering $1"
     fi
 
     pushd $dir
@@ -82,7 +81,7 @@ function hashdir()
                     checkhash $file "" false
                     chash=$?
                     if [[ ! -e $HASHFILE ]] || [[ "$chash" == "1" ]]; then
-                        echo "=> Hash for $fulldir/$file not found, adding..."
+                        echo "=> Hash for $1/$file not found, adding..."
                         hash=`gethash $file`
                         echo "$hash $file" >> $HASHFILE
                     fi
@@ -97,10 +96,10 @@ function hashdir()
                         checkhash $file $hash true
                         chash=$?
                         if [[ ! -e $HASHFILE ]] || [[ "$chash" == "1" ]]; then
-                            echo "=> Hash for $fulldir/$file not found."
+                            echo "=> Hash for $1/$file not found."
                             ret=1
                         elif [[ "$chash" == "2" ]]; then
-                            echo "=> Hash for $fulldir/$file does not match."
+                            echo "=> Hash for $1/$file does not match."
                             ret=1
                         fi
                     fi
