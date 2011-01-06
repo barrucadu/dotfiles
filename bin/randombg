@@ -5,25 +5,44 @@ import random, os, sys, subprocess
 # Multi-screen random wallpaper script
 #  * This assumes all wallpapers are exactly the right size for your screen.
 
+# Make an empty file of the appropriate size
+# @param file     The filename
+# @param geometry The geometry, as a list or tuple
+def prepbg (file, geometry):
+    subprocess.call (["convert", "-size", str (geometry[0]) + "x" + str (geometry[1]), "xc:black", file])
+
+# Stick an image into another
+# @param outfile  The output filename
+# @param infile   The input filename
+# @param geometry The geometry of the input file
+# @param index    The index of the input file (ie: offset/width)
+def mergebg (outfile, infile, geometry, index):
+    subprocess.call (["composite", "-geometry", str (geometry[0]) + "x" + str (geometry[1]) + "+" + str (geometry[0] * index) + "+0", infile, outfile, outfile])
+
+# Set the wallpaper
+# @param file The filename
+def setbg (file):
+    subprocess.call (["feh", "--bg-tile", file])
+
 screens  = 1
 paperdir = "/usr/share/wallpapers/rotation"
-geometry = [1920, 1080]
+geometry = (1920, 1080)
 
 if len (sys.argv) > 1:
     screens = int (sys.argv[1])
 
-fullgeom = [geometry[0] * screens, geometry[1]]
+fullgeom = (geometry[0] * screens, geometry[1])
 
 papers = os.listdir (paperdir)
 random.shuffle (papers)
 
 if screens == 1:
     # Shortcut to skip work
-    subprocess.call (["feh", "--bg-tile", paperdir + "/" + papers[0]])
+    setbg (paperdir + "/" + papers[0])
 else:
-    subprocess.call (["convert", "-size", str (fullgeom[0]) + "x" + str (fullgeom[1]), "xc:white", "/tmp/wallpaper.png"])
+    prepbg ("/tmp/wallpaper.png", fullgeom)
     
     for i in range (0, screens):
-        subprocess.call (["composite", "-geometry", str (geometry[0]) + "x" + str (geometry[1]) + "+" + str (geometry[0] * i) + "+0", paperdir + "/" + papers[i], "/tmp/wallpaper.png", "/tmp/wallpaper.png"])
+        mergebg ("/tmp/wallpaper.png", paperdir + "/" + papers[i], geometry, i)
         
-    subprocess.call (["feh", "--bg-tile", "/tmp/wallpaper.png"])
+    setbg ("/tmp/wallpaper.png")
