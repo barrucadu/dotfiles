@@ -26,6 +26,7 @@ def setbg (file):
 
 screens  = 1
 paperdir = "/usr/share/wallpapers/rotation"
+tmpfile  = "/tmp/wallpaper.png"
 geometry = (1920, 1080)
 
 if len (sys.argv) > 1:
@@ -40,9 +41,9 @@ if screens == 1:
     # Shortcut to skip work
     setbg (paperdir + "/" + papers[0])
 else:
-    prepbg ("/tmp/wallpaper.png", fullgeom)
+    prepbg (tmpfile, fullgeom)
     
     for i in range (0, screens):
-        mergebg ("/tmp/wallpaper.png", paperdir + "/" + papers[i], geometry, i)
+        mergebg (tmpfile, paperdir + "/" + papers[i], geometry, i)
         
-    setbg ("/tmp/wallpaper.png")
+    setbg (tmpfile)
