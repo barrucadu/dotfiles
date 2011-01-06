@@ -3,15 +3,14 @@
 import random, os, sys, subprocess
 
 # Multi-screen random wallpaper script
+#  * This assumes all wallpapers are exactly the right size for your screen.
+
 screens  = 1
 paperdir = "/usr/share/wallpapers/rotation"
 geometry = [1920, 1080]
 
 if len (sys.argv) > 1:
     screens = int (sys.argv[1])
-
-if len (sys.argv) > 3:
-    geometry = [int (sys.argv[2]), int (sys.argv[3])]
 
 fullgeom = [geometry[0] * screens, geometry[1]]
 
