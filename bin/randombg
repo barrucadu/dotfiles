@@ -1,6 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-papers=/usr/share/wallpapers/rotation
-image=`ls $papers | shuf -n1`
+import sys, subprocess
 
-feh --bg-scale "$papers/$image"
+# Multi-screen random wallpaper script
+screens  = 1
+paperdir = "/usr/share/wallpapers/rotation"
+geometry = [1920, 1080]
+
+if len (sys.argv) > 1:
+    screens = int (sys.argv[1])
+
+if len (sys.argv) > 3:
+    geometry = [int (sys.argv[2]), int (sys.argv[3])]
+
+fullgeom = [geometry[0] * screens, geometry[1]]
+
+papers = subprocess.check_output ("ls " + paperdir + " | sort -R", shell = True).decode ().split ("\n")
+papers = papers[:screens]
+
+subprocess.call ("convert -size " + str (fullgeom[0]) + "x" + str (fullgeom[1]) + " xc:white /tmp/wallpaper.png", shell = True)
+
+for i in range (0, len (papers)):
+    subprocess.call ("composite -geometry " + str (geometry[0]) + "x" + str (geometry[1]) + "+" + str (geometry[0] * i) + "+0 \"" + paperdir + "/" + papers[i] + "\" /tmp/wallpaper.png /tmp/wallpaper.png", shell = True)
+
+subprocess.call ("feh --bg-tile /tmp/wallpaper.png", shell = True)
