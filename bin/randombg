@@ -18,11 +18,13 @@ fullgeom = [geometry[0] * screens, geometry[1]]
 papers = os.listdir (paperdir)
 random.shuffle (papers)
 
-papers = papers[:screens]
-
-subprocess.call (["convert", "-size", str (fullgeom[0]) + "x" + str (fullgeom[1]), "xc:white", "/tmp/wallpaper.png"])
-
-for i in range (0, len (papers)):
-    subprocess.call (["composite", "-geometry", str (geometry[0]) + "x" + str (geometry[1]) + "+" + str (geometry[0] * i) + "+0", paperdir + "/" + papers[i], "/tmp/wallpaper.png", "/tmp/wallpaper.png"])
-
-subprocess.call (["feh", "--bg-tile", "/tmp/wallpaper.png"])
+if screens == 1:
+    # Shortcut to skip work
+    subprocess.call (["feh", "--bg-tile", paperdir + "/" + papers[0]])
+else:
+    subprocess.call (["convert", "-size", str (fullgeom[0]) + "x" + str (fullgeom[1]), "xc:white", "/tmp/wallpaper.png"])
+    
+    for i in range (0, screens):
+        subprocess.call (["composite", "-geometry", str (geometry[0]) + "x" + str (geometry[1]) + "+" + str (geometry[0] * i) + "+0", paperdir + "/" + papers[i], "/tmp/wallpaper.png", "/tmp/wallpaper.png"])
+        
+    subprocess.call (["feh", "--bg-tile", "/tmp/wallpaper.png"])
