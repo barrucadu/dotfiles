@@ -17,7 +17,7 @@ xrdb -load ~/config/xorg/Xdefaults
 # APPS
 
 urxvtd -q -f -o
-randombg
+randombg &
 
 if ! pgrep -fl "emacs --daemon" &>/dev/null; then
     emacs --daemon

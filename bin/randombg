@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, subprocess
+import random, os, sys, subprocess
 
 # Multi-screen random wallpaper script
 screens  = 1
@@ -15,7 +15,9 @@ if len (sys.argv) > 3:
 
 fullgeom = [geometry[0] * screens, geometry[1]]
 
-papers = subprocess.check_output ("ls " + paperdir + " | sort -R", shell = True).decode ().split ("\n")
+papers = os.listdir (paperdir)
+random.shuffle (papers)
+
 papers = papers[:screens]
 
 subprocess.call (["convert", "-size", str (fullgeom[0]) + "x" + str (fullgeom[1]), "xc:white", "/tmp/wallpaper.png"])
