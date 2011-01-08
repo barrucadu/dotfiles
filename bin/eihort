@@ -2,7 +2,6 @@
 
 media=true
 share=true
-torrents=true
 http=true
 sudocmd=sudo
 
@@ -15,8 +14,6 @@ function parsearg()
             media=false;;
         "noshare")
             share=false;;
-        "notorrents")
-            torrents=false;;
         "nohttp")
             http=false;;
     esac
@@ -39,11 +36,9 @@ done
 if ! mount | grep -q eihort; then
     $share    && eimount share    eihort
     $media    && eimount media    eihort-media
-    $torrents && eimount torrents eihort-torrents
     $http     && eimount http     eihort-http
 else
     $share    && eiumount eihort
     $media    && eiumount eihort-media
-    $torrents && eiumount eihort-torrents
     $http     && eiumount eihort-http
 fi
