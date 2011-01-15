@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+HOST=eihort
+PORT=22
+
 media=true
 share=true
 http=true
@@ -21,12 +24,14 @@ function parsearg()
 
 function eimount ()
 {
-    $sudocmd mount -t nfs4 eihort:/$1 /share/$2
+    sshfs barrucadu@$HOST:/srv/$1 /share/$2 -C -p $PORT
+    #$sudocmd mount -t nfs4 $HOST:/$1 /share/$2
 }
 
 function eiumount ()
 {
-    $sudocmd umount /share/$1
+    fusermount -u /share/$1
+    #$sudocmd umount /share/$1
 }
 
 for arg in "${*[@]}"; do
