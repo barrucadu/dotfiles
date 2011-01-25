@@ -6,7 +6,7 @@ PORT=22
 media=true
 share=true
 http=true
-sudocmd=sudo
+nfs=false
 
 [[ "$UID" == "0" ]] && sudocmd=''
 
@@ -19,19 +19,27 @@ function parsearg()
             share=false;;
         "nohttp")
             http=false;;
+        "nfs")
+            nfs=true;;
     esac
 }
 
 function eimount ()
 {
-    sshfs barrucadu@$HOST:/srv/$1 /share/$2 -C -p $PORT
-    #$sudocmd mount -t nfs4 $HOST:/$1 /share/$2
+    if $nfs; then
+        sudo mount -t nfs4 $HOST:/$1 /share/$2
+    else
+        sshfs barrucadu@$HOST:/srv/$1 /share/$2 -C -p $PORT
+    fi
 }
 
 function eiumount ()
 {
-    fusermount -u /share/$1
-    #$sudocmd umount /share/$1
+    if $nfs; then
+        sudo umount /share/$1
+    else
+        fusermount -u /share/$1
+    fi
 }
 
 for arg in "${*[@]}"; do
@@ -43,6 +51,8 @@ if ! mount | grep -q eihort; then
     $media    && eimount media    eihort-media
     $http     && eimount http     eihort-http
 else
+    nfs=`mount | grep eihort | grep -q nfs`
+
     $share    && eiumount eihort
     $media    && eiumount eihort-media
     $http     && eiumount eihort-http
