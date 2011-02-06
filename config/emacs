@@ -14,6 +14,9 @@
 (require 'ffap)
 (require 'wrap-region)
 (require 'color-theme)
+(require 'haml-mode)
+(require 'sass-mode)
+(require 'epa)
 
 (load "zenburn.el"             nil t t)
 (load "zenburn-transparent.el" nil t t)
@@ -32,6 +35,11 @@
 (autoload 'pymacs-eval    "pymacs"           nil                                                          t)
 (autoload 'pymacs-apply   "pymacs"           nil                                                          t)
 (autoload 'pymacs-call    "pymacs"           nil                                                          t)
+
+;;;;; ;;;;; ;;;;; MODES ;;;;; ;;;;; ;;;;;
+
+(setq initial-major-mode 'org-mode)
+(setq default-major-mode 'org-mode)
 
 ;;;;; ;;;;; ;;;;; INTERFACE ;;;;; ;;;;; ;;;;;
 
@@ -156,12 +164,10 @@
   (insert "</html>\n"))
 
 
-(require 'haml-mode)
 (add-hook 'haml-mode-hook
   '(lambda () (add-hook 'local-write-file-hooks
     '(lambda () (save-excursion (untabify (point-min) (point-max)))))))
 
-(require 'sass-mode)
 (add-hook 'sass-mode-hook
   '(lambda () (add-hook 'local-write-file-hooks
     '(lambda () (save-excursion (untabify (point-min) (point-max)))))))
@@ -193,14 +199,16 @@
 
 ;;;;; ;;;;; ;;;;; ORG ;;;;; ;;;;; ;;;;;
 
-(setq org-return-follows-link t
-      org-log-done            'time
-      org-agenda-files (list "~/org/home.org"
-			     "~/org/school.org"
-			     "~/org/misc.org"))
+(setq org-return-follows-link       t
+      org-log-done                 'time
+      org-use-property-inheritance  t
+      org-enforce-todo-dependencies t
+      org-startup-indented          t)
 
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-c <right>" 'org-property-next-allowed-value)
+(define-key global-map "\C-c <left>"  'org-property-previous-allowed-value)
 
 (setq auto-mode-alist (append '(("/*..org$"        . org-mode)
                                 ("/*..todo$"       . org-mode))
@@ -214,6 +222,8 @@
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
 ;;;;; ;;;;; ;;;;; MISCELLANEOUS ;;;;; ;;;;; ;;;;;
+
+(epa-file-enable)
 
 (setq-default indent-tabs-mode nil)
 (setq ispell-program-name  "aspell"

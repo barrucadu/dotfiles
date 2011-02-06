@@ -1,5 +1,7 @@
 ## -*- shell-script -*-
 
+source /etc/profile.d/devkitarm.sh
+
 # Environmental Variables
 export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
     # Programs
