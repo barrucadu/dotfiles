@@ -210,8 +210,9 @@
 (define-key global-map "\C-c <right>" 'org-property-next-allowed-value)
 (define-key global-map "\C-c <left>"  'org-property-previous-allowed-value)
 
-(setq auto-mode-alist (append '(("/*..org$"        . org-mode)
-                                ("/*..todo$"       . org-mode))
+(setq auto-mode-alist (append '(("/*..org$"  . org-mode)
+                                ("/*..txt$"  . org-mode)
+                                ("/*..todo$" . org-mode))
                               auto-mode-alist))
 
 (defun org-summary-todo (n-done n-not-done)
@@ -220,6 +221,7 @@
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+(add-hook 'org-mode-hook 'visual-line-mode)
 
 ;;;;; ;;;;; ;;;;; MISCELLANEOUS ;;;;; ;;;;; ;;;;;
 
