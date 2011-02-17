@@ -22,5 +22,5 @@ sid=0
 
 [dvd]
 # Basic DVD settings
-dvd-device=/dev/hda
+dvd-device=/dev/dvd
 nocache=1

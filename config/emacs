@@ -202,9 +202,9 @@
 
 (epa-file-enable)
 
-(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil
+              tab-width        2)
 (setq ispell-program-name  "aspell"
-      indent-tabs-mode      nil
       make-backup-files     nil
       kill-whole-line       t
       inhibit-splash-screen t)
