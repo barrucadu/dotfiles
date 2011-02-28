@@ -1,59 +1,133 @@
-#!/bin/zsh
+#!/usr/bin/env python3
 
-i=1
-stop=-1
+# XKCD Downloader using the JSON interface
 
-[ "$1" != "" ] && i=$1
-[ "$2" != "" ] && stop=$2
+import sys, json, urllib.request, urllib.parse, urllib.error, subprocess
 
-[ -f index.html ] && rm index.html &>/dev/null
+# Make an image of the given dimensions with any extra options
+def makeImage (filename, geometry, options):
+    # Assemble the command
+    cmd = ["convert", "-background", "black", "-fill", "white", "-size", geometry, "-gravity", "center"]
 
-wget "http://www.xkcd.com/" &>/dev/null
-endcomic=`md5sum index.html`
-checksum=" "
-rm index.html
+    # Add in any extra options
+    for opt in options:
+        cmd.append (opt)
 
-while [[ $i != $stop ]] && [[ "$checksum" != "$endcomic" ]]; do
-    if [[ $i != 404 ]]; then # There is no comic 404 ^^
+    # Finish making the command
+    cmd.append (filename)
 
-        wget "http://www.xkcd.com/$i" &>/dev/null
-        checksum=`md5sum index.html`
+    # Run the command
+    p = subprocess.Popen (cmd)
+    p.wait ()
 
-        file=`cat index.html | grep "img src.*comics" | sed "s/\(.*src=\"\|\".*\)//g"`
-        wget "$file" &>/dev/null
+# Merge two images
+def mergeImages (file1, file2, geometry):
+    # Assemble the command
+    cmd = ["composite", "-geometry", geometry, file2, file1, file1]
 
-        filename=`echo $file | sed "s/.*\///g"`
-        name=`cat index.html | grep "h1" | sed "s/.*>\(.*\)<\/h.*/\\1/"`
-        alt=`cat index.html | grep "img.*title=" | sed "s/\(.*title=\"\|\".*\)//g" | sed "/^christmas banner$/d" | sed "s/&amp;/&/g" | sed "s/&quot;/\"/g"`
-        
-        rm index.html &>/dev/null
-        
-        width=`identify "$filename" | sed "s/.* \([0-9]*\)x.*/\\1/"`
-        height=`identify "$filename" | sed "s/.*x\([0-9]*\).*/\\1/"`
-        
-        convert -background black -fill white -size "$width"x16 -gravity center label:$name name.png
-        convert -background black -fill white -size "$width"x   -gravity center -pointsize 13 caption:$alt alt.png
-        
-        altheight=`identify alt.png | sed "s/.*x\([0-9]*\).*/\\1/"`
-        
-        n=$i
-        if [[ $i -lt 10 ]]; then
-            n="00$i"
-        elif [[ $i -lt 100 ]]; then
-            n="0$i"
-        fi
-        
-        if [[ ! -f "$n-$filename" ]]; then        
-            convert -size "$width"x$[$height +  $altheight + 24] xc:white "$n-$filename"                
+    # Run the command
+    p = subprocess.Popen (cmd)
+    p.wait ()
 
-            composite -geometry "$width"x16+0+0 name.png "$n-$filename" "$n-$filename"
-            composite -geometry "$width"x"$height"+0+20 $filename "$n-$filename" "$n-$filename"
-            composite -geometry "$width"x"$altheight"+0+$[$height + 24] alt.png "$n-$filename" "$n-$filename"
+# Get image dimensions
+def imageDimensions (filename):
+    # Get the information
+    p = subprocess.Popen (["identify", filename], stdout=subprocess.PIPE)
+    p.wait ()
+    info = p.communicate()[0].decode ("utf-8")
 
-            echo "Done $n-$filename"
-        fi
-        
-        rm $filename name.png alt.png
-    fi
-    i=$[$i + 1]
-done
+    # Split it up for parsing
+    info = info.split(" PNG ")
+    info = info[1].split()
+    info = info[0].split("x")
+
+    # Get the dimensions
+    width  = int (info[0])
+    height = int (info[1])
+
+    # Check they're sane
+    assert width > 0
+    assert height > 0
+
+    # Return
+    return (width, height)
+
+# Delete an image
+def delImage (filename):
+    # Assemble the command
+    cmd = ["rm", filename]
+
+    # Run the command
+    subprocess.Popen (cmd)
+
+# Download a file
+def downloadFile (source, destination):
+    # Open both file
+    s = urllib.request.urlopen(source, "rb")
+    d = open (destination, "wb")
+
+    # Read the source and write the destination
+    d.write (s.read ())
+
+    # Close
+    d.close ()
+    s.close ()
+
+# Download a comic
+def getComic (jsonurl):
+    # Download the json and make a dict out of it
+    f = urllib.request.urlopen(jsonurl)
+    j = f.read().decode("utf-8")
+    parsed = json.loads(j)
+    f.close ()
+
+    # Final filename
+    comicfile = "%s-%s.png" % (parsed['num'], parsed['safe_title'])
+
+    # Download comic image and get dimensions
+    downloadFile (parsed['img'], "comic.png")
+
+    try:
+        (width, height) = imageDimensions ("comic.png")
+    except AssertionError:
+        print ("Could not read image: comic.png")
+        exit  (1)
+
+    # Make working images
+    makeImage ("name.png", "%ix16" % (width), ["label:%s" % parsed['title']])
+    makeImage ("alt.png",  "%ix"   % (width), ["-pointsize", "13", "caption:%s" % (parsed['alt'])])
+
+    # Get dimensions of alt-text
+    try:
+        (altwidth, altheight) = imageDimensions ("alt.png")
+    except AssertionError:
+        print ("Could not read image: alt.png")
+        exit  (1)
+
+    # Make image
+    makeImage (comicfile, "%ix%i" % (width, height + altheight + 24), ["xc:white"])
+    mergeImages (comicfile, "name.png", "%ix16+0+0"   % (width))
+    mergeImages (comicfile, "comic.png", "%ix%i+0+20" % (width, height))
+    mergeImages (comicfile, "alt.png",   "%ix%i+0+%i" % (width, altheight, height + 24))
+
+    # Delete working images
+    delImage ("comic.png")
+    delImage ("name.png")
+    delImage ("alt.png")
+
+    # Done
+    print ("Done %s." % comicfile)
+    
+
+# Show help text
+if "-h" in sys.argv:
+    print ("Usage: xkcd <num1> <num2> <num3> ... <numn>")
+    print ("\n\nIf no numbers are given, the latest comic will be downloaded.")
+    exit  (0)
+
+# Download all specified comics
+if len (sys.argv) > 1:
+    for num in sys.argv[1:]:
+        getComic ("http://xkcd.com/%s/info.0.json" % num)
+else:
+    getComic ("http://xkcd.com/info.0.json")
