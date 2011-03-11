@@ -63,7 +63,7 @@ def delImage (filename):
 # Download a file
 def downloadFile (source, destination):
     # Open both file
-    s = urllib.request.urlopen(source, "rb")
+    s = urllib.request.urlopen(source)
     d = open (destination, "wb")
 
     # Read the source and write the destination
