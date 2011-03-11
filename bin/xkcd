@@ -37,7 +37,13 @@ def imageDimensions (filename):
     info = p.communicate()[0].decode ("utf-8")
 
     # Split it up for parsing
-    info = info.split(" PNG ")
+    if " PNG " in info:
+        info = info.split(" PNG ")
+    elif " JPEG " in info:
+        info = info.split(" JPEG ")
+    else:
+        raise Exception ("Unknown image type")
+
     info = info[1].split()
     info = info[0].split("x")
 
@@ -82,7 +88,10 @@ def getComic (jsonurl):
     f.close ()
 
     # Final filename
-    comicfile = "%s-%s.png" % (parsed['num'], parsed['safe_title'])
+    cnum = str (parsed['num'])
+    while len (cnum) < 3:
+        cnum = "0" + cnum
+    comicfile = "%s - %s.png" % (cnum, parsed['safe_title'])
 
     # Download comic image and get dimensions
     downloadFile (parsed['img'], "comic.png")
