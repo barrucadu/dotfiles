@@ -7,6 +7,7 @@
 (add-to-list 'load-path "~/.emacs.d/color-theme")
 (add-to-list 'load-path "~/.emacs.d/haml-mode")
 (add-to-list 'load-path "~/.emacs.d/sass-mode")
+(add-to-list 'load-path "~/.emacs.d/sml-mode")
 
 (require 'wrap-region)
 (require 'color-theme)
@@ -18,6 +19,7 @@
 (load "zenburn-transparent.el" nil t t)
 (load "auctex.el"              nil t t)
 (load "preview-latex.el"       nil t t)
+(load "sml-mode-startup.el"    nil t t)
 
 (autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."                                             t)
 (autoload 'php-mode       "php-mode.el"      "PHP Mode."                                                  t)
@@ -120,6 +122,10 @@
 
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 (add-to-list 'interpreter-mode-alist '("jython" . jython-mode))
+
+;;;;; ;;;;; ;;;;; ML ;;;;; ;;;;; ;;;;;
+
+(add-to-list 'auto-mode-alist '("\\.ml$" . sml-mode))
 
 ;;;;; ;;;;; ;;;;; WEB DEV ;;;;; ;;;;; ;;;;;
 
