@@ -77,3 +77,4 @@ alias units='units --verbose -1'
 alias dvdplayer="mplayer -profile dvd dvdnav://"
 alias burniso="wodim -v dev=/dev/cdrom speed=1"
 alias pumount='pmount -u'
+alias mineserver='forward yuggoth 25565 eihort'
