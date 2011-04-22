@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+
+import sys, json, subprocess, os.path, shlex, urllib.request, urllib.parse, urllib.error
+
+# Generate NFO file for a movie
+
+MOVIEDIR = '/home/barrucadu/video/movies'
+
+def info (msg):
+    print ('=> %s' % msg)
+
+def err (msg):
+    print ('!! %s' % msg)
+
+def errexit (msg):
+    err (msg)
+    sys.exit (1)
+
+def infoexit (msg):
+    info (msg)
+    sys.exit (0)
+
+def shellexec (cmd):
+    args = [[]]
+    for a in shlex.split (cmd):
+        if a == '|':
+            args.append ([])
+        else:
+            args[len (args) - 1].append (a)
+
+    procs = []
+    for arg in args:
+        if len (procs) == 0:
+            procs.append (subprocess.Popen (arg, stdout=subprocess.PIPE))
+        else:
+            procs.append (subprocess.Popen (arg,
+                                            stdin=procs[len (procs) - 1].stdout,
+                                            stdout=subprocess.PIPE))
+            
+    out = procs [len (procs) - 1].communicate ()[0]
+    if type (out) is bytes:
+        out = out.decode ('UTF-8')
+        
+    return out.strip ()
+
+if len (sys.argv) < 2: errexit ('USAGE: nfogen <title>')
+
+movie = sys.argv[1]
+
+if not os.path.isdir (MOVIEDIR): errexit ('Movie directory not found')
+
+filename = shellexec (r'find %s/by-director -iname "%s.*" | head -n1' % (MOVIEDIR, movie))
+director = shellexec (r'find %s/by-director -iname "%s.*" | sed "s:.*by-director/\(.*\)/.*:\1:" | head -n1' % (MOVIEDIR, movie))
+year     = shellexec (r'find %s/by-year -iname "%s.*" | sed "s:.*by-year/\(.*\)/.*:\1:" | head -n1' % (MOVIEDIR, movie))
+
+if filename == '': errexit ('Filename could not be found.')
+if director == '': errexit ('Director could not be found.')
+if year     == '': errexit ('Year could not be found.')
+
+jsonurl = 'http://www.imdbapi.com/?t=%s&y=%s' % (movie.replace (' ', '%20'), year)
+f = urllib.request.urlopen (jsonurl)
+j = f.read ().decode ('utf-8')
+parsed = json.loads (j)
+f.close ()
+
+nojson = (parsed['Response'] == 'Parse Error')
+
+if nojson:
+    err ('Could not find movie on IMDB. Continuing...')
+else:
+    plot    = parsed['Plot']
+    thumb   = parsed['Poster']
+    runtime = parsed['Runtime']
+    genres  = parsed['Genre'].split (',')
+
+setname   = input ('If you want to group the movie in a set, enter a set name: ')
+sorttitle = input ('If you want to sort the movie by an alternate title, enter it: ')
+
+nfofilename = '%s/by-director/%s/%s.nfo' % (MOVIEDIR, director, movie)
+nfofile = open (nfofilename, 'w')
+
+nfofile.write ('<movie>\n')
+nfofile.write ('  <title>%s</title>\n' % movie)
+if sorttitle != '': nfofile.write ('  <sorttitle>%s</sorttitle>\n' % sorttitle)
+if setname   != '': nfofile.write ('  <set>%s</set>\n' % setname)
+nfofile.write ('  <year>%s</year>\n' % year)
+nfofile.write ('  <director>%s</director>\n' % director)
+
+if not nojson:
+    nfofile.write ('  <outline>%s</outline>\n' % plot)
+    nfofile.write ('  <plot>%s</plot>\n' % plot)
+    nfofile.write ('  <thumb>%s</thumb>\n' % thumb)
+    nfofile.write ('  <runtime>%s</runtime>\n' % runtime)
+
+    for genre in genres:
+        nfofile.write ('  <genre>%s</genre>\n' % genre.strip ())
+    
+nfofile.write ('</movie>\n')
+nfofile.close ()
+
+infoexit ('Wrote NFO file %s\n' % nfofilename)
