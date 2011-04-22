@@ -15,7 +15,7 @@ if [[ "$EDITOR" == "" ]]; then
 fi
 
 # Make a temporary file
-tmpfile="/tmp/vorbtags.$UID.`date +s`"
+tmpfile="/tmp/vorbtags.$UID.`date +%s`"
 
 # Edit vorbis tags
 vorbiscomment -l "$1" -c $tmpfile
