@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+device=$1
+track=1
+shift
+
+while [[ $1 != "" ]]; do
+    if [[ $track -gt 9 ]]; then
+        filename="$track. $1.wav"
+    else
+        filename="0$track. $1.wav"
+    fi
+
+    cdda2wav -D $device -t $track $filename
+    flac $filename
+
+    track=$[$track + 1]
+    shift
+done
+
+rm *.inf *.wav
