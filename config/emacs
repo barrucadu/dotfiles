@@ -1,13 +1,16 @@
 ;; -*- lisp -*-
 
 ;;;;; ;;;;; ;;;;; EXTRA FILES ;;;;; ;;;;; ;;;;;
-(add-to-list 'load-path "~/.emacs.d/wrap-region")
-(add-to-list 'load-path "~/.emacs.d/pkgbuild-mode")
-(add-to-list 'load-path "~/.emacs.d/php-mode")
-(add-to-list 'load-path "~/.emacs.d/color-theme")
-(add-to-list 'load-path "~/.emacs.d/haml-mode")
-(add-to-list 'load-path "~/.emacs.d/sass-mode")
-(add-to-list 'load-path "~/.emacs.d/sml-mode")
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/wrap-region"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/pkgbuild-mode"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/php-mode"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/color-theme"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/haml-mode"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/sass-mode"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/sml-mode"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/jde/lisp"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet/common"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/elib"))
 
 (require 'wrap-region)
 (require 'color-theme)
@@ -20,6 +23,8 @@
 (load "auctex.el"              nil t t)
 (load "preview-latex.el"       nil t t)
 (load "sml-mode-startup.el"    nil t t)
+
+(load-file (expand-file-name "~/.emacs.d/cedet/common/cedet.el"))
 
 (autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."                                             t)
 (autoload 'php-mode       "php-mode.el"      "PHP Mode."                                                  t)
@@ -203,6 +208,21 @@
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 (add-hook 'org-mode-hook 'visual-line-mode)
+
+;;;;; ;;;;; ;;;;; JAVA ;;;;; ;;;;; ;;;;;
+
+(setq defer-loading-jde t)
+(setq jde-enable-abbrev-mode t)
+(setq jde-build-function '(jde-ant-build))
+
+(if defer-loading-jde
+    (progn
+      (autoload 'jde-mode "jde" "JDE mode." t)
+      (setq auto-mode-alist
+            (append
+             '(("\\.java\\'" . jde-mode))
+             auto-mode-alist)))
+  (require 'jde))
 
 ;;;;; ;;;;; ;;;;; MISCELLANEOUS ;;;;; ;;;;; ;;;;;
 
