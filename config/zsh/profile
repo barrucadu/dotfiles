@@ -1,7 +1,7 @@
 ## -*- shell-script -*-
 
 # Environmental Variables
-export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH:/usr/share/java/apache-ant/bin"
     # Programs
 export BROWSER=chromium
 export EDITOR="emacsclient -c -t"
