@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+if [[ ! -e "$1" ]]; then
+    echo "USAGE: ogginfo <file>"
+    exit 1
+fi
+
+# Get time in minutes and seconds
+len=`ogginfo $1 | grep "Playback length:" | sed -E 's/.*: (.*)\..*/\1/'`
+
+# Get minutes
+mins=`echo $len | sed 's/m:.*//'`
+
+# Get seconds
+secs=`echo $len | sed 's/.*://'`
+
+# Print total time
+echo $[ $[ $mins * 60 ] + $secs ]
