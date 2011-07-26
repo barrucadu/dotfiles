@@ -44,7 +44,7 @@ esac
 
 niceOS="Arch Linux `uname -m`"
 niceGTKFont=`grep "gtk-font-name" ~/.gtkrc-2.0 | sed 's/.*="//' | sed 's/"//'`
-niceXFont=`grep FONT ~/config/xorg/Xdefaults | head -n1 | sed 's/.*xft:\(.*\):pixelsize.*/\1/'`
+niceXFont=`grep FONT ~/projects/home/config/xorg/Xdefaults | head -n1 | sed 's/.*xft:\(.*\):pixelsize.*/\1/'`
 niceIcons=`grep icon-theme-name ~/.gtkrc.mine | sed "s/.* \"//" | sed "s/\"//"`
 niceGtk="Shiki Noble" # Yes, I do change my GTK theme so little I decided it'd be easier to just hardcode it…
 

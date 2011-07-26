@@ -1,14 +1,14 @@
 ## -*- shell-script -*-
 # Additional files - I like splitting things up.
-. ~/config/zsh/functions
-. ~/config/zsh/aliases
-. ~/config/zsh/profile
+. ~/projects/home/config/zsh/functions
+. ~/projects/home/config/zsh/aliases
+. ~/projects/home/config/zsh/profile
 
 if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
     # Start X
     while true; do
         echo "Starting X11 at `ddate +\"%{%A, the %e of %B%}, %Y. %N%n    Celebrate %H\"`"
-        startx ~/config/xorg/xinitrc &> /dev/null
-        source ~/config/zsh/profile
+        startx ~/projects/home/config/xorg/xinitrc &> /dev/null
+        source ~/projects/home/config/zsh/profile
     done
 fi

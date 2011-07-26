@@ -85,4 +85,4 @@
 (define-key *root-map* (kbd "0") "gselect 10")
 
 ;; Extra files
-(load "~/config/stumpwm.d/mplayer")
+(load "~/projects/home/config/stumpwm.d/mplayer")
