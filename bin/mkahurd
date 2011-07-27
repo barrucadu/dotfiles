@@ -159,14 +159,15 @@ function qemu()
     
     showmsg "Creating image..."
 
-    runcmd "Could not set up image" qemu-img create -f raw $IMAGEDIR/ahurd.img 10G
+    runcmd "Could not create image" qemu-img create -f raw $IMAGEDIR/ahurd.img 10G
     runcmd "Could not set up image" sudo losetup /dev/loop0 $IMAGEDIR/ahurd.img
+    runcmd "Could not partition image" sudo zsh -c 'echo "o\nn\np\n\n\nw\n" | fdisk /dev/loop0'
+    sudo losetup -d /dev/loop0
+    runcmd "Could not set up image" sudo losetup -o 32256 /dev/loop0 $IMAGEDIR/ahurd.img
 
     ##### HDD INSTALL #####
 
-    mkdir $IMAGEDIR/mnt
-    hdd /dev/loop0 $IMAGEDIR/mnt qemu
-    rmdir $IMAGEDIR/mnt
+    hdd /dev/loop0 /mnt qemu
 
     #### FINISH
 
@@ -182,6 +183,7 @@ function hdd()
     PARTDEV=$1
     MNTDIR=/mnt
     PACKAGES=(base base-devel)
+    PACCONF=/tmp/mkahurd-pacman.conf
     QEMU=false
 
     if [[ $2 != "" ]]; then
@@ -204,24 +206,26 @@ function hdd()
 
     #### INSTALL PACKAGES
 
-    mkdir -p $MNTDIR/var/lib/pacman/
-    mkdir -p $MNTDIR/var/cache/pacman/pkg/
-    mkdir -p $MNTDIR/var/log/
+    sudo mkdir -p $MNTDIR/var/lib/pacman/
+    sudo mkdir -p $MNTDIR/var/cache/pacman/pkg/
+    sudo mkdir -p $MNTDIR/var/log/
     
     echo "[options]
-RootDir     = ${MNTDIR}/mnt/
-DBPath      = ${MNTDIR}/mnt/var/lib/pacman/
-CacheDir    = ${MNTDIR}/mnt/var/cache/pacman/pkg/
-LogFile     = ${MNTDIR}/mnt/var/log/pacman.log
+RootDir     = ${MNTDIR}/
+DBPath      = ${MNTDIR}/var/lib/pacman/
+CacheDir    = ${MNTDIR}/var/cache/pacman/pkg/
+LogFile     = ${MNTDIR}/var/log/pacman.log
 [core]
-Server = http://files.archhurd.org/repo/core/" > pacman.conf
+Server = http://files.archhurd.org/repo/core/" > $PACCONF
 
-    runcmd "Could not synchronise pacman database." sudo pacman --config pacman.conf -Syy
+    runcmd "Could not synchronise pacman database." sudo pacman --config $PACCONF -Syy
 
     for pkg in $PACKAGES; do
         showmsg "Installing '$pkg'..."
-        runcmd  "Could not install '$pkg'" sudo pacman --config pacman.conf -S $pkg --noconfirm
+        runcmd  "Could not install '$pkg'" sudo pacman --config $PACCONF -S $pkg --noconfirm
     done
+
+    rm $PACCONF
 
     #### FINISH
 
@@ -233,7 +237,13 @@ Server = http://files.archhurd.org/repo/core/" > pacman.conf
 
     if ! $QEMU; then
 	showmsg "Done. Arch Hurd installed to $PARTDEV."
-	shownote "You will need to install GRUB yourself using a GRUB boot image."
+	shownote "If you are booting directly from the Arch Hurd partition, you will need to install GRUB yourself."
+	shownote "If you are booting from an existing GRUB installation, you will need to append the following to the GRUB configuration:
+    title Arch Hurd
+    root (hdX,Y)
+    kernel /boot/gnumach root=device:hdX
+    module /hurd/iso9660fs.static --multiboot-command-line=\${kernel-command-line} --host-priv-port=\${host-port} --device-master-port=\${device-port} --exec-server-task=\${exec-task} -T typed \${root} \$(task-create) \$(task-resume)
+    module /lib/ld-2.11.90.so /hurd/exec \$(exec-task=task-create)"
 	shownote "No configuration has been performed."
     fi
 }
