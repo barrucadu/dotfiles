@@ -59,7 +59,7 @@ function livecd()
     
     for repo in $REPOS; do
         showmsg "Downloading contents of $repo..."
-        runcmd "Could not synchronise packages in $repo." rsync -avz archhurd.org::repos/$repo .
+        runcmd "Could not synchronise packages in $repo." rsync -avz --delete archhurd.org::repos/$repo .
         cp -a $repo $LIVECDDIR/livecd/arch/paccache
     done
     
@@ -78,7 +78,9 @@ LogFile     = ${LIVECDDIR}/livecd/var/log/pacman.log
 [core]
 Server = file://${LIVECDDIR}/livecd/arch/paccache/core" > pacman.conf
 
-    runcmd "Could not install packages." fakeroot pacman --config pacman.conf -Sy base --noconfirm
+    # base:   required for booting
+    # dialog: required for installer
+    runcmd "Could not install packages." fakeroot pacman --config pacman.conf -Sy base dialog --noconfirm
 
     echo "[options]
 RootDir     = /mnt/
@@ -91,8 +93,14 @@ LogFile     = /mnt/var/log/pacman.log" > $LIVECDDIR/livecd/etc/pacman-mnt.conf
 Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
     done
 
-    runcmd "Could not pull initscripts.git." git clone --branch=livecd git://archhurd.org/initscripts.git
-    pushd initscripts/
+    if [[ -d initscripts ]]; then
+        pushd initscripts/
+        runcmd "Could not pull initscripts.git." git checkout livecd
+        runcmd "Could not pull initscripts.git." git pull origin livecd
+    else
+        runcmd "Could not pull initscripts.git." git clone --branch=livecd git://archhurd.org/initscripts.git
+        pushd initscripts/
+    fi
     
     export DESTDIR=$LIVECDDIR/livecd
     runcmd "Could not install initscripts." ./install.sh
@@ -102,8 +110,14 @@ Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
     
     showmsg "Installing setup script"
     
-    runcmd "Could not pull setup.git." git clone git://archhurd.org/setup.git
-    pushd setup/
+    if [[ -d setup ]]; then
+        pushd setup
+        runcmd "Could not pull setup.git." git pull origin
+    else
+        runcmd "Could not pull setup.git." git clone git://archhurd.org/setup.git
+        pushd setup/
+    fi
+
     runcmd "Could not install setup."  cp * ${LIVECDDIR}/livecd/arch/
     popd
     
@@ -125,11 +139,11 @@ Some useful commands for this livecd include:
     less /arch/translators
         - read a short intro to translators
 
-The root user has no password, so simply enter \"login root\" to log in.
-
 Happy Hurding!" > ${LIVECDDIR}/livecd/etc/motd
     
     runcmd "Failed to copy GRUB files." cp ${LIVECDDIR}/livecd/lib/grub/i386-pc/stage2_eltorito ${LIVECDDIR}/livecd/boot/grub/
+
+    runcmd "Failed to make /ftp:" touch ${LIVECDDIR}/livecd/ftp:
     
     echo "timeout   300
 default   0
@@ -139,7 +153,7 @@ title Arch Hurd (hit 'e' and edit hd2 to be the device your CD/DVD is)
 root (cd)
 kernel /boot/gnumach root=device:hd2
 module /hurd/iso9660fs.static --multiboot-command-line=\${kernel-command-line} --host-priv-port=\${host-port} --device-master-port=\${device-port} --exec-server-task=\${exec-task} -T typed \${root} \$(task-create) \$(task-resume)
-module /lib/ld-2.11.90.so /hurd/exec \$(exec-task=task-create)" > $LIVECDDIR/livecd/boot/grub/menu.lst
+module /lib/ld-2.14.so /hurd/exec \$(exec-task=task-create)" > $LIVECDDIR/livecd/boot/grub/menu.lst
     
     runcmd "Failed to build ISO file." mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V "Arch Hurd" -o ahurd.iso $LIVECDDIR/livecd
     
@@ -147,6 +161,7 @@ module /lib/ld-2.11.90.so /hurd/exec \$(exec-task=task-create)" > $LIVECDDIR/liv
 
     shownote "For official livecds, do the following:"
     shownote "    * Add documentation (installation guide & translator intro)"
+    shownote "    * Run \`mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V \"Arch Hurd\" -o ahurd.iso $LIVECDDIR/livecd\` to rebuild the ISO"
 }
 
 function qemu()
@@ -161,9 +176,9 @@ function qemu()
 
     runcmd "Could not create image" qemu-img create -f raw $IMAGEDIR/ahurd.img 10G
     runcmd "Could not set up image" sudo losetup /dev/loop0 $IMAGEDIR/ahurd.img
-    runcmd "Could not partition image" sudo zsh -c 'echo "o\nn\np\n\n\nw\n" | fdisk /dev/loop0'
+    runcmd "Could not partition image" sudo zsh -c 'echo "mklabel msdos\nmkpart primary ext2 512B 100%\nquit\n" | parted /dev/loop0'
     sudo losetup -d /dev/loop0
-    runcmd "Could not set up image" sudo losetup -o 32256 /dev/loop0 $IMAGEDIR/ahurd.img
+    runcmd "Could not set up image" sudo losetup -o 512 /dev/loop0 $IMAGEDIR/ahurd.img
 
     ##### HDD INSTALL #####
 
@@ -187,19 +202,19 @@ function hdd()
     QEMU=false
 
     if [[ $2 != "" ]]; then
-	MNTDIR=$2
+	      MNTDIR=$2
     fi
 
     if [[ $3 == "qemu" ]]; then
-	QEMU=true
+	      QEMU=true
     fi
 
     ##### MAKE & MOUNT FILESYSTEM
     
     if $QEMU; then
-	runcmd "Could not format partition" sudo mkfs.ext2 -b 4096 -I 128 -o hurd $PARTDEV 2610480
+	      runcmd "Could not format partition" sudo mkfs.ext2 -b 4096 -I 128 -o hurd $PARTDEV 2610480
     else
-	runcmd "Could not format partition" sudo mkfs.ext2 -b 4096 -I 128 -o hurd $PARTDEV
+	      runcmd "Could not format partition" sudo mkfs.ext2 -b 4096 -I 128 -o hurd $PARTDEV
     fi
 
     runcmd "Could not mount image" sudo mount $PARTDEV $MNTDIR
