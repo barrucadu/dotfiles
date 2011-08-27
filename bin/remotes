@@ -56,7 +56,7 @@ else
         rport=`echo $share | sed 's/\(.*\):\(.*\):\(.*\):\(.*\):\(.*\)/\5/'`
         
         name=$rhost-$mount
-        mountpoint=/share/$name
+        mountpoint=/share/$rhost/$mount
         remote=$ruser@$rhost:$rpath
 
         if [[ $action == "list" ]]; then
