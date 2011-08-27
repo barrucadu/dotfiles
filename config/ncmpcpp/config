@@ -1,9 +1,9 @@
 ## -*- conf -*-
 
 ##### connection settings #####
-mpd_host               = "eihort"
+mpd_host               = "localhost"
 mpd_port               = "6600"
-mpd_music_dir          = "/media/MHD"
+mpd_music_dir          = "/share/eihort/music"
 mpd_connection_timeout = "5"
 mpd_crossfade_time     = "5"
 
@@ -12,7 +12,7 @@ playlist_disable_highlight_delay = "5"
 message_delay_time = "4"
 
 ##### song format #####
-song_list_format                      = "{%a - %t}|{$8%f$9}%r{$3(%l)$9}"
+song_list_format                      = "{%a - %t}|{$8%f$9}{$3(%l)$9}"
 song_library_format                   = "{%n - }{%t}|{%f}"
 media_library_album_format            = "{(%y) }%b"
 tag_editor_album_format               = "{(%y) }%b"
@@ -52,7 +52,7 @@ progressbar_look                 = "-)"
 display_volume_level             = "no"
 
 ##### visualisation #####
-visualizer_fifo_path = "/share/eihort/mpd/mpd.fifo"
+visualizer_fifo_path = "/home/barrucadu/.mpd/mpd.fifo"
 visualizer_type      = "wave"
 
 ##### colors definitions #####
