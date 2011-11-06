@@ -17,6 +17,7 @@
 (require 'haml-mode)
 (require 'sass-mode)
 (require 'epa)
+(require 'haskell-mode)
 
 (load "zenburn.el"             nil t t)
 (load "zenburn-transparent.el" nil t t)
@@ -131,6 +132,10 @@
 ;;;;; ;;;;; ;;;;; ML ;;;;; ;;;;; ;;;;;
 
 (add-to-list 'auto-mode-alist '("\\.ml$" . sml-mode))
+
+;;;;; ;;;;; ;;;;; Haskell ;;;;; ;;;;; ;;;;;
+
+(add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
 
 ;;;;; ;;;;; ;;;;; WEB DEV ;;;;; ;;;;; ;;;;;
 

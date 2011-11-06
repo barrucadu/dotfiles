@@ -36,11 +36,11 @@
 
 ;; Key bindings
 ; Left Hand
-(define-key *top-map* (kbd "M-Super_L")   "exec urxvtc -e python")
-(define-key *top-map* (kbd "C-Super_L")   "exec urxvtc -e newtmux")
-(define-key *top-map* (kbd "C-M-Super_L") "exec urxvtc -e ypsilon")
-(define-key *top-map* (kbd "C-S-Super_L") "exec urxvtc -e clisp")
-(define-key *top-map* (kbd "M-space")     "exec emelfm2")
+(define-key *top-map* (kbd "M-backslash")   "exec urxvtc -e python")
+(define-key *top-map* (kbd "C-backslash")   "exec urxvtc -e newtmux")
+(define-key *top-map* (kbd "C-M-backslash") "exec urxvtc -e ypsilon")
+(define-key *top-map* (kbd "M-bar")         "exec urxvtc -e clisp")
+(define-key *top-map* (kbd "M-space")       "exec emelfm2")
 
 ; Media keys
 (define-key *top-map* (kbd "XF86HomePage")   "exec chromium")
@@ -49,10 +49,10 @@
 (define-key *top-map* (kbd "XF86Sleep")      "exec /home/barrucadu/bin/lockscreen")
 
 ; Audio
-(define-key *top-map* (kbd "XF86AudioPlay")        "exec nmpc toggle")
-(define-key *top-map* (kbd "XF86AudioStop")        "exec nmpc stop")
-(define-key *top-map* (kbd "XF86AudioPrev")        "exec nmpc previous")
-(define-key *top-map* (kbd "XF86AudioNext")        "exec nmpc next")
+(define-key *top-map* (kbd "XF86AudioPlay")        "exec mpc toggle")
+(define-key *top-map* (kbd "XF86AudioStop")        "exec mpc stop")
+(define-key *top-map* (kbd "XF86AudioPrev")        "exec mpc prev")
+(define-key *top-map* (kbd "XF86AudioNext")        "exec mpc next")
 (define-key *top-map* (kbd "XF86AudioMute")        "exec amixer set Master toggle")
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "exec amixer set Master 1%-")
 (define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec amixer set Master 1%+")

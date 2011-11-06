@@ -28,6 +28,7 @@ fi
 # WM
 
 if [[ "$WM" != "" ]]; then
+    urxvt &
     exec $WM
 elif [[ -e /tmp/notile ]]; then
     urxvt &

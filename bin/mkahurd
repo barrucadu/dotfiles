@@ -75,12 +75,17 @@ RootDir     = ${LIVECDDIR}/livecd/
 DBPath      = ${LIVECDDIR}/livecd/var/lib/pacman/
 CacheDir    = ${LIVECDDIR}/livecd/arch/paccache/core/
 LogFile     = ${LIVECDDIR}/livecd/var/log/pacman.log
+
 [core]
-Server = file://${LIVECDDIR}/livecd/arch/paccache/core" > pacman.conf
+Server = file://${LIVECDDIR}/livecd/arch/paccache/core
+
+[extra]
+Server = http://files.archhurd.org/repo/extra
+" > pacman.conf
 
     # base:   required for booting
     # dialog: required for installer
-    runcmd "Could not install packages." fakeroot pacman --config pacman.conf -Sy base dialog --noconfirm
+    runcmd "Could not install packages." fakeroot pacman --config pacman.conf -Sy base dialog memtest86+ --noconfirm
 
     echo "[options]
 RootDir     = /mnt/
@@ -144,6 +149,8 @@ Happy Hurding!" > ${LIVECDDIR}/livecd/etc/motd
     runcmd "Failed to copy GRUB files." cp ${LIVECDDIR}/livecd/lib/grub/i386-pc/stage2_eltorito ${LIVECDDIR}/livecd/boot/grub/
 
     runcmd "Failed to make /ftp:" touch ${LIVECDDIR}/livecd/ftp:
+
+    runcmd "Failed to copy skel to /root" cp ${LIVECDDIR}/livecd/etc/skel/.* ${LIVECDDIR}/livecd/root/
     
     echo "timeout   300
 default   0
@@ -153,7 +160,12 @@ title Arch Hurd (hit 'e' and edit hd2 to be the device your CD/DVD is)
 root (cd)
 kernel /boot/gnumach root=device:hd2
 module /hurd/iso9660fs.static --multiboot-command-line=\${kernel-command-line} --host-priv-port=\${host-port} --device-master-port=\${device-port} --exec-server-task=\${exec-task} -T typed \${root} \$(task-create) \$(task-resume)
-module /lib/ld-2.14.so /hurd/exec \$(exec-task=task-create)" > $LIVECDDIR/livecd/boot/grub/menu.lst
+module /lib/ld-2.14.so /hurd/exec \$(exec-task=task-create)
+
+title  Memtest86+
+root   (cd)
+kernel /boot/memtest86+/memtest.bin
+" > $LIVECDDIR/livecd/boot/grub/menu.lst
     
     runcmd "Failed to build ISO file." mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V "Arch Hurd" -o ahurd.iso $LIVECDDIR/livecd
     

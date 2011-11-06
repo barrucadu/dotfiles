@@ -23,7 +23,7 @@ function domount ()
     remote=$2
     port=$3
 
-    sshfs -C -p $port $remote $mountpoint
+    sshfs -C -p $port $remote $mountpoint -o ServerAliveInterval=120
 }
 
 # Unmount a remote
