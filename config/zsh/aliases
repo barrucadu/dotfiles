@@ -14,7 +14,8 @@ alias su='su - '
 alias free='free -mt'
 alias grep='grep --color=tty -d skip'
 alias top='htop'
-      # File management
+
+# File management
 alias ls='ls --color=auto'
 alias lls='/bin/ls'
 alias la='ls --color=auto -lA'
@@ -48,11 +49,11 @@ alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Servers
 alias sql='mysql -p -u root'
-alias rtorrent='ssh -t rtorrent@eihort "screen -r rtorrent"'
 alias hurd='ssh -p 2222 root@localhost'
 
 # Coding
-alias gcc='gcc -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -pedantic'
+alias gcc='gcc -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -std=c99 -pedantic'
+alias g89='gcc -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -std=c89 -pedantic'
 alias g++='g++ -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Winline -Wno-long-long -Winit-self -Wconversion -pedantic'
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 alias gdb='gdb -ex run -ex backtrace --args'
@@ -67,15 +68,12 @@ else
     alias aliases='cat /home/barrucadu/projects/home/config/zsh/aliases'
     alias functions='cat /home/barrucadu/projects/home/config/zsh/functions'
 fi
-alias mp3ogg='mp32ogg-bash *.mp3 && rm *.mp3'
+alias mp3ogg='mp32ogg *.mp3 && rm *.mp3'
 alias flacogg='echo ".\n.\n6" | flac2ogg && rm *.flac'
 alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/projects/home/config/xorg/Xdefaults'
-alias myman='myman -z big -i'
-alias nicklist='clear;cat ~/projects/home/config/irssi/nicklistfifo'
 alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
 alias units='units --verbose -1'
 alias dvdplayer="mplayer -profile dvd dvdnav://"
 alias burniso="wodim -v dev=/dev/cdrom speed=1"
 alias pumount='pmount -u'
-alias mineserver='forward yuggoth 25565 eihort'
