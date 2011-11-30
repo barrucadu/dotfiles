@@ -58,6 +58,10 @@ alias g++='g++ -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strin
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 alias gdb='gdb -ex run -ex backtrace --args'
 
+# *TeX
+alias xel='xelatex'
+alias bib='bibtex'
+
 # Miscellanious
 if [[ $UID != 0 ]]; then
     alias aliases='cat ~/projects/home/config/zsh/aliases'
