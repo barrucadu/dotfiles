@@ -1,0 +1,72 @@
+#!/bin/zsh
+
+# Number of bytes for each chunk
+CHUNKSIZE=3500
+
+# Default compression program
+ZIP=gzip
+
+# Mime type for chunks
+CHUNKMIME="application/octet-stream"
+
+# Mime type for index file
+INDEXMIME="text/plain"
+
+# File to upload
+FILE=$1
+
+# Check for the presence of the file
+if [[ ! -e $FILE ]]; then
+    echo "$1 does not exist."
+    exit 1
+fi
+
+# Check of an alternative compression program has been given
+if [[ $2 == bzip2 ]] || [[ $2 == xz ]]; then
+    ZIP=$2
+    echo "Using $ZIP for compression."
+fi
+
+# Make temporary files
+tmpfile=`mktemp`
+indexfile=$tmpfile.index
+
+# Save initial filename and compression method to the index file
+echo "Initialising index file"
+echo $(basename $FILE) > $indexfile
+echo $ZIP >> $indexfile
+
+# Compress the file
+echo "Compressing $1"
+$ZIP $FILE -c > $tmpfile
+
+# Split into chunks
+echo "Splitting into $CHUNKSIZE-byte chunks"
+split -b $CHUNKSIZE $tmpfile $tmpfile-
+
+# For each chunk, base64 encode and upload to tinyurl as a data uri
+echo "Encoding and uploading to tinyurl"
+for tfile in $tmpfile-*; do
+    echo "    Encoding $tfile"
+    base64 -w0 $tfile > $tfile.b64
+
+    echo "    Uploading $tfile"
+    wget "http://tinyurl.com/api-create.php?url=data:$CHUNKMIME;base64,`cat $tfile.b64`" -q -O - >> $indexfile
+    echo "" >> $indexfile
+done
+
+# Always compress the index file with gzip
+echo "Encoding index file"
+gzip $indexfile
+base64 -w0 $indexfile.gz > $indexfile.gz.b64
+
+# Upload the index file
+echo "Uploading index file"
+url=$(wget "http://tinyurl.com/api-create.php?url=data:$INDEXMIME;base64,`cat $indexfile.gz.b64`" -q -O -)
+
+# Clean up
+echo "Cleaning temporary files"
+rm $indexfile* $tmpfile* &>/dev/null
+
+# Link to the index file
+echo "Uploaded, index file is at $url"
