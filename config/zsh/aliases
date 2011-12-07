@@ -68,9 +68,11 @@ if [[ $UID != 0 ]]; then
     alias functions='cat ~/projects/home/config/zsh/functions'
     alias shutdown='sudo shutdown -hP now'
     alias reboot='sudo reboot'
+    alias windows='sudo grub-set-default 2 ; sudo reboot'
 else
     alias aliases='cat /home/barrucadu/projects/home/config/zsh/aliases'
     alias functions='cat /home/barrucadu/projects/home/config/zsh/functions'
+    alias windows='grub-set-default 3 ; reboot'
 fi
 alias mp3ogg='mp32ogg *.mp3 && rm *.mp3'
 alias flacogg='echo ".\n.\n6" | flac2ogg && rm *.flac'
