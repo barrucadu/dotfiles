@@ -71,6 +71,9 @@
 (set-keyboard-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
+
+(setq default-buffer-file-coding-system 'utf-8)
 
 ;;;;; ;;;;; ;;;;; LaTeX ;;;;; ;;;;; ;;;;;
 
@@ -102,7 +105,7 @@
   (insert "\\lstset{basicstyle=\\small\\ttfamily}\n")
   (insert "\\lstset{showstringspaces=false}\n")
   (insert "\\lstset{numbers=left, numberstyle=\\tiny, stepnumber=1, numbersep=5pt}\n")
-  (insert "\\lstset{keywordstyle=\\color{MidnightBlue}\bfseries}\n")
+  (insert "\\lstset{keywordstyle=\\color{MidnightBlue}\\bfseries}\n")
   (insert "\\lstset{commentstyle=\\color{JungleGreen}}\n")
   (insert "\\lstset{identifierstyle=\\color{OliveGreen}}\n")
   (insert "\\lstset{stringstyle=\\color{Red}}\n")
