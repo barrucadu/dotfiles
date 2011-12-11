@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+echo "Started continuous build on `pwd`"
+
+while true; do
+    echo "Rebuilding..."
+    make clean
+    make all
+    inotifywait -e modify -e move -e create -e delete -e delete_self . &>/dev/null
+done
+
+echo "Done."
