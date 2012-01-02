@@ -52,9 +52,10 @@ alias sql='mysql -p -u root'
 alias hurd='ssh -p 2222 root@localhost'
 
 # Coding
-alias gcc='gcc -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -std=c99 -pedantic'
-alias g89='gcc -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -std=c89 -pedantic'
-alias g++='g++ -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Winline -Wno-long-long -Winit-self -Wconversion -pedantic'
+alias g99="gcc $CFLAGS -std=c99"
+alias g89="gcc $CFLAGS -std=c89"
+alias gcc=g99
+alias g++="g++ $CXXFLAGS"
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 alias gdb='gdb -ex run -ex backtrace --args'
 

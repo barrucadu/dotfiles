@@ -42,6 +42,8 @@ export SCHEME_LIBRARY_PATH=/usr/lib/slib/
 export TODOFILE="$HOME/docs/org/todo.org"
 export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 export CVS_RSH=ssh
+export CFLAGS="-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -pedantic -O2"
+export CXXFLAGS="-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Winline -Wno-long-long -Winit-self -Wconversion -pedantic -O2"
     # Prompt
 export PROMPT2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
 export PROMPT3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "
