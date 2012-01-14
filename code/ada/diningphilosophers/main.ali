@@ -1,0 +1,115 @@
+V "GNAT Lib v4.6"
+M P W=b
+P SS ZX
+R vnnnnnnnnvnnnnnnnnvnnvnvnvvvvnnvnvvnvnnvnnnnvnnnnvnvnnnnnnvnnnnnnnnv2nnnnnv1+nnnv1+nn
+
+U main%b		main.adb		8e164d10 NE OO SU
+W ada%s			ada.ads			ada.ali
+W ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
+W ada.exceptions%s	a-except.adb		a-except.ali
+W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
+W ada.numerics%s	a-numeri.ads		a-numeri.ali
+W ada.numerics.float_random%s  a-nuflra.adb	a-nuflra.ali
+W ada.real_time%s	a-reatim.adb		a-reatim.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W system%s		system.ads		system.ali
+W system.finalization_implementation%s  s-finimp.adb  s-finimp.ali
+W system.finalization_root%s  s-finroo.adb	s-finroo.ali
+W system.parameters%s	s-parame.adb		s-parame.ali
+W system.soft_links%s	s-soflin.adb		s-soflin.ali
+W system.standard_library%s  s-stalib.adb	s-stalib.ali
+W system.task_info%s	s-tasinf.adb		s-tasinf.ali
+W system.tasking%s	s-taskin.adb		s-taskin.ali
+W system.tasking.protected_objects%s  s-taprob.adb  s-taprob.ali
+W system.tasking.protected_objects.entries%s  s-tpoben.adb  s-tpoben.ali
+W system.tasking.protected_objects.operations%s  s-tpobop.adb  s-tpobop.ali
+W system.tasking.stages%s  s-tassta.adb		s-tassta.ali
+
+D ada.ads		20070406091342 3ffc8e18
+D a-calend.ads		20090409150019 343c83dd
+D a-caldel.ads		20090409150019 9f20b83d
+D a-except.ads		20090727140100 0c711ac9
+D a-finali.ads		20090409150019 e5e85fa4
+D a-filico.ads		20090409150019 872dc219
+D a-inteio.ads		20070406091342 f64b89a4
+D a-ioexce.ads		20091130110856 8b9de6cd
+D a-numeri.ads		20080324174807 bb51c45a
+D a-nuflra.ads		20100622172941 49c50e0b
+D a-reatim.ads		20090409150019 63f07669
+D a-stream.ads		20090409150019 2ca4ee37
+D a-tags.ads		20101021101406 c7695348
+D a-textio.ads		20091028140912 386df5d4
+D a-tiinio.ads		20090409150019 aa04e5d6
+D a-unccon.ads		20070406091342 f9eb8f06
+D interfac.ads		20090409150019 f77d8799
+D i-c.ads		20101007125900 809c38c4
+D i-cstrea.ads		20100622165701 1bd72c32
+D main.adb		20111231025255 09f53f6b
+D system.ads		20090410155748 23e1f70b
+D s-atacco.ads		20090409150019 1dc856ad
+D s-crtl.ads		20100617122610 ac77b159
+D s-exctab.ads		20090417131547 66e51330
+D s-ficobl.ads		20100909103250 443b9d66
+D s-finimp.ads		20090409150019 46853fe8
+D s-finroo.ads		20090409150019 dbb860c9
+D s-linux.ads		20090730092306 47911ab1
+D s-multip.ads		20101011073009 38ac9f73
+D s-osinte.ads		20101127183452 6e2d2e09
+D s-parame.ads		20091130110856 9c5d83fa
+D s-rannum.ads		20100623054052 5eb33f0a
+D s-secsta.ads		20090707124243 eea35a36
+D s-soflin.ads		20090729085153 9414c974
+D s-stache.ads		20090417130712 596fc1b4
+D s-stausa.ads		20101018101807 bba781f7
+D s-stalib.ads		20101021102512 c4241c00
+D s-stoele.ads		20090417130712 facd7d98
+D s-stoele.adb		20100617152355 afc5dc80
+D s-stratt.ads		20100909123135 aedef97e
+D s-tasinf.ads		20090409150019 21316953
+D s-taspri.ads		20080408071349 af44aca8
+D s-taprop.ads		20090409150019 07f79e46
+D s-taskin.ads		20101021101406 b2eaee08
+D s-taprob.ads		20090409150019 502249e3
+D s-tpoben.ads		20090409150019 e8374469
+D s-tpobop.ads		20090409150019 5f548bb3
+D s-tassta.ads		20101018103456 e88ef99e
+D s-traent.ads		20090417130712 5221ee41
+D s-unstyp.ads		20090409150019 6ae15c76
+D s-wchcon.ads		20090417130712 bfeb2e3d
+X 1 ada.ads
+16K9*Ada 19e8 20|1r6 2r6 4r6 5r6 7r6
+X 7 a-inteio.ads
+18K13*Integer_Text_IO[15|45] 20|4w10 5r10
+X 9 a-numeri.ads
+16K13*Numerics 32e17 20|7r10
+X 10 a-nuflra.ads
+41K22*Float_Random 72e30 20|7w19
+X 14 a-textio.ads
+49K13*Text_IO 472e16 20|1w10 2r10
+264U14*Put_Line 20|44s16 50s16 59s16 65s16 72s10 77s10 81s10 86s10 91s10
+X 15 a-tiinio.ads
+65U14*Put 20|43s16[7|18] 49s16[7|18] 58s16[7|18] 64s16[7|18] 71s10[7|18]
+. 76s10[7|18] 80s10[7|18] 85s10[7|18] 90s10[7|18]
+X 20 main.adb
+9U11*Main 9b11 105t4
+10i4 Num{integer}
+14W19 Chopstick 19l8 19e17 21b19 31l8 31t17 35r55 95r33
+15Y13 Get 22b13 25l11 25t14 45s18 51s18 60s18 66s18
+16Y13 Release 27b13 30l11 30t18 78s12 82s12
+18b7 Taken{boolean} 22r26 24r10 27r26 29r10
+35T14 Philosopher 35d27 35d41 35d44 37b14 93l8 93t19 97r9 98r9 99r9 100r9
+. 101r9
+35i27 ID{integer} 41r13 43r21 49r21 56r13 58r21 64r21 71r15 76r15 80r15 85r15
+. 90r15
+95w4 C1{14W19} 97m25 101m36
+95w8 C2{14W19} 97m36 98m25
+95w12 C3{14W19} 98m36 99m25
+95w16 C4{14W19} 99m36 100m25
+95w20 C5{14W19} 100m36 101m25
+97t4 P1{35T14}
+98t4 P2{35T14}
+99t4 P3{35T14}
+100t4 P4{35T14}
+101t4 P5{35T14}
+

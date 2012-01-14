@@ -1,0 +1,116 @@
+V "GNAT Lib v4.6"
+M P W=b
+P SS ZX
+R vnnnnnnnnvvnnnnnnnvnnvnvnvvvvnnvnvvnvnnvnnnnvnnnnvnvnnnnnnvnnnnnnnnv6nnnnnv1+nnnv1+nn
+
+U main%b		main.adb		721670da NE OO SU
+W ada%s			ada.ads			ada.ali
+W ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
+W ada.exceptions%s	a-except.adb		a-except.ali
+W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
+W ada.real_time%s	a-reatim.adb		a-reatim.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W system%s		system.ads		system.ali
+W system.finalization_implementation%s  s-finimp.adb  s-finimp.ali
+W system.finalization_root%s  s-finroo.adb	s-finroo.ali
+W system.parameters%s	s-parame.adb		s-parame.ali
+W system.soft_links%s	s-soflin.adb		s-soflin.ali
+W system.standard_library%s  s-stalib.adb	s-stalib.ali
+W system.task_info%s	s-tasinf.adb		s-tasinf.ali
+W system.tasking%s	s-taskin.adb		s-taskin.ali
+W system.tasking.protected_objects%s  s-taprob.adb  s-taprob.ali
+W system.tasking.protected_objects.entries%s  s-tpoben.adb  s-tpoben.ali
+W system.tasking.protected_objects.operations%s  s-tpobop.adb  s-tpobop.ali
+W system.tasking.stages%s  s-tassta.adb		s-tassta.ali
+
+D ada.ads		20070406091342 3ffc8e18
+D a-calend.ads		20090409150019 343c83dd
+D a-caldel.ads		20090409150019 9f20b83d
+D a-except.ads		20090727140100 0c711ac9
+D a-finali.ads		20090409150019 e5e85fa4
+D a-filico.ads		20090409150019 872dc219
+D a-inteio.ads		20070406091342 f64b89a4
+D a-ioexce.ads		20091130110856 8b9de6cd
+D a-reatim.ads		20090409150019 63f07669
+D a-stream.ads		20090409150019 2ca4ee37
+D a-tags.ads		20101021101406 c7695348
+D a-textio.ads		20091028140912 386df5d4
+D a-tiinio.ads		20090409150019 aa04e5d6
+D a-unccon.ads		20070406091342 f9eb8f06
+D interfac.ads		20090409150019 f77d8799
+D i-c.ads		20101007125900 809c38c4
+D i-cstrea.ads		20100622165701 1bd72c32
+D main.adb		20120101183517 bc300caa
+D system.ads		20090410155748 23e1f70b
+D s-atacco.ads		20090409150019 1dc856ad
+D s-crtl.ads		20100617122610 ac77b159
+D s-exctab.ads		20090417131547 66e51330
+D s-ficobl.ads		20100909103250 443b9d66
+D s-finimp.ads		20090409150019 46853fe8
+D s-finroo.ads		20090409150019 dbb860c9
+D s-linux.ads		20090730092306 47911ab1
+D s-multip.ads		20101011073009 38ac9f73
+D s-osinte.ads		20101127183452 6e2d2e09
+D s-parame.ads		20091130110856 9c5d83fa
+D s-secsta.ads		20090707124243 eea35a36
+D s-soflin.ads		20090729085153 9414c974
+D s-stache.ads		20090417130712 596fc1b4
+D s-stausa.ads		20101018101807 bba781f7
+D s-stalib.ads		20101021102512 c4241c00
+D s-stoele.ads		20090417130712 facd7d98
+D s-stoele.adb		20100617152355 afc5dc80
+D s-stratt.ads		20100909123135 aedef97e
+D s-tasinf.ads		20090409150019 21316953
+D s-taspri.ads		20080408071349 af44aca8
+D s-taprop.ads		20090409150019 07f79e46
+D s-taskin.ads		20101021101406 b2eaee08
+D s-taprob.ads		20090409150019 502249e3
+D s-tpoben.ads		20090409150019 e8374469
+D s-tpobop.ads		20090409150019 5f548bb3
+D s-tassta.ads		20101018103456 e88ef99e
+D s-traent.ads		20090417130712 5221ee41
+D s-unstyp.ads		20090409150019 6ae15c76
+D s-wchcon.ads		20090417130712 bfeb2e3d
+X 1 ada.ads
+16K9*Ada 19e8 18|1r6 2r6 4r6 5r6
+X 7 a-inteio.ads
+18K13*Integer_Text_IO[13|45] 18|4w10 5r10
+X 12 a-textio.ads
+49K13*Text_IO 472e16 18|1w10 2r10
+243U14*Put 18|109s16 118s16 127s16
+264U14*Put_Line 18|73s16 82s16 91s16 134s10
+X 13 a-tiinio.ads
+65U14*Put 18|72s16[7|18] 81s16[7|18] 90s16[7|18] 108s16[7|18] 117s16[7|18]
+. 126s16[7|18] 133s10[7|18]
+X 18 main.adb
+7U11*Main 7b11 153l5 153t9
+11E9 Ingredient 11e48 64r54 100r45
+11n24 Tobacco{11E9} 70r23 70r44 115r22 124r22 143r19 145r19 147r20
+11n33 Paper{11E9} 79r23 79r42 106r22 124r42 143r28 144r19 148r20
+11n40 Matches{11E9} 88r23 88r44 106r40 115r42 144r28 145r28 149r20
+14W19 Table 25l8 25e13 27b19 60l8 60t13 64r77 100r68 141r16
+15Y13 GetTobacco 29b13 32l11 32t21 110s18
+16Y13 GetPaper 34b13 37l11 37t19 119s18
+17Y13 GetMatches 39b13 42l11 42t21 128s18
+18Y13 PlaceTobacco 46b13 49l11 49t23 74s18
+19Y13 PlacePaper 51b13 54l11 54t21 83s18
+20Y13 PlaceMatches 56b13 59l11 59t23 92s18
+22i7 TobaccoNum{integer} 29r29 31r10 31r24 46r31 48r10 48r24
+23i7 PaperNum{integer} 34r27 36r10 36r22 51r29 53r10 53r22
+24i7 MatchesNum{integer} 39r29 41r10 41r24 56r31 58r10 58r24
+64T14 Agent 64d21 64d35 64d44 64d66 66b14 96l8 96t13 143r9 144r9 145r9
+64i21 ID{integer} 72r21 81r21 90r21
+64e35 IngredA{11E9} 70r13 79r13 88r13
+64e44 IngredB{11E9} 70r34 79r32 88r34
+100T14 Smoker 100d22 100d36 100d57 102b14 137l8 137t14 147r9 148r9 149r9
+100i22 ID{integer} 108r21 117r21 126r21 133r15
+100e36 Ingred{11E9} 106r13 106r31 115r13 115r33 124r13 124r33
+141w4 T{14W19} 143m37 144m37 145m37 147m29 148m29 149m29
+143t4 A1{64T14}
+144t4 A2{64T14}
+145t4 A3{64T14}
+147t4 S1{100T14}
+148t4 S2{100T14}
+149t4 S3{100T14}
+
