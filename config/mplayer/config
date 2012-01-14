@@ -22,5 +22,5 @@ sid=0
 
 [dvd]
 # Basic DVD settings
-dvd-device=/dev/dvd
+dvd-device=/dev/sr0
 nocache=1
