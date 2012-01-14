@@ -23,7 +23,7 @@ export XDG_MUSIC_DIR=~/music
 export XDG_PICTURES_DIR=~/graphics
 export XDG_VIDEOS_DIR=~/movies
     # Input
-export XCOMPOSEFILE=~/config/xorg/XCompose
+export XCOMPOSEFILE=~/.XCompose
 export QT_XFT=1
 export GDK_USE_XFT=1
 export GTK_IM_MODULE=xim
