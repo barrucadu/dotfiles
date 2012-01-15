@@ -17,4 +17,4 @@ import Euler
 -- Find the difference between the sum of the squares and the square of the sum of 1 to 100
 euler006 :: Int
 euler006 = square (sum nats100) - sum (map square nats100)
-    where nats100 = filterupper (\a -> a <= 100) nats
+    where nats100 = filterUpper (\a -> a <= 100) nats

@@ -14,4 +14,4 @@ import Euler
 
 -- Find the sum of the even fibonacci numbers <= 4,000,000
 euler002 :: Int
-euler002 = sum [x | x <- (filterupper (\a -> a <= 4000000) fib), mod x 2 == 0]
+euler002 = sum [x | x <- (filterUpper (\a -> a <= 4000000) fib), mod x 2 == 0]

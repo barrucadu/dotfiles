@@ -21,9 +21,9 @@ fib = [0, 1] ++ fib' 0 1
 ----------------------------
 
 -- Filter a sorted list by some upper bound
-filterupper :: (a -> Bool) -> [a] -> [a]
-filterupper f []     = []
-filterupper f (a:as) | f a       = [a] ++ filterupper f as
+filterUpper :: (a -> Bool) -> [a] -> [a]
+filterUpper f []     = []
+filterUpper f (a:as) | f a       = [a] ++ filterUpper f as
                      | otherwise = []
 
 --------------------
@@ -31,9 +31,9 @@ filterupper f (a:as) | f a       = [a] ++ filterupper f as
 --------------------
 
 -- Check a number has a given set of factors
-hasfactors :: Int -> [Int] -> Bool
-hasfactors _ [] = True
-hasfactors val (f:fs) | mod val f == 0 = hasfactors val fs
+hasFactors :: Int -> [Int] -> Bool
+hasFactors _ [] = True
+hasFactors val (f:fs) | mod val f == 0 = hasFactors val fs
                       | otherwise      = False
 
 -- Check a number has any of some factors

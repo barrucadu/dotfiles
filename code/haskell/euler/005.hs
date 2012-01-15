@@ -11,4 +11,4 @@ import Euler
 
 -- Find the smallest number which divides evenly by 1 to 20
 euler005 :: Int
-euler005 = head [x | x <- nats, hasfactors x [1..20]]
+euler005 = head [x | x <- nats, hasFactors x [1..20]]
