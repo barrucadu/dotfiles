@@ -10,16 +10,7 @@
 
 module Main where
 
--- Generate an infinite list of fibonacci numbers
-fib :: [Int]
-fib = [0, 1] ++ fib' 0 1
-    where fib' a b = [a + b] ++ fib' b (a + b)
-
--- Filter a sorted list by some upper bound
-filterupper :: (a -> Bool) -> [a] -> [a]
-filterupper f []     = []
-filterupper f (a:as) | f a       = [a] ++ filterupper f as
-                     | otherwise = []
+import Euler
 
 -- Find the sum of the even fibonacci numbers <= 4,000,000
 euler002 :: Int

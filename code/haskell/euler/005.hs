@@ -7,16 +7,7 @@
 
 module Main where
 
--- Generate the list of natural numbers
-nats :: [Int]
-nats = nats' 1
-    where nats' n = [n] ++ nats' (n + 1)
-
--- Check a number has a given set of factors
-hasfactors :: Int -> [Int] -> Bool
-hasfactors _ [] = True
-hasfactors val (f:fs) | mod val f == 0 = hasfactors val fs
-                      | otherwise      = False
+import Euler
 
 -- Find the smallest number which divides evenly by 1 to 20
 euler005 :: Int

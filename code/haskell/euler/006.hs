@@ -12,20 +12,7 @@
 
 module Main where
 
--- Generate the list of natural numbers
-nats :: [Int]
-nats = nats' 1
-    where nats' n = [n] ++ nats' (n + 1)
-
--- Filter a sorted list by some upper bound
-filterupper :: (a -> Bool) -> [a] -> [a]
-filterupper f []     = []
-filterupper f (a:as) | f a       = [a] ++ filterupper f as
-                     | otherwise = []
-
--- Square a number
-square :: Int -> Int
-square a = a * a
+import Euler
 
 -- Find the difference between the sum of the squares and the square of the sum of 1 to 100
 euler006 :: Int
