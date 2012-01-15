@@ -36,6 +36,12 @@ hasfactors _ [] = True
 hasfactors val (f:fs) | mod val f == 0 = hasfactors val fs
                       | otherwise      = False
 
+-- Check a number has any of some factors
+hasAnyFactors :: Int -> [Int] -> Bool
+hasAnyFactors _ []       = False
+hasAnyFactors val (f:fs) | mod val f == 0 = True
+                         | otherwise      = hasAnyFactors val fs
+
 ---------------------------
 ---- Numeric functions ----
 ---------------------------

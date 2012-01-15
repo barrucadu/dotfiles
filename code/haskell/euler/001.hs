@@ -10,4 +10,4 @@ module Main where
 import Euler
 
 -- Sum the multiples of 3 or 5 from 0 to 1000
-euler001 = sum [x | x <- (filterupper (\a -> a < 1000) nats), hasfactors x [3, 5]]
+euler001 = sum [x | x <- (filterupper (\a -> a < 1000) nats), hasAnyFactors x [3, 5]]
