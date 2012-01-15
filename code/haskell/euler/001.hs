@@ -7,14 +7,7 @@
 
 module Main where
 
--- Get a list of all multiples of a list of factors in a given range
-multiples :: Int -> Int -> [Int] -> [Int]
-multiples start end factors | end < start = []
-                            | otherwise   = [start | hasfactor start factors ] ++ multiples (start + 1) end factors
-
-                            where hasfactor _ [] = False
-                                  hasfactor val (f:fs) | mod val f == 0 = True
-                                                       | otherwise      = hasfactor val fs
+import Euler
 
 -- Sum the multiples of 3 or 5 from 0 to 1000
-euler001 = sum (multiples 0 999 [3, 5])
+euler001 = sum [x | x <- (filterupper (\a -> a < 1000) nats), hasfactors x [3, 5]]

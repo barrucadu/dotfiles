@@ -26,13 +26,9 @@ filterupper f []     = []
 filterupper f (a:as) | f a       = [a] ++ filterupper f as
                      | otherwise = []
 
----------------------------
----- Numeric functions ----
----------------------------
-
--- Square a number
-square :: Int -> Int
-square a = a * a
+--------------------
+---- Predicates ----
+--------------------
 
 -- Check a number has a given set of factors
 hasfactors :: Int -> [Int] -> Bool
@@ -40,3 +36,10 @@ hasfactors _ [] = True
 hasfactors val (f:fs) | mod val f == 0 = hasfactors val fs
                       | otherwise      = False
 
+---------------------------
+---- Numeric functions ----
+---------------------------
+
+-- Square a number
+square :: Int -> Int
+square a = a * a
