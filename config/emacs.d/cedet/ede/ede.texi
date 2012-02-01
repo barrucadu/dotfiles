@@ -53,7 +53,7 @@ Copyright @copyright{} 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009, 2010 Eric
 @node top, EDE Project Concepts, (dir), (dir)
 @comment  node-name,  next,  previous,  up
 
-@ede{} is a collection of definitions called the 
+@ede{} is a collection of definitions called the
 @emph{Emacs Development Extensions}.  @ede{} provides the gloss that
 simplifies the learning curve for all the very useful functionality of
 building and debugging under emacs.  In doing so it attempts to emulate
@@ -73,10 +73,10 @@ to learn and adopt the GNU ways of doing things.
 * Miscellaneous commands::      Other project related commands.
 * Project types::               There are different types of projects.
 * Extending EDE::               Programming tips when extending.
-* Project::                     
-* Targets::                     
-* Sourcecode::                  
-* Compilers::                   
+* Project::
+* Targets::
+* Sourcecode::
+* Compilers::
 @end menu
 
 @node EDE Project Concepts, EDE Mode, top, top
@@ -195,10 +195,10 @@ project types for detailed information on the project you might be
 using.
 
 @menu
-* Add/Remove target::           
-* Add/Remove files::            
-* Customize Features::          
-* EDE Project Features::        
+* Add/Remove target::
+* Add/Remove files::
+* Customize Features::
+* EDE Project Features::
 @end menu
 
 @node Add/Remove target, Add/Remove files, Modifying your project, Modifying your project
@@ -278,8 +278,8 @@ When you are customizing, you are directly manipulating slot values in
 @ref{Extending EDE}
 
 @menu
-* Changing Compilers and Flags::  
-* Configurations::              
+* Changing Compilers and Flags::
+* Configurations::
 @end menu
 
 @node Changing Compilers and Flags, Configurations, EDE Project Features, EDE Project Features
@@ -549,7 +549,7 @@ automatically create your project.
 Add a new @var{EDE} Autoload instance for identifying a generic project.
 @var{INTERNAL-NAME} is a long name that identifies thsi project type.
 @var{EXTERNAL-NAME} is a shorter human readable name to describe the project.
-@var{PROJECTFILE} is a file name that identifies a project of this type to @var{EDE}, such as 
+@var{PROJECTFILE} is a file name that identifies a project of this type to @var{EDE}, such as
 a Makefile, or SConstruct file.
 @var{CLASS} is the @var{EIEIO} class that is used to track this project.  It should subclass
 the class @dfn{ede-generic-project} project.
@@ -630,7 +630,7 @@ Where @var{MYFCN} is a symbol for a function.  The locate function can
 be used in place of @code{ede-expand-filename} so you can quickly
 customize your custom target to use specialized local routines instead
 of the default @ede{} routines.  The function symbol must take two
-arguments: 
+arguments:
 
 @table @var
 @item NAME
@@ -788,7 +788,7 @@ support that language.
 
 @ede{} is made up of a series of classes implemented with @eieio{}.
 These classes define an interface that can be used to create different
-types of projects. 
+types of projects.
 
 @ede{} defines two superclasses which are @code{ede-project} and
 @code{ede-target}.  All commands in @ede{} are usually meant to
@@ -854,7 +854,7 @@ Here is a high-level UML diagram for the @ede{} system created with @cogre{}..
 |ede-project-class-files|        +-----------------------+
 |                       |        +-----------------------+
 +-----------------------+        +-----------------------+
-           /\                                ^ 
+           /\                                ^
            \/                               /_\
             |                                |
  +--------------------+                +-----------+         +----------+
@@ -862,7 +862,7 @@ Here is a high-level UML diagram for the @ede{} system created with @cogre{}..
  +--------------------+<>--------------+-----------+<>-------+----------+
  +--------------------+                +-----------+         +----------+
  +--------------------+                +-----------+         +----------+
-                                             ^ 
+                                             ^
                                             /_\
                                              |
                        +---------------------+-----------------+

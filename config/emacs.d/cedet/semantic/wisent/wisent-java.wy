@@ -354,7 +354,7 @@
 %keyword WHILE        "while"
 %put     WHILE summary
 "while (<expr>) <stmt> | do <stmt> while (<expr>);"
-  
+
 ;; --------------------------
 ;; Official javadoc line tags
 ;; --------------------------
@@ -382,27 +382,27 @@
 %keyword _AUTHOR      "@author"
 %put     _AUTHOR      javadoc (seq 1 usage (type))
 %keyword _VERSION     "@version"
-%put     _VERSION     javadoc (seq 2 usage (type)) 
+%put     _VERSION     javadoc (seq 2 usage (type))
 %keyword _PARAM       "@param"
-%put     _PARAM       javadoc (seq 3 usage (function) with-name t) 
+%put     _PARAM       javadoc (seq 3 usage (function) with-name t)
 %keyword _RETURN      "@return"
-%put     _RETURN      javadoc (seq 4 usage (function)) 
+%put     _RETURN      javadoc (seq 4 usage (function))
 %keyword _EXCEPTION   "@exception"
-%put     _EXCEPTION   javadoc (seq 5 usage (function) with-name t) 
+%put     _EXCEPTION   javadoc (seq 5 usage (function) with-name t)
 %keyword _THROWS      "@throws"
-%put     _THROWS      javadoc (seq 6 usage (function) with-name t) 
+%put     _THROWS      javadoc (seq 6 usage (function) with-name t)
 %keyword _SEE         "@see"
-%put     _SEE         javadoc (seq 7 usage (type function variable) opt t with-ref t) 
+%put     _SEE         javadoc (seq 7 usage (type function variable) opt t with-ref t)
 %keyword _SINCE       "@since"
-%put     _SINCE       javadoc (seq 8 usage (type function variable) opt t) 
+%put     _SINCE       javadoc (seq 8 usage (type function variable) opt t)
 %keyword _SERIAL      "@serial"
-%put     _SERIAL      javadoc (seq 9 usage (variable) opt t) 
+%put     _SERIAL      javadoc (seq 9 usage (variable) opt t)
 %keyword _SERIALDATA  "@serialData"
-%put     _SERIALDATA  javadoc (seq 10 usage (function) opt t) 
+%put     _SERIALDATA  javadoc (seq 10 usage (function) opt t)
 %keyword _SERIALFIELD "@serialField"
-%put     _SERIALFIELD javadoc (seq 11 usage (variable) opt t) 
+%put     _SERIALFIELD javadoc (seq 11 usage (variable) opt t)
 %keyword _DEPRECATED  "@deprecated"
-%put     _DEPRECATED  javadoc (seq 12 usage (type function variable) opt t) 
+%put     _DEPRECATED  javadoc (seq 12 usage (type function variable) opt t)
 
 %%
 
@@ -441,15 +441,15 @@ numeric_type
   ;
 
 integral_type
-  : BYTE 
-  | SHORT 
-  | INT 
-  | LONG 
-  | CHAR 
+  : BYTE
+  | SHORT
+  | INT
+  | LONG
+  | CHAR
   ;
 
 floating_point_type
-  : FLOAT 
+  : FLOAT
   | DOUBLE
   ;
 
@@ -481,7 +481,7 @@ class_type
 
 interface_type
   : class_or_interface_type
-  ;		
+  ;
 
 array_type
   : primitive_type dims
@@ -739,7 +739,7 @@ interfaces
 
 interfaces_opt
   : ;;EMPTY
-  | interfaces 
+  | interfaces
     (nreverse $1)
   ;
 
@@ -751,7 +751,7 @@ interface_type_list
   ;
 
 class_body
-  : LBRACE class_body_declarations_opt RBRACE 
+  : LBRACE class_body_declarations_opt RBRACE
     (progn $2)
   ;
 
@@ -1307,7 +1307,7 @@ if_then_statement
   ;
 
 if_then_else_statement
-  : IF LPAREN expression RPAREN statement_no_short_if 
+  : IF LPAREN expression RPAREN statement_no_short_if
     ELSE statement
   ;
 
@@ -1666,7 +1666,7 @@ unary_expression_not_plus_minus
 ;;  : LPAREN type RPAREN unary_expression_not_plus_minus
 ;; Introduces ambiguities between parenthesized LT relational
 ;; operations and type casts, like in `LPAREN name LT name ...'.
-;; The following `cast_expression' production solves that.  
+;; The following `cast_expression' production solves that.
 cast_expression
   : LPAREN primitive_type dims_opt RPAREN unary_expression
   | LPAREN name RPAREN unary_expression_not_plus_minus
@@ -1747,7 +1747,7 @@ conditional_or_expression
 
 conditional_expression
   : conditional_or_expression
-  | conditional_or_expression QUESTION expression 
+  | conditional_or_expression QUESTION expression
     COLON conditional_expression
   ;
 
@@ -1985,7 +1985,7 @@ conditional_or_expression_no_name
 conditional_expression_no_name
   : conditional_or_expression_no_name
   | name QUESTION expression COLON conditional_expression
-  | conditional_or_expression_no_name QUESTION expression 
+  | conditional_or_expression_no_name QUESTION expression
     COLON conditional_expression
   ;
 
@@ -1997,7 +1997,7 @@ assignment_expression_no_name
 expression_no_name
   : assignment_expression_no_name
   ;
- 
+
 ;;; JSR-175) Annotation
 ;;
 

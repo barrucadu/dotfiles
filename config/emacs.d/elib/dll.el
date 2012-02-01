@@ -135,7 +135,7 @@ Args: DLL NODE ELEMENT."
 (defun dll-enter-before (dll node element)
   "In the doubly linked list DLL, insert a node containing ELEMENT before NODE.
 Args: DLL NODE ELEMENT."
-  
+
   (let ((new-node (elib-node-create
 		   (elib-node-left node) node
 		   element)))
@@ -238,7 +238,7 @@ and (dll-nth dll -1) returns the last node."
   (let* ((dummy  (dll-get-dummy-node dll))
 	 (branch (if (< n 0) 0 1))
 	 (node   (elib-node-branch dummy branch)))
-	 
+
     (if (< n 0)
 	(setq n (- -1 n)))
 
@@ -298,7 +298,7 @@ If ELEMENT-COPY-FNC is not given the elements are not copied."
       (while node
 	(dll-enter-last result (dll-element dll node))
 	(setq node (dll-next dll node))))
-    
+
     result))
 
 

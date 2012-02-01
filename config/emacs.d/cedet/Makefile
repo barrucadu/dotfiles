@@ -159,9 +159,9 @@ install-info:
 	for file in $(INFO_FILES); do \
 	    cp $$file $(INFO_DIR); \
 	    $(INSTALL_INFO) $$file $(INFO_DIR)/dir ;\
-	done 
+	done
 
-## Uninstall info files 
+## Uninstall info files
 INSTALLED_INFO_FILES=$(shell find . -name *.info | sed -e 's|.*/\(.*\.info$$\)|$(INFO_DIR)/\1|')
 
 .PHONY: uninstall-info

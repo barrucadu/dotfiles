@@ -5,7 +5,7 @@ const
    PRIME_MAX  = 8000; { No prime gets bigger than this. This is the size of the sieve. 1000th prime is 7919, 8000 is a nice round number. }
    NUM_PRIMES = 1000; { The maximum number of primes to calculate. }
 
-var 
+var
    nth	      : Integer; { The Nth prime to find }
    st, en     : Integer; { Start and end of range }
    instr      : String;  { Temporary string for grabbing input }
@@ -14,7 +14,7 @@ Function readint (question : String; min, max : Integer) : Integer; { readint(qu
 var
    str	       : String;  { Temporary string for grabbing input }
    tmpint, err : Integer; { Integer value of str, and error code (val function) }
-   
+
 begin
    err := 1;
 
@@ -24,16 +24,16 @@ begin
       write(question, ' [', min, '-', max, ']: ');
       readln(str);
       val(str, tmpint, err);
-      
+
       { Check if the user did something stupid }
       if err <> 0 then
 	 writeln('Something bad happened. Shall we try that again?');
-   
+
       { Check if the user actually paid any attention whatsoever to the range }
       if (tmpint > max) or (tmpint < min) then
 	 writeln('Value out of range [', min, '-', max, ']');
    end;
-   
+
    readint := tmpint;
 end; { readint }
 
@@ -87,7 +87,7 @@ begin
    st    := 0;
    en    := 0;
    instr := '';
-   
+
    while (instr <> 'R') and (instr <> 'I') do { A loop because some fool is guaranteed to enter an invalid value. }
    begin
       write('Do you want to find a range of prime numbers or an individual number? (R/I): ');
@@ -101,7 +101,7 @@ begin
    begin
       st := readint('Enter start number.', 1, NUM_PRIMES);
       en := readint('Enter end number.', 1, NUM_PRIMES);
-      
+
       if (st > en) then
       begin
 	 write('Start value too big (', st, ' > ', en, '). '); { Fool. }
@@ -111,7 +111,7 @@ begin
 	 en := en + st;
 	 st := en - st;
 	 en := en - st;
-      end;   
+      end;
    end;
 
    { Sieve numbers }

@@ -30,10 +30,10 @@
 ;; >  * Can't parse signature element: "char* const dellog_ClrTxt"
 ;; >  * Can't parse signature element: "const char* dellog_SetTxt"
 ;; >  * Can't parse signature element: "const RmcCmdSSPADetailedStatus& status"
-;; > 
+;; >
 ;; > And FWIW I have seen the following argument cases not handled, even
 ;; > with no leading/trailing spaces in the split:
-;; > 
+;; >
 ;; >  * Can't parse signature element: "const bool currentAlarmStatus"
 ;; >  * Can't parse signature element: "unsigned char mode"
 ;; >  * Can't parse signature element: "TskTimingTask* tsktimingtask"
@@ -883,7 +883,7 @@ opt-restrict
 ;; then also some invalid C++-syntax is parsed but this is better than
 ;; not parsing valid syntax.
 varname
-  : opt-stars opt-restrict namespace-symbol opt-bits opt-array 
+  : opt-stars opt-restrict namespace-symbol opt-bits opt-array
     ( ,$3 ,$1 ,$4 ,$5 )
   ;
 
@@ -1023,9 +1023,9 @@ arg-sub-list
   ;
 
 operatorsym
-  : LESS LESS EQUAL 
+  : LESS LESS EQUAL
     ( "<<=" )
-  | GREATER GREATER EQUAL 
+  | GREATER GREATER EQUAL
     ( ">>=" )
   | LESS LESS
     ( "<<" )
@@ -1142,7 +1142,7 @@ type-cast-list
 opt-stuff-after-symbol
   : PAREN_BLCK
   | BRACK_BLCK
-  | ;; EMPTY 
+  | ;; EMPTY
   ;
 
 multi-stage-dereference
@@ -1158,7 +1158,7 @@ string-seq
     ( $1 )
   ;
 
-expr-start 
+expr-start
   : MINUS
   | PLUS
   | STAR

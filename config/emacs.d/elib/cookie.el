@@ -114,7 +114,7 @@
 ;;;
 ;;; The wrapper data type contains
 ;;;      start-marker    Position of the printed representation of the
-;;;                      cookie in the buffer. 
+;;;                      cookie in the buffer.
 ;;;      cookie          The user-supplied cookie.
 ;;;
 ;;; The wrapper is not accessible to the user of this package.
@@ -220,15 +220,15 @@
 
 ;;; The collection data type
 
-(defun elib-create-collection (buffer pretty-printer 
+(defun elib-create-collection (buffer pretty-printer
 					 header-wrapper footer-wrapper
 					 dll)
   ;; Create a collection. INTERNAL USE ONLY.
   (cons 'COLLECTION
 	;; The last element is a pointer to the last tin
-	;; the cursor was at, or nil if that is unknown.  
+	;; the cursor was at, or nil if that is unknown.
 	(vector buffer
-		pretty-printer 
+		pretty-printer
 		header-wrapper footer-wrapper
 		dll nil)))
 
@@ -396,7 +396,7 @@
 ;;;                  Public members of the cookie package
 
 
-(defun collection-create (buffer pretty-printer 
+(defun collection-create (buffer pretty-printer
 			     &optional header footer pos)
   "Create an empty collection of cookies.
 Args: BUFFER PRETTY-PRINTER &optional HEADER FOOTER POS.
@@ -623,7 +623,7 @@ Returns nil if there is no cookie left in the collection."
 (defun collection-empty (collection)
   "Return true if there are no cookies in COLLECTION."
 
-  (eq (dll-nth (elib-collection->dll collection) 1) 
+  (eq (dll-nth (elib-collection->dll collection) 1)
       (elib-collection->footer collection)))
 
 
@@ -678,8 +678,8 @@ MAP-FUNCTION is applied to the first element first.
 If MAP-FUNCTION returns non-nil the cookie will be refreshed (its
 pretty-printer will be called once again).
 
-Note that the buffer for COLLECTION will be current buffer when MAP-FUNCTION 
-is called.  MAP-FUNCTION must restore the current buffer to BUFFER before 
+Note that the buffer for COLLECTION will be current buffer when MAP-FUNCTION
+is called.  MAP-FUNCTION must restore the current buffer to BUFFER before
 it returns, if it changes it.
 
 If more than two arguments are given to cookie-map, remaining
@@ -705,8 +705,8 @@ arguments will be passed to MAP-FUNCTION."
 MAP-FUNCTION is applied to the last cookie first.
 If MAP-FUNCTION returns non-nil the cookie will be refreshed.
 
-Note that the buffer for COLLECTION will be current buffer when MAP-FUNCTION 
-is called.  MAP-FUNCTION must restore the current buffer to BUFFER before 
+Note that the buffer for COLLECTION will be current buffer when MAP-FUNCTION
+is called.  MAP-FUNCTION must restore the current buffer to BUFFER before
 it returns, if it changes the current buffer.
 
 If more than two arguments are given to cookie-map, remaining
@@ -739,7 +739,7 @@ Args: COLLECTION COOKIE-LIST."
 (defun collection-filter-cookies (collection predicate &rest extra-args)
   "Remove all cookies in COLLECTION for which PREDICATE returns nil.
 Args: COLLECTION PREDICATE &rest EXTRA-ARGS.
-Note that the buffer for COLLECTION will be current-buffer when PREDICATE 
+Note that the buffer for COLLECTION will be current-buffer when PREDICATE
 is called. PREDICATE must restore the current buffer before it returns
 if it changes it.
 
@@ -763,7 +763,7 @@ PREDICATE."
 
 (defun collection-filter-tins (collection predicate &rest extra-args)
   "Remove all cookies in COLLECTION for which PREDICATE returns nil.
-Note that the buffer for COLLECTION will be current-buffer when PREDICATE 
+Note that the buffer for COLLECTION will be current-buffer when PREDICATE
 is called. PREDICATE must restore the current buffer before it returns
 if it changes it.
 
@@ -836,7 +836,7 @@ If the COLLECTION is empty, nil is returned."
 	    (setq best-guess g))))
 
 	(if (elib-collection->last-tin collection) ;Check "previous".
-	    (let* ((g (elib-collection->last-tin collection)) 
+	    (let* ((g (elib-collection->last-tin collection))
 		   (d (elib-abs
 		       (- pos (elib-wrapper->start-marker
 			       (dll-element dll g))))))
@@ -846,10 +846,10 @@ If the COLLECTION is empty, nil is returned."
 		(setq best-guess g)))))
 
 	;; best-guess is now a "best guess".
-     
+
 	;; Find the correct cookie. First determine in which direction
 	;; it lies, and then move in that direction until it is found.
-    
+
 	(cond
 	 ;; Is pos after the guess?
 	 ((>= pos
@@ -879,7 +879,7 @@ If the COLLECTION is empty, nil is returned."
 ;;The marker that is returned should not be modified in any way,
 ;;and is only valid until the contents of the cookie buffer changes."
 ;;
-;;  (elib-wrapper->start-marker 
+;;  (elib-wrapper->start-marker
 ;;   (dll-element (elib-collection->dll collection) tin)))
 
 
@@ -917,7 +917,7 @@ number of cookies needs to be refreshed."
 
       (goto-char (elib-wrapper->start-marker
 		  (dll-element dll footer)))
-    
+
       (let ((tin (dll-nth dll 1)))
 	(while (not (eq tin footer))
 
@@ -927,7 +927,7 @@ number of cookies needs to be refreshed."
 		   (elib-wrapper->cookie (dll-element dll tin)))
 	  (insert "\n")
 	  (setq tin (dll-next dll tin)))))
-    
+
     (set-marker (elib-wrapper->start-marker (dll-element dll footer))
 		(point))))
 
@@ -937,7 +937,7 @@ number of cookies needs to be refreshed."
 The pretty-printer that for COLLECTION will be called for all TINS."
 
   (elib-set-buffer-bind-dll collection
-    
+
     (while tins
       (elib-refresh-tin collection (car tins))
       (setq tins (cdr tins)))))
@@ -949,7 +949,7 @@ Args: COLLECTION GOAL.
 goal-column is made buffer-local.
 
 There will eventually be a better way to specify the cursor position."
-  (elib-set-buffer-bind-dll collection 
+  (elib-set-buffer-bind-dll collection
     (make-local-variable 'goal-column)
     (setq goal-column goal)))
 

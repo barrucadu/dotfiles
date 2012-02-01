@@ -9,7 +9,7 @@ Var
 
 begin
    randomize;
-   
+
    write('Enter the die string (eg: 1d6): ');
    readln(diestr);
 
@@ -18,7 +18,7 @@ begin
    rolls   := -1;
    size    := -1;
    looping := true;
-   
+
    while looping do
    begin
       i := i + 1;
@@ -47,14 +47,14 @@ begin
    end;
 
    sum := 0;
-   
+
    for i := 1 to rolls do
    begin
       a := random(size) + 1;
       writeln('Roll ', i, ' = ', a);
       sum := sum + a;
    end;
-   
+
    mean := sum / rolls;
    writeln('Sum:  ', sum);
    writeln('Mean: ', mean:2:2);

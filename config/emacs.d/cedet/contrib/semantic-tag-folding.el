@@ -35,7 +35,7 @@
 ;;;
 ;;; To use feature, add this file to your load path and put the
 ;;; following line in your .emacs: (require 'semantic-tag-folding)
-;;; 
+;;;
 ;;; Customize `semantic-tag-folding-allow-folding-of' to choose which
 ;;; tags you want to be able to fold.  You can also choose which tags
 ;;; types are folded by default when semantic-decoration-mode is
@@ -56,7 +56,7 @@
 ;;    having to turn on semantic-decoration-mode
 ;; 4. hs-mode style commands to fold and show all tags, all child tags
 ;;    or only the current tag.
-;;    
+;;
 ;; TODO:
 ;; * semantic-tag-folding-tag and semantic-tag-folding-comment attributes should be ignored
 ;; when calling fold-all or show-all (or the yet to be implemented show-children functions)
@@ -131,7 +131,7 @@ If ARG is nil, then toggle."
   "*Hook run at the end of function `semantic-tag-folding-mode'."
   :group 'semantic
   :type 'hook)
-  
+
 (defvar semantic-tag-folding-mode-map
   (let ((km (make-sparse-keymap)))
     (define-key km [left-fringe mouse-1] 'semantic-tag-folding-click)
@@ -364,7 +364,7 @@ unfolded."
        #b00011000
        #b00011000
        #b00011000])
-    
+
     (define-fringe-bitmap  'semantic-tag-folding-unfolded
       ;; a minus sign
       [#b11111111
@@ -607,7 +607,7 @@ is non-nil if the fold region is a comment."
 			       'display
 			       '((left-fringe semantic-tag-folding-folded)
 				 "+" ))))
-        
+
         ;; store the marker string and tag as a property of the
         ;; overlay so we use it to change the displayed fold state
         ;; later (in semantic-tag-folding-set-overlay-visibility)
@@ -616,7 +616,7 @@ is non-nil if the fold region is a comment."
         (semantic-overlay-put ov 'semantic-tag-folding-comment-overlay comment)
 
         (semantic-overlay-put ov2 'before-string marker-string)
-        
+
         ;; store fold state as a function of the tag (unless the default state is being set)
         (unless (functionp semantic-tag-folding-function)
           (semantic-tag-folding-set-fold-state tag comment fold))
@@ -695,7 +695,7 @@ overlay is folded or expanded by reveal mode."
              (or (not called-by-reveal-mode) (not fold) (semantic-overlay-get ov 'semantic-tag-reveal-mode)))
     (semantic-overlay-put ov 'invisible (if fold 'semantic-tag-fold))
     (let ((tag (semantic-overlay-get ov 'semantic-tag-folding-tag)))
-      
+
       (when tag
         (semantic-tag-folding-set-fold-state tag (semantic-overlay-get ov 'semantic-tag-folding-comment-overlay) (if fold 'fold 'show))
         (if fold

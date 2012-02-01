@@ -61,13 +61,13 @@ for package in $packages; do
 	tar xzf $package.tar.gz
 	rm $package.tar.gz
 	cd $package
-	
+
 	msg "Building $package from AUR"
     else # ABS package
 	if [[ $num > 1 ]]; then
 	    msg "$package found in $num repositories. Select one to build"
 	    echo
-	    
+
 	    i=0
 	    while [[ $i < $num ]]; do
 		echo "$i) $pac[(f)$i]"
@@ -78,7 +78,7 @@ for package in $packages; do
 	    while $looping; do
 		echo -n "Enter your choice: "
 		read choice
-		
+
 		if [[ $choice -ge 0 ]] && [[ $choice -lt $i ]]; then
 		    looping=false
 		    pac=$pac[(f)$choice]
@@ -121,7 +121,7 @@ for package in $packages; do
     if $clean; then
 	rm -r src/ pkg/
     fi
-    
+
     if $clear; then
 	cd ..
 	rm -r $package

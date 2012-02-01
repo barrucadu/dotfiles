@@ -134,7 +134,7 @@ Display the references in`semantic-symref-results-mode'."
     (define-key km "R" 'semantic-symref-list-rename-open-hits)
     (define-key km "(" 'semantic-symref-list-create-macro-on-open-hit)
     (define-key km "E" 'semantic-symref-list-call-macro-on-open-hits)
-    
+
     km)
   "Keymap used in `semantic-symref-results-mode'.")
 
@@ -167,7 +167,7 @@ Display the references in`semantic-symref-results-mode'."
      ])
    )
   "Menu entries for the Semantic Symref list mode.")
-   
+
 (defvar semantic-symref-list-menu nil
   "Menu keymap build from `semantic-symref-results-mode'.")
 

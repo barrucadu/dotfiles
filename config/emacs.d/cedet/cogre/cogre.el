@@ -74,7 +74,7 @@
 ;;
 ;; Each cogre element, and the graph is an abstract representation of
 ;; something.  The peer would then be an object that handles a
-;; concrete represenatation of something else.  
+;; concrete represenatation of something else.
 ;;
 ;; For example, a `note' node might be linked to a comment in some
 ;; code.  Updating the node should update the file or updating the
@@ -135,7 +135,7 @@ displayed in.")
 	       :type symbol
 	       :custom (choice (const emacs-lisp-mode)
 			       (const c++-mode)
-			       (const c-mode)	
+			       (const c-mode)
 			       (const java-mode)
 			       ;; Any other useful modes?
 			       (symbol)
@@ -371,7 +371,7 @@ If called non-interactivly there is no default, query for one.
 If NODE is supplied, use that.
 If there is a PREFIX argument, then force a query for one."
   (interactive (list
-		
+
 		;; Check the last key.  Fake keys from toolbar/menu-bar can
 		;; force our hand for some node types.
 		(or (cogre-last-event-element-type cogre-node)
@@ -788,7 +788,7 @@ Each list will be prefixed with a line before it."
 	(setq str (cdr str)))
       (setq slots (cdr slots)))
     ws))
-    
+
 
 (defun cogre-node-horizontal-distance (node1 node2)
   "Calculate the horizontal distance between NODE1 and NODE2.

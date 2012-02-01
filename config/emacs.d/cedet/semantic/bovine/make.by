@@ -133,7 +133,7 @@ elements: element some-whitespace elements
 	  ( ,@$1 )
 	| ;;EMPTY
 	;
-  
+
 element: sub-element element
 	 ( (concat (car ,$1) (car ,$2)) )
        | ;;EMPTY

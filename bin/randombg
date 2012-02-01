@@ -42,8 +42,8 @@ if screens == 1:
     setbg (paperdir + "/" + papers[0])
 else:
     prepbg (tmpfile, fullgeom)
-    
+
     for i in range (0, screens):
         mergebg (tmpfile, paperdir + "/" + papers[i], geometry, i)
-        
+
     setbg (tmpfile)

@@ -1,4 +1,4 @@
-;;; cit-symref.el --- 
+;;; cit-symref.el ---
 ;;
 ;; Copyright (C) 2010 Eric M. Ludlam
 ;;
@@ -77,7 +77,7 @@
     ;; 7 - Run the symref tool
     ;; Create the UI
     (semantic-symref-regexp "doSomethingPublic")
-    
+
     (cit-symref-count '(3 3 0 0))
     ))
 

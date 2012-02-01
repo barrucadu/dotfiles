@@ -95,7 +95,7 @@ Used for testing purpses in conversion routines.")
 	     :package-name "mypack"))
 	)
     (cogre-periodic-link-at i1 i2 'cogre-arrow))
-  
+
   ;; Notes?
   (cogre-periodic-make-node-at 4 27 'cogre-note "Notes about COGRE")
 

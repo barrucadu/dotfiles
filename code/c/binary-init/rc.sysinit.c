@@ -62,7 +62,7 @@ int mountroot()
 int fsck()
 {
     char* fsckcmd = malloc(512 * sizeof(char*));
-    
+
     strcpy(fsckcmd, "/bin/fsck -A -T -C -a -t ");
     strcat(fsckcmd, NETFS);
     run(fsckcmd, "/dev/null");
@@ -102,7 +102,7 @@ int sysclock()
     {
 	echo("/var/lib/hwclock/adjtime", "0.0 0 0.0", 0);
     }
-    
+
     char* timepath = malloc(80 * sizeof(char));
     strcpy(timepath, "/usr/share/zoneinfo/");
     strcat(timepath, TIMEZONE);
@@ -110,7 +110,7 @@ int sysclock()
     if(!strcmp(TIMEZONE, "") && fexists(timepath))
     {
 	remove("/etc/localtime");
-	
+
 	strcpy(clockcmd, "/bin/cp \"");
 	strcat(clockcmd, timepath);
 	strcat(clockcmd, "\" /etc/localtime");
@@ -118,11 +118,11 @@ int sysclock()
     }
 
     free(timepath);
-    
+
     if(!strcmp(HWCLOCK_PARAMS, ""))
     {
 	run("/sbin/hwclock --adjust", "/dev/null");
-	
+
 	strcpy(clockcmd, "/sbin/hwclock ");
 	strcat(clockcmd, HWCLOCK_PARAMS);
 	run(clockcmd, "/dev/null");
@@ -141,7 +141,7 @@ int randomseed()
     strcat(seedcmd, RANDOM_SEED);
     strcat(seedcmd, " > /dev/urandom");
     system(seedcmd);
-    
+
     free(seedcmd);
     return 1;
 }
@@ -181,7 +181,7 @@ int hostname()
     run(hostcmd, "/dev/null");
 
     free(hostcmd);
-    
+
     return 1;
 }
 
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
     } else {
 	printf(" ...fail!\n");
     }
-    
+
     /* Clock */
     printf("Activating system clock...");
     if(sysclock())
@@ -438,7 +438,7 @@ int main(int argc, char *argv[])
 	printf(" ...done!\n");
     } else {
 	printf(" ...fail!\n");
-    }    
+    }
 
     if(!strcmp(KEYMAP, ""))
     {

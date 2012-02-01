@@ -221,7 +221,7 @@ BUFFER is the GUD buffer in which to run the command."
 	(setq gud-gdb-fetched-stack-frame nil
 	      gud-gdb-fetched-stack-frame-list
 	      (nreverse gud-gdb-fetched-stack-frame-list))))))
-  
+
 (defun gud-gdb-speedbar-stack-filter (string)
   ;; checkdoc-params: (string)
   "Filter used to read in the current GDB stack."

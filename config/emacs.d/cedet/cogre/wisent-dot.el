@@ -29,13 +29,13 @@
 ;; The language is declaritive and the whole thing is parsed.
 ;; The result could be used as a data structure representing a graph.
 
-;; This depends on A dot mode 
+;; This depends on A dot mode
 ;;
 ;; It will work with either cogre-dot-mode, or if available, the much
 ;; nicer graphviz-dot-mode by
 ;;   Pieter E.J. Pareit <pieter.pareit@planetinternet.be>
 ;;   http://users.skynet.be/ppareit/graphviz-dot-mode.el
-;;   
+;;
 
 
 ;;; Code:

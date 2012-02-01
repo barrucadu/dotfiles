@@ -88,7 +88,7 @@
   "Fill up a base set of files with some base tags.
 MAKE-TYPE indicates the makefile type being used."
   ;;(interactive)
- 
+
   ;; 2 b) Test various templates.
 
   (if (string= make-type "Automake")

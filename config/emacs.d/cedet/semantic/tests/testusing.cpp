@@ -5,7 +5,7 @@
 #include <testusing.hh>
 
 namespace moose {
-  
+
   class MyClass;
   class Point;
 
@@ -20,7 +20,7 @@ namespace moose {
 }
 
 namespace {
-  
+
   int global_variable = 0;
 
 };
@@ -52,7 +52,7 @@ namespace panda {
 }
 
 namespace togglemoose {
-  
+
   MyOtherClass::testToggle1() { //^1^
     // Impl for testToggle1
   }

@@ -12,7 +12,7 @@ Type
    Tower = Array [0..10] of Integer;
    Hanoi = Array [0 .. 2] of Tower;
 
-Var 
+Var
    disks : LongInt;
 
 Procedure printinfo(disks : LongInt); { Print information about the puzzle generated }
@@ -49,7 +49,7 @@ begin
    { Find the indexes of the last nonzero value in the towers }
    i := 0;
    j := 0;
-   
+
    while towa[i + 1] <> 0 do
       i := i + 1;
 
@@ -83,7 +83,7 @@ begin
    i := 0;
    j := 0;
    k := 0;
-   
+
    while towers[0][i + 1] <> 0 do
       i := i + 1;
 
@@ -107,7 +107,7 @@ begin
 	    towerbegin := 1
 	 else
 	    towerbegin := 2;
-      
+
       towerend := towerbegin + dir;
 
       if towerend = 3 then
@@ -137,18 +137,18 @@ var
    towers     : Hanoi;
 begin
    moves := round(power(2, disks) - 1.0); { Calculate the number of moves }
-   
+
    move := 0;
    writeln(move:3, ': Build a tower of ', disks, ' disks.');
 
    { Keep track of which tower has what }
    inithanoi(towers, disks);
-   
+
    for move := 1 to moves do
    begin
       { Get the next move }
       findmove(disks, towers, towerbegin, towerend, ((move - 1) mod 2 = 0));
-      
+
       { And make it }
       makemove(towers[towerbegin], towers[towerend]);
 
@@ -161,11 +161,11 @@ begin
    write('Enter the number of disks: ');
    readln(disks);
    writeln;
-   
+
    { Information about the puzzle generated }
    printinfo(disks);
    writeln;
-   
+
    { Now solve }
    solve(disks);
 end.

@@ -24,7 +24,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; EDE is the top level Lisp interface to a project management scheme
 ;; for Emacs.  Emacs does many things well, including editing,
 ;; building, and debugging.  Folks migrating from other IDEs don't
@@ -1146,7 +1146,7 @@ See also `ede-map-all-subprojects'."
   "For object THIS, execute PROC on THIS and  all subprojects.
 This function also applies PROC to sub-sub projects.
 See also `ede-map-subprojects'."
-  (apply 'append 
+  (apply 'append
 	 (list (funcall allproc this))
 	 (ede-map-subprojects
 	  this
@@ -1198,7 +1198,7 @@ Return the first non-nil value returned by PROC."
 (defmethod ede-system-include-path ((this ede-project))
   "Get the system include path used by project THIS."
   nil)
-  
+
 (defmethod ede-preprocessor-map ((this ede-project))
   "Get the pre-processor map for project THIS."
   nil)
@@ -1206,7 +1206,7 @@ Return the first non-nil value returned by PROC."
 (defmethod ede-system-include-path ((this ede-target))
   "Get the system include path used by project THIS."
   nil)
-  
+
 (defmethod ede-preprocessor-map ((this ede-target))
   "Get the pre-processor map for project THIS."
   nil)

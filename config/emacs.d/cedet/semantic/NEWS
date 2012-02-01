@@ -334,7 +334,7 @@ safely.
 ** folded tags
 New functions `semantic-set-tag-folded' and `semantic-tag-folded-p'
 allow you to put a tag into a 'folded' state where only the 1st line
-is showing. 
+is showing.
 
 * Database.
 
@@ -461,7 +461,7 @@ Routines for building semantic.cache files from a command line script.
 
 ** `semantic-find-tag-parent-by-overlay'
 Find the parent of a tag by overlays.
-    
+
 * Minor modes.
 
 ** `semantic-show-parser-state-mode'

@@ -1426,7 +1426,7 @@ this:
            (save-excursion
              (end-of-line) (forward-char 1)
              ;; Insert goodies here.
-           ))         
+           ))
          )
 @end example
 
@@ -1452,7 +1452,7 @@ The end result would then look like this:
            (save-excursion
              (end-of-line) (forward-char 1)
              ;; Insert goodies here.
-           ))         
+           ))
          )
         ((string-match "-" text)        ;we have to contract this node
          ;; Contract stuff here

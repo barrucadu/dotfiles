@@ -3,7 +3,7 @@
 (ede-proj-project "templates"
   :name "templates"
   :file "Project.ede"
-  :targets (list 
+  :targets (list
    (ede-proj-target-makefile-miscelaneous "templates"
     :name "templates"
     :path ""

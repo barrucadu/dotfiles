@@ -44,7 +44,7 @@
 @item ede-project-placeholder
 @table @asis
 @item Children:
-@w{@xref{ede-project}.} 
+@w{@xref{ede-project}.}
 @end table
 
 @end table
@@ -91,36 +91,36 @@ File name where this project is stored.
 @end table
 @subsection Specialized Methods
 
-@deffn Method ede--project-inode :AFTER proj 
+@deffn Method ede--project-inode :AFTER proj
 Get the inode of the directory project @var{PROJ} is in.
 @end deffn
 
-@deffn Method ede-project-root :AFTER this 
+@deffn Method ede-project-root :AFTER this
 If a project knows its root, return it here.
 Allows for one-project-object-for-a-tree type systems.
 @end deffn
 
-@deffn Method ede-find-subproject-for-directory :AFTER proj dir 
+@deffn Method ede-find-subproject-for-directory :AFTER proj dir
 Find a subproject of @var{PROJ} that corresponds to @var{DIR}.
 @end deffn
 
-@deffn Method ede-project-root-directory :AFTER this &optional file 
+@deffn Method ede-project-root-directory :AFTER this &optional file
 If a project knows its root, return it here.
 Allows for one-project-object-for-a-tree type systems.
 Optional @var{FILE} is the file to test.  It is ignored in preference
 of the anchor file for the project.
 @end deffn
 
-@deffn Method ede-project-force-load :AFTER this 
+@deffn Method ede-project-force-load :AFTER this
 Make sure the placeholder @var{THIS} is replaced with the real thing.
 Return the new object created in its place.
 @end deffn
 
-@deffn Method project-interactive-select-target :AFTER this prompt 
+@deffn Method project-interactive-select-target :AFTER this prompt
 Make sure placeholder @var{THIS} is replaced with the real thing, and pass through.
 @end deffn
 
-@deffn Method project-add-file :AFTER this file 
+@deffn Method project-add-file :AFTER this file
 Make sure placeholder @var{THIS} is replaced with the real thing, and pass through.
 @end deffn
 
@@ -142,7 +142,7 @@ Make sure placeholder @var{THIS} is replaced with the real thing, and pass throu
 @item ede-project
 @table @asis
 @item Children:
-@w{@xref{ede-cpp-root-project},} @w{@xref{ede-emacs-project},} @w{@xref{ede-linux-project},} @w{@xref{ede-maven-project},} @w{@xref{ede-simple-project},} @w{@xref{ede-simple-base-project},} @w{@xref{ede-proj-project},} @w{@xref{project-am-makefile},} @w{@xref{ede-step-project}.} 
+@w{@xref{ede-cpp-root-project},} @w{@xref{ede-emacs-project},} @w{@xref{ede-linux-project},} @w{@xref{ede-maven-project},} @w{@xref{ede-simple-project},} @w{@xref{ede-simple-base-project},} @w{@xref{ede-proj-project},} @w{@xref{project-am-makefile},} @w{@xref{ede-step-project}.}
 @end table
 
 @end table
@@ -253,111 +253,111 @@ Project local variables
 @end table
 @subsection Specialized Methods
 
-@deffn Method ede-preprocessor-map :AFTER this 
+@deffn Method ede-preprocessor-map :AFTER this
 Get the pre-processor map for project @var{THIS}.
 @end deffn
 
-@deffn Method ede-subproject-relative-path :AFTER proj &optional parent-in 
+@deffn Method ede-subproject-relative-path :AFTER proj &optional parent-in
 Get a path name for @var{PROJ} which is relative to the parent project.
 If PARENT is specified, then be relative to the PARENT project.
 Specifying PARENT is useful for sub-sub projects relative to the root project.
 @end deffn
 
-@deffn Method eieio-speedbar-description :AFTER obj 
+@deffn Method eieio-speedbar-description :AFTER obj
 Provide a speedbar description for @var{OBJ}.
 @end deffn
 
-@deffn Method ede-map-any-target-p :AFTER this proc 
+@deffn Method ede-map-any-target-p :AFTER this proc
 For project @var{THIS}, map @var{PROC} to all targets and return if any non-nil.
 Return the first non-@code{nil} value returned by @var{PROC}.
 @end deffn
 
-@deffn Method project-rescan :AFTER this 
+@deffn Method project-rescan :AFTER this
 Rescan the EDE proj project @var{THIS}.
 @end deffn
 
-@deffn Method ede-map-subprojects :AFTER this proc 
+@deffn Method ede-map-subprojects :AFTER this proc
 For object @var{THIS}, execute @var{PROC} on all direct subprojects.
 This function does not apply @var{PROC} to sub-sub projects.
 See also @dfn{ede-map-all-subprojects}.
 @end deffn
 
-@deffn Method ede-convert-path :AFTER this path 
+@deffn Method ede-convert-path :AFTER this path
 Convert path in a standard way for a given project.
 Default to making it project relative.
 Argument @var{THIS} is the project to convert @var{PATH} to.
 @end deffn
 
-@deffn Method ede-name :AFTER this 
+@deffn Method ede-name :AFTER this
 Return a short-name for @var{THIS} project file.
 Do this by extracting the lowest directory name.
 @end deffn
 
-@deffn Method ede-set-project-variables :AFTER project &optional buffer 
+@deffn Method ede-set-project-variables :AFTER project &optional buffer
 Set variables local to @var{PROJECT} in @var{BUFFER}.
 @end deffn
 
-@deffn Method eieio-speedbar-derive-line-path :AFTER obj &optional depth 
+@deffn Method eieio-speedbar-derive-line-path :AFTER obj &optional depth
 Return the path to @var{OBJ}.
 Optional @var{DEPTH} is the depth we start at.
 @end deffn
 
-@deffn Method ede-map-all-subprojects :AFTER this allproc 
+@deffn Method ede-map-all-subprojects :AFTER this allproc
 For object @var{THIS}, execute PROC on @var{THIS} and  all subprojects.
 This function also applies PROC to sub-sub projects.
 See also @dfn{ede-map-subprojects}.
 @end deffn
 
-@deffn Method project-update-version :AFTER ot 
+@deffn Method project-update-version :AFTER ot
 The @code{:version} of the project @var{OT} has been updated.
 Handle saving, or other detail.
 @end deffn
 
-@deffn Method ede-buffer-header-file :AFTER this buffer 
+@deffn Method ede-buffer-header-file :AFTER this buffer
 Return @code{nil}, projects don't have header files.
 @end deffn
 
-@deffn Method ede-buffer-documentation-files :AFTER this buffer 
+@deffn Method ede-buffer-documentation-files :AFTER this buffer
 Return all documentation in project @var{THIS} based on @var{BUFFER}.
 @end deffn
 
-@deffn Method ede-map-targets :AFTER this proc 
+@deffn Method ede-map-targets :AFTER this proc
 For object @var{THIS}, execute @var{PROC} on all targets.
 @end deffn
 
-@deffn Method ede-buffer-mine :AFTER this buffer 
+@deffn Method ede-buffer-mine :AFTER this buffer
 Return non-@code{nil} if object @var{THIS} lays claim to the file in @var{BUFFER}.
 @end deffn
 
-@deffn Method ede-object-keybindings :BEFORE this 
+@deffn Method ede-object-keybindings :BEFORE this
 Retrieves the slot @code{keybindings} from an object of class @code{ede-project}
 @end deffn
 
-@deffn Method ede-description :AFTER this 
+@deffn Method ede-description :AFTER this
 Return a description suitable for the minibuffer about @var{THIS}.
 @end deffn
 
-@deffn Method eieio-speedbar-object-children :AFTER this 
+@deffn Method eieio-speedbar-object-children :AFTER this
 Return the list of speedbar display children for @var{THIS}.
 @end deffn
 
-@deffn Method project-make-dist :AFTER this 
+@deffn Method project-make-dist :AFTER this
 Build a distribution for the project based on @var{THIS} project.
 @end deffn
 
-@deffn Method ede-system-include-path :AFTER this 
+@deffn Method ede-system-include-path :AFTER this
 Get the system include path used by project @var{THIS}.
 @end deffn
 
-@deffn Method project-new-target-custom :AFTER proj 
+@deffn Method project-new-target-custom :AFTER proj
 Create a new target.  It is up to the project @var{PROJ} to get the name.
 @end deffn
 
-@deffn Method ede-subproject-p :AFTER proj 
+@deffn Method ede-subproject-p :AFTER proj
 Return non-@code{nil} if @var{PROJ} is a sub project.
 @end deffn
 
-@deffn Method ede-expand-filename :AFTER this filename &optional force 
+@deffn Method ede-expand-filename :AFTER this filename &optional force
 Return a fully qualified file name based on project @var{THIS}.
 @var{FILENAME} should be just a filename which occurs in a directory controlled
 by this project.
@@ -365,35 +365,35 @@ Optional argument @var{FORCE} forces the default filename to be provided even if
 doesn't exist.
 @end deffn
 
-@deffn Method ede-menu-items-build :AFTER obj &optional current 
+@deffn Method ede-menu-items-build :AFTER obj &optional current
 Return a list of menu items for building project @var{OBJ}.
 If optional argument @var{CURRENT} is non-@code{nil}, return sub-menu code.
 @end deffn
 
-@deffn Method ede-update-version-in-source :AFTER this version 
+@deffn Method ede-update-version-in-source :AFTER this version
 Change occurrences of a version string in sources.
 In project @var{THIS}, cycle over all targets to give them a chance to set
 their sources to @var{VERSION}.
 @end deffn
 
-@deffn Method project-new-target :AFTER proj &rest args 
+@deffn Method project-new-target :AFTER proj &rest args
 Create a new target.  It is up to the project @var{PROJ} to get the name.
 @end deffn
 
-@deffn Method project-compile-project :AFTER obj &optional command 
+@deffn Method project-compile-project :AFTER obj &optional command
 Compile the entire current project @var{OBJ}.
 Argument @var{COMMAND} is the command to use when compiling.
 @end deffn
 
-@deffn Method eieio-speedbar-object-buttonname :AFTER object 
+@deffn Method eieio-speedbar-object-buttonname :AFTER object
 Return a string to use as a speedbar button for @var{OBJECT}.
 @end deffn
 
-@deffn Method ede-map-project-buffers :AFTER this proc 
+@deffn Method ede-map-project-buffers :AFTER this proc
 For @var{THIS}, execute @var{PROC} on all buffers belonging to @var{THIS}.
 @end deffn
 
-@deffn Method ede-expand-filename-impl :AFTER this filename &optional force 
+@deffn Method ede-expand-filename-impl :AFTER this filename &optional force
 Return a fully qualified file name based on project @var{THIS}.
 @var{FILENAME} should be just a filename which occurs in a directory controlled
 by this project.
@@ -401,51 +401,51 @@ Optional argument @var{FORCE} forces the default filename to be provided even if
 doesn't exist.
 @end deffn
 
-@deffn Method eieio-done-customizing :AFTER proj 
+@deffn Method eieio-done-customizing :AFTER proj
 Call this when a user finishes customizing @var{PROJ}.
 @end deffn
 
-@deffn Method ede-html-documentation :AFTER this 
+@deffn Method ede-html-documentation :AFTER this
 Return a list of HTML files provided by project @var{THIS}.
 @end deffn
 
-@deffn Method ede-documentation :AFTER this 
+@deffn Method ede-documentation :AFTER this
 Return a list of files that provides documentation.
 Documentation is not for object @var{THIS}, but is provided by @var{THIS} for other
 files in the project.
 @end deffn
 
-@deffn Method project-interactive-select-target :AFTER this prompt 
+@deffn Method project-interactive-select-target :AFTER this prompt
 Interactively query for a target that exists in project @var{THIS}.
 Argument @var{PROMPT} is the prompt to use when querying the user for a target.
 @end deffn
 
-@deffn Method ede-target-in-project-p :AFTER proj target 
+@deffn Method ede-target-in-project-p :AFTER proj target
 Is @var{PROJ} the parent of @var{TARGET}?
 If @var{TARGET} belongs to a subproject, return that project file.
 @end deffn
 
-@deffn Method ede-find-target :AFTER proj buffer 
+@deffn Method ede-find-target :AFTER proj buffer
 Fetch the target in @var{PROJ} belonging to @var{BUFFER} or nil.
 @end deffn
 
-@deffn Method ede-add-subproject :AFTER proj-a proj-b 
+@deffn Method ede-add-subproject :AFTER proj-a proj-b
 Add into @var{PROJ-A}, the subproject @var{PROJ-B}.
 @end deffn
 
-@deffn Method ede-commit-project :AFTER proj 
+@deffn Method ede-commit-project :AFTER proj
 Commit any change to @var{PROJ} to its file.
 @end deffn
 
-@deffn Method project-dist-files :AFTER this 
+@deffn Method project-dist-files :AFTER this
 Return a list of files that constitutes a distribution of @var{THIS} project.
 @end deffn
 
-@deffn Method ede-object-menu :BEFORE this 
+@deffn Method ede-object-menu :BEFORE this
 Retrieves the slot @code{menu} from an object of class @code{ede-project}
 @end deffn
 
-@deffn Method ede-commit-local-variables :AFTER proj 
+@deffn Method ede-commit-local-variables :AFTER proj
 Commit change to local variables in @var{PROJ}.
 @end deffn
 
@@ -586,45 +586,45 @@ exist, it should return nil.
 @end table
 @subsection Specialized Methods
 
-@deffn Method initialize-instance :AFTER this &rest fields 
+@deffn Method initialize-instance :AFTER this &rest fields
 Make sure the @code{:file} is fully expanded.
 @end deffn
 
-@deffn Method ede-preprocessor-map :AFTER this 
+@deffn Method ede-preprocessor-map :AFTER this
 Get the pre-processor map for project @var{THIS}.
 @end deffn
 
-@deffn Method ede-set-project-variables :AFTER project &optional buffer 
+@deffn Method ede-set-project-variables :AFTER project &optional buffer
 Set variables local to @var{PROJECT} in @var{BUFFER}.
 Also set up the lexical preprocessor map.
 @end deffn
 
-@deffn Method ede-cpp-root-header-file-p :AFTER proj name 
+@deffn Method ede-cpp-root-header-file-p :AFTER proj name
 Non @code{nil} if in @var{PROJ} the filename @var{NAME} is a header.
 @end deffn
 
-@deffn Method ede-system-include-path :AFTER this 
+@deffn Method ede-system-include-path :AFTER this
 Get the system include path used by project @var{THIS}.
 @end deffn
 
-@deffn Method ede-project-root :AFTER this 
+@deffn Method ede-project-root :AFTER this
 Return my root.
 @end deffn
 
-@deffn Method ede-find-subproject-for-directory :AFTER proj dir 
+@deffn Method ede-find-subproject-for-directory :AFTER proj dir
 Return @var{PROJ}, for handling all subdirs below @var{DIR}.
 @end deffn
 
-@deffn Method ede-project-root-directory :AFTER this 
+@deffn Method ede-project-root-directory :AFTER this
 Return my root.
 @end deffn
 
-@deffn Method ede-expand-filename-impl :AFTER proj name 
+@deffn Method ede-expand-filename-impl :AFTER proj name
 Within this project @var{PROJ}, find the file @var{NAME}.
 This knows details about or source tree.
 @end deffn
 
-@deffn Method ede-find-target :AFTER proj buffer 
+@deffn Method ede-find-target :AFTER proj buffer
 Find an EDE target in @var{PROJ} for @var{BUFFER}.
 If one doesn't exist, create a new one for this directory.
 @end deffn
@@ -695,28 +695,28 @@ This allows any tool to create, manage, and persist project-specific settings.
 @end table
 @subsection Specialized Methods
 
-@deffn Method initialize-instance :AFTER this &rest fields 
+@deffn Method initialize-instance :AFTER this &rest fields
 Make sure the @code{:file} is fully expanded.
 @end deffn
 
-@deffn Method ede-project-root :AFTER this 
+@deffn Method ede-project-root :AFTER this
 Return my root.
 @end deffn
 
-@deffn Method ede-find-subproject-for-directory :AFTER proj dir 
+@deffn Method ede-find-subproject-for-directory :AFTER proj dir
 Return @var{PROJ}, for handling all subdirs below @var{DIR}.
 @end deffn
 
-@deffn Method ede-project-root-directory :AFTER this &optional file 
+@deffn Method ede-project-root-directory :AFTER this &optional file
 Return the root for @var{THIS} Emacs project with file.
 @end deffn
 
-@deffn Method ede-expand-filename-impl :AFTER proj name 
+@deffn Method ede-expand-filename-impl :AFTER proj name
 Within this project @var{PROJ}, find the file @var{NAME}.
 Knows about how the Emacs source tree is organized.
 @end deffn
 
-@deffn Method ede-find-target :AFTER proj buffer 
+@deffn Method ede-find-target :AFTER proj buffer
 Find an EDE target in @var{PROJ} for @var{BUFFER}.
 If one doesn't exist, create a new one for this directory.
 @end deffn
@@ -787,28 +787,28 @@ This allows any tool to create, manage, and persist project-specific settings.
 @end table
 @subsection Specialized Methods
 
-@deffn Method initialize-instance :AFTER this &rest fields 
+@deffn Method initialize-instance :AFTER this &rest fields
 Make sure the @code{:file} is fully expanded.
 @end deffn
 
-@deffn Method ede-project-root :AFTER this 
+@deffn Method ede-project-root :AFTER this
 Return my root.
 @end deffn
 
-@deffn Method ede-find-subproject-for-directory :AFTER proj dir 
+@deffn Method ede-find-subproject-for-directory :AFTER proj dir
 Return @var{PROJ}, for handling all subdirs below @var{DIR}.
 @end deffn
 
-@deffn Method ede-project-root-directory :AFTER this &optional file 
+@deffn Method ede-project-root-directory :AFTER this &optional file
 Return the root for @var{THIS} Linux project with file.
 @end deffn
 
-@deffn Method ede-expand-filename-impl :AFTER proj name 
+@deffn Method ede-expand-filename-impl :AFTER proj name
 Within this project @var{PROJ}, find the file @var{NAME}.
 Knows about how the Linux source tree is organized.
 @end deffn
 
-@deffn Method ede-find-target :AFTER proj buffer 
+@deffn Method ede-find-target :AFTER proj buffer
 Find an EDE target in @var{PROJ} for @var{BUFFER}.
 If one doesn't exist, create a new one for this directory.
 @end deffn
@@ -879,23 +879,23 @@ This allows any tool to create, manage, and persist project-specific settings.
 @end table
 @subsection Specialized Methods
 
-@deffn Method initialize-instance :AFTER this &rest fields 
+@deffn Method initialize-instance :AFTER this &rest fields
 Make sure the @code{:targets} is setup.
 @end deffn
 
-@deffn Method ede-project-root :AFTER this 
+@deffn Method ede-project-root :AFTER this
 Return my root.
 @end deffn
 
-@deffn Method ede-find-subproject-for-directory :AFTER proj dir 
+@deffn Method ede-find-subproject-for-directory :AFTER proj dir
 Return @var{PROJ}, for handling all subdirs below @var{DIR}.
 @end deffn
 
-@deffn Method ede-project-root-directory :AFTER this &optional file 
+@deffn Method ede-project-root-directory :AFTER this &optional file
 Return the root for @var{THIS} Maven project with file.
 @end deffn
 
-@deffn Method ede-find-target :AFTER proj buffer 
+@deffn Method ede-find-target :AFTER proj buffer
 Find an EDE target in @var{PROJ} for @var{BUFFER}.
 If one doesn't exist, create a new one for this directory.
 @end deffn
@@ -966,11 +966,11 @@ This allows any tool to create, manage, and persist project-specific settings.
 @end table
 @subsection Specialized Methods
 
-@deffn Method ede-find-subproject-for-directory :AFTER proj dir 
+@deffn Method ede-find-subproject-for-directory :AFTER proj dir
 Return @var{PROJ}, for handling all subdirs below @var{DIR}.
 @end deffn
 
-@deffn Method ede-commit-project :AFTER proj 
+@deffn Method ede-commit-project :AFTER proj
 Commit any change to @var{PROJ} to its file.
 @end deffn
 
@@ -1131,136 +1131,136 @@ making a tar file.
 @end table
 @subsection Specialized Methods
 
-@deffn Method project-rescan :AFTER this 
+@deffn Method project-rescan :AFTER this
 Rescan the EDE proj project @var{THIS}.
 @end deffn
 
-@deffn Method ede-proj-makefile-create :AFTER this mfilename 
+@deffn Method ede-proj-makefile-create :AFTER this mfilename
 Create a Makefile for all Makefile targets in @var{THIS}.
 @var{MFILENAME} is the makefile to generate.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-rules :AFTER this 
+@deffn Method ede-proj-makefile-insert-rules :AFTER this
 Insert rules needed by @var{THIS} target.
 @end deffn
 
-@deffn Method ede-proj-makefile-tags :AFTER this targets 
+@deffn Method ede-proj-makefile-tags :AFTER this targets
 Insert into the current location rules to make recursive TAGS files.
 Argument @var{THIS} is the project to create tags for.
 Argument @var{TARGETS} are the targets we should depend on for TAGS.
 @end deffn
 
-@deffn Method project-update-version :AFTER this 
+@deffn Method project-update-version :AFTER this
 The @code{:version} of project @var{THIS} has changed.
 @end deffn
 
-@deffn Method ede-buffer-mine :AFTER this buffer 
+@deffn Method ede-buffer-mine :AFTER this buffer
 Return @code{t} if object @var{THIS} lays claim to the file in @var{BUFFER}.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-variables :AFTER this 
+@deffn Method ede-proj-makefile-insert-variables :AFTER this
 Insert variables needed by target @var{THIS}.
 @end deffn
 
-@deffn Method project-make-dist :AFTER this 
+@deffn Method project-make-dist :AFTER this
 Build a distribution for the project based on @var{THIS} target.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-dist-rules :AFTER this 
+@deffn Method ede-proj-makefile-insert-dist-rules :AFTER this
 Insert distribution rules for @var{THIS} in a Makefile, such as CLEAN and DIST.
 @end deffn
 
-@deffn Method project-new-target-custom :AFTER this 
+@deffn Method project-new-target-custom :AFTER this
 Create a new target in @var{THIS} for custom.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-dist-dependencies :AFTER this 
+@deffn Method ede-proj-makefile-insert-dist-dependencies :AFTER this
 Insert any symbols that the DIST rule should depend on.
 Argument @var{THIS} is the project that should insert stuff.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-subproj-rules :AFTER this 
+@deffn Method ede-proj-makefile-insert-subproj-rules :AFTER this
 Insert a rule for the project @var{THIS} which should be a subproject.
 @end deffn
 
-@deffn Method ede-proj-makefile-create-maybe :AFTER this mfilename 
+@deffn Method ede-proj-makefile-create-maybe :AFTER this mfilename
 Create a Makefile for all Makefile targets in @var{THIS} if needed.
 @var{MFILENAME} is the makefile to generate.
 @end deffn
 
-@deffn Method ede-proj-configure-test-required-file :AFTER this file 
+@deffn Method ede-proj-configure-test-required-file :AFTER this file
 For project @var{THIS}, test that the file @var{FILE} exists, or create it.
 @end deffn
 
-@deffn Method ede-proj-setup-buildenvironment :AFTER this &optional force 
+@deffn Method ede-proj-setup-buildenvironment :AFTER this &optional force
 Setup the build environment for project @var{THIS}.
 Handles the Makefile, or a Makefile.am configure.in combination.
 Optional argument @var{FORCE} will force items to be regenerated.
 @end deffn
 
-@deffn Method ede-proj-makefile-garbage-patterns :AFTER this 
+@deffn Method ede-proj-makefile-garbage-patterns :AFTER this
 Return a list of patterns that are considered garbage to @var{THIS}.
 These are removed with make clean.
 @end deffn
 
-@deffn Method ede-proj-configure-synchronize :AFTER this 
+@deffn Method ede-proj-configure-synchronize :AFTER this
 Synchronize what we know about project @var{THIS} into configure.in.
 @end deffn
 
-@deffn Method project-new-target :AFTER this &optional name type autoadd 
+@deffn Method project-new-target :AFTER this &optional name type autoadd
 Create a new target in @var{THIS} based on the current buffer.
 @end deffn
 
-@deffn Method project-compile-project :AFTER proj &optional command 
+@deffn Method project-compile-project :AFTER proj &optional command
 Compile the entire current project @var{PROJ}.
 Argument @var{COMMAND} is the command to use when compiling.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-variables-new :AFTER this 
+@deffn Method ede-proj-makefile-insert-variables-new :AFTER this
 Insert variables needed by target @var{THIS}.
 
 NOTE: Not yet in use!  This is part of an SRecode conversion of
       EDE that is in progress.
 @end deffn
 
-@deffn Method ede-proj-makefile-configuration-variables :AFTER this configuration 
+@deffn Method ede-proj-makefile-configuration-variables :AFTER this configuration
 Return a list of configuration variables from @var{THIS}.
 Use @var{CONFIGURATION} as the current configuration to query.
 @end deffn
 
-@deffn Method eieio-done-customizing :AFTER proj 
+@deffn Method eieio-done-customizing :AFTER proj
 Call this when a user finishes customizing this object.
 Argument @var{PROJ} is the project to save.
 @end deffn
 
-@deffn Method ede-proj-configure-recreate :AFTER this 
+@deffn Method ede-proj-configure-recreate :AFTER this
 Delete project @var{THIS}es configure script and start over.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-user-rules :AFTER this 
+@deffn Method ede-proj-makefile-insert-user-rules :AFTER this
 Insert user specified rules needed by @var{THIS} target.
 This is different from @dfn{ede-proj-makefile-insert-rules} in that this
 function won't create the building rules which are auto created with
 automake.
 @end deffn
 
-@deffn Method ede-proj-dist-makefile :AFTER this 
+@deffn Method ede-proj-dist-makefile :AFTER this
 Return the name of the Makefile with the DIST target in it for @var{THIS}.
 @end deffn
 
-@deffn Method ede-proj-configure-file :AFTER this 
+@deffn Method ede-proj-configure-file :AFTER this
 The configure.in script used by project @var{THIS}.
 @end deffn
 
-@deffn Method ede-commit-project :AFTER proj 
+@deffn Method ede-commit-project :AFTER proj
 Commit any change to @var{PROJ} to its file.
 @end deffn
 
-@deffn Method project-dist-files :AFTER this 
+@deffn Method project-dist-files :AFTER this
 Return a list of files that constitutes a distribution of @var{THIS} project.
 @end deffn
 
-@deffn Method ede-commit-local-variables :AFTER proj 
+@deffn Method ede-commit-local-variables :AFTER proj
 Commit change to local variables in @var{PROJ}.
 @end deffn
 
@@ -1331,23 +1331,23 @@ This allows any tool to create, manage, and persist project-specific settings.
 @end table
 @subsection Specialized Methods
 
-@deffn Method project-rescan :AFTER this 
+@deffn Method project-rescan :AFTER this
 Rescan the makefile for all targets and sub targets.
 @end deffn
 
-@deffn Method project-am-subtree :AFTER ampf subdir 
+@deffn Method project-am-subtree :AFTER ampf subdir
 Return the sub project in @var{AMPF} specified by @var{SUBDIR}.
 @end deffn
 
-@deffn Method project-targets-for-file :AFTER proj 
+@deffn Method project-targets-for-file :AFTER proj
 Return a list of targets the project @var{PROJ}.
 @end deffn
 
-@deffn Method ede-buffer-mine :AFTER this buffer 
+@deffn Method ede-buffer-mine :AFTER this buffer
 Return @code{t} if object @var{THIS} lays claim to the file in @var{BUFFER}.
 @end deffn
 
-@deffn Method project-new-target :AFTER proj &optional name type 
+@deffn Method project-new-target :AFTER proj &optional name type
 Create a new target named @var{NAME}.
 Argument @var{TYPE} is the type of target to insert.  This is a string
 matching something in @code{project-am-type-alist} or type class symbol.
@@ -1355,12 +1355,12 @@ Despite the fact that this is a method, it depends on the current
 buffer being in order to provide a smart default target type.
 @end deffn
 
-@deffn Method project-compile-project :AFTER obj &optional command 
+@deffn Method project-compile-project :AFTER obj &optional command
 Compile the entire current project.
 Argument @var{COMMAND} is the command to use when compiling.
 @end deffn
 
-@deffn Method ede-find-target :AFTER amf buffer 
+@deffn Method ede-find-target :AFTER amf buffer
 Fetch the target belonging to @var{BUFFER}.
 @end deffn
 
@@ -1488,69 +1488,69 @@ making a tar file.
 @end table
 @subsection Specialized Methods
 
-@deffn Method project-rescan :AFTER this 
+@deffn Method project-rescan :AFTER this
 Rescan the EDE proj project @var{THIS}.
 @end deffn
 
-@deffn Method ede-proj-makefile-create :AFTER this mfilename 
+@deffn Method ede-proj-makefile-create :AFTER this mfilename
 Create a GNUmakefile for all Makefile targets in @var{THIS}.
 @var{MFILENAME} is the makefile to generate.
 @end deffn
 
-@deffn Method project-update-version :AFTER this 
+@deffn Method project-update-version :AFTER this
 The @code{:version} of project @var{THIS} has changed.
 @end deffn
 
-@deffn Method ede-buffer-mine :AFTER this buffer 
+@deffn Method ede-buffer-mine :AFTER this buffer
 Return @code{t} if object @var{THIS} lays claim to the file in @var{BUFFER}.
 @end deffn
 
-@deffn Method project-make-dist :AFTER this 
+@deffn Method project-make-dist :AFTER this
 Build a distribution for the project based on @var{THIS} target.
 @end deffn
 
-@deffn Method project-new-target-custom :AFTER this 
+@deffn Method project-new-target-custom :AFTER this
 Create a new target in @var{THIS} for custom.
 @end deffn
 
-@deffn Method ede-proj-makefile-create-maybe :AFTER this mfilename 
+@deffn Method ede-proj-makefile-create-maybe :AFTER this mfilename
 Create a Makefile for all Makefile targets in @var{THIS} if needed.
 @var{MFILENAME} is the makefile to generate.
 @end deffn
 
-@deffn Method ede-proj-setup-buildenvironment :AFTER this &optional force 
+@deffn Method ede-proj-setup-buildenvironment :AFTER this &optional force
 Setup the build environment for project @var{THIS}.
 Handles the Makefile, or a Makefile.am configure.in combination.
 Optional argument @var{FORCE} will force items to be regenerated.
 @end deffn
 
-@deffn Method project-new-target :AFTER this &optional name type autoadd 
+@deffn Method project-new-target :AFTER this &optional name type autoadd
 Create a new target in @var{THIS} based on the current buffer.
 @end deffn
 
-@deffn Method project-compile-project :AFTER proj &optional command 
+@deffn Method project-compile-project :AFTER proj &optional command
 Compile the entire current project @var{PROJ}.
 Argument @var{COMMAND} is the command to use when compiling.
 @end deffn
 
-@deffn Method eieio-done-customizing :AFTER proj 
+@deffn Method eieio-done-customizing :AFTER proj
 Call this when a user finishes customizing this object.
 Argument @var{PROJ} is the project to save.
 @end deffn
 
-@deffn Method ede-proj-dist-makefile :AFTER this 
+@deffn Method ede-proj-dist-makefile :AFTER this
 Return the name of the Makefile with the DIST target in it for @var{THIS}.
 @end deffn
 
-@deffn Method ede-commit-project :AFTER proj 
+@deffn Method ede-commit-project :AFTER proj
 Commit any change to @var{PROJ} to its file.
 @end deffn
 
-@deffn Method project-dist-files :AFTER this 
+@deffn Method project-dist-files :AFTER this
 Return a list of files that constitutes a distribution of @var{THIS} project.
 @end deffn
 
-@deffn Method ede-commit-local-variables :AFTER proj 
+@deffn Method ede-commit-local-variables :AFTER proj
 Commit change to local variables in @var{PROJ}.
 @end deffn
 

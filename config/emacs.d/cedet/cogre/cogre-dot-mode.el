@@ -38,7 +38,7 @@ instead."
   :group 'cogre
   :type 'hook)
 
-(defvar cogre-dot-mode-syntax-table 
+(defvar cogre-dot-mode-syntax-table
   (let ((st (make-syntax-table)))
     (modify-syntax-entry ?/  ". 124b" st)
     (modify-syntax-entry ?*  ". 23"   st)

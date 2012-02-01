@@ -188,11 +188,11 @@
 
 (defconst semantic-c-by--parse-table
   `(
-    (bovine-toplevel 
+    (bovine-toplevel
      (declaration)
      ) ;; end bovine-toplevel
 
-    (bovine-inner-scope 
+    (bovine-inner-scope
      (codeblock)
      ) ;; end bovine-inner-scope
 

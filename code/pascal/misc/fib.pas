@@ -9,7 +9,7 @@ begin
 
    write('Enter the number of Fibonacci numbers to calculate: ');
    read(n);
-   
+
    for i := 1 to n do
    begin
       write(fib1, ' ');

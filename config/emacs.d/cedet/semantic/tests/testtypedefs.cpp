@@ -8,7 +8,7 @@ namespace std {
 
   public:
     void resize(int);
-  
+
   };
 
 }
@@ -25,20 +25,20 @@ int main(){
   a.// -1-
     ;
   // #1# ( "resize" )
-  
+
   bstring b;
   // It doesn't work here.
   b.// -2-
     ;
   // #2# ( "resize" )
-  
+
   return 0;
 }
 
 
 // ------------------
 
-class Bar 
+class Bar
 {
 public:
      void someFunc() {}
@@ -48,7 +48,7 @@ public:
 typedef Bar new_Bar;
 
 template <class mytype>
-class TBar 
+class TBar
 {
 public:
      void otherFunc() {}

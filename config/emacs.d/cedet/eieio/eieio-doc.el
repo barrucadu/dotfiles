@@ -91,7 +91,7 @@ into any menus, nodes or lists."
     (eieiodoc-main-menu root-class skiplist)
     (insert "\n")
     (eieiodoc-recurse root-class 'eieiodoc-one-node nil skiplist)))
-  
+
 (defun eieiodoc-main-menu (class skiplist)
   "Create a menu of all classes under CLASS indented the correct amount.
 SKIPLIST is a list of objects to skip"

@@ -46,7 +46,7 @@
   (require 'font-lock))
 
 (eval-and-compile (if (not (fboundp 'with-syntax-table))
-			
+
 ;; Copied from Emacs 21 for compatibility with released Emacses.
 (defmacro with-syntax-table (table &rest body)
   "Evaluate BODY with syntax table of current buffer set to a copy of TABLE.

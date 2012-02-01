@@ -24,4 +24,3 @@
 	(iter ans 4 dx x 1)
 	dx)
        3)))
-  

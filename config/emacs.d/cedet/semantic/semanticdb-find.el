@@ -764,7 +764,7 @@ Uses the `default-directory' to derive results."
 	(p (semanticdb-current-database-list))
 	)
     (data-debug-new-buffer "*SEMANTICDB Current Database List*")
-    
+
     (data-debug-insert-stuff-list p "*")))
 
 (defun semanticdb-find-adebug-lost-includes ()

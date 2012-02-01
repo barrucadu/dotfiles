@@ -61,7 +61,7 @@
 ;; 	    (list 'let (list (list 'msg message) (list 'dstr donestr)
 ;; 			     '(ref1 0))
 ;; 		  (cons 'progn forms)))
-;;   
+;;
 ;; 	  (defun working-status (&optional percent &rest args)
 ;; 	    "Called within the macro `working-status-forms', show the status."
 ;; 	    (message "%s%s" (apply 'format msg args)
@@ -70,13 +70,13 @@
 ;; 			       (or percent
 ;; 				   (floor (* 100.0 (/ (float (point))
 ;; 						      (point-max)))))))))
-;;   
+;;
 ;; 	  (defun working-dynamic-status (&optional number &rest args)
 ;; 	    "Called within the macro `working-status-forms', show the status."
 ;; 	    (message "%s%s" (apply 'format msg args)
 ;; 		     (format "... %c" (aref [ ?- ?/ ?| ?\\ ] (% ref1 4))))
 ;; 	    (setq ref1 (1+ ref1)))
-;;   
+;;
 ;; 	  (put 'working-status-forms 'lisp-indent-function 2)))))
 ;;
 ;; Depending on what features you use, it is, of course, easy to
@@ -84,7 +84,7 @@
 ;; do not use.
 
 ;;; History:
-;; 
+;;
 ;; 1.0 First Version
 ;;
 ;; 1.1 Working messages are no longer logged.
@@ -248,7 +248,7 @@ See the function `message' for details on ARGS."
        (eval-and-compile (defalias 'working-cancel-timer 'cancel-timer))
        )
       ;;Add compatibility here
-      (t 
+      (t
        ;; This gets the message out but has no timers.
        (defun working-run-with-timer (&rest foo)
          (working-message working-message))
@@ -342,7 +342,7 @@ macro `working-status-forms'."
 		 (m2 (funcall working-status-percentage-type (length m1) p)))
 	    (working-message "%s%s" m1 m2)
 	    (setq working-last-percent p))))))
-  
+
 (defun working-dynamic-status (&optional number &rest args)
   "Called within the macro `working-status-forms', show the status.
 If NUMBER is nil, then increment a local NUMBER from 0 with each call.
@@ -557,7 +557,7 @@ is t to display the done string, or the number to display."
 
    ]
   "Strings for the bounce animation.")
- 
+
 (defun working-bounce-display (length number)
   "Return a string displaying a celeron as things happen.
 LENGTH is the amount of display that has been used.  NUMBER
@@ -593,7 +593,7 @@ is t to display the done string, or the number to display."
 	)
       (working-status t))
     (sit-for 1)))
- 
+
 (defun working-verify-parenthesis-b ()
   "Verify all the parenthesis in an elisp program buffer."
   (interactive)

@@ -32,7 +32,7 @@
 
 ;;;
 ;;; A doubly linked list consists of one cons cell which holds the tag
-;;; 'DL-LIST in the car cell and the list in the cdr 
+;;; 'DL-LIST in the car cell and the list in the cdr
 ;;; cell. The doubly linked list is implemented as a normal list. You
 ;;; should use dll.el and not this package in debugged code. This
 ;;; package is not written for speed...

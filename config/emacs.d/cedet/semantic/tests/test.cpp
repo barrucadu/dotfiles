@@ -86,7 +86,7 @@ public:
     ~embedded_baz_class();
   } embed3;
   ~class3(); /* destructor */
-  
+
   /* Methods */
   int method_for_class3(int a, char b);
 
@@ -186,13 +186,13 @@ public:
   class4()
     try : class1(args)
   {
-    // constructor body	
+    // constructor body
   }
   catch ()
     {
-      
+
     }
-  
+
 
 };
 
@@ -225,7 +225,7 @@ namespace namespace1 {
   // Template in the namespace
   template<class T> T nsti1(const Foo& foo);
   template<> int nsti1<int>(const Foo& foo);
-    
+
 }
 
 namespace namespace2 {
@@ -299,7 +299,7 @@ public:
           Testnamespace::Exception1,
           Testnamespace::Excpetion2,
           Testnamespace::testnamespace1::Exception3);
-  
+
 };
 
 void*
@@ -376,10 +376,10 @@ namespace Parser
     using Lexer::get_test;
     string str = "";
   }
-  
+
   namespace XXX
   {
-    
+
     class Foobar : public virtual POA::Parent,
                    public virtual POA::Parent1,
                    private POA::list<fact>,
@@ -388,15 +388,15 @@ namespace Parser
       ini i;
       list <shared_ptr<item> >::const_iterator l;
     public:
-      
+
       Foobar();
       ~Foobar();
     };
   }
-  
+
 
   void test_function(int i);
-    
+
 };
 
 // unnamed namespaces - even nested
@@ -417,7 +417,7 @@ namespace
   signed short ss = 0;
   short int i = 0;
   long int li = 0;
-  
+
   // expressions with namespace/class-qualifyiers
   ORB_var cGlobalOrb = ORB::_nil();
   ORB_var1 cGlobalOrb1 = ORB::_test;

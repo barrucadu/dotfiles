@@ -496,7 +496,7 @@ into `senator-tag-ring'."
     ;; While cloning the old element, disable the graph.
     (semantic--tag-put-property
      tag :cogre (clone element (oref element :object-name)))
-      
+
     (ring-insert senator-tag-ring tag)
     ))
 
@@ -817,7 +817,7 @@ Clicking and dragging on a node will move the node."
 	      (while (progn
 		       (setq event (read-event))
 		       (mouse-movement-p event))
-		
+
 		;; We need some way to indicate the drag.
 		(picture-mouse-set-point event)
 

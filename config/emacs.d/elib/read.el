@@ -37,12 +37,12 @@
 ;;; Code:
 
 (defun read-number (&optional prompt default)
-  "Read a number from the minibuffer. 
+  "Read a number from the minibuffer.
 Optional arguments: PROMPT DEFAULT.
 
 If DEFAULT is non-nil, it is written within parenthesis after the prompt.
 DEFAULT can be either a number, or of the type which `(interactive P)'
-generates." 
+generates."
   (let ((numdefault (cond ((null default) nil)
 			  ((integerp default) default)
 			  ((listp default) (car default))
@@ -52,12 +52,12 @@ generates."
 
     (while (not number)
       (setq numstr (read-string
-		    (concat (if prompt 
+		    (concat (if prompt
 				prompt
 			      "Enter a number: ")
-			    (if numdefault 
+			    (if numdefault
 				(format "(%d) " numdefault)))))
-      (cond ((and (string= numstr "") 
+      (cond ((and (string= numstr "")
 		  numdefault)
 	     (setq number numdefault))
 	    ((string-match "\\`[0-9]+\\'" numstr)
@@ -76,7 +76,7 @@ to the user."
   (let ((number (1- low)))
     (while (or (< number low)
 	       (> number high))
-      (setq number (read-number 
+      (setq number (read-number
 		    (concat (if prompt
 				prompt
 			      "Enter a number: ")
@@ -110,7 +110,7 @@ For each character the user writes, one OUTCHAR is displayed."
 	(setq input-string ""))
        (t
 	(if outchar
-	    (setq showstring 
+	    (setq showstring
 		  (concat showstring (char-to-string outchar))))
 	(setq input-string
 	      (concat input-string (char-to-string input-char)))))

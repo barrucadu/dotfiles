@@ -1,4 +1,4 @@
-;; srecode-make.srt --- 
+;; srecode-make.srt ---
 
 ;; Copyright (C) 2009 Eric M. Ludlam
 

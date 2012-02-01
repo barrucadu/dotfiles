@@ -60,7 +60,7 @@
 ;; I focused on the method `ede-proj-makefile-create' to write a working
 ;; GNUmakefile.
 
-;; Provide a class `ede-step-project' child of ede-project, it has a 
+;; Provide a class `ede-step-project' child of ede-project, it has a
 ;; :project-mode attribute for 'scanner or 'writer mode.
 ;; difference is in direction of generation
 ;;     scanner: parse *makefile* to write *project file*
@@ -70,7 +70,7 @@
 ;; M-x occur <RET> XXX\|todo\|TODO\|fix\|FIX <RET>
 
 
-(eval-and-compile 
+(eval-and-compile
   (require 'ede)
   (require 'ede-proj)
   (require 'makefile-edit)
@@ -83,7 +83,7 @@
 (unless (fboundp 'string-file-contents)
   (defun string-file-contents (file)
     "Get the plain contents of FILE."
-    (with-temp-buffer 
+    (with-temp-buffer
       (insert-file-contents file)
       (buffer-substring-no-properties (point-min)(point-max))))
   )
@@ -474,7 +474,7 @@ making a tar file.")
 		   ;; 	  (semantic-find-tags-by-class
 		   ;; 	   'variable (current-buffer)))))))
 		"1.0"))
-	 
+
 	 ;; use dirinode to check for existence
 	 (unless (setq proj-obj
 		       (object-assoc (ede--inode-for-dir dir)
@@ -493,7 +493,7 @@ making a tar file.")
       (project-rescan proj-obj)
       (ede-step-save proj-obj))
     proj-obj))
-  
+
 ;(defalias 'ede-proj-load 'ede-step-load)
 (defun ede-step-load (project &optional rootproj)
   "Load a project file from PROJECT directory.
@@ -639,7 +639,7 @@ MFILENAME is the makefile to generate."
 	 "--variable=GNUSTEP_MAKEFILES 2>/dev/null)\n"
 	 "endif\n\n"
 	 "include $(GNUSTEP_MAKEFILES)/common.make\n\n# Stuff\n")
-	
+
 	;; FIX XXX package,vcs repository ... variables
 	;; ...
 	;; Just this project's targets variables
@@ -1070,7 +1070,7 @@ Optional argument FORCE will force items to be regenerated."
 		     (allvariables (ede-gnustep-semantic-tags-all-variables))
 		     inst-domain)
 		 (oset this included-makefiles included)
-		 (setq inst-domain 
+		 (setq inst-domain
 		       (ede-gnustep-semantic-value-for-tag
 			(assoc "GNUSTEP_INSTALLATION_DOMAIN" allvariables)))
 		 (cond ((string= "USER" inst-domain)(oset this installation-domain 'user))
@@ -1128,7 +1128,7 @@ Optional argument FORCE will force items to be regenerated."
 				      ;; rescan subproj after, in tail
 				      ;; (if ede-deep-rescan (project-rescan tmp))
 				      )))
-			      
+
 			      ;; I found a non-subproject target.
 			      (setq tmp (apply class (car targets) :name (car targets)
 					       ;; XXX check for possible relative path
@@ -1185,7 +1185,7 @@ Optional argument FORCE will force items to be regenerated."
 	       (with-temp-buffer
 		 (insert-file-contents mf)
 		 (goto-char (point-min))
-		 ;; FIX add all available _MACROS_FOR_TARGETS by gnustep-make, 
+		 ;; FIX add all available _MACROS_FOR_TARGETS by gnustep-make,
 		 ;; or find a way to do it.
 		 (let ((c-src
 			(makefile-macro-file-list (concat (oref this :name) "_C_FILES"))
@@ -1230,7 +1230,7 @@ Check match of a line for validity."
 	  (setq found (car mfs)))
       (setq mfs (cdr mfs)))
     found))
-    
+
 (defun ede-gnustep-get-topmost-makefile (&optional dir)
   "Find the top most valid (for gnustep) GNUmakefile."
   (let* ((newdir (expand-file-name (or dir default-directory)))
@@ -1238,8 +1238,8 @@ Check match of a line for validity."
 	 (found nil) olddir)
     (while (and (not found) (not (equal olddir newdir)))
       (setq olddir newdir) ;; to prevent loop at /
-      ;; check for RootProjStep.ede file presence, 
-      ;; for a valid ede-step-project root, would be the topmost. 
+      ;; check for RootProjStep.ede file presence,
+      ;; for a valid ede-step-project root, would be the topmost.
       (if (file-readable-p (expand-file-name "RootProjStep.ede" newdir))
 	  (setq found valid))
       (unless (or found (ede-gnustep-get-valid-makefile

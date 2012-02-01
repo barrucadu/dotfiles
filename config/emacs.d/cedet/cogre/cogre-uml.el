@@ -107,7 +107,7 @@ Package names are displayed in italic at the top of the node above the name
 in UML, usuall like this:
    +---------------+
    | <<mypackage>> |
-   | NameOfNode    |          
+   | NameOfNode    |
    | ...           |")
    (package-delimiters :allocation :class
 		       :initform ( "<<" . ">>" )
@@ -201,7 +201,7 @@ Argument CLASS is the class whose slots are referenced."
   (let ((detail (if (eieio-object-p cogre-graph)
 		    (oref cogre-graph :detail)
 		  0)))
-    (cond 
+    (cond
      ((= detail 0)
       ;; Show everything.
       (list
@@ -233,7 +233,7 @@ Argument CLASS is the class whose slots are referenced."
 	      (let* ((tn (semantic-tag-name A))
 		     (c1 (substring tn 0 1))
 		     (str (substring tn 1))
-		     (reg (concat "[gs]et\\(" 
+		     (reg (concat "[gs]et\\("
 				  (if (string= c1 "f") str tn)
 				  "\\)")))
 		(setq meth (semantic--find-tags-by-function
@@ -246,7 +246,7 @@ Argument CLASS is the class whose slots are referenced."
 ;	  nil
 ;	  )
 	;; Heuristic 4 - Get clever.
-	
+
 	(list
 	 (mapcar (lambda (s) (cogre-uml-stoken->uml class s)) meth)
 	 (mapcar (lambda (s) (cogre-uml-stoken->uml class s)) attr)

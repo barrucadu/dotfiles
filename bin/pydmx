@@ -70,7 +70,7 @@ def dmxcmd(channel, value=None, name=None, holding=False, inchase=False):
     global chandata
     global bindddata
     global dmxcommands
-    
+
     if name == None:
         name = activename
 
@@ -175,9 +175,9 @@ def nameinit(newname, newmodel, newstartchan):
     global data
     global chandata
     global datapath
-        
+
     datafile = datapath + "/pydmx/models/" + newmodel + ".py"
-    
+
     try:
         data = imp.load_source(newmodel, datafile)
         chandata.update({newname : {'info' : {'model'     : newmodel,
@@ -186,10 +186,10 @@ def nameinit(newname, newmodel, newstartchan):
             for j in data.dmx[i].keys():
                 key = data.dmx[i][j][1]
                 var = [data.dmx[i][j][0], data.dmx[i][j][2]]
-            
+
                 if len(data.dmx[i][j]) > 3:
                     var.append(data.dmx[i][j][3])
-        
+
                 if key in chandata[newname].keys():
                     chandata[newname][key].append(var)
                 else:
@@ -200,7 +200,7 @@ def nameinit(newname, newmodel, newstartchan):
         if not dontload:
             for channel in range(0, len(data.defaults)):
                 dmxcmd(channel, data.defaults[channel], newname)
-                
+
     except IOError:
         print("The datafile " + datafile + " does not exist.")
 
@@ -213,9 +213,9 @@ def chaseui(stdscr, selected=0):
     stdscr.clear()
     stdscr.move(1, 1)
     stdscr.addstr("Controls: arrows for navigation / a to add / e to edit / d to delete / q to quit.")
-    
+
     stdscr.move(5, int(width / 2 - 10))
-    
+
     stdscr.addch(curses.ACS_ULCORNER)
     for i in range(0, 20):
         stdscr.addch(curses.ACS_HLINE)
@@ -225,7 +225,7 @@ def chaseui(stdscr, selected=0):
         for i in range(0, len(chases)):
             stdscr.move(5 + i, int(width / 2 - 10))
             stdscr.addch(curses.ACS_VLINE)
-            
+
             text = chases[i].chase + " " + str(chases[i].startchan) + " " + str(chases[i].speed)
             attr = curses.color_pair(0)
             if i == selected:
@@ -234,7 +234,7 @@ def chaseui(stdscr, selected=0):
 
             for i in range(0, 18 - len(text)):
                 stdscr.addstr(" ")
-        
+
             stdscr.addch(curses.ACS_VLINE)
     else:
         i = 0
@@ -398,14 +398,14 @@ def updateui(stdscr, active, holding):
         if not dbodata == {}:
             stdscr.addstr("[Holding/DBO]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)
         else:
-            stdscr.addstr("[Holding]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)            
+            stdscr.addstr("[Holding]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)
     elif not dbodata == {}:
         stdscr.addstr("[DBO]", curses.color_pair(4) and curses.A_BLINK and curses.A_BOLD)
 
     stdscr.move(height - 3, 1)
     stdscr.addstr("Name:   ", curses.color_pair(5) and curses.A_BOLD)
     stdscr.addstr(activename)
-    
+
     stdscr.move(height - 2, 1)
     stdscr.addstr("Device: ", curses.color_pair(5) and curses.A_BOLD)
     stdscr.addstr(data.name)
@@ -413,13 +413,13 @@ def updateui(stdscr, active, holding):
     for i in range(0, numbars):
         channel = channels[i]
         value = channel[0]
-        
+
         stdscr.move(5, i * barsize + 6)
-        
+
         attr = curses.color_pair(0)
         if i == active:
             attr = curses.color_pair(4)
-            
+
         stdscr.addstr(data.channels[i], attr)
 
         stdscr.move(6, i * barsize + 6)
@@ -427,25 +427,25 @@ def updateui(stdscr, active, holding):
 
         stdscr.move(8, i * barsize + 6)
         stdscr.addch(curses.ACS_ULCORNER)
-        
+
         for j in range(0, barwidth):
             stdscr.addch(curses.ACS_HLINE)
-            
+
         stdscr.addch(curses.ACS_URCORNER)
 
         goesupto = 0
         if not value == 0:
             goesupto = int(barheight * value / 255)
-        
+
         for j in range(1, barheight):
             stdscr.move(j + 8, i * barsize + 6)
             stdscr.addch(curses.ACS_VLINE)
 
             y = barheight - j
-            
+
             for k in range(0, barwidth):
                 attr = curses.color_pair(0)
-                
+
                 if y <= goesupto:
                     if y >= 2 * barheight / 3:
                         attr = curses.color_pair(1)
@@ -453,19 +453,19 @@ def updateui(stdscr, active, holding):
                         attr = curses.color_pair(2)
                     else:
                         attr = curses.color_pair(3)
-                    
+
                 stdscr.addch(" ", attr)
-                
+
             stdscr.addch(curses.ACS_VLINE)
 
         stdscr.move(8 + barheight, i * barsize + 6)
         stdscr.addch(curses.ACS_LLCORNER)
-        
+
         for j in range(0, barwidth):
             stdscr.addch(curses.ACS_HLINE)
-            
+
         stdscr.addch(curses.ACS_LRCORNER)
-        
+
         stdscr.move(10 + barheight, i * barsize + 6)
         stdscr.addstr(str(i + chandata[activename]['info']['startchan']))
 
@@ -484,12 +484,12 @@ def updateui(stdscr, active, holding):
 def cursesui(stdscr):
     global chandata
     global activename
-    
+
     curses.curs_set(0)
 
     activechan = 0
     holding    = False
-    
+
     curses.init_pair(1, curses.COLOR_RED,   curses.COLOR_RED)
     curses.init_pair(2, curses.COLOR_BLUE,  curses.COLOR_BLUE)
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_GREEN)
@@ -498,13 +498,13 @@ def cursesui(stdscr):
 
     while True:
         updateui(stdscr, activechan, holding)
-        
+
         ch     = stdscr.getch()
         newval = -1
-        
+
         if ch == ord('q'):
             break
-        
+
         elif ch == ord('r'):
             loaddmx(activename)
 
@@ -521,11 +521,11 @@ def cursesui(stdscr):
         elif ch == curses.KEY_LEFT:
             if not activechan == 0:
                 activechan -= 1
-                
+
         elif ch == curses.KEY_RIGHT:
             if not activechan == len(chandata[activename]) - 1:
                 activechan += 1
-                
+
         elif ch in [curses.KEY_UP, curses.KEY_PPAGE, ord('n')]:
             for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
@@ -538,7 +538,7 @@ def cursesui(stdscr):
                     elif cmd[0] > chandata[activename][activechan][0]:
                         if cmd[0] < newval or newval == -1:
                             newval = cmd[0]
-                            
+
         elif ch in [curses.KEY_DOWN, curses.KEY_NPAGE, ord('p')]:
             for cmd in chandata[activename][activechan]:
                 if type(cmd) is list:
@@ -551,13 +551,13 @@ def cursesui(stdscr):
                     elif cmd[0] < chandata[activename][activechan][0]:
                         if cmd[0] > newval or newval == -1:
                             newval = cmd[0]
-                            
+
         elif ch == ord('t'):
             newval = 255
-            
+
         elif ch == ord('b'):
             newval = 0
-            
+
         elif ch == ord('c'):
             chaseui(stdscr)
 
@@ -569,23 +569,23 @@ def cursesui(stdscr):
 
         if not newval == -1:
             dmxcmd(activechan, newval, None, holding)
-    
+
     curses.curs_set(1)
 
 def listcmds(arg):
     global data
-    
+
     print("Commands for " + data.name + ":")
     for i in data.dmx.keys():
         if arg == "" or arg == i:
             commands = []
             longest  = 0
-            
+
             for j in data.dmx[i].keys():
                 cmd = "'" + j + " [" + str(data.dmx[i][j][0]) + "+]'"
-                    
+
                 commands.append([cmd, data.dmx[i][j][2]])
-                
+
                 if len(cmd) > longest:
                     longest = len(cmd)
 
@@ -594,14 +594,14 @@ def listcmds(arg):
                 spacing = longest - len(cmd[0])
                 print("    " + cmd[0], cmd[1].rjust(len(cmd[1]) + spacing))
             print()
-            
+
 def parsecmd(command, args):
     global data
     global chandata
     global activename
     global binddata
     global dmxcommands
-    
+
     funbreak = False
 
     if command == "list":
@@ -614,10 +614,10 @@ def parsecmd(command, args):
                 print(name, "[active]")
             else:
                 print(name)
-                
+
             print("    Model:", chandata[name]['info']['model'])
             print("    Start:", chandata[name]['info']['startchan'])
-            
+
     elif command == "new":
         if len(args) < 3 or args[0] == "" or args[1] == "" or args[2] == "":
             print("Usage: new [name] [model] [startchannel]")
@@ -632,7 +632,7 @@ def parsecmd(command, args):
 
     elif command == "reload":
         loaddmx(activename)
-        
+
     elif command == "rename":
         if len(args) < 2 or not args[0] in chandata.keys() or not args[1] in chandata.keys() or args[1] == "":
             print("Usage: rename [old] [new]")
@@ -648,7 +648,7 @@ def parsecmd(command, args):
             binddata[(args[0], args[1])].append((args[2], args[3]))
         else:
             binddata.update({(args[0], args[1]) : [(args[2], args[3])]})
-        
+
         if (args[2], args[3]) in binddata.keys():
             binddata[(args[2], args[3])].append((args[0], args[1]))
         else:
@@ -657,7 +657,7 @@ def parsecmd(command, args):
     elif command == "unbind":
         if (args[0], args[1]) in binddata.keys():
             binddata[(args[0], args[1])].remove((args[2], args[3]))
-        
+
         if (args[2], args[3]) in binddata.keys():
             binddata[(args[2], args[3])].remove((args[0], args[1]))
 
@@ -665,7 +665,7 @@ def parsecmd(command, args):
         dmxcommands['set'] = ' '.join(args)
 
     elif command == "dmxgetcmd":
-        dmxcommands['get'] = ' '.join(args)        
+        dmxcommands['get'] = ' '.join(args)
 
     elif command == "dmxcommands":
         print("Get:", dmxcommands['get'])
@@ -673,21 +673,21 @@ def parsecmd(command, args):
 
     elif command == "help":
         printhelp()
-        
+
     else:
         try:
             cmd = data.dmx[command][args[0]]
         except KeyError:
             print("Command not found")
             funbreak = True
-            
+
         if not funbreak:
             value = 0
             try:
                 value = int(args[1])
             except ValueError:
                 value = cmd[0]
-                
+
             dmxcmd(cmd[1], value)
 
 def parsepromptline(line):
@@ -709,8 +709,8 @@ def enterprompt():
     funbreak = False
 
     foo = input("> ")
-    
-    if foo == "exit": 
+
+    if foo == "exit":
         return False
     else:
         command, args, funbreak = parsepromptline(foo)
@@ -732,7 +732,7 @@ else:
         startchan = int(sys.argv[2])
         nameinit('start', model, startchan)
         activename = 'start'
-        
+
 looping = True
 
 while looping:

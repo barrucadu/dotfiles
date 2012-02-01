@@ -37,7 +37,7 @@
       (while dicts
 	(setq ans (append ans (cdr (car dicts))))
 	(setq dicts (cdr dicts)))
-      ans)      
+      ans)
     ))
 
 ;;;###autoload

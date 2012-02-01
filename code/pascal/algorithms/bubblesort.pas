@@ -1,7 +1,7 @@
 program BubbleSort;
 { An implementation of Bubble Sort to sort a string by ASCII code }
 
-var 
+var
    orderstr : String; { String to order }
 
 Function sorted (str :  String) : Boolean; { sorted(str) - return whether string is sorted or not. }
@@ -17,10 +17,10 @@ begin
    begin
       if issort then { Don't overwrite a false value! }
 	 issort := ord(str[pos]) <= ord(str[pos + 1]);
-      
+
       pos := pos + 1;
    end;
-      
+
    sorted := issort;
 end; { sorted }
 

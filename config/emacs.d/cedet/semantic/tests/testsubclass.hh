@@ -25,7 +25,7 @@ namespace animal {
 
     enum moose_enum {
       NAME1, NAME2, NAME3 };
-      
+
 
   protected:
 
@@ -35,7 +35,7 @@ namespace animal {
   private:
     int fFeet; // Usually 2 or 4.
     bool fIsPrivateBool;
-    
+
   }; // moose
 
   int two_prototypes();

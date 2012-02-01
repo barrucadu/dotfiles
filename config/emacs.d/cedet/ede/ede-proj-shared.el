@@ -152,8 +152,8 @@ Use ldlibs to add addition libraries.")
 ;;; @TODO - C++ versions of the above.
 
 (when nil
-  		 
-	       
+
+
   (insert;; These C to O rules create dependencies
    "%.o: %.c\n"
    "\t@echo '$(COMPILE) -c $<'; \\\n"

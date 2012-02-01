@@ -25,7 +25,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; The GNU Automake tool is the first step towards having a really
 ;; good project management system.  It provides a simple and concise
 ;; look at what is actually in a project, and records it in a simple
@@ -428,7 +428,7 @@ Argument COMMAND is the command to use for compiling the target."
 	  (setq cmd (read-from-minibuffer
 		     "Run (like this): "
 		     (concat (ede-target-name obj))))
-	  (ede-shell-run-something obj cmd)	  
+	  (ede-shell-run-something obj cmd)
 	  )
       (kill-buffer tb))))
 
@@ -645,7 +645,7 @@ Strip out duplicates, and recurse on variables."
 	   (cof (nth 3 pi))
 	   (osubproj (oref this subproj))
 	   ;; 1/30/10 - We need to append these two lists together,
-	   ;; then strip out duplicates.  Expanding this list (via 
+	   ;; then strip out duplicates.  Expanding this list (via
 	   ;; references to other variables should also strip out
 	   ;; dups
 	   (csubproj (append

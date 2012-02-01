@@ -101,15 +101,15 @@ Finally several parsers bundled with semantic are discussed as case
 studies.
 
 @menu
-* Tag Structure::               
-* Language Support Overview::   
-* Writing Lexers::              
-* Writing Parsers::             
-* Parsing a language file::     
-* Debugging::                   
-* Parser Error Handling::       
-* GNU Free Documentation License::  
-* Index::                       
+* Tag Structure::
+* Language Support Overview::
+* Writing Lexers::
+* Writing Parsers::
+* Parsing a language file::
+* Debugging::
+* Parser Error Handling::
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node Tag Structure
@@ -154,7 +154,7 @@ sometimes the overlay is replaced with an integer pair
 [ START END ]
 @end example
 when the buffer the tag belongs to is not in memory.  This happens
-when a user has activated the Semantic Database 
+when a user has activated the Semantic Database
 @inforef{semanticdb, , semantic-appdev}.
 
 To create tags for a functional or object oriented language, you can
@@ -189,9 +189,9 @@ Application APIs @inforef{top, , semantic-appdev} provide many
 overload functions as well.
 
 @menu
-* Semantic Overload Mechanism::  
-* Semantic Parser Structure::   
-* Application API Structure::   
+* Semantic Overload Mechanism::
+* Semantic Parser Structure::
+* Application API Structure::
 @end menu
 
 @node Semantic Overload Mechanism
@@ -251,7 +251,7 @@ in the parser engine defined via @code{define-overload}:
 
 The document string was truncated in the middle above since it is not
 relevant here.
-The declaration above defines @code{semantic-parse-region}, an 
+The declaration above defines @code{semantic-parse-region}, an
 Emacs-Lisp function for parsing a region of code.  This special
 declaration will first check if there is an overloaded
 implementation for this major mode.
@@ -412,7 +412,7 @@ These tools use the semantic analysis tool.
 @end table
 
 @menu
-* Semantic Analyzer Support::   
+* Semantic Analyzer Support::
 @end menu
 
 @node Semantic Analyzer Support
@@ -492,7 +492,7 @@ scanning, use @dfn{narrow-to-region}.
 * Lexer Built In Analyzers::    Built in analyzers you can use
 * Lexer Analyzer Construction::  Constructing your own anlyzers
 * Keywords::                    Specialized lexical tokens.
-* Keyword Properties::          
+* Keyword Properties::
 @end menu
 
 @node Lexer Overview
@@ -1259,13 +1259,13 @@ tools for debugging in Semantic, and the type of problem you have
 requires different types of tools.
 
 @menu
-* Lexical Debugging::           
-* Parser Output tools::         
-* Bovine Parser Debugging::     
-* Wisent Parser Debugging::     
-* Overlay Debugging::           
-* Incremental Parser Debugging::  
-* Semantic 1.4 Doc::            
+* Lexical Debugging::
+* Parser Output tools::
+* Bovine Parser Debugging::
+* Wisent Parser Debugging::
+* Overlay Debugging::
+* Incremental Parser Debugging::
+* Semantic 1.4 Doc::
 @end menu
 
 @node Lexical Debugging

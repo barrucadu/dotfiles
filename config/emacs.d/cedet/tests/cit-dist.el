@@ -1,4 +1,4 @@
-;;; cit-dist.el --- 
+;;; cit-dist.el ---
 ;;
 ;; Copyright (C) 2009, 2010 Eric M. Ludlam
 ;;
@@ -37,7 +37,7 @@
   (when (not (file-exists-p "CEDET_Integ_Test_Project-1.0.tar.gz"))
     (error "Failed to create expected .tar.gz file."))
 
-  ;; 6.b) update the version number  
+  ;; 6.b) update the version number
   (cit-update-version)
 
   ;; 6.c) make a new dist.  Verify version number.

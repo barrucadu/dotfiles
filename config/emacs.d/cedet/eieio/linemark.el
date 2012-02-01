@@ -47,7 +47,7 @@
 	(defalias 'linemark-delete-overlay 'delete-extent)
 	(defalias 'linemark-overlays-at
 	  (lambda (pos) (extent-list nil pos pos)))
-	(defalias 'linemark-overlays-in 
+	(defalias 'linemark-overlays-in
 	  (lambda (beg end) (extent-list nil beg end)))
 	(defalias 'linemark-overlay-buffer 'extent-buffer)
 	(defalias 'linemark-overlay-start 'extent-start-position)
@@ -96,7 +96,7 @@
 				  (:background "yellow4")))
   "*Face used to indicate a CAUTION type line."
   :group 'linemark)
-				  
+
 (defface linemark-go-face '((((class color) (background light))
 			     (:background "#88ff88"))
 			    (((class color) (background dark))

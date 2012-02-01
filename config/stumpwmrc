@@ -19,11 +19,11 @@
 (set-fg-color "red")
 (set-border-color "red")
 (set-msg-border-width 2)
- 
+
 (setf *message-window-gravity* :top-right
       *timeout-wait*           5
       *input-window-gravity*   :center)
-  
+
 (setf *mode-line-background-color* "black"
       *mode-line-foreground-color* "red"
       *mode-line-border-color*  "grey10"

@@ -104,7 +104,7 @@ the current buffer."
       (when rootfcn
 	(condition-case nil
 	    (funcall rootfcn file)
-	  (error 
+	  (error
 	   (funcall rootfcn)))
 	))))
 

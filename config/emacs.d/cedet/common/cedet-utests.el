@@ -76,7 +76,7 @@
     ;;
     ;; EDE
     ;;
-    
+
     ;; @todo - Currently handled in the integration tests.  Need
     ;;         some simpler unit tests here.
 
@@ -276,7 +276,7 @@ ERRORCONDITION is some error that may have occured durinig testing."
 		 (format-time-string "%c" endtime))
 	(message "     Elapsed Time %.2f Seconds\n"
 		 (cedet-utest-elapsed-time startime endtime)))
-    
+
     (save-excursion
       (set-buffer cedet-utest-buffer)
       (goto-char (point-max))

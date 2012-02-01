@@ -151,7 +151,7 @@ Adds the following:
     ;; If the user didn't apply :tag, then do so now.
     (when (not tag)
       (srecode-semantic-handle-:tag dict))
-    
+
     (setq tag (srecode-dictionary-lookup-name dict "TAG"))
 
     (when (not tag)
@@ -162,7 +162,7 @@ Adds the following:
 
     ;; Extract the doc string
     (setq doc (semantic-documentation-for-tag tag))
-    
+
     (when doc
       (srecode-dictionary-set-value dict "TAGDOC"
 				    (srecode-texi-massage-to-texinfo
@@ -201,7 +201,7 @@ thingy from it using the `document' tool."
   "Massage TAG's documentation from BUFFER as STRING.
 This is to take advantage of TeXinfo's markup symbols."
   (save-excursion
-    (if buffer 
+    (if buffer
 	(progn (set-buffer buffer)
 	       (srecode-texi-texify-docstring string))
       ;; Else, no buffer, so lets do something else
@@ -225,7 +225,7 @@ Takes a few very generic guesses as to what the formatting is."
       (let ((ms (match-string 2 docstring)))
 	;(when (eq mode 'emacs-lisp-mode)
 	;  (setq ms (downcase ms)))
-	
+
 	(when (not (or (string= ms "A")
 		       (string= ms "a")
 		       ))

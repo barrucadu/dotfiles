@@ -36,9 +36,9 @@
 	  :initial-value nil
 	  :from-end t))
 
-;;; 
+;;;
 ;;; defmap
-;;; 
+;;;
 
 (defun custom-create-map (m bs args)
   (let (inherit dense suppress)
@@ -92,9 +92,9 @@
 (defmacro defsyntax (st css doc &rest args)
   `(defvar ,st (custom-create-syntax ,css ,(cons 'list args)) ,doc))
 
-;;;; 
+;;;;
 ;;;; Compatibility info
-;;;; 
+;;;;
 
 (defvar sml-builtin-nested-comments-flag
   (ignore-errors

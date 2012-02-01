@@ -364,7 +364,7 @@ buffer and sets the point to a method/function, corresponding the line."
   (eassist-search-string-updated)
 
   ;; Set current line corresponding to the current function/method if any
-  (let ((line (position-if 
+  (let ((line (position-if
                (lambda (item) (eq eassist-current-tag (eassist-method-tag item)))
                eassist-methods)))
     (when line

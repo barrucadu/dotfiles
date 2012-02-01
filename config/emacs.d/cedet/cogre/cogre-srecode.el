@@ -43,7 +43,7 @@
     (require 'srecode-map)
     (add-to-list 'srecode-map-load-path tmpdir)
     (srecode-map-update-map t)
-    
+
     ))
 
 (defun cogre-srecode-load-tables ()
@@ -77,7 +77,7 @@
 (defun srecode-semantic-handle-:dot (dict)
   "Add macros to dictionary DICT based on the current DOT buffer."
   ;; @todo - Is there anything??
-  
+
   )
 
 (defun cogre-srecode-add-attr (label value dict)
@@ -99,7 +99,7 @@ This fcn is very sparing of fetching tags."
       (when (not ct)
 	(semantic-fetch-tags)
 	(setq ct (semantic-find-tag-by-overlay)))
-      
+
       (cond ((not ct)
 	     (list "declaration" "graph")
 	     )
@@ -125,7 +125,7 @@ This fcn is very sparing of fetching tags."
 
     (srecode-dictionary-set-value dict "NAME" (semantic-tag-name tag))
 
-    (cond 
+    (cond
      ((semantic-tag-of-class-p tag 'node)
       (let ((A (semantic-tag-get-attribute tag :attributes)))
 	(while A

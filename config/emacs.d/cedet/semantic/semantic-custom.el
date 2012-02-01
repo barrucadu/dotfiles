@@ -134,7 +134,7 @@
 	     :tag "Attributes"
 	     :value attr)
 	    chil))
-    
+
     (widget-put widget :children (nreverse chil))
     ))
 

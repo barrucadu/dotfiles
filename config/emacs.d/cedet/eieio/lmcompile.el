@@ -127,7 +127,7 @@ Works on grep, compile, or other type mode."
 
   ;; Get the list of errors to be activated.
   (lmcompile-reinitialize-errors nil)
-  
+
   (let ((marks
 	 (save-excursion
 	   (set-buffer compilation-last-buffer)
@@ -175,7 +175,7 @@ Works on grep, compile, or other type mode."
 		(set-buffer (marker-buffer errmark))
 		(save-excursion
 		  (goto-char errmark)
-	  
+
 		  (setq face (cond
 			      ((re-search-forward "error" (point-at-eol) t)
 			       'linemark-stop-face)

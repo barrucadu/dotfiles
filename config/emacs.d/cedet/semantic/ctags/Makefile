@@ -33,7 +33,7 @@ ctags: $(ctags_LISP)
 	@echo "(setq debug-on-error t)" >> $@-compile-script
 	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
-tags: 
+tags:
 
 
 clean:

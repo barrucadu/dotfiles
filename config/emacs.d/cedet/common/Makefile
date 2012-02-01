@@ -33,7 +33,7 @@ cedet.info: $(Doc_TEXINFOS)
 	$(MAKEINFO) $<
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -84,7 +84,7 @@ tests: $(tests_LISP)
 icons:
 	$(MAKE) -C icons
 
-tags: 
+tags:
 	$(MAKE) -C icons/ $(MFLAGS) $@
 
 

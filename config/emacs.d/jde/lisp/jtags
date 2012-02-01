@@ -11,12 +11,12 @@
 #
 # Options:   -h  Print usage.
 #
-#            -srcdir  Path of top-level directory containing 
+#            -srcdir  Path of top-level directory containing
 #                     Java source(*.java) files to be tagged.
 #                     If omitted, this script tags files in
 #                     the working directory and its subdirectories.
 #
-# By:        Paul Kinnucan 
+# By:        Paul Kinnucan
 #            The MathWorks, Inc.
 #	     paulk@mathworks.com
 #
@@ -38,7 +38,7 @@ if [ "$1" = "-h" ] || [ "$1" = "-help" ] ||
     echo ""
     echo "This command tags all public classes, interfaces,"
     echo "methods, and variables in the specified Java source"
-    echo "hierarchy. If you do not specify a source directory," 
+    echo "hierarchy. If you do not specify a source directory,"
     echo "jtags searches the current directory and its"
     echo "subdirectories."
     echo ""
@@ -113,7 +113,7 @@ var2="/$var2a$var2b/\3/"
 
 # Delete the old TAGS file.
 # Note: the old file must be deleted because we have to run
-# etags in append mode. If we don't remove the old file, 
+# etags in append mode. If we don't remove the old file,
 # etags will append everything to the old file.
 
 if [ -f ${java_dir}/TAGS ]; then
@@ -121,7 +121,7 @@ if [ -f ${java_dir}/TAGS ]; then
     echo "Removed old TAGS file."
 fi
 
-# Use find to recurse through the source hierarchy, 
+# Use find to recurse through the source hierarchy,
 # finding every java source file.
 # Use xargs to apply etags to the source files.
 # Note that xargs may invoke etags multiple

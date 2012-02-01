@@ -145,11 +145,11 @@ int STARTMACRO () {
 #define OBJ(fn)         PASTE(PREFIX, fn)
 #define PREFIX          PASTE(A,B)
 
-int 
+int
 OBJ(test)     /* expands to ABtest */
   ;
 
-/* TEST: Macro Recursion limits in arguments to a macro. 
+/* TEST: Macro Recursion limits in arguments to a macro.
  * This code is from ALSA (with names changed to moose), noticed by Yupeng. */
 #define mr_moose(n) list_entry(n, struct mr_moose, list)
 

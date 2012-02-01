@@ -17,10 +17,10 @@ DISTDIR=$(top)common-$(VERSION)/icons
 
 all: icons
 
-icons: 
+icons:
 	@
 
-tags: 
+tags:
 
 .PHONY: dist
 

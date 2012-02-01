@@ -297,27 +297,27 @@
 %keyword _AUTHOR      "@author"
 %put     _AUTHOR      phpdoc (seq 1 usage (type))
 %keyword _VERSION     "@version"
-%put     _VERSION     phpdoc (seq 2 usage (type)) 
+%put     _VERSION     phpdoc (seq 2 usage (type))
 %keyword _PARAM       "@param"
-%put     _PARAM       phpdoc (seq 3 usage (function) with-name t) 
+%put     _PARAM       phpdoc (seq 3 usage (function) with-name t)
 %keyword _RETURN      "@return"
-%put     _RETURN      phpdoc (seq 4 usage (function)) 
+%put     _RETURN      phpdoc (seq 4 usage (function))
 %keyword _EXCEPTION   "@exception"
-%put     _EXCEPTION   phpdoc (seq 5 usage (function) with-name t) 
+%put     _EXCEPTION   phpdoc (seq 5 usage (function) with-name t)
 %keyword _THROWS      "@throws"
-%put     _THROWS      phpdoc (seq 6 usage (function) with-name t) 
+%put     _THROWS      phpdoc (seq 6 usage (function) with-name t)
 %keyword _SEE         "@see"
-%put     _SEE         phpdoc (seq 7 usage (type function variable) opt t with-ref t) 
+%put     _SEE         phpdoc (seq 7 usage (type function variable) opt t with-ref t)
 %keyword _SINCE       "@since"
-%put     _SINCE       phpdoc (seq 8 usage (type function variable) opt t) 
+%put     _SINCE       phpdoc (seq 8 usage (type function variable) opt t)
 %keyword _SERIAL      "@serial"
-%put     _SERIAL      phpdoc (seq 9 usage (variable) opt t) 
+%put     _SERIAL      phpdoc (seq 9 usage (variable) opt t)
 %keyword _SERIALDATA  "@serialData"
-%put     _SERIALDATA  phpdoc (seq 10 usage (function) opt t) 
+%put     _SERIALDATA  phpdoc (seq 10 usage (function) opt t)
 %keyword _SERIALFIELD "@serialField"
-%put     _SERIALFIELD phpdoc (seq 11 usage (variable) opt t) 
+%put     _SERIALFIELD phpdoc (seq 11 usage (variable) opt t)
 %keyword _DEPRECATED  "@deprecated"
-%put     _DEPRECATED  phpdoc (seq 12 usage (type function variable) opt t) 
+%put     _DEPRECATED  phpdoc (seq 12 usage (type function variable) opt t)
 
 %left T_INCLUDE T_INCLUDE_ONCE T_EVAL T_REQUIRE T_REQUIRE_ONCE
 %left T_COMMA
@@ -368,7 +368,7 @@ start
 
 compilation_units
   : ;;EMPTY
-  | compilation_unit compilation_units 
+  | compilation_unit compilation_units
     (if $2 (append $2 (EXPANDTAG $1)) (EXPANDTAG $1))
   ;
 
@@ -475,7 +475,7 @@ function_declaration
   ;
 
 ;;; Function token
-;; ("NAME" function "TYPE" ( ARG-LIST ) EXTRA-SPEC "DOCSTRING") 
+;; ("NAME" function "TYPE" ( ARG-LIST ) EXTRA-SPEC "DOCSTRING")
 method_declaration
   : method_modifiers_opt method_declarator method_body
     (FUNCTION-TAG (car $2) nil (cdr $2) :typemodifiers $1)
@@ -799,7 +799,7 @@ FLOATING_POINT_LITERAL:
     (semantic-lex-push-token
      (semantic-lex-token 'EPILOGUE start end))))
 
-  
+
 (define-lex-regex-analyzer wisent-php-lex-heredoc
   "Detect and create an epilogue or percent-percent token."
   (concat "<<<[[:blank:]]*\\(" wisent-php-label-regex "\\)$")

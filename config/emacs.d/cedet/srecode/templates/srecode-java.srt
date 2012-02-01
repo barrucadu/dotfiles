@@ -1,4 +1,4 @@
-;; srecode-java.srt --- 
+;; srecode-java.srt ---
 
 ;; Copyright (C) 2009, 2010 Eric M. Ludlam
 
@@ -76,7 +76,7 @@ the user-facing template."
 ----
 {{>:declaration:javadoc-class}}
 public Class {{?NAME}} {{#PARENTS}}{{#FIRST}}extends {{/FIRST}}{{#NOTFIRST}}implements {{/NOTFIRST}}{{NAME}}{{/PARENTS}}
-{     
+{
    {{^}}
 };
 ----
@@ -146,8 +146,8 @@ template javadoc-class :indent :blank :time :user :tag
  * Created: {{DATE}}
  *
  * @author {{AUTHOR}}
- * @version 
- * @since 
+ * @version
+ * @since
  */
 ----
 

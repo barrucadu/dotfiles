@@ -12,7 +12,7 @@
   ; ASCII char to integer
   (define (c->i char)
     (- (char->integer char) 48))
-  
+
   ; Char to function
   (define (c->f char)
     (cond ((eq? #\+ char) +)

@@ -52,29 +52,29 @@ function repackages()
     pacman -Qqem | sort > /tmp/packages-qqem
     pacman -Qqd  | sort > /tmp/packages-qqd
     pacman -Qqdm | sort > /tmp/packages-qqdm
-    
+
     comm -23 /tmp/packages-qqe /tmp/packages-qqem > /tmp/packages1
     comm -23 /tmp/packages-qqd /tmp/packages-qqdm > /tmp/packages2
-    
+
     mv /tmp/packages1 /tmp/packages-qqe
     mv /tmp/packages2 /tmp/packages-qqd
-    
+
     if $3; then
 	EDITOR=`[[ $EDITOR == "" ]] && echo "vim" || echo $EDITOR` # As much as I dislike it, vim *is* the one editor guaranteed to be everywhere...
-	
+
 	$EDITOR /tmp/packages-qqe
 	$EDITOR /tmp/packages-qqd
 	$EDITOR /tmp/packages-qqem
 	$EDITOR /tmp/packages-qqdm
     fi
-    
+
     sudo pacman -Syy
-    
+
     if $1; then
 	sudo pacman -Sf `cat /tmp/packages-qqe`
 	sudo pacman -Sf --asdeps `cat /tmp/packages-qqd`
     fi
-    
+
     if $2; then
 	yaourt -Sf `cat /tmp/packages-qqem`
 	yaourt -Sf --asdeps `cat /tmp/packages-qqdm`

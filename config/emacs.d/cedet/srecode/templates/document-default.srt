@@ -1,4 +1,4 @@
-;; document-default.srt --- 
+;; document-default.srt ---
 
 ;; Copyright (C) 2009 Eric M. Ludlam
 

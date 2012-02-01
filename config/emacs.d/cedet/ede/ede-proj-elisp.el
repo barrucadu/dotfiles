@@ -35,7 +35,7 @@
    (keybindings :initform nil)
    (phony :initform t)
    (sourcetype :initform '(ede-source-emacs))
-   (availablecompilers :initform '(ede-emacs-compiler 
+   (availablecompilers :initform '(ede-emacs-compiler
 				   ede-xemacs-compiler
 				   ede-emacs-preload-compiler))
    (aux-packages :initarg :aux-packages
@@ -101,7 +101,7 @@ A lisp target may be one general program with many separate lisp files in it.")
      "\"$(EMACS)\" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^"
      ))
   "Compile Emacs Lisp programs with preload libraries.")
-	 
+
 
 (defvar ede-xemacs-compiler
   (clone ede-emacs-compiler "ede-xemacs-compiler"
@@ -114,7 +114,7 @@ A lisp target may be one general program with many separate lisp files in it.")
   "Return t if object THIS lays claim to the file in BUFFER.
 Lays claim to all .elc files that match .el files in this target."
   (if (string-match "\\.elc$" (buffer-file-name buffer))
-      (let ((fname 
+      (let ((fname
 	     (concat
 	      (file-name-sans-extension (buffer-file-name buffer))
 	      ".el")

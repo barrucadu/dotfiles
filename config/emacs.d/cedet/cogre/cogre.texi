@@ -3,7 +3,7 @@
 @c $Id: cogre.texi,v 1.4 2009/04/06 02:02:12 zappo Exp $
 @c
 @setfilename cogre.info
-@set TITLE COGRE: COnnected GRaph Editor 
+@set TITLE COGRE: COnnected GRaph Editor
 @set AUTHOR Eric M. Ludlam
 @settitle @value{TITLE}
 

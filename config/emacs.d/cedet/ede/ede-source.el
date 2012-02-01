@@ -22,7 +22,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; Manage different types of source code.  A master list of source code types
 ;; will be maintained, and used to track target objects, what they accept,
 ;; and what compilers can be used.
@@ -74,7 +74,7 @@ that they are willing to use.")
 ;;; Methods
 ;;
 (defmethod initialize-instance :AFTER ((this ede-sourcecode) &rest fields)
-  "Make sure that all ede compiler objects are cached in 
+  "Make sure that all ede compiler objects are cached in
 `ede-compiler-list'."
   (let ((lst ede-sourcecode-list))
     ;; Find an object of the same name.

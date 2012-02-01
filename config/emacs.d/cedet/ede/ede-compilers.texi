@@ -36,7 +36,7 @@
 @item ede-compilation-program
 @table @asis
 @item Children:
-@w{@xref{ede-compiler},} @w{@xref{ede-linker}.} 
+@w{@xref{ede-compiler},} @w{@xref{ede-linker}.}
 @end table
 
 @end table
@@ -120,29 +120,29 @@ For example, C code uses .o on unix, and Emacs Lisp uses .elc.
 @end table
 @subsection Specialized Methods
 
-@deffn Method ede-proj-flush-autoconf :AFTER this 
+@deffn Method ede-proj-flush-autoconf :AFTER this
 Flush the configure file (current buffer) to accomodate @var{THIS}.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-rules :AFTER this 
+@deffn Method ede-proj-makefile-insert-rules :AFTER this
 Insert rules needed for @var{THIS} compiler object.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-variables :AFTER this 
+@deffn Method ede-proj-makefile-insert-variables :AFTER this
 Insert variables needed by the compiler @var{THIS}.
 @end deffn
 
-@deffn Method ede-proj-makefile-insert-commands :AFTER this 
+@deffn Method ede-proj-makefile-insert-commands :AFTER this
 Insert the commands needed to use compiler @var{THIS}.
 The object creating makefile rules must call this method for the
 compiler it decides to use after inserting in the rule.
 @end deffn
 
-@deffn Method ede-object-sourcecode :AFTER this 
+@deffn Method ede-object-sourcecode :AFTER this
 Retrieves the slot @code{sourcetype} from an object of class @code{ede-compilation-program}
 @end deffn
 
-@deffn Method ede-proj-tweak-autoconf :AFTER this 
+@deffn Method ede-proj-tweak-autoconf :AFTER this
 Tweak the configure file (current buffer) to accomodate @var{THIS}.
 @end deffn
 
@@ -162,7 +162,7 @@ Tweak the configure file (current buffer) to accomodate @var{THIS}.
 @item ede-compiler
 @table @asis
 @item Children:
-@w{@xref{ede-object-compiler},} @w{@xref{semantic-ede-grammar-compiler-class}.} 
+@w{@xref{ede-object-compiler},} @w{@xref{semantic-ede-grammar-compiler-class}.}
 @end table
 
 @end table
@@ -245,20 +245,20 @@ linkers that can be used.
 @end table
 @subsection Specialized Methods
 
-@deffn Method ede-proj-makefile-insert-object-variables :AFTER this targetname sourcefiles 
+@deffn Method ede-proj-makefile-insert-object-variables :AFTER this targetname sourcefiles
 Insert an OBJ variable to specify object code to be generated for @var{THIS}.
 The name of the target is @var{TARGETNAME} as a string.  @var{SOURCEFILES} is the list of
 files to be objectified.
 Not all compilers do this.
 @end deffn
 
-@deffn Method ede-compiler-intermediate-objects-p :AFTER this 
+@deffn Method ede-compiler-intermediate-objects-p :AFTER this
 Return non-@code{nil} if @var{THIS} has intermediate object files.
 If this compiler creates code that can be linked together,
 then the object files created by the compiler are considered intermediate.
 @end deffn
 
-@deffn Method ede-compiler-intermediate-object-variable :AFTER this targetname 
+@deffn Method ede-compiler-intermediate-object-variable :AFTER this targetname
 Return a string based on @var{THIS} representing a make object variable.
 @var{TARGETNAME} is the name of the target that these objects belong to.
 @end deffn
@@ -357,7 +357,7 @@ A variable dedicated to dependency generation.
 @end table
 @subsection Specialized Methods
 
-@deffn Method ede-proj-makefile-insert-variables :AFTER this 
+@deffn Method ede-proj-makefile-insert-variables :AFTER this
 Insert variables needed by the compiler @var{THIS}.
 @end deffn
 

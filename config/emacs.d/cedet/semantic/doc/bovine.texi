@@ -102,8 +102,8 @@ the form @file{NAME-by.el}.  This, in turn is byte compiled.
 * Bovine Grammar Rules::        Rules used to parse a language
 * Optional Lambda Expression::  Actions to take when a rule is matched
 * Bovine Examples::             Simple Samples
-* GNU Free Documentation License::  
-* Index::                       
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node Starting Rules
@@ -160,9 +160,9 @@ semantic-appdev}.
 means that a syntactic token of class @code{FOO} must be matched.
 
 @menu
-* How Lexical Tokens Match::    
-* Grammar-to-Lisp Details::     
-* Order of components in rules::  
+* How Lexical Tokens Match::
+* Grammar-to-Lisp Details::
+* Order of components in rules::
 @end menu
 
 @node How Lexical Tokens Match

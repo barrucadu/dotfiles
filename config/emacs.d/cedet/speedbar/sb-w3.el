@@ -103,7 +103,7 @@
 	(while links
 	  (setq part (car (cdr (member ':href (car links))))
 		links (cdr links))
-          (when part 
+          (when part
             (speedbar-insert-button (w3-speedbar-shorten-button part)
                                     'speedbar-file-face 'highlight
                                     'w3-speedbar-link
@@ -124,12 +124,12 @@
 TXT is unused.  MARKER is the location.  INDENT is unused."
   (pop-to-buffer (marker-buffer marker))
   (goto-char (marker-position marker)))
-    
+
 (defun w3-speedbar-shorten-button (button)
   "Takes text BUTTON and shortens it as much as possible."
   ;; I should make this more complex, but I'm not sure
   ;; how...
-  (when button 
+  (when button
     (let ((fnnd (file-name-nondirectory button)))
       (if (< 0 (length fnnd))
 	  fnnd

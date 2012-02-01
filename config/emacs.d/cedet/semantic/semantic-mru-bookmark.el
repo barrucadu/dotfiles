@@ -409,7 +409,7 @@ Jumps to the tag and highlights it briefly."
   (interactive (list (semantic-mrub-completing-read "Switch to tag")))
   (if (not (semantic-bookmark-p tagmark))
       (signal 'wrong-type-argument tagmark))
-  
+
   (semantic-mrub-push semantic-mru-bookmark-ring
 		      (point)
 		      'jump)

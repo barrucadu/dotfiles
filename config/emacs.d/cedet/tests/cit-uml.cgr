@@ -3,7 +3,7 @@
 (cogre-base-graph "/home/zappo/cedet/tests/cit-uml"
   :file "/home/zappo/cedet/tests/cit-uml.cgr"
   :name "/home/zappo/cedet/tests/cit-uml"
-  :elements (list 
+  :elements (list
    (cogre-class "CIT_Baseclass"
     :position [27 0]
     )

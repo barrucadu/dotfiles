@@ -93,13 +93,13 @@ use the grammar writing environment, and how to write in the rule
 based language.
 
 @menu
-* Overview::                    
-* Grammar File::                
+* Overview::
+* Grammar File::
 * Grammar Development Cycle::
-* Working with grammars::       
-* Adding a new grammar mode::   
-* GNU Free Documentation License::  
-* Index::                       
+* Working with grammars::
+* Adding a new grammar mode::
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node Overview
@@ -178,11 +178,11 @@ semicolons (@code{;;}) instead of a single one. The single semicolon
 (@code{;}) is the end of rule delimiter.
 
 @menu
-* Terminal and Nonterminal Symbols::  
-* Prologue::                    
-* Declarations::                
-* Grammar Rules::               
-* Epilogue::                    
+* Terminal and Nonterminal Symbols::
+* Prologue::
+* Declarations::
+* Grammar Rules::
+* Epilogue::
 @end menu
 
 @node Terminal and Nonterminal Symbols
@@ -250,18 +250,18 @@ formulating the grammar and the type associated to categories of
 tokens (@pxref{Terminal and Nonterminal Symbols}).
 
 @menu
-* package Decl::                
-* languagemode Decl::           
-* keyword Decl::                
-* put Decl::                    
-* token Decl::                  
-* type Decl::                   
-* precedence Decl::             
-* default-prec Decl::           
-* quotemode Decl::              
-* scopestart Decl::             
-* start Decl::                  
-* use-macros Decl::             
+* package Decl::
+* languagemode Decl::
+* keyword Decl::
+* put Decl::
+* token Decl::
+* type Decl::
+* precedence Decl::
+* default-prec Decl::
+* quotemode Decl::
+* scopestart Decl::
+* start Decl::
+* use-macros Decl::
 @end menu
 
 @node package Decl
@@ -351,7 +351,7 @@ value is an Emacs Lisp obarray, available at run time in the parsed
 buffer, in the buffer local variable
 @code{semantic-flex-keywords-obarray}.
 
-@c Oh dear.  Perhaps it's time to obsolete and rename that variable. 
+@c Oh dear.  Perhaps it's time to obsolete and rename that variable.
 
 However you shouldn't use that variable directly.  @semantic{} provides
 the following @acronym{API} to use with language keywords at run
@@ -686,21 +686,21 @@ When the Lisp code generator encounters a @code{%use-macros}
 declaration, it automatically loads (@code{require}) the specified
 @var{library} and associates to each @var{macro-name} an expander
 function named @var{library}-@var{macro-name}.
- 
+
 For instance:
 
 @example
 %use-macros my-grammar-macros @{MY-MACRO@}
 @end example
- 
+
 Tells the Lisp code generator to first @w{@samp{(require
 'my-grammar-macros)}}, then to call the function
 @code{my-grammar-macros-MY-MACRO} to expand calls to the
 @code{MY-MACRO} macro.
- 
+
 Typically, the @file{my-grammar-macros.el} library should look like
 this:
- 
+
 @lisp
 @dots{}
 
@@ -713,7 +713,7 @@ this:
 ;; Don't forget to provide myself!
 (provide 'my-grammar-macros)
 @end lisp
- 
+
 @node Grammar Rules
 @section Grammar Rules
 
@@ -757,7 +757,7 @@ comma-separated sequence of zero or more @samp{exp} groupings:
 expseq: ;;Empty
       | expseq1
       ;
-     
+
 expseq1: exp
        | expseq1 COMMA exp
        ;
@@ -980,18 +980,18 @@ or failure of your changes.
 @chapter Working with grammars
 
 @menu
-* Editing grammars::            
-* Auto-generation of lexical rules::  
-* Grammar Macros::              
-* BY grammars::                 
-* WY grammars::                 
+* Editing grammars::
+* Auto-generation of lexical rules::
+* Grammar Macros::
+* BY grammars::
+* WY grammars::
 @end menu
 
 @node Editing grammars
 @section Editing grammars
 
 @c Document here the various commands and keyboard shortcuts
-@c available in semantic-grammar-mode. 
+@c available in semantic-grammar-mode.
 
 @deffn Command semantic-grammar-create-package &optional force
 @anchor{semantic-grammar-create-package}
@@ -1085,9 +1085,9 @@ This chapter details the auto-generation process, and how you can
 control it to produce the lexical rules needed to scan your language.
 
 @menu
-* The principle::               
-* Type properties with a special meaning::  
-* Predefined well-known types::  
+* The principle::
+* Type properties with a special meaning::
+* Predefined well-known types::
 @end menu
 
 @node The principle
@@ -1192,7 +1192,7 @@ understandable by the original @semantic{} @acronym{LL} parser.
 
 For more details on how the @acronym{LL} parser works,
 @inforef{top, the Bovine Parser Manual, bovine}.
- 
+
 @node WY grammars
 @section WY grammars
 
@@ -1209,8 +1209,8 @@ For more details on how the @acronym{LALR} parser works,
 @chapter Adding a new grammar mode
 
 @menu
-* Specialized Implementation::  
-* Querying grammars::           
+* Specialized Implementation::
+* Querying grammars::
 @end menu
 
 @node Specialized Implementation
@@ -1294,8 +1294,8 @@ For declarations, the grammar framework provides a specialized high
 level @acronym{API}.
 
 @menu
-* Grammar Tags::                
-* Querying Declarations::       
+* Grammar Tags::
+* Querying Declarations::
 @end menu
 
 @node Grammar Tags

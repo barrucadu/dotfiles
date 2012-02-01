@@ -179,7 +179,7 @@ are listed in @ref{Tools} section.
 @end ignore
 
 @menu
-* Semantic Components::         
+* Semantic Components::
 @end menu
 
 @node Semantic Components

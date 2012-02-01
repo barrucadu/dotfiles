@@ -11,7 +11,7 @@
 	  (if (< (f mid) n)
 		  (cons mid (cdr guess))
 		  (cons (car guess) mid))))
-		  
+
 
   (define (good-enough? guess)
 	(not (> (abs (- (cdr guess)
@@ -23,7 +23,7 @@
 	(display " ")
 	(display (cdr guess))
 	(newline))
-  
+
   (iter (cons min max)))
 
 (define (improve f n)

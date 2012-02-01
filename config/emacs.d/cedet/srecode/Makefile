@@ -32,7 +32,7 @@ DISTDIR=$(top)srecode-$(VERSION)
 all: autoloads lang srecode srecode.info tests document templates
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -93,7 +93,7 @@ document: $(document_LISP)
 templates:
 	$(MAKE) -C templates
 
-tags: 
+tags:
 	$(MAKE) -C templates/ $(MFLAGS) $@
 
 

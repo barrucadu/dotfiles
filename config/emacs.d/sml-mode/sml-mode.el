@@ -290,7 +290,7 @@ Regexp match data 0 points to the chars."
     ("\\<\\(signature\\)\\s-+\\(\\sw+\\)"
      (1 font-lock-keyword-face)
      (2 font-lock-interface-def-face))
-    
+
     (,sml-keywords-regexp . font-lock-keyword-face)
     ,@(sml-font-lock-symbols-keywords))
   "Regexps matching standard SML keywords.")

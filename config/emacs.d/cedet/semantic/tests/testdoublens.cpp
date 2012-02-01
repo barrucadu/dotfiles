@@ -29,7 +29,7 @@ namespace Name1 {
     void Foo::sendStuff(int /* a */, int /* b */) // ^3^
     {
     }
-    
+
   } // namespace Name2
 } // namespace Name1
 
@@ -44,7 +44,7 @@ int test_fcn () {
   Name1::Name2::F//-4-
     // #4# ( "Foo" )
     ;
-  
+
   // @TODO - get this working...
   Name1::stage2_Foo::M//-5-
     /// #5# ( "Mumble" )
@@ -58,15 +58,15 @@ stage3_Foo foo_fcn() {
 
 // Second test from Ravikiran Rajagopal
 
-namespace A { 
+namespace A {
   class foo {
   public:
     void aa();
     void bb();
   };
 }
-namespace A { 
-  class bar { 
+namespace A {
+  class bar {
   public:
     void xx();
   public:
@@ -96,7 +96,7 @@ namespace a {
 
     int Bar::baz()
     {
-      return dum// -7- 
+      return dum// -7-
 	// #7# ( "dumdum" )
 	;
     }

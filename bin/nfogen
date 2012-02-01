@@ -36,11 +36,11 @@ def shellexec (cmd):
             procs.append (subprocess.Popen (arg,
                                             stdin=procs[len (procs) - 1].stdout,
                                             stdout=subprocess.PIPE))
-            
+
     out = procs [len (procs) - 1].communicate ()[0]
     if type (out) is bytes:
         out = out.decode ('UTF-8')
-        
+
     return out.strip ()
 
 if len (sys.argv) < 2: errexit ('USAGE: nfogen <title>')
@@ -94,7 +94,7 @@ if not nojson:
 
     for genre in genres:
         nfofile.write ('  <genre>%s</genre>\n' % genre.strip ())
-    
+
 nfofile.write ('</movie>\n')
 nfofile.close ()
 

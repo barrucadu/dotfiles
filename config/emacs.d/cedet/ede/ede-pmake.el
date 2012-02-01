@@ -22,7 +22,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; Code generator for Makefiles.
 ;;
 ;; Here is how it should work:
@@ -153,7 +153,7 @@ MFILENAME is the makefile to generate."
 					      (file-name-sans-extension
 					       f)) ".P"))
 				   df " "))))
-	  ;; 
+	  ;;
 	  ;; Insert ALL Rule
 	  ;;
 	  (insert "\n\nall:")
@@ -349,7 +349,7 @@ NOTE: Not yet in use!  This is part of an SRecode conversion of
 ;
 ;	   conf-table)
 ;
-     
+
      ;; @TODO - finish off this function, and replace the below fcn
 
 ;     ))
@@ -485,7 +485,7 @@ These are removed with make clean."
       (setq garb (append (oref (car src) garbagepattern) garb)
 	    src (cdr src)))
     garb))
-    
+
 
 ;;; RULES
 ;;

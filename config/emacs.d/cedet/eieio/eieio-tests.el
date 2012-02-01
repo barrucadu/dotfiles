@@ -26,7 +26,7 @@
 ;;
 
 ;;; Commentary:
-;;  
+;;
 ;; Test the various features of EIEIO.  To run the tests, evaluate the
 ;; entire buffer.
 
@@ -69,7 +69,7 @@
 	(error ":initarg and :allocation warning not thrown!"))
       )
   (error (error "%S" msg)))
-  
+
 
 (defclass class-b ()
   ((land :initform "Sc"
@@ -127,7 +127,7 @@
 (defun anormalfunction () "A plain function for error testing." nil)
 
 (if (condition-case nil
-	(defgeneric anormalfunction () 
+	(defgeneric anormalfunction ()
 	  "Attempt to turn it into a generic.")
       (error nil))
     (error "Generic function created over an existing function."))
@@ -709,7 +709,7 @@ METHOD is the method that was attempting to be called."
   ;;; HACK ALERT: The new value of a class slot is inherited by the
   ;; subclass!  This is probably a bug.  We should either share the slot
   ;; so sets on the baseclass change the subclass, or we should inherit
-  ;; the original value. 
+  ;; the original value.
 
   (if (not (eq (get-slot-3 t2) 'emu))
       (error "Accessor to private :class slot returned bad value from object."))
@@ -889,7 +889,7 @@ Subclasses to override slot attributes.")
 
 
 (defclass slotattr-ok (slotattr-base)
-  ((initform :initform no-init)   
+  ((initform :initform no-init)
    (initarg :initarg :initblarg)
    (custom :custom string
 	   :label "One String"
@@ -953,7 +953,7 @@ Subclasses to override slot attributes.")
 
 
 (defclass slotattr-class-ok (slotattr-class-base)
-  ((initform :initform no-init)   
+  ((initform :initform no-init)
    (initarg :initarg :initblarg)
    (custom :custom string
 	   :label "One String"
@@ -977,7 +977,7 @@ Subclasses to override slot attributes.")
        (args   (aref cv class-initarg-tuples))
        (i 0)
        )
-  
+
   (if (not (assoc :initblarg args))
       (error ":initarg did not override for subclass."))
 

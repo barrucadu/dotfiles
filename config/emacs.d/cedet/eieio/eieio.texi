@@ -679,7 +679,7 @@ Example of creating an object from a class:
 
 @end defun
 
-To create an object from a class symbol, use use @code{make-instance}.  
+To create an object from a class symbol, use use @code{make-instance}.
 
 @defun make-instance class &rest initargs
 @anchor{make-instance}
@@ -1083,7 +1083,7 @@ make a slot unbound.
 @defun class-name class
 Return a string of the form @samp{#<class myclassname>} which should look
 similar to other Lisp objects like buffers and processes.  Printing a
-class results only in a symbol.  
+class results only in a symbol.
 @end defun
 
 @defun class-option class option
@@ -1467,12 +1467,12 @@ slots, and do not take up space in your instances.
 @end deftp
 
 @deftp {Class} eieio-speedbar-directory-button buttontype buttonface
-This class inherits from @code{eieio-speedbar} and initializes 
+This class inherits from @code{eieio-speedbar} and initializes
 @var{buttontype} and @var{buttonface} to appear as directory level lines.
 @end deftp
 
 @deftp {Class} eieio-speedbar-file-button buttontype buttonface
-This class inherits from @code{eieio-speedbar} and initializes 
+This class inherits from @code{eieio-speedbar} and initializes
 @var{buttontype} and @var{buttonface} to appear as file level lines.
 @end deftp
 
@@ -1535,7 +1535,7 @@ speedbar.
 
 Read the Extending chapter in the speedbar manual for more information
 on how speedbar modes work
-@xref{Extending,,,speedbar}. 
+@xref{Extending,,,speedbar}.
 @end deffn
 
 @node Browsing
@@ -1715,7 +1715,7 @@ to prepend a space.
 
 (defmethod object-print ((this data-object) &optional strings)
   "Return a string with a summary of the data object as part of the name."
-  (apply 'call-next-method this 
+  (apply 'call-next-method this
          (cons (format " value: %s" (render this)) strings)))
 @end example
 
@@ -1971,7 +1971,7 @@ Improve integration with the @file{cl} package.
 @end enumerate
 
 There are also improvements to be made to allow @eieio{} to operate
-better in the Emacs environment.  
+better in the Emacs environment.
 
 @enumerate
 @item

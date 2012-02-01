@@ -268,7 +268,7 @@ EMPTY-DICT-ENTRIES are dictionary entries for the EMPTY fill macro."
       ;; 3 c) Test incremental parsers (by side-effect)
       (let ((e (srecode-semantic-insert-tag tag))
 	    (code (semantic-tag-get-attribute tag :code)))
-      
+
 	(when code (insert code))
 
 	(goto-char e)
@@ -302,7 +302,7 @@ EMPTY-DICT-ENTRIES are dictionary entries for the EMPTY fill macro."
 EXTRA tags might also be in the list, so don't fail if any tags in EXTRA
 are found, but don't error if they are not their."
   (while actual
-    
+
     (let ((T1 (car actual))
 	  (T2 (car expected)))
 
@@ -337,7 +337,7 @@ are found, but don't error if they are not their."
 	       (semantic-format-tag-name T2))
 	)
        ))
-    
+
     (setq actual (cdr actual))
     ))
 
@@ -350,7 +350,7 @@ such as 'clean'."
     (ede-proj-regenerate)
     ;; 1 g) build the sources.
     (compile (concat ede-make-command (or ARGS "")))
-    
+
     (cit-wait-for-compilation)
     (cit-check-compilation-for-error)
 

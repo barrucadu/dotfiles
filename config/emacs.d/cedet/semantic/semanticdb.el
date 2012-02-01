@@ -22,7 +22,7 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
-;; 
+;;
 ;;; Commentary:
 ;;
 ;; Maintain a database of tags for a group of files and enable
@@ -544,13 +544,13 @@ This will call `semantic-fetch-tags' if that file is in memory."
     (semanticdb-set-buffer obj)
     (semantic-fetch-tags))
    ;;
-   ;; Not in a buffer.  Forcing a load.  
+   ;; Not in a buffer.  Forcing a load.
    (force
-    ;; Patch from Iain Nicol. -- 
-    ;; @TODO: I wonder if there is a way to recycle 
+    ;; Patch from Iain Nicol. --
+    ;; @TODO: I wonder if there is a way to recycle
     ;;        semanticdb-create-table-for-file-not-in-buffer
     (save-excursion
-      (let ((buff (semantic-find-file-noselect 
+      (let ((buff (semantic-find-file-noselect
 		   (semanticdb-full-filename obj))))
 	(set-buffer buff)
 	(semantic-fetch-tags)
@@ -937,7 +937,7 @@ DONTLOAD does not affect the creation of new database objects."
 	  ;; would need fixing
 	  (setq fullfile (file-truename file))
 	  )
-	
+
 	;; If we have a table, but no fullfile, that's ok.  Lets get the filename
 	;; from the table which is pre-truenamed.
 	(when (and (not fullfile) tab)

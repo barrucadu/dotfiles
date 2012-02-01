@@ -27,6 +27,6 @@
           ((string=? (string-ref code codepos) "+")
            (if (<= datapos 0) (iter (+ codepos 1) datapos cells size)
                (iter (+ codepos 1) (- datapos 1) cells size)))
-          
+
 
   (iter 0 0 (gen-brainfuck-cells 30000) 30000))

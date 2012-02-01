@@ -69,7 +69,7 @@
 
 (defconst semantic-make-by--parse-table
   `(
-    (bovine-toplevel 
+    (bovine-toplevel
      (Makefile)
      ) ;; end bovine-toplevel
 

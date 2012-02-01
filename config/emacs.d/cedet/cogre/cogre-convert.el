@@ -74,7 +74,7 @@ DOT is a part of GraphViz."
 
     ;; Get a parsing mode running here.
     (cogre-dot-mode)
-    
+
     ;; Convert G into this buffer.
     (let* ((graphtag (cogre-export-dot-method g))
 	   (members (semantic-tag-get-attribute graphtag :members))
@@ -171,7 +171,7 @@ DOT is a part of GraphVis."
     (let ((cogre-export-max-y (count-lines (point-min) (point-max))))
       (semantic-tag (oref g :name)
 		    'digraph
-		    :members 
+		    :members
 		    (cogre-map-elements 'cogre-export-dot-method g)
 		    )
       )))
@@ -290,7 +290,7 @@ DOT uses points, where as COGRE uses characters."
 	(replace-match "n:" t t title)
       (concat ":" title))))
 
-;;; LINKS		  
+;;; LINKS
 (defmethod cogre-export-dot-method ((link cogre-link))
   "Convert LINK into DOT syntax of semantic tags."
   (let ((start (oref link start))
@@ -304,7 +304,7 @@ DOT uses points, where as COGRE uses characters."
 		    (semantic-tag "arrowtail" 'attribute :value "none")
 		    )
 		  )))
-		
+
 (defmethod cogre-export-dot-method ((link cogre-inherit))
   "Convert LINK into DOT syntax of semantic tags."
   (let ((tag (call-next-method))
@@ -313,13 +313,13 @@ DOT uses points, where as COGRE uses characters."
     (cogre-tag-put-dot-attribute tag "arrowsize" "2")
     ;(cogre-tag-put-dot-attribute tag :sametail (oref end :object-name))
     tag))
-		
+
 (defmethod cogre-export-dot-method ((link cogre-aggregate))
   "Convert LINK into DOT syntax of semantic tags."
   (let ((tag (call-next-method)))
     (cogre-tag-put-dot-attribute tag "arrowhead" "diamond")
     tag))
-		
+
 (defmethod cogre-export-dot-method ((link cogre-arrow))
   "Convert LINK into DOT syntax of semantic tags."
   (let ((tag (call-next-method)))
@@ -353,7 +353,7 @@ table as an example."
   (let* ((graphtag (cogre-export-dot-method cogre-graph))
 	 (members (semantic-tag-get-attribute graphtag :members))
 	 )
-    
+
     (when (not graphtag)
       (error "Conversions failed to make anything"))
 

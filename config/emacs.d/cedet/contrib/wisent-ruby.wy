@@ -1,5 +1,5 @@
 ;;; wisent-ruby.wy: Lexer and parser support for wisent
-;;; ruby grammar. 
+;;; ruby grammar.
 
 ;;; Copyright (C) 2007 Daniel Debertin (debertin@gmail.com)
 
@@ -59,7 +59,7 @@
 %token <newline> NEWLINE
 
 ;; Language keyword tokens
-;; This is the base list of reserved words. 
+;; This is the base list of reserved words.
 ;; More will be added later.
 %token FILE "__FILE__"
 %put FILE summary "__FILE__: The current file"
@@ -266,15 +266,15 @@ definition: method_def
 	  | module_def
 	  ;
 
-simple_stmt: require 
-	   | super 
-	   | alias 
-	   | attr_decl 
-	   | mixin 
-	   | access_decl 
-	   | loop_control 
-	   | return 
-	   | exception 
+simple_stmt: require
+	   | super
+	   | alias
+	   | attr_decl
+	   | mixin
+	   | access_decl
+	   | loop_control
+	   | return
+	   | exception
 	   ;
 
 require: REQUIRE STRING_LITERAL
@@ -403,7 +403,7 @@ methodcall: method_head
 receiver: CONSTANT PERIOD
 	| IDENTIFIER PERIOD
 	| literal PERIOD
-	; 
+	;
 
 code_block: BRACE_BLOCK
 	  | DO RUBY_BLOCK
@@ -519,7 +519,7 @@ module_def: MODULE CONSTANT RUBY_BLOCK END
 	    (TYPE-TAG $2 "module" (EXPANDFULL $3 stmts) nil)
 	  ;
 
-exception: RAISE 
+exception: RAISE
 	 | RAISE CONSTANT
 	 | RAISE CONSTANT STRING_LITERAL
 	 | RAISE STRING_LITERAL

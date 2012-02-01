@@ -54,7 +54,7 @@ If nil then the default efc custom-based dialogs will be used."
 (defun efc-query-options-function-minibuf (options prompt title history default)
   (let (sel)
     ;; efc doesn't add the end colon
-    (setq prompt (format "%s%s" 
+    (setq prompt (format "%s%s"
 			 (or prompt "Select option")
 			 (if default
 			     (format " (default %s): " default)

@@ -78,7 +78,7 @@ IMAGESPEC is the image data, and DOCSTRING is documentation for the image."
 
        )
   (if (not (fboundp 'make-glyph))
-      
+
 (defmacro defezimage (variable imagespec docstring)
   "Don't bother loading up an image...
 Argument VARIABLE is the variable to define.

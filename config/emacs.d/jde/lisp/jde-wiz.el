@@ -124,10 +124,10 @@ extends clause is updated"
 	      (forward-char))
 	    (insert (concat " " keyword " " interface " "))))))))
 
-(defun jde-dollar-name (name) 
+(defun jde-dollar-name (name)
   "Convert pkg[.Outer].Inner[$Inner] to pkg[.Outer]$Inner[$Inner]"
   ;; change last '.' to '$'
-  (replace-in-string name "[.]\\([^.]+$\\)" "$\\1"))  
+  (replace-in-string name "[.]\\([^.]+$\\)" "$\\1"))
 
 (defun jde-jeval-classname (fmt interface-name &optional eval-return)
   "Try jde-jeval on the command derived from (format FMT INTERFACE-NAME),
@@ -151,7 +151,7 @@ If EVAL-RETURN is t, then return (jde-jeval ... t), else return (read (jde-jeval
 (defun jde-wiz-generate-interface (interface-name)
   "*Generate a skeleton implementation of a specified interface."
   (let* ((code
-	  (jde-jeval-classname 
+	  (jde-jeval-classname
 	   "jde.wizards.InterfaceFactory.makeInterfaceExpression(\"%s\",true);"
 	   interface-name)))
     (if code

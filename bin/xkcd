@@ -126,7 +126,7 @@ def getComic (jsonurl):
 
     # Done
     print ("Done %s." % comicfile)
-    
+
 
 # Show help text
 if "-h" in sys.argv:

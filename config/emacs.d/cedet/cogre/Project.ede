@@ -3,7 +3,7 @@
 (ede-proj-project "COGRE"
   :name "COGRE"
   :file "Project.ede"
-  :targets (list 
+  :targets (list
    (semantic-ede-proj-target-grammar "wy"
     :name "wy"
     :path ""

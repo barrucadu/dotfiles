@@ -62,7 +62,7 @@ sub munge_nickname
 
   $nick = decode('utf8', $nick);
   $nick =~ s/[- ]/_/g;
-  $nick = unidecode($nick); 
+  $nick = unidecode($nick);
   $nick =~ s/[^A-Za-z0-9-]//g;
   $nick = substr $nick, 0, 24;
   $nick = "${nick}-fb";

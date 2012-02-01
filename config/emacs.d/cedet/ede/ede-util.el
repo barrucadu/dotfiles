@@ -94,7 +94,7 @@ If BUFFER isn't specified, use the current buffer."
 	    (vc-toggle-read-only)
 	  (if (not vc-mode)
 	      (toggle-read-only -1))))))
-  
+
 (provide 'ede-util)
 
 ;;; ede-util.el ends here

@@ -23,7 +23,7 @@ all: example semantic Languages tools senator semantic.info
 test ${B}: foo bar
 	@echo ${A}
 
-example: 
+example:
 	@
 
 init: $(init_LISP)

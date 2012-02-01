@@ -61,7 +61,7 @@
 (defun cit-srecode-fill-texi ()
   "Fill up a base set of files with some base tags."
   (interactive)
- 
+
   ;; 2 b) Test various templates.
 
   (cit-srecode-fill-with-stuff "src/foodoc.texi" cit-doc-tags
@@ -82,7 +82,7 @@
 
   (cit-srecode-verify-tags (semantic-fetch-tags)
 			   cit-section-tags)
-  
+
   ;; 1 e) Tell EDE where the srcs are
   (ede-new-target "Doc" "info" "n")
   (ede-add-file "Doc")

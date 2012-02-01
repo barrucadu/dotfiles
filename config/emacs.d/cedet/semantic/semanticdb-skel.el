@@ -22,7 +22,7 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
-;; 
+;;
 ;;; Commentary:
 ;;
 ;; If you want to make an omniscient semanticdb database, start with
@@ -58,7 +58,7 @@
 
 ;; Create the database, and add it to searchable databases for SKEL mode.
 (defvar-mode-local YOUR-MAJOR-mode semanticdb-project-system-databases
-  (list 
+  (list
    (semanticdb-project-database-SKEL "SKEL"))
   "Search SKEL for symbols.")
 
@@ -75,7 +75,7 @@ the omniscience database.")
 (defmethod semanticdb-get-database-tables ((obj semanticdb-project-database-SKEL))
   "For a SKEL database, there are no explicit tables.
 Create one of our special tables that can act as an intermediary."
-  ;; NOTE: This method overrides an accessor for the `tables' slot in 
+  ;; NOTE: This method overrides an accessor for the `tables' slot in
   ;;       a database.  You can either construct your own (like tmp here
   ;;       or you can manage any number of tables.
 
@@ -159,7 +159,7 @@ Return a list of tags."
 Optional argument TAGS is a list of tags to search.
 Return a list of tags."
   (if tags (call-next-method)
-    ;; YOUR IMPLEMENTATION HERE    
+    ;; YOUR IMPLEMENTATION HERE
     ))
 
 (defmethod semanticdb-find-tags-for-completion-method
@@ -190,7 +190,7 @@ Returns a table of all matching tags."
 ;;
 ;; If your language does not have a `deep' concept, these can be left
 ;; alone, otherwise replace with implementations similar to those
-;; above. 
+;; above.
 ;;
 (defmethod semanticdb-deep-find-tags-by-name-method
   ((table semanticdb-table-SKEL) name &optional tags)

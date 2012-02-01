@@ -26,7 +26,7 @@
 ;;;; Boston, MA 02111-1307, USA
 ;;;;
 ;;;; Author: Inge Wallin
-;;;; 
+;;;;
 
 ;;; Commentary:
 
@@ -63,7 +63,7 @@ Args: STACK ELEMENT"
 
 
 (defun stack-pop (stack)
-  "Remove the topmost element from STACK and return it. 
+  "Remove the topmost element from STACK and return it.
 If the stack is empty, return nil."
   (prog1
       (car-safe (cdr stack))

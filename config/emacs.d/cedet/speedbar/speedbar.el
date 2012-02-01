@@ -10,7 +10,7 @@
   "The current version of speedbar.")
 (defvar speedbar-incompatible-version "0.14beta4"
   "This version of speedbar is incompatible with this version.
-Due to massive API changes (removing the use of the word PATH) 
+Due to massive API changes (removing the use of the word PATH)
 this version is not backward compatible to 0.14 or earlier.")
 
 ;; This file is part of GNU Emacs.
@@ -844,7 +844,7 @@ This basically creates a sparse keymap, and makes its parent be
 		     (looking-at "[0-9]+: *\\[[+-]\\] [^ \n]+ \\*?[!#]$"))]
     )
   "Additional menu items while in file-mode.")
- 
+
 (defvar speedbar-easymenu-definition-trailer
   (append
    (if (and (featurep 'custom) (fboundp 'custom-declare-variable))
@@ -1103,7 +1103,7 @@ return true without a query."
 ;; Backwards compatibility
 (defalias 'speedbar-with-attached-buffer 'dframe-with-attached-buffer)
 (defalias 'speedbar-maybee-jump-to-attached-frame 'dframe-maybee-jump-to-attached-frame)
- 
+
 (defun speedbar-set-mode-line-format ()
   "Set the format of the mode line based on the current speedbar environment.
 This gives visual indications of what is up.  It EXPECTS the speedbar
@@ -1996,7 +1996,7 @@ position to insert a new item, and that the new item will end with a CR."
 			    (if tag-button-function 'speedbar-highlight-face nil)
 			    tag-button-function tag-button-data))
     ))
-  
+
 (defun speedbar-change-expand-button-char (char)
   "Change the expansion button character to CHAR for the current line."
   (save-excursion
@@ -2041,7 +2041,7 @@ cell of the form ( 'DIRLIST .  'FILELIST )."
 
 (defun speedbar-default-directory-list (directory index)
   "Insert files for DIRECTORY with level INDEX at point."
-  (speedbar-insert-files-at-point 
+  (speedbar-insert-files-at-point
    (speedbar-file-lists directory) index)
   (speedbar-reset-scanners)
   (if (= index 0)
@@ -2395,7 +2395,7 @@ name will have the function FIND-FUN and not token."
   (speedbar-insert-generic-list indent lst
 				'speedbar-tag-expand
 				'speedbar-tag-find))
-				
+
 (defun speedbar-insert-etags-list (indent lst)
   "At level INDENT, insert the etags generated LST."
   (speedbar-insert-generic-list indent lst
@@ -2674,7 +2674,7 @@ If new functions are added, their state needs to be updated here."
   "Go to the line where FILE is."
 
   (set-buffer speedbar-buffer)
-  
+
   (goto-char (point-min))
   (let ((m nil))
     (while (and (setq m (re-search-forward
@@ -3174,7 +3174,7 @@ directory with these items.  This function is replaceable in
     (widen)
     (let ((rf (speedbar-fetch-replacement-function 'speedbar-line-directory)))
       (if rf (funcall rf depth) default-directory))))
-      
+
 (defun speedbar-files-line-directory (&optional depth)
   "Retrieve the directoryname associated with the current line.
 This may require traversing backwards from DEPTH and combining the default
@@ -3259,12 +3259,12 @@ With universal argument ARG, flush cached data."
 	  (forward-char -2)
 	  (speedbar-do-function-pointer))
       (error (speedbar-position-cursor-on-line)))))
-  
+
 (defun speedbar-flush-expand-line ()
   "Expand the line under the cursor and flush any cached information."
   (interactive)
   (speedbar-expand-line 1))
-  
+
 (defun speedbar-contract-line ()
   "Contract the line under the cursor."
   (interactive)
@@ -3513,11 +3513,11 @@ This assumes that the cursor is on a file, or tag of a file which the user is
 interested in."
 
   (save-selected-window
-  
+
     (select-window (get-buffer-window speedbar-buffer t))
-    
+
     (set-buffer speedbar-buffer)
-    
+
     (if (<= (count-lines (point-min) (point-max))
 	    (1- (window-height (selected-window))))
 	;; whole buffer fits

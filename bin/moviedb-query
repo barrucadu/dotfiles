@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 function args2str ()
-{  
+{
     string=$1
     while [[ $2 != "" ]]; do
         shift
@@ -30,7 +30,7 @@ function director ()
         ls $name | match $1 $fuzzy -q && echo -n "$name, " | sed "s/^.*\///" && returncode=0
     done | sed "s/, $//"
     echo
-    
+
     return $returncode
 }
 
@@ -51,7 +51,7 @@ function genre ()
         ls $name | match $1 $fuzzy -q && echo -n "$name, " | sed "s/^.*\///" && returncode=0
     done | sed "s/, $//"
     echo
-    
+
     return $returncode
 }
 
@@ -62,7 +62,7 @@ function year ()
     for year in $MOVIEPATH/by-year/*; do
         ls $year | match $1 $fuzzy -q && echo "$year" | sed "s/^.*\///" && returncode=0
     done
-    
+
     return $returncode
 }
 

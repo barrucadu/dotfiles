@@ -17,10 +17,10 @@ DISTDIR=$(top)COGRE-$(VERSION)/templates
 
 all: templates
 
-templates: 
+templates:
 	@
 
-tags: 
+tags:
 
 .PHONY: dist
 

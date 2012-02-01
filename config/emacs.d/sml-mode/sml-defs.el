@@ -36,9 +36,9 @@
 This actually can't work without extending `outline-minor-mode' with the
 notion of \"the end of an outline\".")
 
-;;; 
+;;;
 ;;; Internal defines
-;;; 
+;;;
 
 (defmap sml-mode-map
   ;; smarter cursor movement

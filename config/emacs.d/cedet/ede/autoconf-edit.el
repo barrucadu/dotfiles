@@ -22,7 +22,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; Autoconf editing and modification support, and compatibility layer
 ;; for Emacses w/out autoconf mode built in.
 
@@ -216,7 +216,7 @@ the ordering list `autoconf-preferred-macro-order'."
       (progn
 	(insert "(" param ")")
 	(if (< (current-column) 3) (insert " dnl")))))
-    
+
 (defun autoconf-insert-new-macro (macro &optional param)
   "Add a call to MACRO in the current autoconf file.
 Deals with macro order.  See `autoconf-preferred-macro-order' and

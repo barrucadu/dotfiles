@@ -125,7 +125,7 @@ private:
 	(skip-chars-backward " \t\n") ; xemacs forward-comment is different.
 	(forward-comment -1)
 	(re-search-forward "miscFunction" pos))
-      
+
       ))
   (cedet-utest-log-shutdown
    "SRECODE Get/Set"

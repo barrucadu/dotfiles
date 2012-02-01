@@ -21,7 +21,7 @@ def rolldie(rolls, sides, modifierstr, modifier, verbose):
 	if modifierstr == "":
 		modifier = 0
 		modifierstr = "+0"
-	
+
 	output = "Rolling a " + str(sides) + "-sided die " + str(rolls) + " times, with a modifier of " + modifierstr + ":"
 	total = 0
 
@@ -45,7 +45,7 @@ def prepdie(diestring, verbose):
 		sides       = ""
 		modifier    = 0
 		modifierstr = ""
-		
+
 		cur = "rolls"
 		loop = True
 		for i in range(0, len(diestring)):
@@ -69,7 +69,7 @@ def prepdie(diestring, verbose):
 					loop = False
 					modifier = -prepdie(diestring[i + 1:], False)
 					modifierstr = diestring[i:]
-					
+
 		rolls    = toint(rolls)
 		sides    = toint(sides)
 
@@ -77,7 +77,7 @@ def prepdie(diestring, verbose):
 			rolls = 1
 		if sides == 0:
 			sides = 6
-	
+
 		return rolldie(rolls, sides, modifierstr, modifier, verbose)
 
 for arg in sys.argv:

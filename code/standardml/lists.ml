@@ -1,7 +1,7 @@
 (* Implementation of some list functions. Yay, pattern matching :D *)
 
 (* Count the length of a list *)
-fun llen l = 
+fun llen l =
     let
         fun lleniter ([], c) = c
           | lleniter (m :: ns, c) = lleniter (ns, c + 1)
@@ -51,7 +51,7 @@ local
         in fibiter 0 1 n
         end;
 
-in fun fiblist n = 
+in fun fiblist n =
         let fun fibliter l N = if N = n
                                then l
                                else fibliter (l @ [fib N]) (N + 1)
@@ -65,7 +65,7 @@ fun list_pair [] [] = []
 
 (* Unpair the elements, producing a pair of lists *)
 fun list_unpair [] = ([], [])
-  | list_unpair ((a, b) :: pairs) = 
+  | list_unpair ((a, b) :: pairs) =
     let val (x, y) = list_unpair pairs
     in (a :: x, b :: y)
     end;

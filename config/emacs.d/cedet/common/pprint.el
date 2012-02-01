@@ -125,7 +125,7 @@ found."
   (while (and table (not (looking-at (cdar table))))
     (setq table (cdr table)))
   (caar table))
-  
+
 (defsubst pprint-dispatch-printer ()
   "Dispatch a printer to print current expression.
 Return non-nil if a printer was found."

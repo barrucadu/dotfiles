@@ -62,7 +62,7 @@
       (if (not (file-exists-p endfile))
 	  (error "No project file found")))
     (find-file endfile)))
-	 
+
 
 (defun ede-upload-distribution ()
   "Upload the current distribution to the correct location.

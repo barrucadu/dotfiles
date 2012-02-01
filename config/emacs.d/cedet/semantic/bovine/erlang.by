@@ -296,9 +296,9 @@ binary-unit
   ;
 
 binary-type-spec
-  : binary-type 
-  | binary-signed 
-  | binary-endian 
+  : binary-type
+  | binary-signed
+  | binary-endian
   | binary-unit
   ;
 

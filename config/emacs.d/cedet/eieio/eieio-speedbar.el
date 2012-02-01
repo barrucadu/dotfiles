@@ -25,7 +25,7 @@
 ;; Please send bug reports, etc. to zappo@gnu.org
 
 ;;; Commentary:
-;;  
+;;
 ;;  This provides some classes that can be used as a parent which
 ;; will automatically provide SPEEDBAR support for any list of objects
 ;; of that type.
@@ -80,14 +80,14 @@
 ;;    not already loaded, and specifying all overload functions.
 ;;
 ;; 5) Create an initliazer function which looks like this:
-;; 
+;;
 ;; (defun my-speedbar-mode-initilaize ()
 ;;   "documentation"
 ;;   (interactive)
 ;;   (speedbar-frame-mode 1)
 ;;   (speedbar-change-initial-expansion-list mymodename)
 ;;   (speedbar-get-focus))
-;; 
+;;
 ;; where `mymodename' is the same value as passed to `eieio-speedbar-create'
 ;; as the MODENAME parameter.
 

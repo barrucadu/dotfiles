@@ -51,7 +51,7 @@
 
 ;; This returns t if the major mode of the current buffer is not
 ;; 'xml-mode. If it is 'xml-mode, then this returns a
-;; list where each element is (LEVEL TARGETNAME . MARKER). 
+;; list where each element is (LEVEL TARGETNAME . MARKER).
 ;; LEVLE is always 0,  NAME is the name of the target. MARKER is
 ;; emacs marker that points to the beginning of the section. The
 ;; elements in the list returned are in ascending order of the

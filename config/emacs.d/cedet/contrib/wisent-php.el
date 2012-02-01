@@ -114,7 +114,7 @@ Use the alternate LALR(1) parser."
   ;; Setup phpdoc stuff
   ;;(semantic-php-doc-setup))
 
-	
+
 (defun wisent-php-expand-tag (tag)
   "Expand TAG into a list of equivalent tags, or nil.
 Expand multiple variable declarations in the same statement, that is

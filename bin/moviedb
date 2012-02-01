@@ -18,7 +18,7 @@ function help ()
     echo "    play  : Play movies."
     echo "    query : Search for movies."
     echo "See the individual command help for more details."
-    echo 
+    echo
     echo "Return codes:"
     echo "    7 = Unknown command."
     echo "    8 = Missing movie player."

@@ -139,7 +139,7 @@ was not found."
 				      :tables nil)))
 	;; Save this new mode table in that mode's variable.
 	(eval `(setq-mode-local ,mode srecode-table ,new))
-	
+
 	new))))
 
 (defmethod srecode-mode-table-find ((mt srecode-mode-table) file)
@@ -248,7 +248,7 @@ Use PREDICATE is the same as for the `sort' function."
     (while temp
       (srecode-dump (car temp))
       (setq temp (cdr temp))))
-  )  
+  )
 
 
 (provide 'srecode-table)

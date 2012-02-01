@@ -54,7 +54,7 @@ else
         rhost=`echo $share | sed 's/\(.*\):\(.*\):\(.*\):\(.*\):\(.*\)/\3/'`
         rpath=`echo $share | sed 's/\(.*\):\(.*\):\(.*\):\(.*\):\(.*\)/\4/'`
         rport=`echo $share | sed 's/\(.*\):\(.*\):\(.*\):\(.*\):\(.*\)/\5/'`
-        
+
         name=$rhost-$mount
         mountpoint=/share/$rhost/$mount
         remote=$ruser@$rhost:$rpath
@@ -84,7 +84,7 @@ else
             if ! `mounted $mountpoint $remote`; then
                 domount $mountpoint $remote $rport
             fi
-            
+
         elif [[ $action == "none" ]]; then
             # Unmount all mounted remotes
             if `mounted $mountpoint $remote`; then

@@ -25,7 +25,7 @@
 ;; Please send bug reports, etc. to zappo@gnu.org
 
 ;;; Commentary:
-;;  
+;;
 ;; Byte compiler functions for defmethod.  This will affect the new GNU
 ;; byte compiler for Emacs 19 and better.  This function will be called by
 ;; the byte compiler whenever a `defmethod' is encountered in a file.
@@ -90,7 +90,7 @@ that is called but rarely.  Argument FORM is the body of the method."
 	 (arg1 (car params))
 	 (class (if (listp arg1) (nth 1 arg1) nil))
 	 (my-outbuffer (if (eval-when-compile (featurep 'xemacs))
-			   byte-compile-outbuffer 
+			   byte-compile-outbuffer
 			 (condition-case nil
 			     bytecomp-outbuffer
 			   (error outbuffer))))
@@ -124,7 +124,7 @@ that is called but rarely.  Argument FORM is the body of the method."
     (add-to-list 'byte-compile-function-environment
 		 (cons meth
 		       (eieio-defgeneric-form meth "")))
-    
+
     ;; Remove it from the undefined list if it is there.
     (let ((elt (assq meth byte-compile-unresolved-functions)))
       (if elt (setq byte-compile-unresolved-functions
@@ -181,7 +181,7 @@ Argument OUTBUFFER is the buffer to dump the created code to."
 	     (setq i (1+ i)))
 	   (princ "]" outbuffer)))
 	(t (prin1 code outbuffer))))
-    
+
 
 (defun byte-compile-defmethod-param-convert (paramlist)
   "Convert method params into the params used by the defmethod thingy.

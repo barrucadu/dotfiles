@@ -35,7 +35,7 @@ struct {
   int slot31;
   char slot32;
   float slot33;
-} var_of_anonymous_struct;  
+} var_of_anonymous_struct;
 
 typedef struct mystruct1 typedef_of_mystruct1;
 typedef struct mystruct1 *typedef_of_pointer_mystruct1;
@@ -61,7 +61,7 @@ struct {
   int slot61;
   char slot72;
   float slot83;
-} var_of_anonymous_union;  
+} var_of_anonymous_union;
 
 typedef union myunion1 typedef_of_myunion1;
 typedef union myunion1 *typedef_of_pointer_myunion1;
@@ -216,7 +216,7 @@ int funk3(arg_51, arg_53)
 int funk4_fixme(arg_61, arg_62)
      int arg_61, arg_62;
 {
-  
+
 }
 
 /* End of C tests */

@@ -183,8 +183,8 @@ If one doesn't exist, create a new one for this directory."
 	 (ans (ede-linux-find-matching-target cls dir targets))
 	 )
     (when (not ans)
-      (setq ans (make-instance 
-		 cls 
+      (setq ans (make-instance
+		 cls
 		 :name (file-name-nondirectory
 			(directory-file-name dir))
 		 :path dir

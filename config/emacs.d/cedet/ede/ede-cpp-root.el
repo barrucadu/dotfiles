@@ -42,7 +42,7 @@
 ;; See the end of this file for an example.
 ;;
 ;;; EXAMPLE
-;; 
+;;
 ;; Add this to your .emacs file, modifying appropriate bits as needed.
 ;;
 ;; (ede-cpp-root-project "SOMENAME" :file "/dir/to/some/file")
@@ -63,7 +63,7 @@
 ;;     :spp-table '( ("MOOSE" . "")
 ;;                   ("CONST" . "const") )
 ;;     :spp-files '( "include/config.h" )
-;;     ) 
+;;     )
 ;;
 ;;  In this case each item in the include path list is searched.  If
 ;;  the directory starts with "/", then that expands to the project
@@ -86,7 +86,7 @@
 ;;  file name for a header in your project where most of your CPP
 ;;  macros reside.  Doing this can be easier than listing everything in
 ;;  the :spp-table option.  The files listed in :spp-files should not
-;;  start with a /, and are relative to something in :include-path.;;  
+;;  start with a /, and are relative to something in :include-path.;;
 ;;
 ;; If you want to override the file-finding tool with your own
 ;; function you can do this:
@@ -121,7 +121,7 @@
 ;;   "Return the root directory for `default-directory'"
 ;;   ;; You might be able to use `ede-cpp-root-project-root'.
 ;;   )
-;; 
+;;
 ;; (defun MY-LOAD (dir)
 ;;   "Load a project of type `cpp-root' for the directory DIR.
 ;; Return nil if there isn't one."
@@ -138,12 +138,12 @@
 ;; 	      :load-type 'MY-LOAD
 ;; 	      :class-sym 'ede-cpp-root)
 ;; 	     t)
-;; 
+;;
 ;;; TODO
 ;;
 ;; Need a way to reconfigure a project, and have it affect all open buffers.
 ;; From Tobias Gerdin:
-;;   
+;;
 ;;   >>3) Is there any way to refresh a ede-cpp-root-project dynamically? I have
 ;;   >>some file open part of the project, fiddle with the include paths and would
 ;;   >>like the open buffer to notice this when I re-evaluate the
@@ -152,7 +152,7 @@
 ;;   > Another good idea.  The easy way is to "revert-buffer" as needed.  The
 ;;   > ede "project local variables" does this already, so it should be easy
 ;;   > to adapt something.
-;;   
+;;
 ;;   I actually tried reverting the buffer but Semantic did not seem to pick
 ;;   up the differences (the "include summary" reported the same include paths).
 
@@ -485,7 +485,7 @@ Also set up the lexical preprocessor map."
 (defmethod ede-system-include-path ((this ede-cpp-root-project))
   "Get the system include path used by project THIS."
   (oref this system-include-path))
-  
+
 (defmethod ede-preprocessor-map ((this ede-cpp-root-project))
   "Get the pre-processor map for project THIS."
   (let ((spp (oref this spp-table))
@@ -508,7 +508,7 @@ Also set up the lexical preprocessor map."
 (defmethod ede-system-include-path ((this ede-cpp-root-target))
   "Get the system include path used by project THIS."
   (ede-system-include-path (ede-target-parent this)))
-  
+
 (defmethod ede-preprocessor-map ((this ede-cpp-root-target))
   "Get the pre-processor map for project THIS."
   (ede-preprocessor-map  (ede-target-parent this)))

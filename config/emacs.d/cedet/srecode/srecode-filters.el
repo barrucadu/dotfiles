@@ -30,7 +30,7 @@
 ;;  "Filter some string..."
 ;;  (let* ((tpl (srecode-peek srecode-template))
 ;;	 (dict srecode-inserter-variable-current-dictionary))
-;;    
+;;
 ;;    ))
 
 (condition-case nil

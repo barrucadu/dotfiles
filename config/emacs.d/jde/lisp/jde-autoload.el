@@ -1211,7 +1211,7 @@ Display an interactive call tree of which function call the current
   the callers of interfaces to a function, or calls to a superclass
   which may result in a virtual function call to the subclass should
   not be considered.  In other words, if STRICT is true, then only
-  calls that are definitely to the requested function are considered. 
+  calls that are definitely to the requested function are considered.
 
 \(fn STRICT)" t nil)
 

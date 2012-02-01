@@ -1,4 +1,4 @@
-;; srecode-document-java.srt --- 
+;; srecode-document-java.srt ---
 
 ;; Copyright (C) 2009 Eric M. Ludlam
 

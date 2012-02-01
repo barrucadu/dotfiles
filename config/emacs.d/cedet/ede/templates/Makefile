@@ -17,10 +17,10 @@ DISTDIR=$(top)EDE-$(VERSION)/templates
 
 all: Templates
 
-Templates: 
+Templates:
 	@
 
-tags: 
+tags:
 
 .PHONY: dist
 

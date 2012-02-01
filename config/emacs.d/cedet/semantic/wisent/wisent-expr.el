@@ -31,7 +31,7 @@
 ;; expressions from infix (C like) to prefix notation (Lisp like).
 
 ;;; History:
-;; 
+;;
 
 ;;; Code:
 

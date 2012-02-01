@@ -37,13 +37,13 @@
 ;;; tree has a dummy node as its root with the real tree in the left
 ;;; pointer.  The compare function must take two arguments of the type
 ;;; which is to be stored in the tree and must return non-nil if
-;;; the first argument is "less than" the second argument and nil 
+;;; the first argument is "less than" the second argument and nil
 ;;; otherwise.
 ;;;
 ;;; For example, use
 ;;;    (bintree-create '<)
 ;;; if the tree is going to store integers.
-;;; 
+;;;
 ;;;
 ;;; This package uses the macros in the file elib-node.el and
 ;;; a stack from stack.el.
@@ -110,7 +110,7 @@
 (defun elib-bintree-do-copy (root)
 
   ;; Copy the tree with ROOT as root.  Highly recursive. INTERNAL USE ONLY.
-  (if (null root) 
+  (if (null root)
       nil
     (elib-node-create (elib-bintree-do-copy (elib-node-left root))
 		      (elib-bintree-do-copy (elib-node-right root))
@@ -123,9 +123,9 @@
 
 (defun bintree-create (compare-function)
   "Create an empty binary tree using COMPARE-FUNCTION as the compare function.
-COMPARE-FUNCTION is a function which takes two arguments, A and B, and 
+COMPARE-FUNCTION is a function which takes two arguments, A and B, and
 returns non-nil if A is less than B, and nil otherwise."
-  
+
   (cons 'BINTREE
 	(cons (elib-node-create nil nil nil)
 	      compare-function)))
@@ -194,28 +194,28 @@ Return the element in TREE which matched DATA, or nil if no element matched."
 	nil
       (while upper-node
 	(setq node-data (elib-node-data branch-node))
-	(cond 
+	(cond
 	 ((funcall cmpfun data node-data)	   ; data<node-data => go left
 	  (setq upper-node branch-node
 		branch-node (elib-node-left upper-node)
 		branch 0))
-	 
+
 	 ((funcall cmpfun node-data data)	   ; data>node-data => go right
 	  (setq upper-node branch-node
 		branch-node (elib-node-right upper-node)
 		branch 1))
-	 
-	 (t					   ; This is the node we want 
+
+	 (t					   ; This is the node we want
 						   ; to delete.
 	  (cond
 	   ((null (elib-node-left branch-node))	   ; Empty left node?
 	    (elib-node-set-branch upper-node branch
 				  (elib-node-right branch-node)))
-	   
+
 	   ((null (elib-node-right branch-node))   ; Empty right node?
 	    (elib-node-set-branch upper-node branch
 				  (elib-node-left branch-node)))
-	   
+
 	   (t					   ; Both branches occupied.
 
 	    ;; At this point `branch-node' points at the node we want
@@ -227,7 +227,7 @@ Return the element in TREE which matched DATA, or nil if no element matched."
 	    (while (elib-node-right (elib-node-branch right-node branch))
 	      (setq right-node (elib-node-branch right-node branch)
 		    branch 1))
-	    (elib-node-set-data branch-node 
+	    (elib-node-set-data branch-node
 				(elib-node-data (elib-node-branch right-node
 								  branch)))
 	    (elib-node-set-branch right-node branch
@@ -243,18 +243,18 @@ Matching uses the compare function previously specified in `bintree-create'
 when TREE was created.
 
 If there is no such element in the tree, the value is nil."
-  
+
   (let ((node (elib-bintree-root tree))
 	(compare-function (elib-bintree-cmpfun tree))
 	found)
-    (while (and node 
+    (while (and node
 		(not found))
       (cond
        ((funcall compare-function data (elib-node-data node))
 	(setq node (elib-node-left node)))
        ((funcall compare-function (elib-node-data node) data)
 	(setq node (elib-node-right node)))
-       (t 
+       (t
 	(setq found t))))
 
     (if node
@@ -304,16 +304,16 @@ If there is no such element in the tree, the value is nil."
 (defun bintree-copy (tree)
   "Return a copy of the binary tree TREE.
 
-Note: This function is recursive and might result in an 
+Note: This function is recursive and might result in an
       `max eval depth exceeded' error."
 
-  (let ((new-tree (bintree-create 
+  (let ((new-tree (bintree-create
 		   (elib-bintree-cmpfun tree))))
     (elib-node-set-left (elib-bintree-dummyroot new-tree)
 			(elib-bintree-do-copy (elib-bintree-root tree)))
     new-tree))
 
-  
+
 
 ;;
 ;; Not the fastest way to do this.
@@ -321,7 +321,7 @@ Note: This function is recursive and might result in an
 (defun bintree-flatten (tree)
   "Return a sorted list containing all elements of the binary tree TREE."
 
-  (nreverse 
+  (nreverse
    (let ((treelist nil))
      (elib-bintree-mapc (function (lambda (node)
 				    (setq treelist (cons (elib-node-data node)

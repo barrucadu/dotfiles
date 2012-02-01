@@ -30,7 +30,7 @@ DISTDIR=$(top)Contrib-$(VERSION)
 all: autoloads init setup wy lisp
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -81,7 +81,7 @@ lisp: $(lisp_LISP)
 	@echo "(setq debug-on-error t)" >> $@-compile-script
 	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
-tags: 
+tags:
 
 
 clean:

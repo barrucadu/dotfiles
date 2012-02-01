@@ -106,8 +106,8 @@ read the @inforef{Top, Semantic manual, semantic.info}.
 * Minor Modes::                 Useful minor modes
 * semanticdb::                  Cache your parsed buffers between sessions.
 * Debugging::                   How to debug speed or accuracy issues.
-* GNU Free Documentation License::  
-* Index::                       
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node speedbar
@@ -487,7 +487,7 @@ Completions run through the following filters:
 @item Elements currently in scope
 @item Constants currently in scope
 @item Elements match the @code{:prefix} in the @var{CONTEXT}.
-@item Type of the completion matches the type of the context. 
+@item Type of the completion matches the type of the context.
 Context type matching can identify the following:
 @item No specific type
 @item Assignment into a variable of some type.
@@ -802,7 +802,7 @@ navigable tree, use @kbd{M-x semantic-adebug-bovinate} instead.  You
 can then look to make sure your tag has been properly parsed.
 
 If it has not, then you may have found a parser bug.  To get a feel
-how @semantic{} treats your file, you can enable 
+how @semantic{} treats your file, you can enable
 @kbd{M-x global-semantic-show-unmatched-syntax-mode}.  It will
 underline syntax it cannot parse in red.
 
@@ -1620,7 +1620,7 @@ You can use @kbd{M-x semanticdb-dump-all-table-summary RET} to see the
 list of databases that will be searched from a given buffer.  It
 should include DBs for the directories you expect.  You can follow up
 with @kbd{M-x semanticdb-find-test-translate-path RET} to then make
-sure specific tables from the path are discovered correctly. 
+sure specific tables from the path are discovered correctly.
 
 Alternately, you can get a list of include files @semantic{}
 encountered, but could not find on disk using
@@ -1808,7 +1808,7 @@ need to customize @code{semantic-edits-verbose-flag} to enable some
 friendly debug output.  Additionally using
 @code{semantic-load-enable-semantic-debugging-helpers} to help
 identify possible problem areas by enabling highlight edits mode and
-show parser state mode 
+show parser state mode
 @inforef{Incremental Parser Debugging, ,semantic-langdev.info}
 
 @section Profiling

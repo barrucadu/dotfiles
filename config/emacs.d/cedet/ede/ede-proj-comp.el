@@ -174,12 +174,12 @@ This is used when creating a Makefile to prevent duplicate variables and
 rules from being created.")
 
 (defmethod initialize-instance :AFTER ((this ede-compiler) &rest fields)
-  "Make sure that all ede compiler objects are cached in 
+  "Make sure that all ede compiler objects are cached in
 `ede-compiler-list'."
   (add-to-list 'ede-compiler-list this))
 
 (defmethod initialize-instance :AFTER ((this ede-linker) &rest fields)
-  "Make sure that all ede compiler objects are cached in 
+  "Make sure that all ede compiler objects are cached in
 `ede-linker-list'."
   (add-to-list 'ede-linker-list this))
 
@@ -225,7 +225,7 @@ This will prevent rules from creating duplicate variables or rules."
 	      (not (member sourcetype (oref (car compilers) sourcetype))))
     (setq compilers (cdr compilers)))
   (car-safe compilers))
-				  
+
 (defun ede-proj-find-linker (linkers sourcetype)
   "Return a compiler from the list LINKERS to be used with SOURCETYPE."
   (while (and linkers
@@ -233,7 +233,7 @@ This will prevent rules from creating duplicate variables or rules."
 	      (not (member sourcetype (oref (car linkers) sourcetype))))
     (setq linkers (cdr linkers)))
   (car-safe linkers))
-				  
+
 ;;; Methods:
 (defmethod ede-proj-tweak-autoconf ((this ede-compilation-program))
   "Tweak the configure file (current buffer) to accomodate THIS."

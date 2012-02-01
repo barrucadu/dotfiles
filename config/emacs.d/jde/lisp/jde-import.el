@@ -943,20 +943,20 @@ are not the names of inner or outer classes declared in this buffer."
 
 (defun jde-import-is-included0 (name import0)
   "check single qualified name against a single qualified class name."
-  (and import0 
+  (and import0
        (let* ((len0 (length import0))
 	      (dotstar (eq t (compare-strings import0 (- len0 2) len0 ".*" nil nil nil)))
 	      (import (if dotstar (substring import0 0 (- len0 2)) import0))
 	      (len (length import)))
 	 (or
 	  (string-equal import name)	; name.equals(import)
-	  (and 
+	  (and
 	   (eq t (compare-strings name 0 len import nil nil nil))  ; name.startsWith(import)
 	   (eq t (compare-strings name len (1+ len) "." nil nil )) ; name[len] == "."
 	   ))
 	 )))
 
-(defun jde-import-is-included1 (name classes) 
+(defun jde-import-is-included1 (name classes)
   "check single qualified name against list of qualified classes"
   (and name
        (do* ((imports classes (cdr imports))
@@ -965,9 +965,9 @@ are not the names of inner or outer classes declared in this buffer."
 	   ((or (null import) incl) incl)
 	 )))
 
-(defun jde-import-is-included (names classes) 
+(defun jde-import-is-included (names classes)
   "check single or list of qualified names against qualified classes"
-  (if (listp names) 
+  (if (listp names)
       (do* ((nlist names (cdr nlist))
 	    (name (car nlist) (car nlist))
 	    (incl (jde-import-is-included1 name classes) (jde-import-is-included1 name classes))
@@ -976,13 +976,13 @@ are not the names of inner or outer classes declared in this buffer."
     (jde-import-is-included1 names classes)
     ))
 
-(defun jde-import-filter-inner-imports (qualified-names) 
-  "remove names that are imported by outer classes or some.package.*" 
+(defun jde-import-filter-inner-imports (qualified-names)
+  "remove names that are imported by outer classes or some.package.*"
   (let* ((import-tags (semantic-brute-find-tag-by-class 'include (current-buffer)))
 	 (imported-classes (mapcar (lambda (import-tag) (semantic-tag-name import-tag)) import-tags))
 	 (imports nil))
     (dolist (qnames qualified-names imports)
-      (if (not (jde-import-is-included qnames imported-classes)) 
+      (if (not (jde-import-is-included qnames imported-classes))
 	  (setq imports (cons qnames imports))))
     ))
 

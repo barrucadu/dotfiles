@@ -97,32 +97,32 @@ type directive.
 @end table
 @subsection Specialized Methods
 
-@deffn Method ede-want-any-files-p :AFTER this filenames 
+@deffn Method ede-want-any-files-p :AFTER this filenames
 Return non-@code{nil} if @var{THIS} will accept any files in @var{FILENAMES}.
 @end deffn
 
-@deffn Method ede-want-any-source-files-p :AFTER this filenames 
+@deffn Method ede-want-any-source-files-p :AFTER this filenames
 Return non-@code{nil} if @var{THIS} will accept any source files in @var{FILENAMES}.
 @end deffn
 
-@deffn Method ede-want-any-auxiliary-files-p :AFTER this filenames 
+@deffn Method ede-want-any-auxiliary-files-p :AFTER this filenames
 Return non-@code{nil} if @var{THIS} will accept any aux files in @var{FILENAMES}.
 @end deffn
 
-@deffn Method ede-buffer-header-file :AFTER this filename 
+@deffn Method ede-buffer-header-file :AFTER this filename
 Return a list of file names of header files for @var{THIS} with @var{FILENAME}.
 Used to guess header files, but uses the auxsource regular expression.
 @end deffn
 
-@deffn Method ede-want-file-p :AFTER this filename 
+@deffn Method ede-want-file-p :AFTER this filename
 Return non-@code{nil} if sourcecode definition @var{THIS} will take @var{FILENAME}.
 @end deffn
 
-@deffn Method ede-want-file-source-p :AFTER this filename 
+@deffn Method ede-want-file-source-p :AFTER this filename
 Return non-@code{nil} if @var{THIS} will take @var{FILENAME} as an auxiliary .
 @end deffn
 
-@deffn Method ede-want-file-auxiliary-p :AFTER this filename 
+@deffn Method ede-want-file-auxiliary-p :AFTER this filename
 Return non-@code{nil} if @var{THIS} will take @var{FILENAME} as an auxiliary .
 @end deffn
 

@@ -81,7 +81,7 @@ namespace foo { namespace bar {
 
     int foo_bar_func(int a) { }
 
-  } 
+  }
 }
 
 /* TEST: The VC++ macro hack. */
@@ -99,7 +99,7 @@ int MACROA () {
 /* TEST: Fancy concat/recursive macros */
 int ABtest;
 
-/* TEST: Macro Recursion limits in arguments to a macro. 
+/* TEST: Macro Recursion limits in arguments to a macro.
  * This code is from ALSA, noticed by Yupeng. */
 struct mr_moose_ops {
   int (*mr_moose_disconnect)(struct mr_moose *dev);

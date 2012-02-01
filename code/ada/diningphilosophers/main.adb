@@ -8,7 +8,7 @@ with Ada.Numerics.Float_Random;
 
 procedure Main is
    Num : Integer := 5;
-   
+
    ----- ----- ----- CHOPSTICK ----- ----- -----
 
    protected type Chopstick is
@@ -23,7 +23,7 @@ procedure Main is
       begin
          Taken := True;
       end Get;
-      
+
       entry Release when Taken is
       begin
          Taken := False;
@@ -51,7 +51,7 @@ procedure Main is
                R.Get;
             end;
          end if;
-         
+
          -- Get second chopstick
          if ID mod 2 = 1 then
             begin
@@ -66,34 +66,34 @@ procedure Main is
                R.Get;
             end;
          end if;
-         
+
          -- Eat
          Put (ID);
          Put_Line (": I am eating");
          delay 1.0;
-         
+
          -- Put down
          Put (ID);
          Put_Line (": I am putting down my left chopstick");
          L.Release;
-         
+
          Put (ID);
          Put_Line (": I am putting down my right chopstick");
          R.Release;
-         
+
          -- Think
          Put (ID);
          Put_Line (": I am thinking");
          delay 1.0;
-         
+
          -- Repeat
          Put (ID);
          Put_Line (": I feel hungry again");
       end loop;
    end Philosopher;
-   
+
    C1, C2, C3, C4, C5 : aliased Chopstick;
-   
+
    P1 : Philosopher (1, C1'access, C2'access);
    P2 : Philosopher (2, C2'access, C3'access);
    P3 : Philosopher (3, C3'access, C4'access);

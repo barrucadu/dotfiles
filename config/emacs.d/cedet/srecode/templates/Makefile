@@ -18,13 +18,13 @@ DISTDIR=$(top)srecode-$(VERSION)/templates
 
 all: templates document
 
-templates: 
+templates:
 	@
 
-document: 
+document:
 	@
 
-tags: 
+tags:
 
 .PHONY: dist
 

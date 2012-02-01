@@ -282,7 +282,7 @@ instance."
 		(setq buffer-file-coding-system cs))
 	      ;; Old way - write file.  Leaves message behind.
 	      ;;(write-file cfn nil)
-	      
+
 	      ;; New way - Avoid the vast quantities of error checking
 	      ;; just so I can get at the special flags that disable
 	      ;; displaying random messages.

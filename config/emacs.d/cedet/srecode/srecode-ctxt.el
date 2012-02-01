@@ -24,7 +24,7 @@
 ;; Manage context calculations for Semantic Recoder.
 ;;
 ;; SRecode templates are always bound to a context.  By calculating
-;; the current context, we can narrow down the selection of possible 
+;; the current context, we can narrow down the selection of possible
 ;; templates to something reasonable.
 ;;
 ;; Alternately, code here will find a context for templates that
@@ -75,7 +75,7 @@ Assume that what we want to insert next is based on what is just
 before point.  If there is nothing, then assume it is whatever is
 after point."
   ;; @todo - ADD BOUNDS TO THE PREV/NEXT TAG SEARCH
-  ;;         thus classdecl "near" stuff cannot be 
+  ;;         thus classdecl "near" stuff cannot be
   ;;         outside the bounds of the type in question.
   (let ((near (semantic-find-tag-by-overlay-prev))
 	(prot nil)
@@ -177,7 +177,7 @@ This might add the following:
 	  (cc srecode-insertion-start-context)
 	  ;(context (oref template context))
 	  )
-  
+
 ;      (when (and cc
 ;		 (null (string= (car cc) context))
 ;		 )
@@ -190,7 +190,7 @@ This might add the following:
 ;	;; at the end.
 ;	;;
 ;	;; @todo -
-;	
+;
 ;	)
 
       ;; The various context all have different features.

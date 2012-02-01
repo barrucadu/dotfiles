@@ -27,7 +27,7 @@
 ;;;; Boston, MA 02111-1307, USA
 ;;;;
 ;;;; Author: Inge Wallin
-;;;; 
+;;;;
 
 ;;; Commentary:
 
@@ -36,8 +36,8 @@
 ;;; (elt node 1) as the right pointer
 ;;; (elt node 2) as the data
 ;;;
-;;; Some types of trees, e.g. AVL trees, need bigger nodes, but 
-;;; as long as the first three parts are the left pointer, the 
+;;; Some types of trees, e.g. AVL trees, need bigger nodes, but
+;;; as long as the first three parts are the left pointer, the
 ;;; right pointer and the data field, these macros can be used.
 ;;;
 
@@ -91,7 +91,7 @@
 (defmacro elib-node-branch (node branch)
 
   ;; Get value of a branch of a node.
-  ;; 
+  ;;
   ;; NODE is the node, and BRANCH is the branch.
   ;; 0 for left pointer, 1 for right pointer and 2 for the data."
   `(aref ,node ,branch))

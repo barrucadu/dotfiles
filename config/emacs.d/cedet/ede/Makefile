@@ -32,7 +32,7 @@ DISTDIR=$(top)EDE-$(VERSION)
 all: autoloads init ede proj-project projects aux-lisp ede.info EDE_Templates
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -104,7 +104,7 @@ ede.info: $(ede_info_TEXINFOS)
 EDE_Templates:
 	$(MAKE) -C templates
 
-tags: 
+tags:
 	$(MAKE) -C templates/ $(MFLAGS) $@
 
 
