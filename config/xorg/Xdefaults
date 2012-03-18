@@ -1,4 +1,4 @@
-!! Fonts
+!!! Fonts
 #define FONT           xft:DejaVu Sans Mono:pixelsize=11:antialias=true:autohinting=true
 #define FONT_BOLD      xft:DejaVu Sans Mono:bold:pixelsize=11:antialias=true:autohinting=true
 #define FONT_ITALIC    xft:DejaVu Sans Mono:italic:pixelsize=11:antialias=true:autohinting=true
@@ -54,6 +54,7 @@ URxvt*tintColor:         white
 URxvt*internalBorder:    0
 URxvt.imLocale:          en.GB.UTF-8
 URxvt.iso14755_52:       0
+URxvt.letterSpace:       -1
 
 !! Emacs
 Emacs*font:               DejaVu Sans Mono-8
