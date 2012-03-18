@@ -2,13 +2,7 @@
 
 # X
 
-# Keyboard
-setxkbmap gb
-setxkbmap -option compose:rctrl
 setxkbmap -option terminate:ctrl_alt_bksp
-xmodmap -e "clear Mod4"
-
-# Resources
 xsetroot -cursor_name left_ptr
 xrdb -load ~/projects/home/config/xorg/Xdefaults
 
