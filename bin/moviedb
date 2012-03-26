@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/home/barrucadu/video/movies" || echo $MOVIEPATH`
+export MOVIEPATH=`[ "$MOVIEPATH" = "" ] && echo "/share/eihort/movies" || echo $MOVIEPATH`
 export MOVIEPLAYER=`[ "$MOVIEPLAYER" = "" ] && echo "mplayer" || echo $MOVIEPLAYER`
 
 function help ()
