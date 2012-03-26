@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+java -jar "/home/barrucadu/projects/tagger/tagger/dist/tagger.jar" $@
+
