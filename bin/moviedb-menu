@@ -20,10 +20,10 @@ function playfilm ()
     director=`moviedb query director $1`
     genres=`moviedb query genre $1`
     year=`moviedb query year $1`
-    
+
     message="Name:     $1\nFile:     $file\nDirector: $director\nGenre:    $genres\nYear:     $year\n-\nPress enter to play."
     play=`choice $message true`
-    
+
     if [[ "$play" != "" ]]; then
 	moviedb query play $1 &>/dev/null &
     fi

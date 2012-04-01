@@ -1,5 +1,5 @@
 ;;; wisent-ruby.el: Lexer and parser support for wisent
-;;; ruby grammar. 
+;;; ruby grammar.
 
 ;;; Copyright (C) 2007 Daniel Debertin (debertin@gmail.com)
 
@@ -29,7 +29,7 @@
 ;; derivation and "intellisense mode". Work on these items is
 ;; ongoing, but feel free to contact the author if you would like
 ;; to contribute to wisent-ruby's development.
-;; 
+;;
 
 (require 'semantic)
 (condition-case nil
@@ -218,14 +218,14 @@
 	  (setq semantic-lex-end-point (point))))
     (lex-token-at-pt (word-at-point) 'forward-sexp 1)
     (setq semantic-lex-end-point (point))))
-    
+
 (define-lex-regex-analyzer semantic-lex-ruby-newline
   "Detect newlines"
   "\\s-*\n+\\s-*"
   (goto-char (match-end 0))
   (semantic-lex-push-token
    (semantic-lex-token 'NEWLINE (1- (point)) (point))))
-		 
+
 ;; Lexer support functions
 (defun lex-token-at-pt (type forwardfn &rest fw-args)
   "Eat and lex the token at point, leave point at the end of the token"
@@ -306,7 +306,7 @@
 
 (defun set-tag-protection (sym level)
   nil)
-	   
+
 (defun variable-type (var)
   "Do the same thing as semantic-lex-ruby-variables, but as a function, not a lexer"
   (cond ((string-match "^@@" var)

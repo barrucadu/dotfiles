@@ -10,7 +10,7 @@ fi
 for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
     eval PR_$color='$terminfo[bold]$fg[${(L)color}]'
     eval PR_LIGHT_$color='$fg[${(L)color}]'
-    
+
     export PR_$color
     export PR_LIGHT_$color
 done
@@ -49,27 +49,27 @@ function livecd()
 {
     LIVECDDIR=$1
     REPOS=(core)
-    
+
     mkdir -p $LIVECDDIR/livecd
     cd $LIVECDDIR
-    
+
     ##### SYNC PACKAGES
-    
+
     mkdir -p $LIVECDDIR/livecd/arch/paccache
-    
+
     for repo in $REPOS; do
         showmsg "Downloading contents of $repo..."
         runcmd "Could not synchronise packages in $repo." rsync -avz --delete archhurd.org::repos/$repo .
         cp -a $repo $LIVECDDIR/livecd/arch/paccache
     done
-    
+
     ##### INSTALL PACKAGES & INITSCRIPTS
-    
+
     showmsg "Installing packages..."
-    
+
     mkdir -p livecd/var/lib/pacman/
     mkdir -p livecd/var/log/
-    
+
     echo "[options]
 RootDir     = ${LIVECDDIR}/livecd/
 DBPath      = ${LIVECDDIR}/livecd/var/lib/pacman/
@@ -106,15 +106,15 @@ Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
         runcmd "Could not pull initscripts.git." git clone --branch=livecd git://archhurd.org/initscripts.git
         pushd initscripts/
     fi
-    
+
     export DESTDIR=$LIVECDDIR/livecd
     runcmd "Could not install initscripts." ./install.sh
     popd
 
     ##### SETUP
-    
+
     showmsg "Installing setup script"
-    
+
     if [[ -d setup ]]; then
         pushd setup
         runcmd "Could not pull setup.git." git pull origin
@@ -125,7 +125,7 @@ Server = file:///arch/paccache/$repo" >> $LIVECDDIR/livecd/etc/pacman-mnt.conf
 
     runcmd "Could not install setup."  cp * ${LIVECDDIR}/livecd/arch/
     popd
-    
+
     ##### BUILD LIVECD
 
     showmsg "Building LiveCD..."
@@ -145,13 +145,13 @@ Some useful commands for this livecd include:
         - read a short intro to translators
 
 Happy Hurding!" > ${LIVECDDIR}/livecd/etc/motd
-    
+
     runcmd "Failed to copy GRUB files." cp ${LIVECDDIR}/livecd/lib/grub/i386-pc/stage2_eltorito ${LIVECDDIR}/livecd/boot/grub/
 
     runcmd "Failed to make /ftp:" touch ${LIVECDDIR}/livecd/ftp:
 
     runcmd "Failed to copy skel to /root" cp ${LIVECDDIR}/livecd/etc/skel/.* ${LIVECDDIR}/livecd/root/
-    
+
     echo "timeout   300
 default   0
 color light-blue/black light-cyan/blue
@@ -166,9 +166,9 @@ title  Memtest86+
 root   (cd)
 kernel /boot/memtest86+/memtest.bin
 " > $LIVECDDIR/livecd/boot/grub/menu.lst
-    
+
     runcmd "Failed to build ISO file." mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -V "Arch Hurd" -o ahurd.iso $LIVECDDIR/livecd
-    
+
     showmsg "Done. ISO built as ${LIVECDDIR}/ahurd.iso."
 
     shownote "For official livecds, do the following:"
@@ -179,11 +179,11 @@ kernel /boot/memtest86+/memtest.bin
 function qemu()
 {
     IMAGEDIR=$1
-    
+
     mkdir -p $IMAGEDIR
 
     ##### MAKE & MOUNT IMAGE
-    
+
     showmsg "Creating image..."
 
     runcmd "Could not create image" qemu-img create -f raw $IMAGEDIR/ahurd.img 10G
@@ -222,7 +222,7 @@ function hdd()
     fi
 
     ##### MAKE & MOUNT FILESYSTEM
-    
+
     if $QEMU; then
 	      runcmd "Could not format partition" sudo mkfs.ext2 -b 4096 -I 128 -o hurd $PARTDEV 2610480
     else
@@ -236,7 +236,7 @@ function hdd()
     sudo mkdir -p $MNTDIR/var/lib/pacman/
     sudo mkdir -p $MNTDIR/var/cache/pacman/pkg/
     sudo mkdir -p $MNTDIR/var/log/
-    
+
     echo "[options]
 RootDir     = ${MNTDIR}/
 DBPath      = ${MNTDIR}/var/lib/pacman/

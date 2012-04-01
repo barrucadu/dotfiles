@@ -32,7 +32,7 @@
 ;;
 
 ;;; History:
-;; 
+;;
 
 (require 'semantic)
 (require 'semantic-skeleton-by)

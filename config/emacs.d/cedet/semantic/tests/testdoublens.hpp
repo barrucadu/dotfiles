@@ -16,7 +16,7 @@ namespace Name1 {
       void publishStuff(int a, int b);
 
       void sendStuff(int a, int b);
-    
+
       Mumble* pMumble;
     };
 

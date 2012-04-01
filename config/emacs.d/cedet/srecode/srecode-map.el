@@ -121,7 +121,7 @@ in the global map."
 Return non-nil if the MAP was changed."
   (let ((entry (srecode-map-entry-for-file map file))
 	(dirty t))
-    (cond 
+    (cond
      ;; It is already a match.. do nothing.
      ((and entry (eq (cdr entry) mode))
       (setq dirty nil))
@@ -272,7 +272,7 @@ if that file is NEW, otherwise assume the mode has not changed."
 	(setq srecode-current-map (srecode-map "SRecode Map"))
 	(message "SRecode map created in non-save mode.")
 	)
-    
+
     ;; 1) Do we even have a MAP or save file?
     (when (and (not srecode-current-map)
 	       (not (file-exists-p srecode-map-save-file)))

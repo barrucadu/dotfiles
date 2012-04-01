@@ -25,7 +25,7 @@ DISTDIR=$(top)semantic-$(VERSION)/doc
 
 all: images grammar-fw.info semantic.info semantic-user.info semantic-appdev.info semantic-langdev.info bovine.info wisent.info
 
-images: 
+images:
 	@
 
 grammar-fw.info: $(semantic-grammar_TEXINFOS)
@@ -49,7 +49,7 @@ bovine.info: $(bovine_info_TEXINFOS)
 wisent.info: $(wisent_info_TEXINFOS)
 	$(MAKEINFO) $<
 
-tags: 
+tags:
 
 
 clean:

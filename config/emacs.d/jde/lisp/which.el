@@ -23,13 +23,13 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-(defvar windows-suffixes 
+(defvar windows-suffixes
   (if (memq system-type (list 'ms-dos 'windows-nt))
       (list ".exe" ".EXE" ".cmd" ".CMD" ".bat" ".BAT" "")
     (list ""))
   "List of suffixes used by Windows executables")
 
-(defun which (exe &optional insert &optional silent) 
+(defun which (exe &optional insert &optional silent)
   "Show the full path name of an executable.
 With a prefix argument, insert the full-path name at point.
 This command searches the directories in `exec-path'."
@@ -42,7 +42,7 @@ This command searches the directories in `exec-path'."
       (or silent (message "%s is %s" exe executable))
       executable)))
 
-(defun which-find-executable (exe directory-list) 
+(defun which-find-executable (exe directory-list)
   "Show the full path name of an executable in DIRECTORY-LIST."
   (catch 'answer
     (mapcar
@@ -57,7 +57,7 @@ windows-suffixes))
      directory-list)
     nil))
 
-(defun which-find-all-executables (exe directory-list) 
+(defun which-find-all-executables (exe directory-list)
   "Show the full path name of an executable in DIRECTORY-LIST."
   (let ((answers))
     (mapcar

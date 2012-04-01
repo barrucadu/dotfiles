@@ -103,12 +103,12 @@ It also describes how Wisent is used with the @semantic{} tool set
 described in the @ref{Top, Semantic Manual, Semantic Manual, semantic}.
 
 @menu
-* Wisent Overview::             
-* Wisent Grammar::              
-* Wisent Parsing::              
-* Wisent Semantic::             
-* GNU Free Documentation License::  
-* Index::                       
+* Wisent Overview::
+* Wisent Grammar::
+* Wisent Parsing::
+* Wisent Semantic::
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node Wisent Overview
@@ -130,7 +130,7 @@ See the @ref{Top, Semantic Manual, , semantic}.
 It benefits from these Bison features:
 
 @itemize @bullet
-@item 
+@item
 It uses a fast but not so space-efficient encoding for the parse
 tables, described in Corbett's PhD thesis from Berkeley:
 @quotation
@@ -138,7 +138,7 @@ tables, described in Corbett's PhD thesis from Berkeley:
 June 1985, Report No. UCB/CSD 85/251.
 @end quotation
 
-@item 
+@item
 For generating the lookahead sets, Wisent uses the well-known
 technique of F. DeRemer and A. Pennello they described in:
 @quotation
@@ -146,11 +146,11 @@ technique of F. DeRemer and A. Pennello they described in:
 October 1982, ACM TOPLS Vol 4 No 4.
 @end quotation
 
-@item 
+@item
 Wisent resolves shift/reduce conflicts using operator precedence and
 associativity.
 
-@item 
+@item
 Parser error recovery is accomplished using rules which match the
 special token @code{error}.
 @end itemize
@@ -223,12 +223,12 @@ exp @equiv{} exp PLUS exp
 
 Says that two groupings of type @samp{exp}, with a @samp{PLUS} token
 in between, can be combined into a larger grouping of type @samp{exp}.
- 
+
 @menu
-* Grammar format::              
-* Example::                     
-* Compiling a grammar::         
-* Conflicts::                   
+* Grammar format::
+* Example::
+* Compiling a grammar::
+* Conflicts::
 @end menu
 
 @node Grammar format, Example, Wisent Grammar, Wisent Grammar
@@ -290,7 +290,7 @@ For example,
 
 Says that two groupings of type @samp{exp}, with a @samp{+} token in
 between, can be combined into a larger grouping of type @samp{exp}.
- 
+
 @cindex grammar coding conventions
 By convention, a nonterminal symbol should be in lower case, such as
 @samp{exp}, @samp{stmt} or @samp{declaration}.  Terminal symbols
@@ -463,14 +463,14 @@ Here is an example to parse simple infix arithmetic expressions.  See
 '(
   ;; Terminals
   (NUM)
-  
+
   ;; Terminal associativity & precedence
   ((nonassoc ?=)
    (left ?- ?+)
    (left ?* ?/)
    (left NEG)
    (right ?^))
-  
+
   ;; Rules
   (input
    ((line))
@@ -671,8 +671,8 @@ information.
 @end table
 
 @menu
-* Grammar Debugging::           
-* Understanding the automaton::  
+* Grammar Debugging::
+* Understanding the automaton::
 @end menu
 
 @node Grammar Debugging
@@ -742,7 +742,7 @@ We will use the following example:
   (wisent-compile-grammar
    '((NUM STR)                          ; %token NUM STR
 
-     ((left ?+ ?-)                      ; %left '+' '-'; 
+     ((left ?+ ?-)                      ; %left '+' '-';
       (left ?*))                        ; %left '*'
 
      (exp                               ; exp:
@@ -1183,11 +1183,11 @@ Normal hook run just after the @var{LR} parser engine terminated.
 @end defvar
 
 @menu
-* Writing a lexer::             
-* Actions goodies::             
-* Report errors::               
-* Error recovery::              
-* Debugging actions::           
+* Writing a lexer::
+* Actions goodies::
+* Report errors::
+* Error recovery::
+* Debugging actions::
 @end menu
 
 @node Writing a lexer
@@ -1593,8 +1593,8 @@ Please @inforef{top, Semantic Grammar Framework Manual, grammar-fw}
 for more information on @semantic{} grammars.
 
 @menu
-* Grammar styles::              
-* Wisent Lex::                  
+* Grammar styles::
+* Wisent Lex::
 @end menu
 
 @node Grammar styles
@@ -1608,11 +1608,11 @@ used with the @semantic{} tool set: the @dfn{Iterative style} and the
 it can be worth a mix of the two styles!
 
 @menu
-* Iterative style::             
-* Bison style::                 
-* Mixed style::                 
-* Start nonterminals::          
-* Useful functions::            
+* Iterative style::
+* Bison style::
+* Mixed style::
+* Start nonterminals::
+* Useful functions::
 @end menu
 
 @node Iterative style, Bison style, Grammar styles, Grammar styles
@@ -1929,7 +1929,7 @@ schedules an incremental re-parse of that data, using the tag's
 reviewed to ensure that the incremental parser will work!}
 
 Things are a little bit different when the grammar is written in Bison
-style.  
+style.
 
 @strong{The @code{reparse-symbol} property is set to the nonterminal
 symbol the rule that explicitly uses @code{EXPANDTAG} belongs to.}
@@ -1996,7 +1996,7 @@ Is a symbol that identifies a lexical token class, like @code{symbol},
 @itemx end
 Are the start and end positions of mapped data in the input buffer.
 @end table
- 
+
 The Wisent's parser doesn't depend on the nature of analyzed input
 stream (buffer, string, etc.), and requires that lexical tokens have a
 different form (@pxref{Writing a lexer}):

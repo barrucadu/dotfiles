@@ -1,4 +1,4 @@
-;; cit-extra-cpp.srt --- 
+;; cit-extra-cpp.srt ---
 
 ;; Copyright (C) 2008 Eric M. Ludlam
 

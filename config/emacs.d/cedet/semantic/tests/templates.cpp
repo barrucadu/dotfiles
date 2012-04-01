@@ -12,7 +12,7 @@ namespace
     if(!(interpreter << arg) || !(interpreter >> result) ||
        !(interpreter >> std::ws).eof())
       throw bad_lexical_cast();
-    
+
     return result;
   }
 }
@@ -96,7 +96,7 @@ Target lexical_cast(Source arg)
   if(!(interpreter << arg) || !(interpreter >> result) ||
      !(interpreter >> std::ws).eof())
     throw bad_lexical_cast();
-    
+
   return result;
 }
 

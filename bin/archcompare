@@ -37,7 +37,7 @@ function syncrepos()
         mkdir -p $ARCHCOMPAREDIR/{linux,hurd}/
 
         chmod 777 $ARCHCOMPAREDIR/ $ARCHCOMPAREDIR/linux $ARCHCOMPAREDIR/hurd
-	
+
         # Make pacman configs
         getpaccfg linux
         getpaccfg hurd
@@ -66,7 +66,7 @@ function prepinfo()
     if [[ -e $ARCHCOMPAREDIR/linux/packages.list ]]; then
         < $ARCHCOMPAREDIR/linux/packages.list cut -d' ' -f2 | sort > $ARCHCOMPAREDIR/linux/names.list
         < $ARCHCOMPAREDIR/linux/packages.list cut -d' ' -f3 | sort > $ARCHCOMPAREDIR/linux/versions.list
-	
+
         < $ARCHCOMPAREDIR/hurd/packages.list cut -d' ' -f2 | sort > $ARCHCOMPAREDIR/hurd/names.list
         < $ARCHCOMPAREDIR/hurd/packages.list cut -d' ' -f3 | sort > $ARCHCOMPAREDIR/hurd/versions.list
     fi
@@ -99,7 +99,7 @@ function versions()
         while read pkg; do
             linux=`grep " $pkg " $ARCHCOMPAREDIR/linux/packages.list | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
             hurd=`grep " $pkg " $ARCHCOMPAREDIR/hurd/packages.list   | sed 's/^\(core\|extra\) //' | cut -d' ' -f2`
-	    
+
             if $([[ "$1" == "o" ]] && [[ `vercmp $hurd $linux` == -1 ]]) || \
                 $([[ "$1" == "n" ]] && [[ `vercmp $hurd $linux` == 1 ]]) || \
                 $([[ "$1" == "d" ]] && [[ `vercmp $hurd $linux` != 0 ]]); then

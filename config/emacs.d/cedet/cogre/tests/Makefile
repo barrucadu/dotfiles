@@ -17,10 +17,10 @@ DISTDIR=$(top)COGRE-$(VERSION)/tests
 
 all: TestFiles
 
-TestFiles: 
+TestFiles:
 	@
 
-tags: 
+tags:
 
 .PHONY: dist
 

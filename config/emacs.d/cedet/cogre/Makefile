@@ -46,7 +46,7 @@ wy: $(wy_SEMANTIC_GRAMMAR)
 	"$(EMACS)" -batch --no-site-file -l grammar-make-script -f semantic-grammar-batch-build-packages $^
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -93,7 +93,7 @@ Mode: $(Mode_LISP)
 cogre.info: $(info_TEXINFOS)
 	$(MAKEINFO) $<
 
-misc: 
+misc:
 	@
 
 .PHONY: hacks
@@ -129,7 +129,7 @@ utests: $(utests_LISP)
 	@echo "(setq debug-on-error t)" >> $@-compile-script
 	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
-icons: 
+icons:
 	@
 
 .PHONY:Tests
@@ -140,7 +140,7 @@ Tests:
 templates:
 	$(MAKE) -C templates
 
-tags: 
+tags:
 	$(MAKE) -C tests/ $(MFLAGS) $@
 	$(MAKE) -C templates/ $(MFLAGS) $@
 

@@ -301,7 +301,7 @@ Optional argument STREAM is the stream of tags for the current buffer."
 	    (setq tables (cdr tables)))
 	  (working-dynamic-status))
 	(working-dynamic-status t))
-      
+
       ;; If enabled automatically rebuild other imenu directory
       ;; indexes based on the same Semantic database
       (or (not semantic-imenu-auto-rebuild-directory-indexes)
@@ -313,7 +313,7 @@ Optional argument STREAM is the stream of tags for the current buffer."
                 (semantic-imenu-rebuild-directory-indexes
                  semanticdb-current-database))
             (setq semantic-imenu-auto-rebuild-running nil)))
-      
+
       (nreverse index))))
 
 (defun semantic-create-imenu-index-1 (stream &optional parent)

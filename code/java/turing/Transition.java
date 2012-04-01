@@ -13,7 +13,7 @@ public class Transition
     this._newsymbol = newsymbol;
     this._newstate  = newstate;
     this._direction = direction;
- } 
+ }
 
   public String getSymbol ()
   {

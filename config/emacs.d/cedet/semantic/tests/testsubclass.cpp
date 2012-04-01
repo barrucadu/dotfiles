@@ -94,7 +94,7 @@ moose deer::alces::createMoose()
   MooseVariableName = createMoose();
 
   doLatinStuff(MooseVariableName);
-  
+
   tmp = this.f// -1-
     // #1# ( "fAlcesBool" "fIsValid" "fLatin" )
     ;
@@ -125,7 +125,7 @@ moose deer::alces::createMoose()
 int someFunction(int mPickle)
 {
   moose mMoose = deer::alces::createMoose();
-  
+
   if (mPickle == 1) {
 
     int mOption1 = 2;
@@ -152,7 +152,7 @@ namespace pub_priv {
   class A{
   private:
     void private_a(){}
-  public: 
+  public:
     void public_a();
   };
 

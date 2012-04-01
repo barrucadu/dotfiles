@@ -42,7 +42,7 @@
     (require 'srecode-map)
     (add-to-list 'srecode-map-load-path tmpdir)
     (srecode-map-update-map t)
-    
+
     ;; We don't call this unless we need it.  Load in the templates.
     (srecode-load-tables-for-mode 'makefile-mode)
     (srecode-load-tables-for-mode 'makefile-mode 'ede)

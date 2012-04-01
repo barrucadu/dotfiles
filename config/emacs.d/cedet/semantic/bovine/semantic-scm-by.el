@@ -57,7 +57,7 @@
 
 (defconst semantic-scm-by--parse-table
   `(
-    (bovine-toplevel 
+    (bovine-toplevel
      (scheme)
      ) ;; end bovine-toplevel
 

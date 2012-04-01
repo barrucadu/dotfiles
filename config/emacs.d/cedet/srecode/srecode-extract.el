@@ -144,7 +144,7 @@ Uses STATE to maintain the current extraction state."
   "Return non-nil if this inserter can extract values."
   nil)
 
-(defmethod srecode-inserter-extract ((ins srecode-template-inserter) 
+(defmethod srecode-inserter-extract ((ins srecode-template-inserter)
 				     start end dict state)
   "Extract text from START/END and store in DICT.
 Return nil as this inserter will extract nothing."
@@ -156,12 +156,12 @@ Return nil as this inserter will extract nothing."
   "Return non-nil if this inserter can extract values."
   'later)
 
-(defmethod srecode-inserter-extract ((ins srecode-template-inserter-variable) 
+(defmethod srecode-inserter-extract ((ins srecode-template-inserter-variable)
 				     start end vdict state)
   "Extract text from START/END and store in VDICT.
 Return t if something was extracted.
 Return nil if this inserter doesn't need to extract anything."
-  (srecode-dictionary-set-value vdict 
+  (srecode-dictionary-set-value vdict
 				(oref ins :object-name)
 				(buffer-substring-no-properties
 				 start end)
@@ -174,7 +174,7 @@ Return nil if this inserter doesn't need to extract anything."
   "Return non-nil if this inserter can extract values."
   'now)
 
-(defmethod srecode-inserter-extract ((ins srecode-template-inserter-section-start) 
+(defmethod srecode-inserter-extract ((ins srecode-template-inserter-section-start)
 				     start end indict state)
   "Extract text from START/END and store in INDICT.
 Return the starting location of the first plain-text match.
@@ -191,7 +191,7 @@ Return nil if nothing was extracted."
 		  (oref ins template) subdict state)
 		 t)
 	     (error nil))
-      
+
       ;; Success means keep this subdict, and also make a new one for
       ;; the next iteration.
       (setq allsubdict (cons subdict allsubdict))
@@ -208,7 +208,7 @@ Return nil if nothing was extracted."
   "Return non-nil if this inserter can extract values."
   'now)
 
-(defmethod srecode-inserter-extract ((ins srecode-template-inserter-include) 
+(defmethod srecode-inserter-extract ((ins srecode-template-inserter-include)
 				     start end dict state)
   "Extract text from START/END and store in DICT.
 Return the starting location of the first plain-text match.

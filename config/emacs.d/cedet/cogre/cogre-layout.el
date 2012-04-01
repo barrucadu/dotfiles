@@ -60,7 +60,7 @@ This function depends on graphviz `dot' program."
 	))
     ;; Get stuff in the graph.
     (setq elts (semantic-tag-get-attribute (car tags) :members))
-    
+
     ;; Loop over the tags.
     (dolist (E elts)
       (when (semantic-tag-of-class-p E 'node)
@@ -102,6 +102,6 @@ This function depends on graphviz `dot' program."
     ;; Refresh the graph.
     (cogre-refresh)
     ))
-  
+
 (provide 'cogre-layout)
 ;;; cogre-layout.el ends here

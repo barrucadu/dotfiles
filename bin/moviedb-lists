@@ -8,7 +8,7 @@ function play()
 	$MOVIEPLAYER "$PLAYLISTPATH/$1.m3u" &>/dev/null &
     else
 	return 2
-    fi    
+    fi
 }
 
 function list()

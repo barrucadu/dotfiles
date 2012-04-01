@@ -10,7 +10,7 @@ local
     (* Divide a list, returning two equal halves *)
     fun divide [] = ([], [])
       | divide [m] = ([], [m])
-      | divide l = 
+      | divide l =
         let
             val lena = (length l) div 2;
             val lenb = (length l) - lena;

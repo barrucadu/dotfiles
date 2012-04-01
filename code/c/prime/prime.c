@@ -18,7 +18,7 @@ int main()
 	while(sieve[p] == 1) ++p;
 	for(i = 1; i * p < MAXPRIME; ++i) sieve[i * p] = 1;
 	++n;
-	
+
 	if(n == 1000)     printf("The 1000th     prime number is %i\n", p);
 	if(n == 10000)    printf("The 10000th    prime number is %i\n", p);
 	if(n == 100000)   printf("The 100000th   prime number is %i\n", p);

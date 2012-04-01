@@ -45,9 +45,9 @@ while read url; do
         sed "s%data:$CHUNKMIME;base64,%%" | \
         tail -n1 | \
         sed "s/: Unsupported scheme \`data'.//" > $tmpfile-part.b64
-    
+
     base64 -d $tmpfile-part.b64 > $tmpfile-part
-    
+
     cat $tmpfile-part >> $file.zip
     rm $tmpfile-part
 done

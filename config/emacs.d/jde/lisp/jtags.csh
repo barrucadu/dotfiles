@@ -11,12 +11,12 @@
 #
 # Options:   -h  Print usage.
 #
-#            -srcdir  Path of top-level directory containing 
+#            -srcdir  Path of top-level directory containing
 #                     Java source(*.java) files to be tagged.
 #                     If omitted, this script tags files in
 #                     the working directory and its subdirectories.
 #
-# By:        Paul Kinnucan 
+# By:        Paul Kinnucan
 #            The MathWorks, Inc.
 #	     paulk@mathworks.com
 #
@@ -31,7 +31,7 @@ set java_dir = .
 
 # Process command line parameters.
 foreach arg ($*)
-    switch ($arg) 
+    switch ($arg)
 	case -h:
 	case -help:
         case -usage:
@@ -58,7 +58,7 @@ if ( $1 == "-h" || $1 == "-help" || $1 == "-usage" ) then
     echo ""
     echo "This command tags all public classes, interfaces,"
     echo "methods, and variables in the specified Java source"
-    echo "hierarchy. If you do not specify a source directory," 
+    echo "hierarchy. If you do not specify a source directory,"
     echo "jtags searches the current directory and its"
     echo "subdirectories."
     echo ""
@@ -140,10 +140,10 @@ set var1 = "/$var1a$var1b/\4/"
 set var2a = ".*$class_type$ws*\(\[$ws*\]$ws*\)*$identifier"
 set var2b = "$ws*\(=\|;\)"
 set var2 = "/$var2a$var2b/\3/"
-  
+
 # Delete the old TAGS file.
 # Note: the old file must be deleted because we have to run
-# etags in append mode. If we don't remove the old file, 
+# etags in append mode. If we don't remove the old file,
 # etags will append everything to the old file.
 
 if ( -e $java_dir/TAGS ) then
@@ -151,7 +151,7 @@ if ( -e $java_dir/TAGS ) then
     echo "Removed old TAGS file."
 endif
 
-# Use find to recurse through the source hierarchy, 
+# Use find to recurse through the source hierarchy,
 # finding every java source file.
 # Use xargs to apply etags to the source files.
 # Note that xargs may invoke etags multiple
@@ -162,7 +162,7 @@ endif
 echo "Tagging classes and constructors"
 find $java_dir \( -name RCS -prune \) -o \( -name CVS -prune \) -o \( -name '*.java' -print \) | xargs  \
 "${etags_dir}etags"  -l none -a -o ${java_dir}/TAGS  \
-"--regex=$class1" "--regex=$class2"  "--regex=$constructor"  
+"--regex=$class1" "--regex=$class2"  "--regex=$constructor"
 
 echo "Tagging methods"
 find $java_dir \( -name RCS -prune \) -o \( -name CVS -prune \) -o \( -name '*.java' -print \) | xargs  \
@@ -221,4 +221,4 @@ find $java_dir \( -name RCS -prune \) -o \( -name CVS -prune \) -o \( -name '*.j
 
 # End of jtags.csh script
 
- 
+

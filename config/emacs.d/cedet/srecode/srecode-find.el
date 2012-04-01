@@ -82,7 +82,7 @@ all template files for that application will be loaded."
 	;; No parent mode, all templates depend on the defaults being
 	;; loaded in, so get that in instead.
 	(srecode-load-tables-for-mode 'default appname)))
-    
+
     ;; Load in templates for our major mode.
     (dolist (f files)
       (let ((mt (srecode-get-mode-table mmode))

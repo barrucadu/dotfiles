@@ -92,7 +92,7 @@ testfiles - which would not changing the tag-data itself but the
 data-locations. But if this option is not nil then for each tag the
 tag-boundaries are included in the output - if the tag is not positionless."
   :group 'semantic-regtest
-  :type 'boolean)  
+  :type 'boolean)
 
 (defcustom semantic-regtest-highlight-tag t
   "*Highlight tag in the source-file.
@@ -173,7 +173,7 @@ test-outputs) then the name of the generated result-file is returned.
 
 The format of the file TEST-SOURCE-FILE.res is described at the command
 `semantic-regtest-cmp-results'. Also how to interpret and use the file
-TEST-SOURCE-FILE.res."  
+TEST-SOURCE-FILE.res."
   (let* ((test-file (expand-file-name test-source-file))
          (ref-output-file (concat test-file ".ro"))
          (test-output-file (concat test-file ".to"))
@@ -221,7 +221,7 @@ The user will be asked for the file-name of the created test-output-file \(see
     (setq file (read-file-name "Test-output: " nil file nil
                                (file-name-nondirectory file)))
     (semantic-regtest-create-output--internal file)))
-  
+
 
 (defun semantic-regtest-create-output--internal (test-output-file)
   "Runs the functions in `semantic-regtest-functions' on every tag in current
@@ -253,12 +253,12 @@ Return the number of tags."
 
     (unless (semantic-active-p)
       (error "Sorry, regression-test are only possible for semantic supported sources!"))
-    
+
     ;; clean the output buffer
     (save-excursion
       (set-buffer buf)
       (erase-buffer))
-    
+
     ;; reparse the whole source-buffer so we have fresh-parsed tags
     (semantic-fetch-tags)
 
@@ -270,7 +270,7 @@ Return the number of tags."
     ;;    |###| <output of print-function-2> |###| ... |###|
     ;; whereas <output of print-function-1> is "<print-function-1>: <print-text>"
     ;; (all in one single line without linebreaks!)
-    
+
     (while (setq tag (semantic-find-tag-by-overlay-next))
       (setq tag-counter (1+ tag-counter))
       (if (not (semantic-tag-with-position-p tag))
@@ -444,10 +444,10 @@ What is the \"semantic\" of such a difference-result-vector:
 If \(a-start = a-end) Then lines \(= tags) between b-start and b-end of
                           FILE-B are missed in FILE-A
 ElseIf \(b-start = b-end) Then lines \(= tags between a-start and a-end are
-                              new in FILE-A (missed in the FILE-B) 
+                              new in FILE-A (missed in the FILE-B)
 Else lines \(= tags between a-start and a-end are parsed differently.
 
-If there are no differences between FILE-A and FILE-B then nil is returned."      
+If there are no differences between FILE-A and FILE-B then nil is returned."
   (require 'ediff)
   ;; we must set ediff-buffer-A, ediff-buffer-B and ediff-buffer-C because
   ;; these buffers are needed by ediff to work
@@ -521,7 +521,7 @@ file-names. See this function for details about the optional argument
                                            (file-name-nondirectory result-file))))
     (semantic-regtest-cmp-results--internal source-file test-file ref-file
                                             result-file use-full-path-name)))
-    
+
 
 (defun semantic-regtest-cmp-results--internal (source-file
                                                test-file
@@ -559,7 +559,7 @@ USE-FULL-PATH-NAME is not nil \(called with a prefix arg) filenames include
 full path-info.
 
 How to interpret and use the created RESULT-FILE:
-  
+
 For all differences reported in RESULT-FILE the number N of the each missed,
 new or differently parsed tag is printed out. With this number you can
 - use `semantic-regtest-goto-tag' to jump to the N-th tag in the
@@ -573,7 +573,7 @@ new or differently parsed tag is printed out. With this number you can
         (test-buffer (find-file-noselect (expand-file-name test-file)))
         (ref-buffer (find-file-noselect (expand-file-name ref-file)))
         a-start a-end a-diff-data b-start b-end b-diff-data output-str)
-    
+
     (with-temp-file (expand-file-name result-file)
       (erase-buffer)
       (insert "Semantic grammar/parser regression-test\n\n")
@@ -590,27 +590,27 @@ new or differently parsed tag is printed out. With this number you can
                           ref-file
                         (file-name-nondirectory ref-file))))
       (insert "\n\n")
-      
+
       (if (null diff-result)
           (insert "No differences!\n")
         ;; evaluating the ediff-result
         (dolist (diff-elem diff-result)
           (setq a-start (aref diff-elem 0)
-                a-end (aref diff-elem 1)                
+                a-end (aref diff-elem 1)
                 a-diff-data (semantic-regtest-convert-difference
                              test-buffer a-start a-end)
-                
+
                 b-start (aref diff-elem 2)
                 b-end (aref diff-elem 3)
                 b-diff-data (semantic-regtest-convert-difference
                              ref-buffer b-start b-end))
-          
+
           ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: The following is just a
           ;; first example how the output of the test-result could look. Maybe
           ;; it would be useful to print out more data about differences - but
           ;; this is not a problem, because we have all data we need in the
           ;; a-diff-data resp. b-diff-data.
-          
+
           (cond ((null a-diff-data) ;; tags are missed
                  (setq output-str
                        (concat "These tags are only in the reference file:\n"
@@ -642,7 +642,7 @@ new or differently parsed tag is printed out. With this number you can
                                  (semantic-regtest-1-diffdata2str b-diff-data
                                                                   "reference"
                                                                   "-r- "))))))
-          
+
           (insert output-str)
           (insert "\n\n"))))
 
@@ -680,7 +680,7 @@ reported by `semantic-regtest-cmp-results'."
   (interactive "e")
   (mouse-set-point e)
   (semantic-regtest-goto-file 'output))
-      
+
 (defun semantic-regtest-open-source-file ()
   "Open the source-file of this button in another window. If the button is a
 tag-number then jump also to this tag."
@@ -692,8 +692,8 @@ tag-number then jump also to this tag."
 tag-number then jump also to this line in the output-file."
   (interactive)
   (semantic-regtest-goto-file 'output))
-      
-    
+
+
 (defun semantic-regtest-goto-file (type)
   "Action function for all clickable buttons in `semantic-regtest-mode'.
 TYPE can be one of the symbols `output' or `source'. In case of the former one
@@ -784,7 +784,7 @@ and the source-file, the test output file and the reference file clickable."
       (error "No reference-file file found in the regtest result!"))
 
     ;; now make all tag-numbers clickable
-    
+
     (goto-char (point-min))
     (while (re-search-forward "\\([0-9]+\\)\\. tag of test file" nil t)
       (add-text-properties (1- (match-beginning 0))
@@ -822,7 +822,7 @@ and the source-file, the test output file and the reference file clickable."
       )
     (set-buffer-modified-p nil)
     (goto-char (point-min))))
-  
+
 
 (define-derived-mode semantic-regtest-mode
   view-mode "se-re-te"

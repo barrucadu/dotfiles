@@ -39,7 +39,7 @@ Adds the following:
 			(semantic-find-tags-by-class 'variable (current-buffer)))
 		)
 	 (common (try-completion "" names)))
-    
+
     (srecode-dictionary-set-value dict "PRENAME" common)
     ))
 
@@ -68,7 +68,7 @@ Adds the following:
 
     ;; Double check the facegroup.
     (setq faceg (or faceg varg))
-    
+
     ;; Setup some variables
     (srecode-dictionary-set-value dict "GROUP" (semantic-tag-name varg))
     (srecode-dictionary-set-value dict "FACEGROUP" (semantic-tag-name faceg))
@@ -97,8 +97,8 @@ Calls `srecode-semantic-apply-tag-to-dict-default' first."
 	  (srecode-dictionary-set-value dict "INTERACTIVE" "  (interactive)\n  ")
 	(srecode-dictionary-set-value dict "INTERACTIVE" ""))
       )
-     
-      
+
+
      )
     ))
 

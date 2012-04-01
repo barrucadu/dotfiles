@@ -32,7 +32,7 @@
 ;; A toplevel project is one where there is no active project above
 ;; it.  Finding the toplevel project involves going up a directory
 ;; till no ede-project-autoload structure matches.
-;; 
+;;
 
 (require 'ede)
 
@@ -85,7 +85,7 @@ of the anchor file for the project."
   (if ede--disable-inode
       (let ((ans nil))
 	;; Try to find the right project w/out inodes.
-	(ede-map-subprojects 
+	(ede-map-subprojects
 	 proj
 	 (lambda (SP)
 	   (when (not ans)
@@ -96,7 +96,7 @@ of the anchor file for the project."
     ;; We can use inodes, so lets try it.
     (let ((ans nil)
 	  (inode (ede--inode-for-dir dir)))
-      (ede-map-subprojects 
+      (ede-map-subprojects
        proj
        (lambda (SP)
 	 (when (not ans)
@@ -404,11 +404,11 @@ is return."
     ;; complex routines, such as smart completion asks this question
     ;; many times, so doing this speeds things up, especially on NFS
     ;; or other remote file systems.
-    
+
     ;; As such, special care is needed to use the hash, and also obey
     ;; the FORCE option, which is needed when trying to identify some
     ;; new file that needs to be created, such as a Makefile.
-    (cond 
+    (cond
      ;; We have a hash-table match, AND that match wasn't the 'nomatch
      ;; flag, we can return it.
      ((and ha (not (eq ha 'nomatch)))

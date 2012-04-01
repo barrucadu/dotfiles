@@ -25,7 +25,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING. If not, write to the
 ;; Free Software Foundation, 675 Mass Ave, Cambridge, MA 0139, USA.
-;; (See sml-mode.el for HISTORY.) 
+;; (See sml-mode.el for HISTORY.)
 
 ;; ====================================================================
 
@@ -168,7 +168,7 @@ inferior ML's running:
     sml         #<process sml>
     mosml       #<process mosml>
     *sml*       #<process sml<2>>
-If you do a \\[sml-send-function] command on some ML source code, 
+If you do a \\[sml-send-function] command on some ML source code,
 what process do you send it to?
 
 - If you're in a process buffer (sml, mosml, or *sml*), you send it to
@@ -191,7 +191,7 @@ use the command \\[sml-buffer] in the interaction buffer of choice.")
 
 (defvar sml-use-command "use \"%s\""
   "*Template for loading a file into the inferior ML process.
-Set to \"use \\\"%s\\\"\" for SML/NJ or Edinburgh ML; 
+Set to \"use \\\"%s\\\"\" for SML/NJ or Edinburgh ML;
 set to \"PolyML.use \\\"%s\\\"\" for Poly/ML, etc.")
 
 (defvar sml-cd-command "OS.FileSys.chDir \"%s\""
@@ -327,7 +327,7 @@ If prefix argument ECHO is set, then it only reports on the current state."
   ;; always obvious to spot it).
   ;;
   ;; Sample messages:
-  ;; 
+  ;;
   ;; Data.sml:31.9-33.33 Error: right-hand-side of clause doesn't agree with function result type [tycon mismatch]
   ;;   expression:  Hstring
   ;;   result type:  Hstring * int
@@ -544,8 +544,8 @@ See variables `sml-use-command'."
 ;; declarations surrounding point will do everyone a favour!
 
 (defun sml-send-function (&optional and-go)
-  "Send current paragraph to the inferior ML process. 
-With a prefix argument AND-GO switch to the sml buffer as well 
+  "Send current paragraph to the inferior ML process.
+With a prefix argument AND-GO switch to the sml buffer as well
 \(cf. `sml-send-region'\)."
   (interactive "P")
   (save-excursion
@@ -560,7 +560,7 @@ considered an ML source file by `sml-load-file'.  Used by these commands
 to determine defaults.")
 
 (defun sml-send-buffer (&optional and-go)
-  "Send buffer to inferior shell running ML process. 
+  "Send buffer to inferior shell running ML process.
 With a prefix argument AND-GO switch to the sml buffer as well
 \(cf. `sml-send-region'\)."
   (interactive "P")
@@ -589,7 +589,7 @@ Set in `sml-load-file' and `sml-cd' commands.
 Used to determine the default in the next `ml-load-file'.")
 
 (defun sml-load-file (&optional and-go)
-  "Load an ML file into the current inferior ML process. 
+  "Load an ML file into the current inferior ML process.
 With a prefix argument AND-GO switch to sml buffer as well.
 
 This command uses the ML command template `sml-use-command' to construct
@@ -691,7 +691,7 @@ Prefix arg AND-GO also means to `switch-to-sml' afterwards."
 
 ;;; PARSING ERROR MESSAGES
 
-;; This should need no modification to support other compilers. 
+;; This should need no modification to support other compilers.
 
 ;; Update the buffer-local error-cursor in proc-buffer to be its
 ;; current proc mark.

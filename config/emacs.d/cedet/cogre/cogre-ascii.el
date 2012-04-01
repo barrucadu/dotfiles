@@ -39,7 +39,7 @@
     (switch-to-buffer (get-buffer-create (concat "*ASCII Graph " name "*")))
     (erase-buffer)
     (kill-all-local-variables)
-    
+
     ;; Reset the drawing routines.
     (let ((cogre-node-rebuild-method 'cogre-node-rebuild-ascii)
 	  ;; Need this for rendering.
@@ -107,7 +107,7 @@ Always make the width 2 greater than the widest string."
       (let ((sl (car slots)))
 	(setq rect (cons (cogre-horizontal-box-line width)
 			 rect))
-	
+
 	(while sl
 	  (setq rect (cons (cogre-string-with-edges (car sl) width align)
 			   rect)
@@ -147,7 +147,7 @@ tweaks the faces."
 	))
     ;; Return it.
     rect))
-    
+
 (defmethod cogre-node-rebuild-ascii ((node cogre-note))
   "Create the text rectangle for the COGRE package.
 Calls the base method, and takes the return argument and

@@ -98,7 +98,7 @@ MODE - The mode of this buffer.  If not declared yet, guess."
 
     (when mode
       (srecode-dictionary-set-value dict "MAJORMODE" mode))
-	  
+
     ))
 
 (provide 'srecode-srt)

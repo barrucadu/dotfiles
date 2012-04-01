@@ -39,7 +39,7 @@ DISTDIR=$(top)semantic-$(VERSION)
 all: autoloads init semantic utils Database tools Analyzer Languages metagrammar tests example scripts wisent Tests Symref Documentation ctags bovinator
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -156,10 +156,10 @@ tests: $(tests_LISP)
 	@echo "(setq debug-on-error t)" >> $@-compile-script
 	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
-example: 
+example:
 	@
 
-scripts: 
+scripts:
 	@
 
 .PHONY:wisent
@@ -186,7 +186,7 @@ ctags:
 bovinator:
 	$(MAKE) -C bovine
 
-tags: 
+tags:
 	$(MAKE) -C wisent/ $(MFLAGS) $@
 	$(MAKE) -C tests/ $(MFLAGS) $@
 	$(MAKE) -C symref/ $(MFLAGS) $@

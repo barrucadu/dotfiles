@@ -44,7 +44,7 @@
 
   ;; MAKE A GRAPH
   (cogre "TEST GRAPH")
-  
+
   (when (not (string= "*Graph TEST GRAPH*" (buffer-name)))
     (error "Failed to create graph"))
 
@@ -57,12 +57,12 @@
   (cogre-render-buffer cogre-graph)
 
   (cedet-utest-log " * Create Nodes ... pass")
-  
+
   ;; Create a link.
   (cogre-utest-link-at 2 2 12 12 'cogre-aggregate)
 
   (cogre-render-buffer cogre-graph)
-  
+
   (cedet-utest-log " * Create links ... pass")
 
   ;; Move Test
@@ -105,7 +105,7 @@ Link is created with the specified TYPE."
   (push-mark (point) t)
   (let ((cogre-default-link type))
     (picture-goto-coordinate x2 y2)
-    
+
     (call-interactively 'cogre-new-link)
     ))
 
@@ -136,7 +136,7 @@ Link is created with the specified TYPE."
 	  (unless (cogre-find-node-by-name C)
 	    (error "Could not find expected node %S" C)))
 	))))
-    
+
 
 (provide 'cogre-utest)
 ;;; cogre-utest.el ends here

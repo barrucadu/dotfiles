@@ -101,13 +101,13 @@ use the mailing list cedet-semantic@@sourceforge.net via the URL:
 @url{http://lists.sourceforge.net/lists/listinfo/cedet-semantic}
 
 @menu
-* Overview::                    
-* Installation/Basic Configuration::                
-* Semantic manuals::            
-* Semantic Internals::          
-* Glossary::                    
-* GNU Free Documentation License::  
-* Index::                       
+* Overview::
+* Installation/Basic Configuration::
+* Semantic manuals::
+* Semantic Internals::
+* Glossary::
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node Overview
@@ -127,19 +127,19 @@ To know how to use applications enabled by @semantic{},
 @inforef{top, the User's Guide, semantic-user}.
 
 If you are an application developer and need to know the functions and
-concepts, 
+concepts,
 @inforef{top, the Application Development Manual, semantic-appdev}.
 
 To support a new language,
 @inforef{top, the Language Support Developer's Guide, semantic-langdev}.
 
 To use the grammar writing environment, and write in the rule based
-language, 
+language,
 @inforef{top, the Grammar Framework Manual, grammar-fw}.
 
 For details on the original @semantic{} @acronym{LL} parser,
 @inforef{top, the Bovine Parser Manual, bovine}.
- 
+
 For details on the Bison-like @acronym{LALR} parser,
 @inforef{top, the Wisent Parser Manual, wisent}.
 

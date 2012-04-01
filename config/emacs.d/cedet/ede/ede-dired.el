@@ -23,7 +23,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; This provides a dired interface to dired, allowing users to modify
 ;; their project file by adding files (or whatever) directly from a
 ;; dired buffer.
@@ -48,7 +48,7 @@
   (define-key ede-dired-keymap ".s" 'ede-speedbar)
   (define-key ede-dired-keymap ".C" 'ede-compile-project)
   (define-key ede-dired-keymap ".d" 'ede-make-dist)
-  
+
   (easy-menu-define
    ede-dired-menu ede-dired-keymap "EDE Dired Minor Mode Menu"
    '("Project"

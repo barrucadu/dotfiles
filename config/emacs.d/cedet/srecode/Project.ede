@@ -3,7 +3,7 @@
 (ede-proj-project "SRecode"
   :name "srecode"
   :file "Project.ede"
-  :targets (list 
+  :targets (list
    (ede-proj-target-aux "Misc"
     :name "Misc"
     :path ""

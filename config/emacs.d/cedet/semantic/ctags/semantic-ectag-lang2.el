@@ -63,7 +63,7 @@ These tags can be used as the argument list for a C function."
 	      ;; Two words, but first is "CLASS" or something.
 	      (semantic-tag-new-variable
 	       ""
-	       (semantic-tag-new-type 
+	       (semantic-tag-new-type
 		(match-string 2 S)
 		(match-string 1 S) nil nil)))
 	     ((string-match
@@ -71,7 +71,7 @@ These tags can be used as the argument list for a C function."
 	      ;; Three words, first is "CLASS" or something.
 	      (semantic-tag-new-variable
 	       (match-string 3 S)
-	       (semantic-tag-new-type 
+	       (semantic-tag-new-type
 		(match-string 2 S)
 		(match-string 1 S) nil nil)))
 	     ((string-match "^\\(\\w+\\)\\s-+\\(\\w+\\)$" S)
@@ -82,7 +82,7 @@ These tags can be used as the argument list for a C function."
 	     ((string-match "^\\(\\w+\\)$" S)
 	      ;; Only one word is a simple type.
 	      (semantic-tag-new-variable
-	       "" 
+	       ""
 	       (match-string 1 S)))
 	     ))
       (setq args (cons arg args))

@@ -39,13 +39,13 @@ This package includes:
 
    -- jde-run.el
 
-   -- jde-db.el 
+   -- jde-db.el
 
    -- speedbar.el
 
    -- shell script that tags java files,
       using the etags program. This script
-      comes in two versions, one for 
+      comes in two versions, one for
       csh and the other for bash shells.
 
 It requires:
@@ -63,8 +63,8 @@ It requires:
 
       This is required for syntax highlighting.
 
-   -- Java Development Kit (jdk) 
-     
+   -- Java Development Kit (jdk)
+
       (available from
         http://www.javasoft.com/products/jdk/1.1/index.html)
 
@@ -103,12 +103,12 @@ c:/JDK1.1/docs. Then, you would add
 
 to your .emacs file.
 
-If you are using the bash shell, you should 
+If you are using the bash shell, you should
 specify this either by setting the SHELL
 environment variable or the elisp variable
 shell-file-name to bash. For example, for
 Win95, enter
-   
+
    set shell=bash
 
 in your autoexec.bat file or
@@ -118,7 +118,7 @@ in your autoexec.bat file or
 in your .emacs file.
 
 If you are using bash on Windows 95 or Windows/NT, you should
-also put 
+also put
 
    (setq shell-command-switch "-c")
 
@@ -157,7 +157,7 @@ RUNNING AN APPLICATION
 
 Choose "Run App" To run an application. The JDE runs either
 the class previously specified with the jde-run-set-app
-command (see below) or the class file corresponding to the 
+command (see below) or the class file corresponding to the
 source file in the current buffer. In the latter case,
 the JDE determines the class's package from the source
 in the current buffer.
@@ -167,7 +167,7 @@ SPECIFYING THE APP MAIN CLASS
 Execute M-x jde-run-set-app to specify your application's
 main class (the class with the main() method). Don't forget
 to qualify the class name if the main class is a member of
-a package. 
+a package.
 
 SPECIFYING A JAVA INTERPRETER
 
@@ -189,7 +189,7 @@ SPECIFYING RUN OPTIONS
 To specify run options supported by the Java interpreter,
 enter
 
-  M-x jde-run-set-args 
+  M-x jde-run-set-args
 
 and enter the options as you would on the command line,
 e.g.,
@@ -218,7 +218,7 @@ To debug an application:
    jde-run-set-app command (you need only do this
    once) or by switching to the buffer that contains
    the source file for the main class.
- 
+
 The JDE starts the debugger and opens a debugger
 interaction window. Open the source file where
 you want to set your first break and position
@@ -246,7 +246,7 @@ any of the following methods
 
 For a list of jdb commands, type help at the
 jdb command line. For a list of gud-mode key bindings,
-see below. Note that you can step, set/clear breakpoints, 
+see below. Note that you can step, set/clear breakpoints,
 etc, from either the debugger window or from a source window.
 For example, to step from a source window,
 type C-x C-a C-s or select step from the
@@ -284,7 +284,7 @@ TIP:
 
 Specify source paths in your .emacs file to avoid having
 to set them every time you start a session. For example,
-entering 
+entering
 
 (jde-db-set-source-paths "c:/jdk/src/;c:/java_projects/")
 
@@ -321,14 +321,14 @@ the Java menu.
 
 BROWSING YOUR SOURCE CODE
 
-You can use Emacs' etags facility or the speedbar to browse your 
+You can use Emacs' etags facility or the speedbar to browse your
 Java source code.
 
 To use the speedbar, select Speedbar from the JDE
 menu. The speedbar opens in a separate window, showing
-a tree-structure list of the Java source files in the 
+a tree-structure list of the Java source files in the
 current directory. Click on the + button in front of
-any file. The node for the file expands, showing 
+any file. The node for the file expands, showing
 the methods, class and instance variables, and
 classes defined in that file as children of the
 file node. Click on any method, variable, or class
@@ -339,7 +339,7 @@ first construct a TAGS file that indexes every symbol
 in your source code. The JDE package contains two shell
 scripts that you can use to tag your source code, one
 for csh shells and the other for bash. The bash version
-is called jtags; the csh version, jtags.csh. 
+is called jtags; the csh version, jtags.csh.
 
 To tag your source code, first copy the appropriate
 shell script to a directory in your Emacs path. Then
@@ -347,11 +347,11 @@ start a shell (M-x shell). Change to the top-level
 directory containing your source code and then
 enter jtags. The jtags script will tag every .java
 file in the current directory and in all descendants
-of the current directory, storing the result in a 
+of the current directory, storing the result in a
 file called TAGS in the top-level directory.
 
 To find the definition of a symbol, put your cursor
-anywhere in the symbol and enter M-x . Emacs 
+anywhere in the symbol and enter M-x . Emacs
 responds by locating and opening (if necessary) the
 file containing the definition and positioning the
 point at the definition. (The first time you type

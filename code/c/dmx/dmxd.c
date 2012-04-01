@@ -40,7 +40,7 @@ void sendDMX()
   int m;
 
   m=*maxchannel;
-  for (i=0;(i<100) && !channels[i] && (i < m - 6);i++); 
+  for (i=0;(i<100) && !channels[i] && (i < m - 6);i++);
 
   data[0] = 4; /* Start of data, number of leading 0 and 6 channels */
   data[1] = i+1;
@@ -79,7 +79,7 @@ void sendDMX()
       i+=7;
     }
   }
-  
+
   for(;i < m;i++) {
     data[0] = 3; /* send one channel */
     data[1] = channels[i];
@@ -112,7 +112,7 @@ int initUSB()
 
 void initSHM()
 {
-    
+
     shmid=shmget(0x56444D58,sizeof(int)*522,IPC_CREAT | 0666);
     shm=(int *)shmat(shmid,NULL,0);
     memset(shm,0,sizeof(int)*522);
@@ -177,7 +177,7 @@ int main() {
 	        select(0,NULL,NULL,NULL,&diff);
 	        gettimeofday(&now,NULL);
 	        timediff(&diff,&next,&now);
-	    };		    
+	    };
 	}
 	memset(channels,0,512*sizeof(int));
 	*maxchannel=512;

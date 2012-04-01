@@ -477,12 +477,12 @@ integral_type
   | UINT
   | LONG
   | ULONG
-  | CHAR 
+  | CHAR
   ;
 
 predefined_type
-  : BOOL 
-  | BYTE 
+  : BOOL
+  | BYTE
   | CHAR
   | DECIMAL
   | DOUBLE
@@ -897,7 +897,7 @@ event_declaration
   : attrs_opt modifiers_opt EVENT type variable_declarators SEMICOLON
     (VARIABLE-TAG $5 $4 nil 'typemodifiers (cons "event" $2))
   | attrs_opt modifiers_opt EVENT type qualified_name event_accessor_list
-    (FUNCTION-TAG $5 $4 nil 'typemodifiers (cons "event" $2)) 
+    (FUNCTION-TAG $5 $4 nil 'typemodifiers (cons "event" $2))
   ;
 
 event_accessor_list
@@ -927,7 +927,7 @@ remove_accessor_declaration
   | attrs_opt REMOVE SEMICOLON
     (identity $2)
   ;
-    
+
 ;;--------------------------------------------------
 ;; *** Class body declarations: Indexer
 ;;--------------------------------------------------
@@ -994,7 +994,7 @@ operator_declaration
 operator_declarator ;; (name type arglist)
  ;; operator overload
   : type OPERATOR overloadable_operator formal_parameter_list
-    (list $3 $1 $4) 
+    (list $3 $1 $4)
  ;; conversion operators
   | OPERATOR type formal_parameter_list
     (list (concat "(" $2 ")") $2 $3)
@@ -1239,7 +1239,7 @@ local_variable_declaration
  ;; this could include out of scope variables,
  ;; but it's used to much that I think it's worth it
   | FOREACH PAREN_BLOCK
-    (EXPANDFULL $2 local_foreach_declaration) 
+    (EXPANDFULL $2 local_foreach_declaration)
   ;
 
 local_foreach_declaration

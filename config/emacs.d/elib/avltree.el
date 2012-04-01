@@ -26,10 +26,10 @@
 ;;;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;;;; Boston, MA 02111-1307, USA
 ;;;;
-;;;; Initial author:	 Thomas Bellman	       
-;;;;			 Lysator Computer Club 
-;;;;		 	 Linkoping University  
-;;;;		 	 Sweden		       
+;;;; Initial author:	 Thomas Bellman
+;;;;			 Lysator Computer Club
+;;;;		 	 Linkoping University
+;;;;		 	 Sweden
 ;;;;
 ;;;; Bugfixes and completion: Inge Wallin
 ;;;;
@@ -42,11 +42,11 @@
 ;;; 'AVLTREE in the car cell, and the second one having the tree
 ;;; in the car and the compare function in the cdr cell.  The tree has
 ;;; a dummy node as its root with the real tree in the left pointer.
-;;; 
+;;;
 ;;; Each node of the tree consists of one data element, one left
 ;;; sub-tree and one right sub-tree.  Each node also has a balance
 ;;; count, which is the difference in depth of the left and right
-;;; sub-trees. 
+;;; sub-trees.
 ;;;
 
 ;;; Code:
@@ -123,7 +123,7 @@
 	 p1
 	 b1
 	 p2
-	 b2 
+	 b2
 	 result)
     (cond
      ((< (elib-avl-node-balance br) 0)
@@ -178,8 +178,8 @@
   (let* ((br (elib-node-branch node branch))
 	 p1
 	 b1
-	 p2 
-	 b2 
+	 p2
+	 b2
 	 result)
     (cond
      ((> (elib-avl-node-balance br) 0)
@@ -286,7 +286,7 @@
   (let* ((br (elib-node-branch node branch))
 	 p1
 	 p2
-	 b2 
+	 b2
 	 result)
     (cond
      ((< (elib-avl-node-balance br) 0)
@@ -332,7 +332,7 @@
   ;; Return t if the tree has grown.
   (let* ((br (elib-node-branch node branch))
 	 p1
-	 p2 
+	 p2
 	 b2)
     (cond
      ((> (elib-avl-node-balance br) 0)
@@ -343,7 +343,7 @@
       (elib-avl-node-set-balance br -1)
       t)
 
-     (t	
+     (t
       ;; Balance was -1 => Rebalance
       (setq p1 (elib-node-left br))
       (if (< (elib-avl-node-balance p1) 0)
@@ -432,7 +432,7 @@
 (defun elib-avl-do-copy (root)
   ;; Copy the tree with ROOT as root.
   ;; Highly recursive. INTERNAL USE ONLY.
-  (if (null root) 
+  (if (null root)
       nil
     (elib-avl-node-create (elib-avl-do-copy (elib-node-left root))
 			  (elib-avl-do-copy (elib-node-right root))
@@ -500,14 +500,14 @@ If there is no such element in the tree, the value is nil."
   (let ((node (elib-avl-root tree))
 	(compare-function (elib-avl-cmpfun tree))
 	found)
-    (while (and node 
+    (while (and node
 		(not found))
       (cond
        ((funcall compare-function data (elib-node-data node))
 	(setq node (elib-node-left node)))
        ((funcall compare-function (elib-node-data node) data)
 	(setq node (elib-node-right node)))
-       (t 
+       (t
 	(setq found t))))
 
     (if node
@@ -552,7 +552,7 @@ If there is no such element in the tree, the value is nil."
 
 (defun avltree-copy (tree)
   "Return a copy of the avl tree TREE."
-  (let ((new-tree (avltree-create 
+  (let ((new-tree (avltree-create
 		   (elib-avl-cmpfun tree))))
     (elib-node-set-left (elib-avl-dummyroot new-tree)
 			(elib-avl-do-copy (elib-avl-root tree)))

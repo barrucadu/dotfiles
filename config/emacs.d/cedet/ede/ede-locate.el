@@ -168,7 +168,7 @@ that created this EDE locate object."
   nil
   )
 
-(defmethod ede-locate-create/update-root-database :STATIC 
+(defmethod ede-locate-create/update-root-database :STATIC
   ((loc ede-locate-base) root)
   "Create or update the database for the current project.
 You cannot create projects for the baseclass."

@@ -91,7 +91,7 @@
     :parent "foo"
     :code "   Field1 = f;\n")
    (semantic-tag-new-function
-    "getField1" "int" nil 
+    "getField1" "int" nil
     :parent "foo"
     :code "   return Field1;\n")
    (semantic-tag-new-function
@@ -178,7 +178,7 @@ MAKE-TYPE is the type of make process to use."
   ;; Make a new one
   (cit-srecode-fill-with-stuff "src/bar.cpp" cit-src-cpp-tags)
   (ede-add-file "Prog")
-  
+
   ;; 1 g) build the sources.
   ;; Direct compile to test that make fails properly.
   (compile ede-make-command)
@@ -210,7 +210,7 @@ Argument MAKE-TYPE is the type of make project to create."
     (oset mt :compiler 'ede-g++-libtool-shared-compiler)
     (oset mt :linker 'ede-g++-linker-libtool)
     )
-  
+
 
   ;; 1 g) build the sources.
   ;; Direct compile to test that make fails properly.

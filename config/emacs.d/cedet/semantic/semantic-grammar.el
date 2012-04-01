@@ -839,9 +839,9 @@ Lisp code."
       (erase-buffer)
       (unless (eq major-mode 'emacs-lisp-mode)
         (emacs-lisp-mode))
-      
+
 ;;;; Header + Prologue
-      
+
       (insert header
               "\n;;; Prologue\n;;\n"
               prologue
@@ -849,32 +849,32 @@ Lisp code."
       ;; Evaluate the prologue now, because it might provide definition
       ;; of grammar macro expanders.
       (eval-region (point-min) (point))
-      
+
       (save-excursion
-        
+
 ;;;; Declarations
-        
+
         (insert "\n;;; Declarations\n;;\n")
-        
+
         ;; `eval-defun' is not necessary to reset `defconst' values.
         (semantic-grammar-insert-defconst
          (semantic-grammar-keywordtable)
          (with-current-buffer semantic--grammar-input-buffer
            (semantic-grammar-keyword-data))
          "Table of language keywords.")
-        
+
         (semantic-grammar-insert-defconst
          (semantic-grammar-tokentable)
          (with-current-buffer semantic--grammar-input-buffer
            (semantic-grammar-token-data))
          "Table of lexical tokens.")
-        
+
         (semantic-grammar-insert-defconst
          (semantic-grammar-parsetable)
          (with-current-buffer semantic--grammar-input-buffer
            (semantic-grammar-parser-data))
          "Parser table.")
-        
+
         (semantic-grammar-insert-defun
          (semantic-grammar-setupfunction)
          (with-current-buffer semantic--grammar-input-buffer
@@ -887,14 +887,14 @@ Lisp code."
         (semantic-grammar-insert-defanalyzers)
 
 ;;;; Epilogue & Footer
-        
+
         (insert "\n;;; Epilogue\n;;\n"
                 epilogue
                 footer
                 )
-        
+
         )
-      
+
       (save-buffer 16)
 
       ;; If running in batch mode, there is nothing more to do.
@@ -1657,7 +1657,7 @@ EXPANDER is the name of the function that expands MACRO."
 		(error
 		 (eldoc-docstring-format-sym-doc
 		  macro (format "==> %s %s" expander doc)))))
-		
+
         (eldoc-last-data-store expander doc 'function))
       doc)))
 

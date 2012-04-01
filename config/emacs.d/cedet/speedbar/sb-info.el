@@ -154,7 +154,7 @@ specific node to expand."
 	     (setq completions (cdr completions)))
 	   t)
 	nil))))
-  
+
 (defun Info-speedbar-goto-node (text node indent)
   "When user clicks on TEXT, goto an info NODE.
 The INDENT level is ignored."
@@ -200,7 +200,7 @@ INDENT is the current indentation depth."
 	   (speedbar-delete-subblock indent))
 	  (t (error "Ooops... not sure what to do")))
     (speedbar-center-buffer-smartly)))
-  
+
 (defun Info-speedbar-fetch-file-nodes (nodespec)
   "Fetch the subnodes from the info NODESPEC.
 NODESPEC is a string of the form: (file)node.

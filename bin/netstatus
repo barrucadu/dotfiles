@@ -11,7 +11,7 @@ fi
 for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
     eval PR_$color='$terminfo[bold]$fg[${(L)color}]'
     eval PR_LIGHT_$color='$fg[${(L)color}]'
-    
+
     export PR_$color
     export PR_LIGHT_$color
 done
@@ -152,7 +152,7 @@ function do_host()
 
     if [[ "$${HOSTS[(I)$host]}" != "" ]]; then
         temp=$TEMPS[${HOSTS[(I)$host]}]
-        col=$COLOURS[${HOSTS[(I)$host]}]  
+        col=$COLOURS[${HOSTS[(I)$host]}]
         check_host $host $temp $col
     fi
 }

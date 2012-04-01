@@ -24,7 +24,7 @@ int main (int argc, char* argv[]) {
   }
 
   current[9 - digits] = 1;
-  
+
   while (listval (current) < listval (end)) {
     if (listsum (current) == root) {
       found ++;

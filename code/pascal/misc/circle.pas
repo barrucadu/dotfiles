@@ -13,6 +13,6 @@ begin
 
    circumference := round(2 * pi * radius);
    area          := round(radius * pi * pi);
-   
+
    Writeln('The circumference is ', circumference, ', and the area is ', area);
 end.

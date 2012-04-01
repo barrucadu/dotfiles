@@ -37,7 +37,7 @@ function importfile()
     director=$2
     year=$3
     genres=$4
-    
+
     makedir $MOVIEPATH/by-director/$director
     mv $file $MOVIEPATH/by-director/$director
 
@@ -64,14 +64,14 @@ function importdb()
 		    director=`grep "^$file:" $backup | cut -d':' -f2`
 		    year=`grep "^$file:" $backup | cut -d':' -f3`
 		    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:[^:]*\:::'`
-		    
+
 		    importfile "$file" "$director" "$year" "$genres"
 		else
 		    echo "'$file' not found in backup."
 		fi
 	    fi
 	done
-	
+
 	if [[ "$retcode" == "4" ]]; then
 	    echo "No files in the current directory found in the backup, bad backup?"
 	fi
@@ -93,7 +93,7 @@ function add()
 	    director=`grep "^$file:" $backup | cut -d':' -f2`
 	    year=`grep "^$file:" $backup | cut -d':' -f3`
 	    genres=`grep "^$file:" $backup | sed 's:[^:]*\:[^:]*\:[^:]*\:::'`
-	    
+
 	    importfile "$file" "$director" "$year" "$genres"
 	else
 	    retcode=4

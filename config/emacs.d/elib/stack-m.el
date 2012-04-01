@@ -24,9 +24,9 @@
 ;;;; along with GNU Elib; see the file COPYING.  If not, write to
 ;;;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;;;; Boston, MA 02111-1307, USA
-;;;; 
+;;;;
 ;;;; Author: Inge Wallin
-;;;; 
+;;;;
 
 ;;; Commentary:
 
@@ -34,7 +34,7 @@
 ;;; as the first element.  All entries and removals are done using
 ;;; destructive functions.
 ;;;
-;;; This file implements the functions as macros for speed in compiled 
+;;; This file implements the functions as macros for speed in compiled
 ;;; code.
 ;;;
 
@@ -66,7 +66,7 @@ Args: STACK ELEMENT"
 
 
 (defmacro stack-pop (stack)
-  "Remove the topmost element from STACK and return it. 
+  "Remove the topmost element from STACK and return it.
 If the stack is empty, return nil."
   `(prog1
        (car-safe (cdr ,stack))

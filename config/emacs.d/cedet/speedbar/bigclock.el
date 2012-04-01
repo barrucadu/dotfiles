@@ -57,7 +57,7 @@
     (dframe-update-keymap km)
     km)
   "Keymap used in the big clock.")
-  
+
 (defvar bigclock-buffer nil
   "Bigclocks buffer.")
 

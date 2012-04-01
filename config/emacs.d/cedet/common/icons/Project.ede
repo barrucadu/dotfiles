@@ -3,7 +3,7 @@
 (ede-proj-project "common/icons"
   :name "icons"
   :file "Project.ede"
-  :targets (list 
+  :targets (list
    (ede-proj-target-makefile-miscelaneous "icons"
     :name "icons"
     :path ""

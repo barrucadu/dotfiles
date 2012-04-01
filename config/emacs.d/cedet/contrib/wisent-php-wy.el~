@@ -787,7 +787,7 @@ FLOATING_POINT_LITERAL:
     (semantic-lex-push-token
      (semantic-lex-token 'EPILOGUE start end))))
 
-  
+
 (define-lex-regex-analyzer wisent-php-lex-heredoc
   "Detect and create an epilogue or percent-percent token."
   (concat "<<<[[:blank:]]*\\(" wisent-php-label-regex "\\)$")

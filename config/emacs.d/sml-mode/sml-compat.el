@@ -73,9 +73,9 @@ If DIR-FLAG is non-nil, create a new empty directory instead of a file."
       (concat open (mapconcat 'regexp-quote strings "\\|") close))))
 
 
-;;;; 
+;;;;
 ;;;; Custom
-;;;; 
+;;;;
 
 ;; doesn't exist in Emacs < 20.1
 (unless (fboundp 'set-face-bold-p)

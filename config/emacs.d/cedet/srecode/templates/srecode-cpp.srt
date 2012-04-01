@@ -131,7 +131,7 @@ Override this to affect applications, or the outer class structure for
 the user-facing template."
 ----
 class {{?NAME}} {{#PARENTS}}{{#FIRST}}: {{/FIRST}}public {{NAME}}{{/PARENTS}}
-{     
+{
    {{^}}
 };
 ----
@@ -207,7 +207,7 @@ Override this with your own preference to avoid using doxygen"
 ----
 
 ;;; DOXYGEN FEATURES
-;; 
+;;
 ;;
 context classdecl
 

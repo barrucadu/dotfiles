@@ -256,7 +256,7 @@ Completion options are calculated with `semantic-analyze-possible-completions'."
   (let* ((ctxt (semantic-analyze-current-context point))
 	 (comp nil)
 	 )
-    
+
     ;; We really want to look at the function if we are on an
     ;; argument.  Are there some additional rules we care about for
     ;; changing the CTXT we look at?

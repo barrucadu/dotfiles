@@ -1,4 +1,4 @@
-;;; cit-global.el --- 
+;;; cit-global.el ---
 ;;
 ;; Copyright (C) 2010 Eric M. Ludlam
 ;;
@@ -33,7 +33,7 @@
 
 ;;; Code:
 
-(defvar cit-externaldb-files-to-find 
+(defvar cit-externaldb-files-to-find
   '(("foo.hpp" . "include/foo.hpp")
     ;;("foo.cpp" . "src/foo.cpp")
     ("umltest.cpp" . "uml/umltest.cpp")
@@ -74,7 +74,7 @@
       nil ;; 7 the database type
       ( "cscope.out" "cscope.files") ;; 8 files created
       )
-     
+
      )
   "Different external DB tools to test.")
 
@@ -84,7 +84,7 @@
     ;; Pull in the tool libraries needed
     (require (nth 1 TOOL))
     (when (nth 5 TOOL) (require (nth 5 TOOL)))
-    
+
     ;; Check the tool
     (if (not (funcall (nth 2 TOOL) t))
 	(progn
@@ -107,19 +107,19 @@
 				    semanticdbclass
 				    cleanupfiles)
   "Test GNU Global tooling integration if it is available."
-  (let ((bufftokill (find-file (cit-file "Project.ede"))))    
+  (let ((bufftokill (find-file (cit-file "Project.ede"))))
 
     ;; 1) Create
     ;; We are at the root of the created CIT project.  Lets create a
     ;; database.
     (funcall createfcn default-directory)
-    
+
     ;; 2) force ede's find file to use gnu global
     (require 'ede-locate)
     (let* ((ede-locate-setup-options (list edelocatesym))
 	   (base default-directory)
 	   (fname nil))
-      
+
       ;; Change the locate tool active on this project.
       (ede-enable-locate-on-project)
 
@@ -132,7 +132,7 @@
 	  (when (not (string= result expect))
 	    (error "%s: Expected %s; Found %s" symrefsym expect result))
 	  ))
-      
+
       (let ((fail (ede-expand-filename (ede-current-project) "doesnotexist.cpp")))
 	(if fail
 	    (error "%s TEST: Found a file that shouldn't exist." symrefsym)))
@@ -146,16 +146,16 @@
 	(save-excursion
 	  (let ((killme (find-file (cit-file "src/main.cpp"))))
 	    (funcall semanticdbenablefcn)
-	    
+
 	    (let ((res (semanticdb-find-tags-by-name "doSomethingPublic")))
-	
+
 	      ;; There is only one database result because we never enabled
 	      ;; semanticdb minor mode.
 	      (if (not (object-of-class-p (car (car res)) semanticdbclass))
 		  (error "Did not find %s results table." symrefsym))
 
 	      (when (/= (semanticdb-find-result-length res) 1)
-		(error "%s should find 1 tag, found %d" 
+		(error "%s should find 1 tag, found %d"
 		       symrefsym
 		       (semanticdb-find-result-length res)))
 
@@ -170,7 +170,7 @@
 
     ;; Do the tests again.
     (cit-symref-quick-find-test)
-    
+
     ;; Delete the GTAGS and other files.
     (dolist (F cleanupfiles)
       (when (file-exists-p F)

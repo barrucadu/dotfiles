@@ -6,7 +6,7 @@
 ;; Version: 0.2
 ;; RCS: $Id: chart.el,v 1.20 2010/02/27 03:44:25 zappo Exp $
 ;; Keywords: OO, chart, graph
-;;                                                                          
+;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)

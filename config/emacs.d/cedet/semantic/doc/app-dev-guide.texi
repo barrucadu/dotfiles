@@ -101,7 +101,7 @@ This chapter describes @semantic{} functions and concepts an application
 developer needs to know to perform all of the tasks just listed.
 
 @menu
-* Semantic Tags::               
+* Semantic Tags::
 * Searching Tag Tables::        Searching tag tables.
 * Tags at Point::               Finding tags at point.
 * Tag Decoration::              Decorating tags
@@ -116,8 +116,8 @@ developer needs to know to perform all of the tasks just listed.
 * Example Programs::            Simple programming examples.
 * Current Context::             Local context analysis.
 * Data Debugger::               Application Debugger
-* GNU Free Documentation License::  
-* Index::                       
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node Semantic Tags
@@ -783,7 +783,7 @@ If @var{initial-input} is non-@code{nil}, insert it in the minibuffer initially.
 @anchor{semantic-complete-read-tag-analyzer}
 Ask for a tag by name based on the current context.
 The function @dfn{semantic-analyze-current-context} is used to
-calculate the context.  @dfn{semantic-analyze-possible-completions} is used 
+calculate the context.  @dfn{semantic-analyze-possible-completions} is used
 to generate the list of possible completions.
 @var{prompt} is the first part of the prompt.  Additional prompt
 is added based on the contexts full prefix.
@@ -866,8 +866,8 @@ HISTORY is a symbol representing a variable to story the history in."
 @end example
 
 @menu
-* Tag Collectors::              
-* Tag Displayors::              
+* Tag Collectors::
+* Tag Displayors::
 @end menu
 
 @node Tag Collectors
@@ -1219,7 +1219,7 @@ The following overridable functions can fetch those tags.
 @defun semantic-tag-components tag
 Return a list of components for @var{tag}.
 A Component is a part of @var{tag} which itself may be a @var{tag}.
-Examples include the elements of a structure in a 
+Examples include the elements of a structure in a
 tag of class `type, or the list of arguments to a
 tag of class @code{'function}.
 This function can be overloaded (see @dfn{define-mode-local-override} for details).
@@ -2278,7 +2278,7 @@ See @inforef{Idle Scheduler, , semantic-user.info}.
 It performs the following tasks in order:
 
 @enumerate
-@item 
+@item
 Reprarse the current buffer if needed
 @item
 Reparse other buffers that need it
@@ -2358,7 +2358,7 @@ means languages with parenthetical blocks, and type dereferencing
 which uses a similar form.
 
 @menu
-* Blocks::                      
+* Blocks::
 * Local Variables::             Getting lists of local variables.
 * Derived Context::             What goes at a given location?
 * Context Analysis::            Analysis information about the local context.
@@ -2637,7 +2637,7 @@ a summary of the return value.  This is useful when debugging.
 @defindex analyze
 
 @c First, delete text between this comment and END OF ANALYZE OBJECT text.
-@c 
+@c
 @c Execute the below line with C-x C-e
 @c
 

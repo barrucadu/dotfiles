@@ -45,7 +45,7 @@
 
 (defun cit-fill-uml (make-type)
   "Fill a buffer with code based on a UML representation."
-  
+
   ;; 5 a) Read in the cogre UML file.
   ;; It should automatically switch to cogre mode.
   (find-file (locate-library "cit-uml.cgr"))

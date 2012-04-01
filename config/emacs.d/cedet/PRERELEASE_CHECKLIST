@@ -23,7 +23,7 @@ Add a CVS tag
     - touch `find . -name Makefile`
     - make dist
     - ./testdist.sh # Test out that basic stuff is working before tagging.
-    - cvs tag -b <branchname>     
+    - cvs tag -b <branchname>
 
   * update new sandbox to branch
     - cvs update -r <branchname>
@@ -89,7 +89,7 @@ CEDET & Common area
     - Start emacs this way:
 
       emacs -q
-      -or- 
+      -or-
       xemacs -q
 
       M-x load-file RET cedet/common/cedet.el RET
@@ -132,7 +132,7 @@ Semantic
   * Make sure the semanticdb inversion check against persistent file loading
     is updated if the file-format has changed.
 
-  * In a clean Emacs  
+  * In a clean Emacs
 
     Visit files for different modes.  Include:
       All files in cedet/semantic/tests.
@@ -151,7 +151,7 @@ Semantic
       M-x bovinate RET - verify tags are accurate.
       M-x speedbar RET - Open the file and verify tags.
       - Check the TAGS menu for tags in that file.
-      
+
       M-x global-semantic-highlight-edits-mode RET
       - Edit a file.  See the highlight of newly inserted text.
       - Customize `semantic-edits-verbose-flag' to be non-nil.
@@ -175,7 +175,7 @@ Semantic
          'semantic-analyze-current-context'.
 
        - At a location with incomplete syntax (a list of arguments
-         with no close paren for instance: repeat previous step. 
+         with no close paren for instance: repeat previous step.
 
       M-x semanticdb-find-test-translate-path RET
        - Verify the list matches the include files.

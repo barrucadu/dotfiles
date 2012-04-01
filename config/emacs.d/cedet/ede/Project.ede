@@ -3,7 +3,7 @@
 (ede-proj-project "EDE"
   :name "EDE"
   :file "Project.ede"
-  :targets (list 
+  :targets (list
    (ede-proj-target-elisp-autoloads "autoloads"
     :name "autoloads"
     :path ""

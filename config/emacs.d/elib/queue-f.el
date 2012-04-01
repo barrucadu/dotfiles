@@ -26,11 +26,11 @@
 ;;;; Boston, MA 02111-1307, USA
 ;;;;
 ;;;; Author: Inge Wallin
-;;;; 
+;;;;
 
 ;;; Commentary:
 
-;;; The queue is implemented as a two cons cell list, the first 
+;;; The queue is implemented as a two cons cell list, the first
 ;;; containing the tag 'QUEUE.  The car of the the second cons
 ;;; cell points at the first element of the queue and the cdr points
 ;;; at the last.  All entries and removals are done using destructive
@@ -65,7 +65,7 @@ Args: QUEUE ELEMENT"
     (if (null (car (cdr queue)))
 	;; QUEUE is empty
 	(setcar (cdr queue)
-		(setcdr (cdr queue) 
+		(setcdr (cdr queue)
 			elementcell))
       (setcdr (cdr (cdr queue))
 	      elementcell)

@@ -3,7 +3,7 @@
 (ede-proj-project "Symref"
   :name "Symref"
   :file "Project.ede"
-  :targets (list 
+  :targets (list
    (ede-proj-target-elisp "symref"
     :name "symref"
     :path ""

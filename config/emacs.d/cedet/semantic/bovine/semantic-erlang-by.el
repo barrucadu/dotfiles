@@ -136,7 +136,7 @@
 
 (defconst semantic-erlang-by--parse-table
   `(
-    (bovine-toplevel 
+    (bovine-toplevel
      (module-decl)
      ) ;; end bovine-toplevel
 

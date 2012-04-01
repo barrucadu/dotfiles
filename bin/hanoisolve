@@ -46,26 +46,26 @@ def move(move, source, destination, towers):
     piece = towers[source][0]
     towers[source].remove(piece)
     towers[destination].insert(0, piece)
-    
+
     return towers
 
 def solve(towers):
     global movesonly
     global maxmoves
-    
+
     maxmoves = 2 ** len(towers[0]) - 1
 
     print("The minimum number of moves is", maxmoves)
 
     if movesonly:
         sys.exit()
-        
+
     direction = (len(towers[0]) % 2 == 0)
     moves     = 1
-    
+
     while len(towers[0]) > 0 or len(towers[1]) > 0:
         smalltower = findsmallest(towers)
-        
+
         newtower = smalltower
         if direction:
             newtower += 1
@@ -76,7 +76,7 @@ def solve(towers):
             newtower = 0
         elif newtower < 0:
             newtower = 2
-            
+
         towers = move(moves, smalltower, newtower, towers)
         moves += 1
 
@@ -88,7 +88,7 @@ def solve(towers):
 if len(sys.argv) > 1:
     discs  = int(sys.argv[1])
     towers = [[], [], []]
-    
+
     if discs > 0:
         for x in range(0, discs):
             towers[0].append(x)

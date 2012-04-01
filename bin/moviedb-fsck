@@ -68,7 +68,7 @@ function checkdirs()
                     echo -n "$dir/$subdir is not a directory, delete or ignore? [di] "
                     read answer
 		done
-		
+
 		case "$answer" in
                     "d")
 			rm "$dir/$subdir";;
@@ -89,7 +89,7 @@ function checkdirs()
                     echo -n "$dir/$subdir is empty, delete or ignore? [di] "
                     read answer
 		done
-		
+
 		case "$answer" in
                     "d")
 			rmdir "$dir/$subdir";;
@@ -125,7 +125,7 @@ function checklinks()
                 if [[ $ret == 0 ]]; then
                     ret=1
                 fi
-               
+
 		if $dellinks; then
 		    echo "$dir/$subdir/$link is not a symbolic link, deleting."
 		    rm "$dir/$subdir/$link"
@@ -134,7 +134,7 @@ function checklinks()
 			echo -n "$dir/$subdir/$link is not a symbolic link, delete or ignore? [di] "
 			read answer
                     done
-                    
+
                     case "$answer" in
 			"d")
                             rm "$dir/$subdir/$link";;
@@ -146,7 +146,7 @@ function checklinks()
                 if [[ $ret == 0 ]]; then
                     ret=1
                 fi
-                
+
 		if $fixlinks; then
 		    echo "$dir/$subdir/$link is a broken symbolic link, fixing."
 		    if ! fixlink $link; then
@@ -165,7 +165,7 @@ function checklinks()
 			echo -n "$dir/$subdir/$link is a broken symbolic link, delete, fix or ignore? [dfi] "
 			read answer
                     done
-                    
+
                     case "$answer" in
 			"d")
                             rm "$dir/$subdir/$link";;
@@ -182,7 +182,7 @@ function checklinks()
                 if [[ $ret == 0 ]]; then
                     ret=1
                 fi
-                
+
 		if $fixlinks; then
 		    echo "$dir/$subdir/$link is a non-relative symbolic link, fixing."
 		    if ! fixlink $link; then
@@ -201,7 +201,7 @@ function checklinks()
 			echo -n "$dir/$subdir/$link is a non-relative symbolic link, delete, fix or ignore? [dfi] "
 			read answer
                     done
-                    
+
                     case "$answer" in
 			"d")
                             rm "$dir/$subdir/$link";;

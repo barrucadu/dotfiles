@@ -416,7 +416,7 @@ That is the value of the attribute `:detail'.
 @anchor{semantic-tag-components}
 Return a list of components for @var{tag}.
 A Component is a part of @var{tag} which itself may be a @var{tag}.
-Examples include the elements of a structure in a 
+Examples include the elements of a structure in a
 tag of class `type, or the list of arguments to a
 tag of class @code{'function}.
 This function can be overloaded (see @dfn{define-mode-local-override} for details).

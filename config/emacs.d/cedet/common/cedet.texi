@@ -107,20 +107,20 @@ use the mailing list cedet-devel.net via the URL:
 @url{http://lists.sourceforge.net/lists/listinfo/cedet-devel}
 
 @menu
-* Overview::                    
-* Installation/Basic Configuration::                
+* Overview::
+* Installation/Basic Configuration::
 * JDEE Target::
 * ECB Target::
 * Project Management::
 * Code Completion::
-* Code Generation::     
-* C++ Features::        
-* GNU Global::  
-* ID Utils::    
-* CScope::      
+* Code Generation::
+* C++ Features::
+* GNU Global::
+* ID Utils::
+* CScope::
 * Maintenance:: Maintaining your @cedet{} Data files
-* GNU Free Documentation License::  
-* Index::                       
+* GNU Free Documentation License::
+* Index::
 @end menu
 
 @node Overview
@@ -226,19 +226,19 @@ For high level overviews, configuration advice, etc, please read
 @inforef{Top, Semantic Manual, semantic}.
 
 If you are an application developer and need to know the functions and
-concepts, 
+concepts,
 @inforef{Top, the Application Development Manual, semantic-appdev}.
 
 To support a new language,
 @inforef{Top, the Language Support Developer's Guide, semantic-langdev}.
 
 To use the grammar writing environment, and write in the rule based
-language, 
+language,
 @inforef{Top, the Grammar Framework Manual, grammar-fw}.
 
 For details on the original @semantic{} @acronym{LL} parser,
 @inforef{Top, the Bovine Parser Manual, bovine}.
- 
+
 For details on the Bison-like @acronym{LALR} parser,
 @inforef{Top, the Wisent Parser Manual, wisent}.
 
@@ -275,7 +275,7 @@ code browser which embeds Speebar.
 version of speedbar (as of this writing, Jul 08) is nearly identical
 to the version in Emacs 22.
 
-For more details, read the 
+For more details, read the
 @inforef{top, Speedbar Manual, speedbar}.
 
 @node EDE
@@ -392,7 +392,7 @@ INSTALL file in the top level @cedet{} directory.
 make
 @end example
 
-or 
+or
 
 @example
 make EMACS=<your favorite emacs> MAKEINFO=<substitute, or echo>
@@ -453,7 +453,7 @@ javascript-mode.el : @url{http://www.emacswiki.org/cgi-bin/wiki/JavaScriptMode}
 To use Exuberent ctags to emable Semantic support in more major modes,
 or as an extra database backend parser, install ctags:
 @url{http://ctags.sourceforge.net/}
-   
+
 To use the UML chart generation from @code{M-x semantic-dot}
 graphviz dot programs, including @file{dotty}
 @url{http://www.graphviz.org/}
@@ -550,7 +550,7 @@ underlying build technology to use for compilation.
 Use the menu to add targets.  You can then use either Speedbar or
 dired to populate your targets with files.
 
-For more details, see the 
+For more details, see the
 @inforef{Top, EDE reference manual, ede}.
 
 
@@ -609,7 +609,7 @@ need to configure a few more things.  This is done mainly by providing
 details on where Semantic can find the source code where your tag
 definitions are.
 
-For more, 
+For more,
 @inforef{Semanticdb Search Configuration, Semantic search configuration, semantic-user}.
 
 Once you've optimized @semantic{}'s ability to find your sources,
@@ -808,7 +808,7 @@ Something like this can work in your @file{.emacs} file.
 
 @example
 (setq ede-locate-setup-options
-      '(ede-locate-global 
+      '(ede-locate-global
         ede-locate-base))
 @end example
 
@@ -948,7 +948,7 @@ Something like this can work in your @file{.emacs} file.
 @section @semantic{} Database
 
 @semantic{} could use CScope as a back end for database searches,
-but this has not been implemented yet.  
+but this has not been implemented yet.
 
 @example
 (semanticdb-enable-cscope-databases)

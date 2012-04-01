@@ -94,7 +94,7 @@ FLOATING_POINT_LITERAL:
 
 (defconst wisent-csharp-string-re "@?['\"]"
   "Regexp matching beginning of a csharp string.")
-  
+
 (defun wisent-csharp-expand-tag (tag)
   "Expand TAG into a list of equivalent tags, or nil.
 Expand multiple variable declarations in the same statement, that is
@@ -311,12 +311,12 @@ It ignores whitespaces, newlines and comments."
   wisent-csharp-lex-blocks
   semantic-lex-default-action)
 
-  
+
 ;;;----------------------------------------------------------------------
 ;;; * Parser
 ;;;----------------------------------------------------------------------
 
-;;;###autoload   
+;;;###autoload
 (defun wisent-csharp-default-setup ()
   (wisent-csharp-wy--install-parser)
   (setq
@@ -345,7 +345,7 @@ It ignores whitespaces, newlines and comments."
    senator-step-at-tag-classes '(function variable)
    ))
 
-;;;###autoload   
+;;;###autoload
 (add-hook 'csharp-mode-hook #'wisent-csharp-default-setup)
 
 

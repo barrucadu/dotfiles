@@ -1,4 +1,4 @@
-## -*- conf -*- 
+## -*- conf -*-
 
 <Multi_key> <less>    <apostrophe> : "‘"
 <Multi_key> <greater> <apostrophe> : "’"

@@ -37,9 +37,9 @@
   "Syntax table used for internal sml-mode operation."
   :copy sml-mode-syntax-table)
 
-;;; 
+;;;
 ;;; various macros
-;;; 
+;;;
 
 (defmacro sml-with-ist (&rest r)
   (let ((ost-sym (make-symbol "oldtable")))
@@ -155,9 +155,9 @@ This assumes that we are `looking-at' the OP."
 	     (t (error "Unbalanced")))))
     t))
 
-;;; 
+;;;
 ;;; read a symbol, including the special "op <sym>" case
-;;; 
+;;;
 
 (defmacro sml-move-read (&rest body)
   (let ((pt-sym (make-symbol "point")))
@@ -219,7 +219,7 @@ This assumes that we are `looking-at' the OP."
 	   ;;  (save-excursion (sml-backward-spaces)
 	   ;; 		    (if (eq (preceding-char) ?=) "=datatype" sym)))
 	   (t sym)))))))
-    
+
 
 (defun sml-backward-sexp (prec)
   "Move one sexp backward if possible, or one char else.

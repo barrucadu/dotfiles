@@ -572,7 +572,7 @@ FILE, NOWARN, RAWFILE, and WILDCARDS are passed into `find-file-noselect'"
      (data-debug-add-specialized-thing #'semanticdb-find-results-p
 				       #'data-debug-insert-find-results-button)
      ;; Find results elements.
-     (data-debug-add-specialized-thing (lambda (thing) 
+     (data-debug-add-specialized-thing (lambda (thing)
 					 (and (listp thing)
 					      (semanticdb-abstract-table-child-p (car thing))
 					      (semantic-tag-p (cdr thing))))

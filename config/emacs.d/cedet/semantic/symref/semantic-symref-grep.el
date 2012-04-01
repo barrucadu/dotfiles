@@ -151,14 +151,14 @@ This shell should support pipe redirect syntax."
 	 (b (get-buffer-create "*Semantic SymRef*"))
 	 (ans nil)
 	 )
-    
+
     (with-current-buffer b
       (erase-buffer)
       (setq default-directory rootdir)
 
       (if (not (fboundp 'grep-compute-defaults))
 
-	  ;; find . -type f -print0 | xargs -0 -e grep -nH -e 
+	  ;; find . -type f -print0 | xargs -0 -e grep -nH -e
 	  ;; Note : I removed -e as it is not posix, nor necessary it seems.
 
 	  (let ((cmd (concat "find " default-directory " -type f " filepattern " -print0 "

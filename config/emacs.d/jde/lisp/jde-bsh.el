@@ -232,7 +232,7 @@ prints out, Emacs has nothing to evaluate or report."
       (log java-statement 'request)
       (let ((output (bsh-eval the-bsh java-statement eval-return))
 	    len)
-	(when (stringp output) 
+	(when (stringp output)
 	  (when (> (length output) 0)
 	    (setq len (length output))
 	    (if (eq ?\n (elt output (1- len)))

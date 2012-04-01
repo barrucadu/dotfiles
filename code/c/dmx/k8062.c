@@ -15,7 +15,7 @@ int shmid;
 
 void dmx_open()
 {
-    
+
     shmid=shmget(0x56444D58,sizeof(int)*522, 0666);
     shm=(int *)shmat(shmid,NULL,0);
     dmx_maxchannels=shm;

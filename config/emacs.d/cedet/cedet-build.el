@@ -32,7 +32,7 @@
 ;; Step 1:  Compile CEDET in a fresh Emacs:
 ;;
 ;;     emacs -Q -l cedet-build.el -f cedet-build
-;;     
+;;
 ;;       or, if -Q isn't supported
 ;;
 ;;     emacs -q --no-site-file -l cedet-build.el -f cedet-build

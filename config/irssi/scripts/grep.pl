@@ -10,11 +10,11 @@
 use Irssi;
 use strict;
 use Text::ParseWords;
-use vars qw($VERSION %IRSSI); 
+use vars qw($VERSION %IRSSI);
 $VERSION = "2.1";
 %IRSSI = (
 	authors	    => "Timo \'cras\' Sirainen, Wouter Coekaerts",
-	contact	    => "tss\@iki.fi, wouter\@coekaerts.be", 
+	contact	    => "tss\@iki.fi, wouter\@coekaerts.be",
 	name        => "grep",
 	description => "/GREP [-i] [-w] [-v] [-F] <perl-regexp> <command to run>",
 	license     => "Public Domain",
@@ -26,7 +26,7 @@ my ($match, $v);
 
 sub sig_text {
 	my ($dest, $text, $stripped_text) = @_;
-	Irssi::signal_stop() if (($stripped_text =~ /$match/) == $v);	
+	Irssi::signal_stop() if (($stripped_text =~ /$match/) == $v);
 }
 
 sub cmd_grep {
@@ -34,7 +34,7 @@ sub cmd_grep {
 	my ($option,$cmd,$i,$w,$F);
 	$v = 0;
 	$F = 0;
-  
+
 	# split the arguments, keep quotes
 	my (@args)  = &quotewords(' ', 1, $data);
 
@@ -44,7 +44,7 @@ sub cmd_grep {
 		if ($option eq '-i') {$i = 1;}
 		elsif ($option eq '-v') {$v = 1;}
 		elsif ($option eq '-w') {$w = 1;}
-		elsif ($option eq '-F') {$F = 1;}	
+		elsif ($option eq '-F') {$F = 1;}
 		else {
 			Irssi::print("Unknown option: $option",MSGLEVEL_CLIENTERROR);
 			return;
@@ -63,7 +63,7 @@ sub cmd_grep {
 		Irssi::print($@,MSGLEVEL_CLIENTERROR);
 		return;
 	}
-	
+
 	if ($F) {
 		$match =~ s/(\(|\)|\[|\]|\{|\}|\\|\*|\.|\?|\|)/\\$1/g;
 	}

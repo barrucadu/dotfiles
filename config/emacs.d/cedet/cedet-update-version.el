@@ -30,7 +30,7 @@
 ;; M-x cuv-update RET
 
 ;;; History:
-;; 
+;;
 
 ;;; Code:
 (if (not (featurep 'cedet))
@@ -90,7 +90,7 @@
   (cuv-update-all-cedet-packages)
   (message "Revision Number Updates Complete.")
   )
-  
+
 (provide 'cedet-update-version)
 
 ;;; cedet-update-version.el ends here

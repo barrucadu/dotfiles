@@ -50,7 +50,7 @@
 ;;
 ;;     xrdb -load ~/.Xresources
 ;; or
-;;     xrdb -merge ~/.Xresources 
+;;     xrdb -merge ~/.Xresources
 ;;
 ;; (Depending on what is desired).  Then restart Emacs.
 ;;
@@ -61,11 +61,11 @@
 (require 'time-stamp)
 
 (defvar color-theme-x-color-theme-source nil
-  "*The full path to your color-theme.el.  
+  "*The full path to your color-theme.el.
 If this variable is nil, then the default is to discover the path
 via `locate-library'")
 
-(defvar color-theme-x-supported-attributes 
+(defvar color-theme-x-supported-attributes
   '((:foreground . "Foreground")
     (:background . "Background")
     (:bold . "Bold")
@@ -88,11 +88,11 @@ via `locate-library'")
 
 (defun color-theme-x-read-theme (name &optional source)
   (save-excursion
-    (with-temp-buffer 
+    (with-temp-buffer
       (insert-file-contents-literally (or source (color-theme-x-locate-color-theme-source)))
       (goto-char 0)
       (when (and (search-forward-regexp (concat "^(defun color-theme-" name) (point-max) t)
-		 (search-forward "color-theme-install")) 
+		 (search-forward "color-theme-install"))
 	(next-line 0)
 	(let ((function (read (current-buffer))))
 	  ;; muahahahaaa
@@ -111,14 +111,14 @@ via `locate-library'")
 
 (defun color-theme-x-traverse-theme (theme function)
   (dolist (e theme)
-    (ignore-errors 
+    (ignore-errors
       (destructuring-bind (face-name ((true face-attributes))) e
 	(if (and (symbolp face-name)
 		 (eq true t)
 		 (listp face-attributes))
-	    ;; it looks like we have found something like 
+	    ;; it looks like we have found something like
 	    ;; (face-name ((t (:foreground "white"))))
-	    (funcall function 
+	    (funcall function
 		     (symbol-name face-name)
 		     (color-theme-x-list-to-paired-list face-attributes)))))))
 
@@ -133,18 +133,18 @@ via `locate-library'")
   "Convert lisp symbols to X resource values."
   (cond ((eq value t)
 	 "on")
-	(t 
+	(t
 	 value)))
-    
+
 (defun color-theme-x-xresource-writer (face-name attributes)
   (dolist (a attributes)
     (let ((attribute (car a))
 	  (value (cdr a)))
       (let ((xresource-attribute (cdr (assoc attribute color-theme-x-supported-attributes))))
 	(when xresource-attribute
-	  (insert (format "Emacs.%s.attribute%s: %s\n" 
-			  face-name 
-			  xresource-attribute 
+	  (insert (format "Emacs.%s.attribute%s: %s\n"
+			  face-name
+			  xresource-attribute
 			  (color-theme-x-lisp-to-resource value))))))))
 
 (defun color-theme-x-basic-xresource-writer (name value)
@@ -156,7 +156,7 @@ via `locate-library'")
 	 (and current-prefix-arg (read-file-name "Path to theme source: "))))
   (setq theme-source (or theme-source (color-theme-x-locate-color-theme-source)))
   (save-excursion
-    (setq color-theme-x-output-buffer 
+    (setq color-theme-x-output-buffer
 	  (get-buffer-create (or color-theme-x-output-buffer-name "*color-theme-xresources*")))
     (set-buffer color-theme-x-output-buffer)
     (goto-char (point-max))

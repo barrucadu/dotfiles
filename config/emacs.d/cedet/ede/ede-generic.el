@@ -118,7 +118,7 @@
 			 :custom (repeat (cons (string :tag "Macro")
 					       (string :tag "Value")))
 			 :group c
-			 :documentation 
+			 :documentation
 			 "Preprocessor Symbols for this project.")
    (c-preprocessor-files :initarg :c-preprocessor-files
 			 :initform nil
@@ -198,7 +198,7 @@ The class allocated value is replace by different sub classes.")
 	    ;; Load in the configuration
 	    (setq config (eieio-persistent-read fname))
 	  ;; Create a new one.
-	  (setq config (ede-generic-config 
+	  (setq config (ede-generic-config
 			"Configuration"
 			:file fname))
 	  ;; Set initial values based on project.
@@ -278,13 +278,13 @@ If one doesn't exist, create a new one for this directory."
 	  (when (and (not (string= extreg ""))
 		     (string-match (concat "^" extreg "$") ext))
 	    (setq cls classsym)))))
-    (when (not cls) (setq cls 'ede-generic-target-misc))    
+    (when (not cls) (setq cls 'ede-generic-target-misc))
     ;; find a pre-existing matching target
     (setq ans (ede-generic-find-matching-target cls dir targets))
     ;; Create a new instance if there wasn't one
     (when (not ans)
-      (setq ans (make-instance 
-		 cls 
+      (setq ans (make-instance
+		 cls
 		 :name (oref cls shortname)
 		 :path dir
 		 :source nil))
@@ -311,7 +311,7 @@ If one doesn't exist, create a new one for this directory."
 	  )))
     ;; The core table
     (setq filemap (append filemap (oref config :c-preprocessor-table)))
-    
+
     filemap
     ))
 
@@ -362,7 +362,7 @@ the new configuration."
   "Add a new EDE Autoload instance for identifying a generic project.
 INTERNAL-NAME is a long name that identifies thsi project type.
 EXTERNAL-NAME is a shorter human readable name to describe the project.
-PROJECTFILE is a file name that identifies a project of this type to EDE, such as 
+PROJECTFILE is a file name that identifies a project of this type to EDE, such as
 a Makefile, or SConstruct file.
 CLASS is the EIEIO class that is used to track this project.  It should subclass
 the class `ede-generic-project' project."

@@ -488,7 +488,7 @@ code to parse."
 	  ;; should be skipped.
 	  (semantic-c-skip-conditional-section)
 	  (setq semantic-lex-end-point (point))
-	  
+
 	  ;; @TODO -somewhere around here, we also need to skip
 	  ;; other sections of the conditional.
 
@@ -896,7 +896,7 @@ the regular parser."
 		 (message "Macro parsing state may be broken...")
 		 (sit-for 1))))
 	    )				; save match data
-	
+
 	  ;; Hack in mode-local
 	  (activate-mode-local-bindings)
 	  ;; CHEATER!  The following 3 lines are from
@@ -968,7 +968,7 @@ M-x semantic-c-debug-mode-init
 now.
 ")
     (remove-hook 'post-command-hook 'semantic-c-debug-mode-init-pch)))
-  
+
 (defun semantic-expand-c-tag (tag)
   "Expand TAG into a list of equivalent tags, or nil."
   (let ((return-list nil)
@@ -1123,7 +1123,7 @@ now.
 	       (semantic--tag-set-overlay addlast (semantic-tag-overlay tag)))
 	     )
 
-	   
+
 	   (while names
 
 	     (setq vl (cons (semantic-tag-new-type

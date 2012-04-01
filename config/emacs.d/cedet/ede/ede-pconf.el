@@ -22,7 +22,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; Code generator for autoconf configure.ac, and support files.
 
 (require 'ede-proj)
@@ -76,10 +76,10 @@ don't do it.  A value of nil means to just do it.")
       (autoconf-set-output
        (ede-map-all-subprojects
 	this
-	(lambda (sp) 
+	(lambda (sp)
 	  ;; NOTE: don't put in ./Makefile - configure complains.
-	  (let ((dir (file-name-as-directory 
-		      (directory-file-name 
+	  (let ((dir (file-name-as-directory
+		      (directory-file-name
 		       (ede-subproject-relative-path sp top-level-project-local)))))
 	    (when (string= dir "./") (setq dir ""))
 	    ;; Use concat, because expand-file-name removes the relativeness.
@@ -89,11 +89,11 @@ don't do it.  A value of nil means to just do it.")
     ;;
     (ede-proj-dist-makefile this)
     ;; Loop over all targets to clean and then add themselves in.
-    (ede-map-all-subprojects 
+    (ede-map-all-subprojects
      this
      (lambda (sp)
        (ede-map-targets sp 'ede-proj-flush-autoconf)))
-    (ede-map-all-subprojects 
+    (ede-map-all-subprojects
      this
      (lambda (sp)
        (ede-map-targets this 'ede-proj-tweak-autoconf)))
@@ -145,7 +145,7 @@ don't do it.  A value of nil means to just do it.")
 	      ;; that it gets flushed so we don't keep rebuilding
 	      ;; the autoconf system.
 	      (if b (kill-buffer b))))
-	  
+
 	  ))))
 
 (defmethod ede-proj-configure-recreate ((this ede-proj-project))

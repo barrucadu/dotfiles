@@ -30,7 +30,7 @@ DISTDIR=$(top)eieio-$(VERSION)
 all: autoloads init eieio examples eieio.info
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -83,10 +83,10 @@ test: $(test_LISP)
 	@echo "(setq debug-on-error t)" >> $@-compile-script
 	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
-Misc: 
+Misc:
 	@
 
-tags: 
+tags:
 
 
 clean:

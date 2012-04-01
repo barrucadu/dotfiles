@@ -1165,7 +1165,7 @@ The VALUE is a spp lexical table."
 	    (prin1 first)
 	    (setq rest (cdr rest))
 	    )
-	
+
 	  (when rest
 	    (princ " . ")
 	    (let ((len (length (cdr rest))))

@@ -74,7 +74,7 @@ sub read_settings {
 	($prefix_mode[$MODE_HALFOP] = Irssi::settings_get_str('nicklist_prefix_mode_halfop')) =~ s/\\e/\033/g;
 	($prefix_mode[$MODE_VOICE] = Irssi::settings_get_str('nicklist_prefix_mode_voice')) =~ s/\\e/\033/g;
 	($prefix_mode[$MODE_NORMAL] = Irssi::settings_get_str('nicklist_prefix_mode_normal')) =~ s/\\e/\033/g;
-	
+
 	if ($mode != $SCREEN) {
 		$height = Irssi::settings_get_int('nicklist_height');
 	}
@@ -186,10 +186,10 @@ sub screen_size {
 			# without this reloading doesn't work. workaround for some unknown bug
 			do 'asm/ioctls.ph';
 		};
-		
+
 		# ugly way not working, let's try something uglier, the dg-hack(tm) (constant for linux only?)
 		if($@) { no strict 'refs'; *TIOCGWINSZ = sub { return 0x5413 } }
-		
+
 		unless (defined &TIOCGWINSZ) {
 			die "Term::ReadKey not found, and ioctl 'workaround' failed. Install the Term::ReadKey perl module to use screen mode.\n";
 		}
@@ -200,11 +200,11 @@ sub screen_size {
 		close(TTY);
 		($row, $col, $xpixel, $ypixel) = unpack('S4', $winsize);
 	}
-	
+
 	# set screen width
 	$irssi_width = $col-$nicklist_width-1;
 	$height = $row-1;
-	
+
 	# on some recent systems, "screen -X fit; screen -X width -w 50" doesn't work, needs a sleep in between the 2 commands
 	# so we wait a second before setting the width
 	Irssi::timeout_add_once(1000, sub {

@@ -131,7 +131,7 @@ expanded from elsewhere."
                           " vals)")
                   (and (not x) (not inplace)
                        (setq inlist t)))
-              
+
               (when (and (not inlist) (not inplace))
                 (insert "\n(list")
                 (setq inlist t))
@@ -188,7 +188,7 @@ The format of a bovine parser table is:
    ( NONTERMINAL-SYMBOL2 MATCH-LIST2 )
    ...
    ( NONTERMINAL-SYMBOLn MATCH-LISTn )
- 
+
 Where each NONTERMINAL-SYMBOL is an artificial symbol which can appear
 in any child state.  As a starting place, one of the NONTERMINAL-SYMBOLS
 must be `bovine-toplevel'.

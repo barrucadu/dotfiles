@@ -210,7 +210,7 @@ If SUPRESS-QUESTIONS, then do not ask to create the directory."
 	  ((y-or-n-p (format "Create directory %s for SemanticDB? " dest))
 	   (make-directory dest t)
 	   t)
-	  (t 
+	  (t
 	   (if (boundp 'semanticdb--inhibit-make-directory)
                (setq semanticdb--inhibit-make-directory t))
 	   nil))

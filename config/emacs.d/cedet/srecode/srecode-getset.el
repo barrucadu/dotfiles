@@ -1,4 +1,4 @@
-;;; srecode-getset.el --- 
+;;; srecode-getset.el ---
 
 ;; Copyright (C) 2007, 2008, 2009 Eric M. Ludlam
 
@@ -122,7 +122,7 @@ will be derived."
 
       ;; Step 3.5: Insert an initializer if needed.
       ;; ...
-      
+
 
       ;; Set up for the rest.
       )
@@ -255,7 +255,7 @@ INCLASS specifies if the cursor is already in CLASS or not."
   "Select a position for a new field for CLASS.
 If INCLASS is non-nil, then the cursor is already in the class
 and should not be moved during point selection."
-  
+
   ;; If we aren't in the class, get the cursor there, pronto!
   (when (not inclass)
 
@@ -291,7 +291,7 @@ Base selection on the field related to POINT."
       (goto-char point))
 
     (let ((field (semantic-current-tag-of-class 'variable)))
-      
+
       ;; If we get a field, make sure the user gets a chance to choose.
       (when field
 	(if srecode-insert-getset-fully-automatic-flag
@@ -318,7 +318,7 @@ Base selection on the field related to POINT."
   (save-excursion
     (when point
       (goto-char point))
-    
+
     (let ((tag (semantic-current-tag-of-class 'type)))
 
       (when (or (not tag)

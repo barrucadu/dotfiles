@@ -94,7 +94,7 @@ Argument START and END bound the time being calculated."
 	       gen prim
 	       (if (> gen prim) pcentf pcents)
 	       (if (> gen prim) "faster" "slower")))
-    
+
     ))
 
 ;;;###autoload
@@ -148,7 +148,7 @@ Argument START and END bound the time being calculated."
 	       (if (> gen one) 1centf 1cents)
 	       (if (> gen one) "faster" "slower")
 	       ))
-    
+
     ))
 
 (provide 'eieio-perftest)

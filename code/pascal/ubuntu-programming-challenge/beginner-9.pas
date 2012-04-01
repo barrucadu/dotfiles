@@ -31,7 +31,7 @@ var
    i	 : Integer;  { Line counter }
 begin
    i := 0;
-   
+
    AssignFile(fh, fname); { Assign the file handler with the file }
    reset(fh);             { Open file in read mode }
 
@@ -60,7 +60,7 @@ var
    count, i : Integer; { Counting variable, and loop counter. }
 begin
    count := 0;
-   
+
    for i := 0 to FILESIZE do
    begin
       if pfile[i] = ascii then

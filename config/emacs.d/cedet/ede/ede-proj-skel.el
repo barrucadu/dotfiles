@@ -44,7 +44,7 @@
   (;; Use these two items to modify the target specificy menu.
    ;;(menu :initform nil)
    ;;(keybindings :initform nil)
-   (sourcetype :initform '(ede-source-%NAME%))   
+   (sourcetype :initform '(ede-source-%NAME%))
    ;;(availablecompilers :initform '(ede-%NAME%-compiler))
    ;; Add your specialized fields here
    )
@@ -75,7 +75,7 @@
 ;;  ()
 ;;  "Specialized compiler for %NAME%")
 
-;; This variable is important to set if you are planning on supporting 
+;; This variable is important to set if you are planning on supporting
 ;; a compiled form of your sources via a Makefile or Makefile.am
 ;; If you do not create or use a compiler, remove the compiler init line
 ;; from the class you create.
@@ -85,7 +85,7 @@
 ;; If you have your own compiler class, then use the correct class initializer
 ;; below.
 (defvar ede-%NAME%-compiler
-  (ede-compiler 
+  (ede-compiler
    "ede-%NAME%-compiler"
    :name "%NAME%"
    :variables '(("%NAME-COMPILER%" . "%compiler-and-flags%"))
@@ -246,7 +246,7 @@
 ;;  (call-next-method)
 ;;  (insert "other variable thing"))
 
-;; This returns a string for the dependencies as they 
+;; This returns a string for the dependencies as they
 (defmethod ede-proj-makefile-dependencies ((this ede-proj-target-%NAME%))
   "Return a string representing the dependencies for THIS."
   (or (call-next-method)

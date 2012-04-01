@@ -7757,10 +7757,10 @@ This builds on `color-theme-jsc-light'."
 
 (defun color-theme-kingsajz ()
   "Color theme by Olgierd \"Kingsajz\" Ziolko, created 2001-12-04.
-Another theme with wheat on DarkSlatGrey. Based on Subtle Hacker. 
-Used on Emacs 21.1 @ WinMe. Not tested on any other systems. 
+Another theme with wheat on DarkSlatGrey. Based on Subtle Hacker.
+Used on Emacs 21.1 @ WinMe. Not tested on any other systems.
 
-Some faces uses Andale mono font (nice fixed-width font). 
+Some faces uses Andale mono font (nice fixed-width font).
 It is available at:  http://www.microsoft.com/typography/downloads/andale32.exe
 
 Hail Eris! All hail Discordia!"
@@ -11280,7 +11280,7 @@ Bonus: do not use 3D modeline."
      (zmacs-region ((t (:background "gray65")))))))
 
 (defun color-theme-emacs-nw ()
-  "Follow emacs21's color-theme, with -nw getting 100% compatibility. 
+  "Follow emacs21's color-theme, with -nw getting 100% compatibility.
 
 Alex's `color-theme-emacs-21' follows emacs21's theme, but in the
 current scheme of things, that means that when it works on X, it won't
@@ -11290,7 +11290,7 @@ there are multiple windows.
 
 OTOH, `color-theme-emacs-nw' follows emacs21's theme but the goal is
 100% -nw compatibility, and in X; we shall try for decent color
-scheme, and as much compability default emacs21's X as possble. 
+scheme, and as much compability default emacs21's X as possble.
 Bugs to deego@gnufans.org.
 
 TODO: Try to make this theme relative to color-theme-emacs-21 rather

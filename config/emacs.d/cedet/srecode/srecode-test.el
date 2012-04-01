@@ -192,13 +192,13 @@ Assumes that the current buffer is the testing buffer."
    (srecode-utest-output
     "wrapinclude-basic" :name "wrapinclude-basic"
     :output ";; An includable  we could use.
-;; 
+;;
 ;; Text after a point inserter."
     )
    (srecode-utest-output
     "wrapinclude-basic2" :name "wrapinclude-basic"
     :output ";; An includable MOOSE we could use.
-;; 
+;;
 ;; Text after a point inserter."
     :dict-entries '("COMMENT" "MOOSE")
     )

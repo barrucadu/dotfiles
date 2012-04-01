@@ -1,8 +1,8 @@
 /** testclasses.hh --- A test file full of classes to make diagrams from.
  */
 
-class MyBaseclass 
-{     
+class MyBaseclass
+{
 
 public:
   MyBaseclass()
@@ -30,7 +30,7 @@ private:
 };
 
 class Subclass : public MyBaseclass
-{     
+{
 
 public:
   Subclass()
@@ -57,7 +57,7 @@ private:
 };
 
 class SpecificClass : public Subclass
-{     
+{
 
 public:
   SpecificClass()
@@ -76,7 +76,7 @@ private:
 };
 
 class OtherClass : public Subclass
-{     
+{
 
 public:
   OtherClass()
@@ -103,7 +103,7 @@ private:
 };
 
 class AltClass : public Subclass
-{     
+{
 
 public:
   AltClass()

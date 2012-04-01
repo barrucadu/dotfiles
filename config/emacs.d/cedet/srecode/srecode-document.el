@@ -89,7 +89,7 @@ If the cursor is on a one line prototype, then insert post-fcn comments."
 
       ;; A declaration comment.  Find what it documents.
       (when (equal ctxt '("declaration" "comment"))
-	
+
 	;; If we are on a one line tag/comment, go to that fcn.
 	(if (save-excursion (back-to-indentation)
 			    (semantic-current-tag))
@@ -120,7 +120,7 @@ If the cursor is on a one line prototype, then insert post-fcn comments."
 	;; header??
 
 	(let ((title (read-string "Section Title (RET to skip): ")))
-	  
+
 	  (when (and (stringp title) (not (= (length title) 0)))
 	    (srecode-document-insert-section-comment title)))
 
@@ -129,13 +129,13 @@ If the cursor is on a one line prototype, then insert post-fcn comments."
 (defun srecode-document-insert-section-comment (&optional title)
   "Insert a section comment with TITLE."
   (interactive "sSection Title: ")
-  
+
   (srecode-load-tables-for-mode major-mode)
   (srecode-load-tables-for-mode major-mode 'document)
 
   (if (not (srecode-table))
       (error "No template table found for mode %s" major-mode))
-  
+
   (let* ((dict (srecode-create-dictionary))
 	 (temp (srecode-template-get-table (srecode-table)
 					   "section-comment"
@@ -147,7 +147,7 @@ If the cursor is on a one line prototype, then insert post-fcn comments."
     (when title
       (srecode-dictionary-set-value
        dict "TITLE" title))
-    
+
     (srecode-insert-fcn temp dict)
     ))
 
@@ -173,7 +173,7 @@ It is assumed that the comment occurs just in front of FCN-IN."
 
   (if (not (srecode-table))
       (error "No template table found for mode %s" major-mode))
-  
+
   (let* ((dict (srecode-create-dictionary))
 	 (temp (srecode-template-get-table (srecode-table)
 					   "function-comment"
@@ -186,7 +186,7 @@ It is assumed that the comment occurs just in front of FCN-IN."
     (when (not fcn-in)
       (semantic-fetch-tags)
       (setq fcn-in (semantic-current-tag)))
-  
+
     (when (or (not fcn-in)
 	      (not (semantic-tag-of-class-p fcn-in 'function)))
       (error "No tag of class 'function to insert comment for"))
@@ -284,7 +284,7 @@ It is assumed that the comment occurs just after VAR-IN."
 
   (if (not (srecode-table))
       (error "No template table found for mode %s" major-mode))
-  
+
   (let* ((dict (srecode-create-dictionary))
 	 (temp (srecode-template-get-table (srecode-table)
 					   "variable-same-line-comment"
@@ -297,7 +297,7 @@ It is assumed that the comment occurs just after VAR-IN."
     (when (not var-in)
       (semantic-fetch-tags)
       (setq var-in (semantic-current-tag)))
-  
+
     (when (or (not var-in)
 	      (not (semantic-tag-of-class-p var-in 'variable)))
       (error "No tag of class 'variable to insert comment for"))
@@ -358,7 +358,7 @@ If there is only one tag in the region, complain."
 
   (if (not (srecode-table))
       (error "No template table found for mode %s" major-mode))
-  
+
   (let* ((dict (srecode-create-dictionary))
 	 (context "declaration")
 	 (temp-start nil)
@@ -436,7 +436,7 @@ If there is only one tag in the region, complain."
     (srecode-dictionary-set-value
      dict "GROUPNAME"
      (read-string "Name of group: "))
-    
+
     ;; Perform the insertion
     ;; Do the end first so we don't need to recalculate anything.
     ;;
@@ -562,7 +562,7 @@ Works with the following rules:
   1) convert all _ into spaces.
   2) inserts spaces between CamelCasing word breaks.
   3) expands noun names based on common programmer nouns.
-  
+
   This function is designed for variables, not functions.  This does
 not account for verb parts."
   (if (string= "" programmer)
@@ -647,7 +647,7 @@ Dump out the extracted dictionary."
 
   (if (not (srecode-table))
       (error "No template table found for mode %s" major-mode))
-  
+
   (let* ((temp (srecode-template-get-table (srecode-table)
 					   "function-comment"
 					   "declaration"

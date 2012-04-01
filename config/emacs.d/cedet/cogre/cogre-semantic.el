@@ -127,7 +127,7 @@ Goes to the original location of TAG, and tries to re-find that tag."
 	 )
 	(setq slots (cdr slots)))
 
-      ;; Add in all those extra methods	
+      ;; Add in all those extra methods
       (when (semanticdb-find-results-p extmeth)
 	(setq extmeth (semanticdb-strip-find-results extmeth t)))
       (while extmeth
@@ -233,7 +233,7 @@ while creating the tags."
 	  (out nil))
       ;; Each entry in TREE is:
       ;; ( CLASS SUPER1 SUPER2 ... )
-      (dolist (E tree) 
+      (dolist (E tree)
 	(let* ((node (car E))
 	       (name (oref node :object-name))
 	       (parents (mapcar (lambda (P)
@@ -282,11 +282,11 @@ Uses `cogre-srecode-setup' to setup SRecode for code generation."
       (let ((me (srecode-semantic-insert-tag T)))
 	(goto-char me))
       )
-    
+
     ))
 
 ;;; USER-UTILITY
-;; 
+;;
 ;; Previous version of cogre-uml-quick-class used a different class
 ;; hierarchy.  This implementation uses the new peer back-end to various
 ;; nodes to build up the tree.
@@ -331,7 +331,7 @@ Uses `cogre-srecode-setup' to setup SRecode for code generation."
   "Create a new UML diagram based on CLASS showing only immediate lineage.
 The parent to CLASS, CLASS, and all of CLASSes children will be shown."
   (interactive (list (cogre-read-class-name)))
-  
+
   (message "Building UML diagram for %S" class)
 
   (let*
@@ -357,7 +357,7 @@ The parent to CLASS, CLASS, and all of CLASSes children will be shown."
       ;; Create the children nodes
       (cogre-uml-children-classes class-tok CT)
       )
-      
+
     ;; Run the layout engine.
     (condition-case nil
 	(cogre-layout)
@@ -420,7 +420,7 @@ that the children of TAG-NODE will be linked to."
 	;; Recurse
 	(cogre-uml-children-classes C cn)
 	))
-    
+
     ))
 
 (provide 'cogre-semantic)

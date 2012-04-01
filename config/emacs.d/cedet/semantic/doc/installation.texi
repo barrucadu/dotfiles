@@ -34,7 +34,7 @@ enabling your preferred subset individually in your @file{.emacs} file.
 @anchor{semantic-load-enable-minimum-features}
 Enable the minimum number of semantic features for basic usage.
 
-These minimum features are designed to allow @semantic{} to 
+These minimum features are designed to allow @semantic{} to
 maintain the parsing data necessary needed by various tools while
 intruding on your typical editing practices as little as possible.
 
@@ -63,7 +63,7 @@ Loads any ebrowse dbs created earlier.
 Enable all ectag supported backend support features.
 This includes:
 @table @asis
-@item semanticdb backend support 
+@item semanticdb backend support
 Using exuberent ctags as a semanticdb backend allows for faster
 first-time parsing of files for supported languages, such as C/C++.
 @item buffer parsing using ectags for some modes.
@@ -249,11 +249,11 @@ include path.
 Finding files within a project path is more complex.  One way is to
 teach @semantic{} about your project, and add an entry to
 @code{semanticdb-project-roots}.  See
-@xref{(semantic-user)Semanticdb Search Configuration}, or 
+@xref{(semantic-user)Semanticdb Search Configuration}, or
 @xref{(semantic-user)SemanticDB project roots}.
 @refill
 
-Alternately, setup an EDE project.  Using the 
+Alternately, setup an EDE project.  Using the
 @inforef{top, EDE project system, ede} to allow finer grained control
 on how Semantic will find header files.  You can use EDE to create a
 project and create your Makefiles for you, or you can create a simple
@@ -277,7 +277,7 @@ Here are some common tasks you may be interested in:
 @subsection Don't parse certain buffers
 
 You can inhibit parsing using the @code{semantic-inhibit-functions}
-variable. 
+variable.
 
 @defvar semantic-inhibit-functions
 @anchor{semantic-inhibit-functions}

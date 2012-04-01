@@ -64,7 +64,7 @@ Use the 'ldflags' slot to specify where in-project libraries might be.
 
 Note: Currently only used for Automake projects."
 	   )
-   
+
    )
    "This target is an executable program.")
 

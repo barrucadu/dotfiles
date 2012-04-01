@@ -124,7 +124,7 @@
 (if (fboundp 'frame-parameter)
 
     (defalias 'dframe-frame-parameter 'frame-parameter)
-  
+
   (defun dframe-frame-parameter (frame parameter)
     "Return FRAME's PARAMETER value."
     (cdr (assoc parameter (frame-parameters frame)))))
@@ -687,7 +687,7 @@ Optionally select that frame if necessary."
   (when (or (not (dframe-mouse-event-p last-input-event))
             dframe-activity-change-focus-flag)
     (dframe-select-attached-frame)
-    ;; KB: For what is this - raising the frame?? 
+    ;; KB: For what is this - raising the frame??
     (other-frame 0)))
 
 
@@ -871,7 +871,7 @@ Must be bound to event E."
 		 (windowp (posn-window (event-end event))) ; Sometimes
 					; there is no window to jump into.
 		 ))
-	     
+
     (funcall dframe-track-mouse-function event)))
 
 (defun dframe-track-mouse-xemacs (event)

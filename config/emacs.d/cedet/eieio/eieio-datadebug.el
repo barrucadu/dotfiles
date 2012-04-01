@@ -107,7 +107,7 @@ PREBUTTONTEXT is some text between PREFIX and the object button."
 	    (let ((i (class-slot-initarg cl (car publa)))
 		  (v (eieio-oref obj (car publa))))
 	      (data-debug-insert-thing
-	       v prefix (concat 
+	       v prefix (concat
 			 (if i (symbol-name i)
 			   (symbol-name (car publa)))
 			 " ")))
@@ -152,7 +152,7 @@ PREBUTTONTEXT is some text between PREFIX and the object button."
 			  (symbol-function (car sym)))
 			  data))
 	 )
-    
+
     (data-debug-insert-thing data2 ">" "")))
 
 

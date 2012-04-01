@@ -15,6 +15,6 @@ public class Turing
     this._tape   = tape;
     this._states = states;
     this._halts  = halts;
-    this._mystate = 
+    this._mystate =
   }
 }

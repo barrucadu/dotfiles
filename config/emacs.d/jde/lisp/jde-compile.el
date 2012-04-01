@@ -541,7 +541,7 @@ source and class files.
   :type 'boolean)
 
 (defcustom jde-compile-enable-kill-buffer -1
-  "* Time in seconds to display the compilation buffer before 
+  "* Time in seconds to display the compilation buffer before
 'jde-compile-finish-kill-buffer will kill the compilation buffer.
 
 If less than zero (or nil), do not kill the compilation buffer.

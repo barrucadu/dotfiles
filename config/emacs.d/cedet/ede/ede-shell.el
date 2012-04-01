@@ -54,7 +54,7 @@ COMMAND is a text string representing the thing to be run."
     ;; Run the command itself.
     (ede-shell-run-command command)
     ))
-  
+
 (defun ede-shell-run-command (command)
   "Run the COMMAND in the current shell-buffer."
   ;; go to end

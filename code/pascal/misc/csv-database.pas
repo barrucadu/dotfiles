@@ -1,10 +1,10 @@
 program CSVDatabase;
 { A simple database program operating on plaintext files. Databases are stored in the form:
-  
+
     tablename
     field1,field2,field3
     value1,value2,value3
-  
+
   ie: CSV with table names.
   As the databases are plaintext, compression works exceedingly well on them. }
 
@@ -14,33 +14,33 @@ Uses SysUtils;
 type
    plink    = ^linked;
    prec     = ^records;
-   ptab     = ^table;	 
+   ptab     = ^table;
    pdb      = ^database;
 
    linked   = Record
 		 value : String;
 		 next  : plink;                      { Pointer to next linked record }
-	      End;     
-   
+	      End;
+
    records  = Record
 		 values	: plink;                     { Pointer to first value }
 		 next	: prec;                      { Pointer to next record }
-	      End;	
-   
-   table    = Record	
+	      End;
+
+   table    = Record
 		 name	 : String;
 		 fields	 : plink;                   { Pointer to first field value object }
 		 records : prec;                    { Pointer to first record object }
 		 nfield	 : Integer;                 { Number of fields }
 		 nrecs	 : Integer;                 { Number of records }
 		 next	 : ptab;                    { Pointer to next table record }
-	      End;	 
-   
-   database = Record	 
+	      End;
+
+   database = Record
 		 fname	: String;
 		 tables	: ptab;                      { Pointer to linked list of tables }
 		 ntabs	: Integer;                   { Number of tables }
-	      End;	
+	      End;
 
 var
    prompt : String;   { User input }
@@ -113,22 +113,22 @@ var
    tmpln : String;   { Temporary string }
    ctab	 : ptab;     { Current table }
    crec	 : prec;     { Current record }
-begin	     
+begin
    db^.fname := fname;
    db^.ntabs := 0;
 
    new(db^.tables);
    ctab := db^.tables; { Set the current table to the first }
    ctab^.name := '';
-   
+
    { Open file for reading }
    assignfile(fh, fname);
    reset(fh);
-   
+
    while not eof(fh) do
    begin
       readln(fh, tmpln);
-      
+
       if Length(tmpln) > 0 then
       begin
 	 if numvals(tmpln, ',') = 0 then { Table name }
@@ -163,7 +163,7 @@ begin
 	    end
       end;
    end;
-   
+
    closefile(fh);
 end; { readdb }
 
@@ -178,9 +178,9 @@ begin
    { Open database file for writing }
    assignfile(fh, db.fname);
    rewrite(fh);
-   
+
    ctab := db.tables;
-   
+
    for i := 0 to db.ntabs do
    begin
       { Write table name }
@@ -191,10 +191,10 @@ begin
       for j := 0 to ctab^.nfield do
       begin
 	 write(fh, clink^.value);
-	 
+
 	 if j < ctab^.nfield then
 	    write(fh, ',');
-	    
+
 	 clink := clink^.next;
       end;
       writeln(fh, '');
@@ -208,19 +208,19 @@ begin
 	 for k := 0 to ctab^.nfield do
 	 begin
 	    write(fh, clink^.value);
-	    
+
 	    if k < ctab^.nfield then
 	       write(fh, ',');
-	    
+
 	    clink := clink^.next;
 	 end;
 	 crec := crec^.next;
 	 writeln(fh, '');
       end;
-      
+
       ctab := ctab^.next;
    end;
-   
+
    closefile(fh);
 end; { writedb }
 
@@ -230,11 +230,11 @@ var
    s : String;  { Working string }
 begin
    s := '';
-   
+
    { Grab the substring }
    for i := start to (start + count - 1) do
       s := s + str[i];
-   
+
    substr := s;
 end;
 
@@ -260,24 +260,24 @@ var
    clink : plink;   { Current link }
 begin
    ctab := db.tables;
-   
+
    for i := 0 to db.ntabs do
    begin
       { Write table name }
       write(ctab^.name, ': ');
-      
+
       { Write field headings }
       clink := ctab^.fields;
       for j := 0 to ctab^.nfield do
       begin
 	 write(clink^.value);
-	 
+
 	 if j < ctab^.nfield then
 	    write(', ');
-	 
+
 	 clink := clink^.next;
       end;
-      
+
       ctab := ctab^.next;
       writeln();
    end;
@@ -289,7 +289,7 @@ var
    tname  : String;  { Table name }
    ctab	  : ptab;    { Current table }
    crec	  : prec;    { Current record }
-   clink  : plink;   { Current link } 
+   clink  : plink;   { Current link }
    recs	  : Integer; { Counter }
    i, j	  : Integer; { Counters }
 begin
@@ -311,7 +311,7 @@ begin
    begin
       recs := 0;
       crec := ctab^.records;
-      
+
       { Print records }
       for i := 0 to ctab^.nrecs do
       begin
@@ -319,10 +319,10 @@ begin
 	 for j := 0 to ctab^.nfield do
 	 begin
 	    write(clink^.value);
-	    
+
 	    if j < ctab^.nfield then
 	       write(', ');
-	    
+
 	    clink := clink^.next;
 	 end;
 
@@ -382,13 +382,13 @@ begin
 
    readdb(ParamStr(1), @db);
    writeln('Read database from file');
-   
+
    prompt := '';
    while prompt <> 'exit' do
    begin
       write(' > ');
       readln(prompt);
-      
+
       if (prompt <> 'exit') and (prompt <> '') then
 	 doprompt(prompt, @db);
    end;

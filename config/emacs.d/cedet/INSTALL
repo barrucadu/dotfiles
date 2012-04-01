@@ -72,7 +72,7 @@ install scripts:
 
   If the version of Make you are using doesn't work with the CEDET
   Makefiles, (such as the version on AIX) you will need to download and
-  install GNU Make to use with these Makefiles.  Alternately, 
+  install GNU Make to use with these Makefiles.  Alternately,
   see cedet-build.el
 
 3) Install load hooks into your .emacs file.  For more detail on
@@ -182,7 +182,7 @@ OTHER REQUIREMENTS:
 
    To use the JavaScript parser:
    javascript-mode.el : http://www.emacswiki.org/cgi-bin/wiki/JavaScriptMode
-   
+
    To use Exuberent CTags to parse files:
    http://ctags.sourceforge.net/
 

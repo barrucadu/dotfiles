@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
     (void) argc;
     (void) argv;
-    
+
     char* dimportant[] = DIMPORTANT;
     char* dnetwork[]   = DNETWORK;
     char* dschool[]    = DSCHOOL;
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
     printf("-> Starting important daemons.\n");
     start_daemons(dimportant, 0, 0);
-    
+
     if(findnet())
     {
 	printf("-> Starting network daemons.\n");
@@ -56,6 +56,6 @@ int main(int argc, char *argv[])
 	printf("-> Starting normal daemons.\n");
 	start_daemons(dnormal, 1, 0);
     }
-    
+
     return 0;
 }

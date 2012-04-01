@@ -37,7 +37,7 @@
       (locate-file exec exec-path))
 
   ;; Else, older version of Emacs.
-  
+
   (defsubst ede--find-executable (exec)
     "Return an expanded file name for a program EXEC on the exec path."
     (let ((p exec-path)

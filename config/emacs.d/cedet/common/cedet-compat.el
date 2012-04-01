@@ -96,7 +96,7 @@ If string STR1 is greater, the value is a positive number N;
 ;; here for compatibility.
 (if (not (fboundp 'subst-char-in-string))
 
-;;;###autoload    
+;;;###autoload
 (defun subst-char-in-string (fromchar tochar string &optional inplace)
   ;; From Emacs 21.3/lisp/subr.el
   "Replace FROMCHAR with TOCHAR in STRING each time it occurs.
@@ -154,7 +154,7 @@ Return a coding system between BEGIN and END."
 	       ;; Assume strings are always short enough that the
 	       ;; condition-case is not worth it.
 	       (query-coding-string begin coding-system t))
-	 
+
 	   (remove-duplicates
 	    (append
 	     (get-language-info current-language-environment 'coding-system)

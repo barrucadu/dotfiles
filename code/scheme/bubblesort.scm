@@ -19,5 +19,5 @@
 	(if (= current (sort current))
 		current
 		(iterator (sort current))))
-  
+
   (iterator list))

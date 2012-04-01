@@ -36,16 +36,16 @@ Lisp: $(Lisp_LISP)
 	@echo "(setq debug-on-error t)" >> $@-compile-script
 	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
-templates: 
+templates:
 	@
 
-scripts: 
+scripts:
 	@
 
-Misc: 
+Misc:
 	@
 
-tags: 
+tags:
 
 
 clean:

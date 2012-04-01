@@ -10,7 +10,7 @@ top=
 ede_FILES=Project.ede Makefile
 
 EMACS=emacs
-LOADPATH= ../common/ 
+LOADPATH= ../common/
 LOADDEFS=speedbar-loaddefs.el
 LOADDIRS=.
 init_LISP=speedbar-load.el
@@ -30,7 +30,7 @@ DISTDIR=$(top)speedbar-$(VERSION)
 all: autoloads init speedbar speedbar.info
 
 .PHONY: autoloads
-autoloads: 
+autoloads:
 	@echo "(add-to-list 'load-path nil)" > $@-compile-script
 	for loadpath in . ${LOADPATH}; do \
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
@@ -68,10 +68,10 @@ opt: $(opt_LISP)
 	@echo "(setq debug-on-error t)" >> $@-compile-script
 	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
-images: 
+images:
 	@
 
-tags: 
+tags:
 
 
 clean:

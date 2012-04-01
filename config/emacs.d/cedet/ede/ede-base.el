@@ -83,7 +83,7 @@ which files this object is interested in."
 	       :accessor ede-object-sourcecode)
    (keybindings :allocation :class
 		:initform (("D" . ede-debug-target))
-		:documentation 
+		:documentation
 "Keybindings specialized to this type of target."
 		:accessor ede-object-keybindings)
    (menu :allocation :class
@@ -96,7 +96,7 @@ which files this object is interested in."
 	 :accessor ede-object-menu)
    )
   "A target is a structure that describes a file set that produces something.
-Targets, as with 'Make', is an entity that will manage a file set 
+Targets, as with 'Make', is an entity that will manage a file set
 and knows how to compile or otherwise transform those files into some
 other desired outcome.")
 
@@ -301,7 +301,7 @@ All specific project types must derive from this project."
 ;; The cache is a way to mark where all known projects live without
 ;; loading those projects into memory, or scanning for them each time
 ;; emacs starts.
-;; 
+;;
 (defcustom ede-project-placeholder-cache-file
   (expand-file-name "~/.projects.ede")
   "*File containing the list of projects EDE has viewed."
@@ -527,7 +527,7 @@ files in the project."
 
 (defmethod ede-html-documentation ((this ede-project))
   "Return a list of HTML files provided by project THIS."
-  
+
   )
 
 ;;; Default "WANT" methods.

@@ -47,8 +47,8 @@ private:
 class AAA::Private
 {
     Private() : bbb(0) {
-    }    
-    
+    }
+
     BBB* bbb;
 };
 

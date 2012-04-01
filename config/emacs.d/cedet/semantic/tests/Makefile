@@ -17,10 +17,10 @@ DISTDIR=$(top)semantic-$(VERSION)/tests
 
 all: Tests
 
-Tests: 
+Tests:
 	@
 
-tags: 
+tags:
 
 .PHONY: dist
 
