@@ -6,8 +6,8 @@ DPORT=:0.1
 # X
 
 setxkbmap -option terminate:ctrl_alt_bksp
-xsetroot -d :1.0 -cursor_name left_ptr
-xsetroot -d :1.1 -cursor_name left_ptr
+xsetroot -d $DLAND -cursor_name left_ptr
+xsetroot -d $DPORT -cursor_name left_ptr
 xrdb -load ~/projects/home/config/xorg/Xdefaults
 
 # /X
