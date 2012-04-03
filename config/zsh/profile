@@ -4,8 +4,8 @@
 export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:$PATH:/usr/share/java/apache-ant/bin"
     # Programs
 export BROWSER=chromium
-export EDITOR="emacsclient -c -t"
-export VISUAL="emacsclient -c -t"
+export EDITOR="emacs"
+export VISUAL="emacs"
 export PAGER=most
     # History
 export HISTFILE=~/.data/zsh/history
