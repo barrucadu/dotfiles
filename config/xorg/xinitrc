@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+DLAND=:0.0
+DPORT=:0.1
+
 # X
 
 setxkbmap -option terminate:ctrl_alt_bksp
@@ -13,8 +16,8 @@ xrdb -load ~/projects/home/config/xorg/Xdefaults
 
 urxvtd -q -f -o
 
-DISPLAY=:1.0 randombg /usr/share/wallpapers/rotation/landscape &
-DISPLAY=:1.1 randombg /usr/share/wallpapers/rotation/portrait  &
+DISPLAY=$DLAND randombg /usr/share/wallpapers/rotation/landscape &
+DISPLAY=$DPORT randombg /usr/share/wallpapers/rotation/portrait  &
 
 # /APPS
 
@@ -23,9 +26,6 @@ DISPLAY=:1.1 randombg /usr/share/wallpapers/rotation/portrait  &
 if [[ "$WM" != "" ]]; then
     urxvt &
     exec $WM
-elif [[ -e /tmp/notile ]]; then
-    urxvt &
-    exec openbox
 else
     exec stumpwm
 fi
