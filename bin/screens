@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+SCREENDIR=/etc/X11/screens
+SCREENCFG=/etc/X11/xorg.conf.d/10-screens.conf
+
+PORTFILE=/run/portrait-only
+
+cfg=$1.conf
+
+if [[ -e $SCREENDIR/$cfg ]]; then
+    [[ -e $PORTFILE ]] && rm $PORTFILE
+
+    ln -sf $SCREENDIR/$cfg $SCREENCFG
+
+    [[ $1 == "portrait" ]] && touch $PORTFILE
+else
+    echo "Unknown screen option, '$1'."
+fi
