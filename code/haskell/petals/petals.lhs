@@ -20,12 +20,9 @@ list of dice rolls.
 > petals :: [Die] -> Int
 > petals [] = 0
 > petals (d:ds) = petals ds + case d of
->                               One   -> 0
->                               Two   -> 0
 >                               Three -> 2
->                               Four  -> 0
 >                               Five  -> 4
->                               Six   -> 0
+>                               _     -> 0
 
 Tying it all together
 ---------------------
