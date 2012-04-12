@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-CFGFILES=(uzbl)
-HOMEFILES=(emacs irssi mostrc mplayer ncmpcpp stumpwmrc tmux.conf)
+CFGFILES=()
+HOMEFILES=(emacs mplayer ncmpcpp stumpwmrc tmux.conf)
 
 force=""
 if [[ $1 == "-f" ]]; then
@@ -22,5 +22,4 @@ done
 ln -s $force $dir/config/xorg/XCompose $HOME/.XCompose
 ln -s $force $dir/config/zsh/rc $HOME/.zshrc
 ln -s $force $dir/bin $HOME/bin
-ln -s $force $dir/.data $HOME/.data
 ln -s $force $dir/code $HOME/code
