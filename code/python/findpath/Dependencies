@@ -1,5 +1,0 @@
-Tested in Python 2.6.1 (Windows) and Python 2.6.3 (Linux)
-
-Extra modules required:
-    pygame
-    pymedia
