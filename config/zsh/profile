@@ -31,15 +31,7 @@ export GTK_IM_MODULE=xim
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 export LC_CTYPE=en_GB.UTF-8
-    # NMPC / MPD
-export NMPC_DEFCMD="status"
-export NMPC_DEFHELP="all"
-export MPDHOST="eihort"
     # Misc
-export WEBKIT_IGNORE_SSL_ERRORS=1
-export NETHACKOPTIONS=@/home/barrucadu/config/nethack/config
-export SCHEME_LIBRARY_PATH=/usr/lib/slib/
-export TODOFILE="$HOME/docs/org/todo.org"
 export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 export CVS_RSH=ssh
 export CFLAGS="-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -pedantic -O2"

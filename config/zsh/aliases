@@ -7,7 +7,6 @@ alias c='clear'
 alias e='exit'
 alias o=$EDITOR
 alias O='sudoedit'
-alias t='todo'
 
 # Basic commands
 alias su='su - '
@@ -19,33 +18,14 @@ alias top='htop'
 alias ls='ls --color=auto'
 alias lls='/bin/ls'
 alias la='ls --color=auto -lA'
-alias laa='ls --color=auto -la'
-alias ll='ls --color=auto -l'
 alias cp='cp -rpv'
 alias mv='mv -v'
 alias locate='locate -e -L'
 alias mkdir='mkdir -p'
-alias tree='tree -L 2 -d -l'
-
-# Package management
-alias fullupgrade='sudo abs && sudo clyde -Syua'
-alias upgrade='sudo clyde -Syua'
-alias orphans='clyde -Qtdq'
-alias paclist='clyde -Ql'
-alias pacfile='clyde -Qo'
-alias install='sudo clyde -S --needed'
-alias remove='sudo clyde -Rsc'
-alias synchronise='sudo clyde -Syyuw && sudo abs'
-alias upgrades='clyde -Qu'
-alias deorphan='sudo clyde -Rsc $(clyde -Qtdq)'
-alias pacgraph='pacgraph -b \#111111 -l \#ffffff -t \#eeeeee -d \#aaaaaa'
-alias pacgroup='clyde -Qg'
-alias pacgroups='clyde -Qg | sed "s/ .*//" | sort | uniq'
 
 # Security
 alias gpgsig='gpg -a --detach-sign'
 alias gpgasc='gpg -e -r 9F58FC68 -a'
-alias pw='echo `< /dev/urandom tr -cd "[:graph:]" | head -c8`'
 
 # Servers
 alias sql='mysql -p -u root'
@@ -65,22 +45,16 @@ alias bib='bibtex'
 
 # Miscellanious
 if [[ $UID != 0 ]]; then
-    alias aliases='cat ~/projects/home/config/zsh/aliases'
-    alias functions='cat ~/projects/home/config/zsh/functions'
     alias shutdown='sudo shutdown -hP now'
     alias reboot='sudo reboot'
     alias windows='sudo grub-set-default 2 ; sudo reboot'
 else
-    alias aliases='cat /home/barrucadu/projects/home/config/zsh/aliases'
-    alias functions='cat /home/barrucadu/projects/home/config/zsh/functions'
+    alias shutdown='shutdown -hP now'
     alias windows='grub-set-default 3 ; reboot'
 fi
-alias mp3ogg='mp32ogg *.mp3 && rm *.mp3'
-alias flacogg='echo ".\n.\n6" | flac2ogg && rm *.flac'
+
 alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/projects/home/config/xorg/Xdefaults'
 alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
 alias units='units --verbose -1'
-alias dvdplayer="mplayer -profile dvd dvdnav://"
-alias burniso="wodim -v dev=/dev/cdrom speed=1"
 alias pumount='pmount -u'
