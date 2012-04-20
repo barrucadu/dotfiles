@@ -1,5 +1,20 @@
 #!/bin/zsh
 
-WALLPAPERDIR=`default $1 /usr/share/wallpapers/rotation/landscape`
+# Set the wallpaper directories
+WALLPAPERDIR=`default $1 /usr/share/wallpapers/rotation`
+LANDDIR=$WALLPAPERDIR/landscape
+PORTDIR=$WALLPAPERDIR/portrait
 
-feh --bg-scale "$WALLPAPERDIR/`ls $WALLPAPERDIR | shuf -n1`"
+# Pick random landscape and portrait wallpapers.
+landscape="$LANDDIR/`ls $LANDDIR | shuf -n1`"
+portrait="$PORTDIR/`ls $PORTDIR | shuf -n1`"
+
+# Make the new wallpaper
+wall=`mktemp`.png
+montage $portrait $landscape -tile 2x1 -geometry "3000x1920+0+0" -mode concatenate $wall
+
+# Set the wallpaper
+feh --bg-tile $wall
+
+# Delete the temporary image
+rm $wall
