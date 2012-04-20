@@ -1,31 +1,17 @@
 #!/bin/zsh
 
-DLAND=:0.0
-DPORT=:0.1
-
 # X
 
 setxkbmap -option terminate:ctrl_alt_bksp
 xrdb -load ~/projects/home/config/xorg/Xdefaults
-
-if [[ -e /run/portrait-only ]]; then
-    xsetroot -cursor_name left_ptr
-else
-    xsetroot -d $DLAND -cursor_name left_ptr
-    xsetroot -d $DPORT -cursor_name left_ptr
-fi
+xsetroot -cursor_name left_ptr
 # /X
 
 # APPS
 
 urxvtd -q -f -o
 
-if [[ -e /run/portrait-only ]]; then
-    randombg /usr/share/wallpapers/rotation/portrait
-else
-    DISPLAY=$DLAND randombg /usr/share/wallpapers/rotation/landscape
-    DISPLAY=$DPORT randombg /usr/share/wallpapers/rotation/portrait
-fi
+randombg /usr/share/wallpapers/rotation
 
 # /APPS
 
@@ -35,7 +21,7 @@ if [[ "$WM" != "" ]]; then
     urxvt &
     exec $WM
 else
-    exec stumpwm
+    exec xmonad
 fi
 
 # /WM

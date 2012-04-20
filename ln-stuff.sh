@@ -23,3 +23,6 @@ ln -s $force $dir/config/xorg/XCompose $HOME/.XCompose
 ln -s $force $dir/config/zsh/rc $HOME/.zshrc
 ln -s $force $dir/bin $HOME/bin
 ln -s $force $dir/code $HOME/code
+
+mkdir $HOME/.xmonad
+ln -s $force $dir/config/xmonad.hs $HOME/.xmonad/xmonad.hs
