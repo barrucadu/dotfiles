@@ -1,0 +1,29 @@
+#!/bin/zsh
+
+# Get the API key and ISBN
+KEY=$1
+ISBN=$2
+
+# Construct the API request URL
+URL="http://isbndb.com/api/books.xml?access_key=$KEY&index1=isbn&value1=$ISBN"
+
+# Download the API response
+tmp=`mktemp`
+wget $URL -O $tmp &>/dev/null
+
+# Check for a result
+if grep -q 'shown_results="0"' $tmp; then
+    echo "No result for $ISBN."
+    rm $tmp
+    exit 1
+fi
+
+# Extract the title and author
+title=`grep "<Title>" $tmp | sed 's:^.*<Title>::' | sed 's:</Title>.*$::'`
+author=`grep "<AuthorsText>" $tmp | sed 's:^.*<AuthorsText>::' | sed 's:</AuthorsText>.*$::'`
+
+# Print the output
+echo "$ISBN: $title, $author"
+
+# Clean up
+rm $tmp
