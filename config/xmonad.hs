@@ -105,8 +105,7 @@ myKeymap config =
      ("<XF86AudioRaiseVolume>", spawn "amixer set Master 1%+"),
 
 -- Misc keys
-     ("C-z x",   spawn "xscreensaver --no-splash"),
-     ("C-z X",   spawn "xscreensaver-command -exit"),
+     ("C-z x",   spawn "slock"),
      ("C-z C-c", spawn "urxvt"),
      ("C-\\",    spawn "urxvtc -e newtmux")
     ]
