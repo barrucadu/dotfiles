@@ -91,7 +91,7 @@ myKeymap config =
 -- Special Keys
      ("<XF86HomePage>", spawn "chromium"),
      ("<XF86Mail>",     spawn "claws-mail"),
-     ("<XF86Sleep>",    spawn "lockscreen"),
+     ("<XF86Sleep>",    spawn "slock"),
      ("<Print>",        spawn "scrot ~/screenshot.png"),
      ("M-<Print>",      spawn "urxvtc -e screenshot"),
 
@@ -105,7 +105,6 @@ myKeymap config =
      ("<XF86AudioRaiseVolume>", spawn "amixer set Master 1%+"),
 
 -- Misc keys
-     ("C-z x",   spawn "slock"),
      ("C-z C-c", spawn "urxvt"),
      ("C-\\",    spawn "urxvtc -e newtmux")
     ]
