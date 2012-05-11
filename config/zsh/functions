@@ -30,32 +30,6 @@ function reprobe()
     done
 }
 
-function maintain()
-{
-    # Update
-    sudo pacman -Syu
-    sudo abs
-
-    # Clean
-    sudo pacman -Rsc $(pacman -Qtdq)
-    sudo localepurge
-    sudo pacman -Scc
-
-    # Generale maintenence
-    sudo pacman-optimize
-    sudo mandb
-    sudo ldconfig -v
-    sudo updatedb
-    sudo sync
-}
-
-function shutdownhost()
-{
-    if ping -c1 $1 &>/dev/null; then
-        ssh $1 "sudo shutdown -hP now"
-    fi
-}
-
 # Running programs
 function r()
 {
@@ -69,7 +43,6 @@ function re()
     disown %%
     exit
 }
-
 
 # Misc
 function extract ()
@@ -102,14 +75,7 @@ function extract ()
     esac
 }
 
-function sign ()
+function @ ()
 {
-    KEY=$1;
-    KEYSERVER='keyserver.ubuntu.com';
-    
-    [[ "$2" != "" ]] && KEYSERVER=$2
-    
-    gpg --keyserver $KEYSERVER --recv-keys $KEY
-    gpg --yes --ask-cert-level --sign-key $KEY
-    gpg --keyserver $KEYSERVER --send-keys $KEY
+    chromium --app=$1
 }

@@ -2,7 +2,6 @@
 
 # Short aliases
 alias !='sudo'
-alias @='chromium'
 alias c='clear'
 alias e='exit'
 alias o=$EDITOR
