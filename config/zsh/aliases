@@ -47,7 +47,7 @@ alias bib='bibtex'
 if [[ $UID != 0 ]]; then
     alias shutdown='sudo shutdown -hP now'
     alias reboot='sudo reboot'
-    alias windows='sudo grub-set-default 2 ; sudo reboot'
+    alias windows='sudo grub-set-default 3 ; sudo reboot'
 else
     alias shutdown='shutdown -hP now'
     alias windows='grub-set-default 3 ; reboot'
