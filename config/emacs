@@ -11,6 +11,7 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/jde/lisp"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet/common"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elib"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/minimap"))
 
 ;(require 'wrap-region)
 (require 'color-theme)
@@ -18,6 +19,7 @@
 (require 'sass-mode)
 (require 'epa)
 (require 'haskell-mode)
+(require 'minimap)
 
 (load "zenburn.el"             nil t t)
 (load "zenburn-transparent.el" nil t t)
@@ -34,6 +36,7 @@
 (autoload 'jython-mode    "python-mode"      "Python editing mode."                                       t)
 (autoload 'py-shell       "python-mode"      "Start an interactive Python interpreter in another window." t)
 (autoload 'doctest-mode   "doctest-mode"     "Editing mode for Python Doctest examples."                  t)
+
 ;;;;; ;;;;; ;;;;; MODES ;;;;; ;;;;; ;;;;;
 
 (setq initial-major-mode 'org-mode)
@@ -290,6 +293,13 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+(defun minimap-toggle ()
+  "Toggle minimap for current buffer."
+  (interactive)
+  (if (null minimap-bufname)
+      (minimap-create)
+    (minimap-kill)))
+
 ; Key Bindings
 (global-set-key [?\C-x ?w]      'delete-horizontal-space)
 (global-set-key [?\C-x ?g]      'goto-line)
@@ -299,4 +309,4 @@
 (global-set-key [?\M-O <down>]  'forward-paragraph)
 (global-set-key [?\M-O <left>]  'forward-word)
 (global-set-key [?\M-O <right>] 'backward-word)
-(global-set-key [?\C-x ?\C-x]    'switch-to-previous-buffer)
+(global-set-key [?\C-x ?\C-x]   'switch-to-previous-buffer)
