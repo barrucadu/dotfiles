@@ -58,3 +58,4 @@ alias xreload='xrdb -load ~/projects/home/config/xorg/Xdefaults'
 alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
 alias units='units --verbose -1'
 alias pumount='pmount -u'
+alias tea="grep '-' ~/docs/teas | sed 's:^- ::' | sort | uniq | shuf -n1"
