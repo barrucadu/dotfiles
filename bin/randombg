@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Set the wallpaper directories
-WALLPAPERDIR=`default $1 /usr/share/wallpapers`
+WALLPAPERDIR=`default $1 /mnt/data/wallpaper`
 LANDDIR=$WALLPAPERDIR/landscape
 PORTDIR=$WALLPAPERDIR/portrait
 
