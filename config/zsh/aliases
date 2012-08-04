@@ -26,10 +26,6 @@ alias mkdir='mkdir -p'
 alias gpgsig='gpg -a --detach-sign'
 alias gpgasc='gpg -e -r 9F58FC68 -a'
 
-# Servers
-alias sql='mysql -p -u root'
-alias hurd='ssh -p 2222 root@localhost'
-
 # Coding
 alias g99="gcc $CFLAGS -std=c99"
 alias g89="gcc $CFLAGS -std=c89"
@@ -44,18 +40,10 @@ alias xel='xelatex'
 alias bib='bibtex'
 
 # Miscellanious
-if [[ $UID != 0 ]]; then
-    alias shutdown='sudo shutdown -hP now'
-    alias reboot='sudo reboot'
-    alias windows='sudo grub-set-default 3 ; sudo reboot'
-else
-    alias shutdown='shutdown -hP now'
-    alias windows='grub-set-default 3 ; reboot'
-fi
+alias shutdown='sudo shutdown -hP now'
+alias reboot='sudo reboot'
 
 alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/projects/home/config/xorg/Xdefaults'
 alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
-alias units='units --verbose -1'
 alias pumount='pmount -u'
-alias tea="grep '-' ~/docs/teas | sed 's:^- ::' | sort | uniq | shuf -n1"
