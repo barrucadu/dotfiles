@@ -4,10 +4,10 @@
 . ~/projects/home/config/zsh/functions
 . ~/projects/home/config/zsh/aliases
 
-if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
-    # Start X
+# Start X
+if [[ -z "$DISPLAY" ]] && [[ $(tty) == /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
     while true; do
-        echo "Starting X11 at `ddate +\"%{%A, the %e of %B%}, %Y. %N%n    Celebrate %H\"`"
+        echo "Starting X11"
         startx ~/projects/home/config/xorg/xinitrc &> /dev/null
         source ~/projects/home/config/zsh/profile
     done
