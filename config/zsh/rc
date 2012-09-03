@@ -8,7 +8,7 @@
 if [[ -z "$DISPLAY" ]] && [[ $(tty) == /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
     while true; do
         echo "Starting X11"
-        startx ~/projects/home/config/xorg/xinitrc &> /dev/null
+        xinit &>/dev/null
         source ~/projects/home/config/zsh/profile
     done
 fi
