@@ -104,8 +104,8 @@ function prompt_hostname()
             echo -n "${PR_LIGHT_CYAN}randolph${PR_NO_COLOR}";;
         "eihort")
             echo -n "${PR_LIGHT_MAGENTA}eihort${PR_NO_COLOR}";;
-        "yuggoth")
-            echo -n "${PR_LIGHT_RED}yuggoth${PR_NO_COLOR}";;
+        *)
+            echo -n "${PR_LIGHT_RED}`hostname`${PR_NO_COLOR}";;
     esac
 }
 
