@@ -1,4 +1,0 @@
-#!/bin/zsh
-
-# For some reason I can't have this directly in the tmux status line config... it doesn't work.
-date +"%H:%M:%S (%Y-%m-%d)"
