@@ -42,8 +42,6 @@ alias bib='bibtex'
 # Miscellanious
 alias shutdown='sudo shutdown -hP now'
 alias reboot='sudo reboot'
-
 alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/projects/home/config/xorg/Xdefaults'
-alias qemu='qemu -net nic,vlan=1,model=pcnet -net user,vlan=1 --enable-kvm -m 1G'
 alias pumount='pmount -u'
