@@ -1,6 +1,6 @@
 [default]
 # Audio/Video settings
-ao=alsa
+ao=pulse
 vo=xv,x11
 fs=1
 zoom=1
