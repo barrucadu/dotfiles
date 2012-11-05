@@ -22,8 +22,6 @@ urxvtd -q -f -o
 
 randombg
 
-start-pulseaudio-x11
-
 # /APPS
 
 # WM
