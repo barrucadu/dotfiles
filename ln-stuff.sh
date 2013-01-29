@@ -19,7 +19,12 @@ for file in $HOMEFILES; do
     ln -s $force $dir/config/$file $HOME/.$file
 done
 
-ln -s $force $dir/config/xorg/XCompose $HOME/.XCompose
+pushd $dir/config/xorg
+for file in *; do
+    ln -s $force $dir/config/xorg/$file $HOME/.$file
+done
+popd
+
 ln -s $force $dir/config/zsh/rc $HOME/.zshrc
 
 mkdir $HOME/bin

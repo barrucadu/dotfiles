@@ -12,3 +12,4 @@ if [[ -z "$DISPLAY" ]] && [[ $(tty) == /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]
         source ~/projects/home/config/zsh/profile
     done
 fi
+eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)
