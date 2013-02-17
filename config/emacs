@@ -66,8 +66,18 @@
 ;;;;; Editing Modes ;;;;;
 ; pkgbuild-mode
 (require 'pkgbuild-mode)
-(setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("/PKGBUILD$" . pkgbuild-mode))
 
 ; python-mode
-(autoload 'python-mode "python-mode" "Python editing mode." t)
+(require 'python-mode)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+
+; haskell-mode
+(require 'haskell-mode)
+(add-to-list 'auto-mode-alist '("\\.hs$"  . haskell-mode))
+(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
+
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+
+(setq haskell-font-lock-symbols t)
