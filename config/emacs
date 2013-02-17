@@ -15,6 +15,34 @@
 ;;;;; Appearence ;;;;;
 (load-theme 'solarized-dark t)
 
+;;;;; Behaviour ;;;;;
+; Initial mode
+(setq initial-major-mode 'org-mode)
+
+; Transparent encryption
+(require 'epa-file)
+(epa-file-enable)
+
+; Tabs instead of spaces
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+
+; Spell checking
+(setq ispell-program-name "asell")
+
+; Backup files
+(setq make-backup-files nil)
+
+; Line-killing
+(setq kill-whole-line t)
+
+; Splash screen
+(setq inhibit-splash-screen t)
+
+; Highlight matching parentheses and other such characters
+(show-paren-mode 1)
+(setq show-paren-delay 0)
+
 ;;;;; Editing Modes ;;;;;
 ; pkgbuild-mode
 (require 'pkgbuild-mode)
