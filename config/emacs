@@ -43,6 +43,9 @@
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 
+; Change yes-or-no to y-or-n
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 ;;;;; Keybindings ;;;;;
 ; Helper functions
 (defun switch-to-previous-buffer ()
