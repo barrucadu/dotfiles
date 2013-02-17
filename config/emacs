@@ -87,3 +87,7 @@
 (require 'markdown-mode)
 (add-to-list 'auto-mode-alist '("/*..md$" . markdown-mode))
 (add-to-list 'auto-mode-alist '("/*..markdown$" . markdown-mode))
+
+; c-mode
+(setq c-default-style "gnu")
+(setq c-basic-offset  2)
