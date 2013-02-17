@@ -67,3 +67,7 @@
 ; pkgbuild-mode
 (require 'pkgbuild-mode)
 (setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
+
+; python-mode
+(autoload 'python-mode "python-mode" "Python editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
