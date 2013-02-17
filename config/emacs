@@ -14,7 +14,28 @@
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 ;;;;; Appearence ;;;;;
+; Colour theme
 (load-theme 'solarized-dark t)
+
+; Hide menu bar
+(menu-bar-mode 0)
+
+; Mode line
+(column-number-mode t)
+(display-time-mode t)
+
+(setq default-mode-line-format '("-"
+				 mode-line-mule-info
+				 mode-line-modified
+				 mode-line-frame-identification
+				 mode-line-buffer-identification
+				 "  "
+				 global-mode-string
+				 "   %[(" mode-name mode-line-process minor-mode-alist "%n"")%]--"
+				 (line-number-mode "L%l--")
+				 (column-number-mode "C%c--")
+				 (-3 . "%p")
+				 "-%-"))
 
 ;;;;; Behaviour ;;;;;
 ; Initial mode
