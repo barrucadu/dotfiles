@@ -1,61 +1,28 @@
 ;; -*- lisp -*-
 
-;;;;; ;;;;; ;;;;; EXTRA FILES ;;;;; ;;;;; ;;;;;
-;(add-to-list 'load-path (expand-file-name "~/.emacs.d/wrap-region"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/pkgbuild-mode"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/php-mode"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/color-theme"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/haml-mode"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/sass-mode"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/sml-mode"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/jde/lisp"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet/common"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/elib"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/minimap"))
+;;;;; Dependencies ;;;;;
+; - emacs-pkgbuild-mode-git (AUR)
+; - solarized-theme (Marmalade)
+; - markdown-mode (Marmalade)
 
-;(require 'wrap-region)
-(require 'color-theme)
-(require 'haml-mode)
-(require 'sass-mode)
-(require 'epa)
-(require 'haskell-mode)
-(require 'minimap)
+;;;;; Package Management ;;;;;
+(require 'package)
+(package-initialize)
+(add-to-list 'package-archives
+             '("elpa" . "http://tromey.com/elpa/"))
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 
-(load "zenburn.el"             nil t t)
-(load "zenburn-transparent.el" nil t t)
-(load "auctex.el"              nil t t)
-(load "preview-latex.el"       nil t t)
-(load "sml-mode-startup.el"    nil t t)
+;;;;; Appearence ;;;;;
+; Colour theme
+(load-theme 'solarized-dark t)
 
-(load-file (expand-file-name "~/.emacs.d/cedet/common/cedet.el"))
+; Hide menu bar
+(menu-bar-mode 0)
 
-(autoload 'pkgbuild-mode  "pkgbuild-mode.el" "PKGBUILD Mode."                                             t)
-(autoload 'php-mode       "php-mode.el"      "PHP Mode."                                                  t)
-(autoload 'markdown-mode  "markdown-mode.el" "Major mode for editing Markdown files"                      t)
-(autoload 'python-mode    "python-mode"      "Python editing mode."                                       t)
-(autoload 'jython-mode    "python-mode"      "Python editing mode."                                       t)
-(autoload 'py-shell       "python-mode"      "Start an interactive Python interpreter in another window." t)
-(autoload 'doctest-mode   "doctest-mode"     "Editing mode for Python Doctest examples."                  t)
-
-;;;;; ;;;;; ;;;;; MODES ;;;;; ;;;;; ;;;;;
-
-(setq initial-major-mode 'org-mode)
-(setq default-major-mode 'org-mode)
-
-;;;;; ;;;;; ;;;;; INTERFACE ;;;;; ;;;;; ;;;;;
-
-; Set up the colour theme
-(color-theme-initialize)
-
-(if (string= "x" window-system)
-    (color-theme-zenburn)              ; If in X
-    (color-theme-zenburn-transparent)) ; If in a terminal
-
-; And the rest of the interface
-(menu-bar-mode         0)
-(column-number-mode    t)
-(display-time-mode     t)
-(global-font-lock-mode 1)
+; Mode line
+(column-number-mode t)
+(display-time-mode t)
 
 (setq default-mode-line-format '("-"
 				 mode-line-mule-info
@@ -70,17 +37,103 @@
 				 (-3 . "%p")
 				 "-%-"))
 
-; UTF-8
-(set-keyboard-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(prefer-coding-system       'utf-8)
-(set-default-coding-systems 'utf-8)
+;;;;; Behaviour ;;;;;
+; Initial mode
+(setq initial-major-mode 'org-mode)
 
-(setq default-buffer-file-coding-system 'utf-8)
+; Transparent encryption
+(require 'epa-file)
+(epa-file-enable)
 
-;;;;; ;;;;; ;;;;; LaTeX ;;;;; ;;;;; ;;;;;
+; Tabs instead of spaces
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
-; Start off a LaTeX document
+; Spell checking
+(setq ispell-program-name "asell")
+
+; Backup files
+(setq make-backup-files nil)
+
+; Line-killing
+(setq kill-whole-line t)
+
+; Splash screen
+(setq inhibit-splash-screen t)
+
+; Highlight matching parentheses and other such characters
+(show-paren-mode 1)
+(setq show-paren-delay 0)
+
+; Change yes-or-no to y-or-n
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;;;;; Keybindings ;;;;;
+; Helper functions
+(defun switch-to-previous-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+
+; Bindings
+(global-set-key [?\C-x ?w]      'delete-horizontal-space)
+(global-set-key [?\C-x ?g]      'goto-line)
+(global-set-key [?\C-x ?i]      'indent-according-to-mode)
+(global-set-key [?\C-x ?\C-u]   'undo)
+(global-set-key [?\M-O <up>]    'backward-paragraph)
+(global-set-key [?\M-O <down>]  'forward-paragraph)
+(global-set-key [?\M-O <left>]  'forward-word)
+(global-set-key [?\M-O <right>] 'backward-word)
+(global-set-key [?\C-x ?\C-x]   'switch-to-previous-buffer)
+
+;;;;; Editing Modes ;;;;;
+; pkgbuild-mode
+(require 'pkgbuild-mode)
+(add-to-list 'auto-mode-alist '("/PKGBUILD$" . pkgbuild-mode))
+
+; python-mode
+(autoload 'python-mode "python-mode" "Python editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+
+; haskell-mode
+(require 'haskell-mode)
+(add-to-list 'auto-mode-alist '("\\.hs$"  . haskell-mode))
+(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
+
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+
+(setq haskell-font-lock-symbols t)
+
+; markdown-mode
+(require 'markdown-mode)
+(add-to-list 'auto-mode-alist '("/*..md$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("/*..markdown$" . markdown-mode))
+
+; c-mode
+(setq c-default-style "gnu")
+(setq c-basic-offset  2)
+
+; agda2-mode
+(add-to-list 'load-path (expand-file-name "~/.cabal/share/Agda-2.3.2/emacs-mode/"))
+(require 'agda2-mode)
+(setq agda2-include-dirs `(,(expand-file-name "~/agda/lib-0.7/src") "."))
+(custom-set-variables '(agda2-highlight-face-groups (quote default-faces))) ; for some reason setq doesn't work here
+
+; auctex
+(load "auctex.el" nil t t)
+
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq TeX-electric-sub-and-superscript t)
+
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
+
+(setq auto-mode-alist (append '(("/*..tex$" . LaTeX-mode))
+                              auto-mode-alist))
+
+;;;;; Helper Commands ;;;;;
 (defun latex-wizard ()
   "Insert all the basic code required to create a usable LaTeX document which can be compiled into a PDF file."
   (interactive)
@@ -129,184 +182,3 @@
   (insert "\n")
   (insert "\n")
   (insert "\\end{document}"))
-
-; View a PDF file generated from the current LaTeX file
-(defun latex-view-pdf ()
-  "View the compiled PDF form of the LaTeX file generated by latex-compile-pdf"
-  (interactive)
-  (save-excursion
-	(let ((cb (current-buffer)))
-	  (call-process "epdfview" nil nil nil (concat (substring (buffer-file-name cb) 0 -4) ".pdf" )))))
-
-(setq TeX-auto-save                    t
-      TeX-parse-self                   t
-      TeX-electric-sub-and-superscript 1
-      preview-scale-function           1.33)
-
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
-
-(setq auto-mode-alist (append '(("/*..tex$" . LaTeX-mode))
-                              auto-mode-alist))
-
-;;;;; ;;;;; ;;;;; PYTHON ;;;;; ;;;;; ;;;;;
-
-(add-to-list 'auto-mode-alist '("\\.py$"      . python-mode))
-(add-to-list 'auto-mode-alist '("\\.doctest$" . doctest-mode))
-
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-(add-to-list 'interpreter-mode-alist '("jython" . jython-mode))
-
-;;;;; ;;;;; ;;;;; ML ;;;;; ;;;;; ;;;;;
-
-(add-to-list 'auto-mode-alist '("\\.ml$" . sml-mode))
-
-;;;;; ;;;;; ;;;;; Haskell ;;;;; ;;;;; ;;;;;
-
-(add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
-(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
-
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
-
-(setq haskell-font-lock-symbols t)
-
-;;;;; ;;;;; ;;;;; WEB DEV ;;;;; ;;;;; ;;;;;
-
-; XHTML Wizard
-(defun xhtml-wizard ()
-  "Insert the basic XHTML tags I use."
-  (interactive)
-  (insert "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n")
-  (insert "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\" dir=\"ltr\">\n")
-  (insert "  <head>\n")
-  (insert "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\"/>\n")
-  (insert "	<meta name=\"keywords\" content=\"\"/>\n")
-  (insert "	<meta name=\"description\" content=\"\"/>\n")
-  (insert "	<meta name=\"author\" content=\"Michael Walker\"/>\n")
-  (insert "	<meta name=\"robots\" content=\"FOLLOW,INDEX\"/>\n")
-  (insert "\n")
-  (insert "	<title></title>\n")
-  (insert "\n")
-  (insert "	<link rel=\"stylesheet\" href=\"/style.css\" type=\"text/css\" />\n")
-  (insert "	<link rel=\"shortcut icon\" type=\"application/ico\" href=\"/favicon.ico\" />\n")
-  (insert "	<base href=\"http://www./\"/>\n")
-  (insert "  </head>\n")
-  (insert "\n")
-  (insert "  <body>\n")
-  (insert "\n")
-  (insert "  </body>\n")
-  (insert "</html>\n"))
-
-
-(add-hook 'haml-mode-hook
-  '(lambda () (add-hook 'local-write-file-hooks
-    '(lambda () (save-excursion (untabify (point-min) (point-max)))))))
-
-(add-hook 'sass-mode-hook
-  '(lambda () (add-hook 'local-write-file-hooks
-    '(lambda () (save-excursion (untabify (point-min) (point-max)))))))
-
-(setq auto-mode-alist (append '(("/*..php$"  . php-mode)
-                                ("/*..inc$"  . php-mode)
-                                ("/*..rdf$"  . xml-mode)
-                                ("/*..xsl$"  . xml-mode)
-                                ("/*..haml$" . haml-mode)
-                                ("/*..sass$" . sass-mode)
-                                ("/*..scss$" . sass-mode)
-                                ("/*..md$"   . markdown-mode))
-                              auto-mode-alist))
-
-;;;;; ;;;;; ;;;;; C ;;;;; ;;;;; ;;;;;
-
-(setq c-default-style "gnu"
-      c-basic-offset  2)
-
-;;;;; ;;;;; ;;;;; ORG ;;;;; ;;;;; ;;;;;
-
-(setq org-return-follows-link       t
-      org-log-done                 'time
-      org-use-property-inheritance  t
-      org-enforce-todo-dependencies t
-      org-startup-indented          t)
-
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(define-key global-map "\C-c <right>" 'org-property-next-allowed-value)
-(define-key global-map "\C-c <left>"  'org-property-previous-allowed-value)
-
-(setq auto-mode-alist (append '(("/*..org$"  . org-mode)
-                                ("/*..txt$"  . org-mode)
-                                ("/*..todo$" . org-mode))
-                              auto-mode-alist))
-
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)   ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-(add-hook 'org-mode-hook 'visual-line-mode)
-
-;;;;; ;;;;; ;;;;; JAVA ;;;;; ;;;;; ;;;;;
-
-(setq defer-loading-jde t)
-(setq jde-enable-abbrev-mode t)
-(setq jde-build-function '(jde-ant-build))
-
-(if defer-loading-jde
-    (progn
-      (autoload 'jde-mode "jde" "JDE mode." t)
-      (setq auto-mode-alist
-            (append
-             '(("\\.java\\'" . jde-mode))
-             auto-mode-alist)))
-  (require 'jde))
-
-;;;;; ;;;;; ;;;;; MISCELLANEOUS ;;;;; ;;;;; ;;;;;
-
-(epa-file-enable)
-
-(setq-default indent-tabs-mode nil
-              tab-width        2)
-(setq ispell-program-name  "aspell"
-      make-backup-files     nil
-      kill-whole-line       t
-      inhibit-splash-screen t)
-
-(setq auto-mode-alist (append '(("/PKGBUILD$"      . pkgbuild-mode)
-                                ("/*..py$"         . python-mode)
-                                ("/*..tex$"        . LaTeX-mode)
-                                ("/*..sh$"         . shell-script-mode))
-                              auto-mode-alist))
-
-(show-paren-mode 1)
-(set-face-foreground 'show-paren-match-face "#bc8383")
-
-; Functions
-(defun switch-to-previous-buffer ()
-  (interactive)
-  (switch-to-buffer (other-buffer)))
-
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-(defun minimap-toggle ()
-  "Toggle minimap for current buffer."
-  (interactive)
-  (if (null minimap-bufname)
-      (minimap-create)
-    (minimap-kill)))
-
-; Key Bindings
-(global-set-key [?\C-x ?w]      'delete-horizontal-space)
-(global-set-key [?\C-x ?g]      'goto-line)
-(global-set-key [?\C-x ?i]      'indent-according-to-mode)
-(global-set-key [?\C-x ?\C-u]   'undo)
-(global-set-key [?\M-O <up>]    'backward-paragraph)
-(global-set-key [?\M-O <down>]  'forward-paragraph)
-(global-set-key [?\M-O <left>]  'forward-word)
-(global-set-key [?\M-O <right>] 'backward-word)
-(global-set-key [?\C-x ?\C-x]   'switch-to-previous-buffer)
