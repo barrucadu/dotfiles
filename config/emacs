@@ -69,7 +69,7 @@
 (add-to-list 'auto-mode-alist '("/PKGBUILD$" . pkgbuild-mode))
 
 ; python-mode
-(require 'python-mode)
+(autoload 'python-mode "python-mode" "Python editing mode." t)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 
 ; haskell-mode
