@@ -2,6 +2,7 @@
 
 ;;;;; Dependencies ;;;;;
 ; - emacs-pkgbuild-mode-git (AUR)
+; - solarized-theme (Marmalade)
 
 ;;;;; Package Management ;;;;;
 (require 'package)
@@ -10,6 +11,9 @@
              '("elpa" . "http://tromey.com/elpa/"))
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
+
+;;;;; Appearence ;;;;;
+(load-theme 'solarized-dark t)
 
 ;;;;; Editing Modes ;;;;;
 ; pkgbuild-mode
