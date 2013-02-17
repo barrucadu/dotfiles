@@ -3,9 +3,9 @@
 ;;;;; Dependencies ;;;;;
 ; - emacs-pkgbuild-mode-git (AUR)
 
-
 ;;;;; Package Management ;;;;;
 (require 'package)
+(package-initialize)
 (add-to-list 'package-archives
              '("elpa" . "http://tromey.com/elpa/"))
 (add-to-list 'package-archives
