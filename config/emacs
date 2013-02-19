@@ -4,6 +4,7 @@
 ; - emacs-pkgbuild-mode-git (AUR)
 ; - solarized-theme (Marmalade)
 ; - markdown-mode (Marmalade)
+; - agda2 (Hackage)
 
 ;;;;; Package Management ;;;;;
 (require 'package)
