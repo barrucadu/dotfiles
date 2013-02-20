@@ -1,15 +1,14 @@
 ## -*- shell-script -*-
-# Additional files - I like splitting things up.
-. ~/projects/home/config/zsh/profile
-. ~/projects/home/config/zsh/functions
-. ~/projects/home/config/zsh/aliases
+
+. ~/.zsh/profile
+. ~/.zsh/functions
+. ~/.zsh/aliases
 
 # Start X
 if [[ -z "$DISPLAY" ]] && [[ $(tty) == /dev/tty2 ]] && [[ "`runlevel`" == *5* ]]; then
     while true; do
         echo "Starting X11"
         xinit &>/dev/null
-        source ~/projects/home/config/zsh/profile
+        source ~/.zsh/profile
     done
 fi
-eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)

@@ -1,7 +1,6 @@
 #!/bin/zsh
 
-CFGFILES=()
-HOMEFILES=(emacs mplayer ncmpcpp stumpwmrc tmux.conf)
+HOMEFILES=(emacs mplayer ncmpcpp tmux.conf zsh)
 
 force=""
 if [[ $1 == "-f" ]]; then
@@ -10,10 +9,6 @@ if [[ $1 == "-f" ]]; then
 fi
 
 dir=`pwd`
-
-for file in $CFGFILES; do
-    ln -s $force $dir/config/$file $XDG_CONFIG_HOME/$file
-done
 
 for file in $HOMEFILES; do
     ln -s $force $dir/config/$file $HOME/.$file
@@ -26,6 +21,7 @@ done
 popd
 
 ln -s $force $dir/config/zsh/rc $HOME/.zshrc
+ln -s $force $dir/config/zsh/profile $HOME/.zprofile
 
 mkdir $HOME/bin
 pushd $HOME/bin
