@@ -1,4 +1,5 @@
 import XMonad
+import XMonad.Layout.LayoutModifier
 import XMonad.Layout.IndependentScreens
 import XMonad.Util.EZConfig
 import XMonad.Layout.NoBorders
@@ -6,16 +7,19 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 -- List of workspaces per screen
+myWorkspaces :: [String]
 myWorkspaces = map show [1..9]
 
 -- Layout hook: no borders
+myLayoutHook :: ModifiedLayout WithBorder Full Window
 myLayoutHook = noBorders Full
 
 -- Fire up xmonad
-main = xmonad $ cfg `additionalKeysP` (myKeymap cfg)
-    where cfg = myConfig
+main :: IO ()
+main = xmonad $ myConfig `additionalKeysP` myKeymap myConfig
 
 -- Configuration
+myConfig :: XConfig (ModifiedLayout WithBorder Full)
 myConfig = defaultConfig
            { workspaces = withScreens 2 myWorkspaces
            , terminal   = "urxvt"
@@ -23,9 +27,11 @@ myConfig = defaultConfig
            , layoutHook = myLayoutHook }
 
 -- Don't have any of the default keybindings
-myDefaultKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList []
+myDefaultKeys :: a -> M.Map k v
+myDefaultKeys _ = M.empty
 
 -- My extra keys, not merely overriding or disabling of the defaults.
+myKeymap :: XConfig c -> [(String, X ())]
 myKeymap config = 
     [
 -- Special Keys
@@ -33,7 +39,6 @@ myKeymap config =
      ("<XF86Mail>",     spawn "claws-mail"),
      ("<XF86Sleep>",    spawn "slock"),
      ("<Print>",        spawn "scrot ~/screenshot.png"),
-     ("M-<Print>",      spawn "urxvtc -e screenshot"),
 
 -- Media Keys
      ("<XF86AudioPlay>",        spawn "mpc toggle"),
