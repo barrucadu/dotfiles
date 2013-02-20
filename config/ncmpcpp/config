@@ -3,7 +3,7 @@
 ##### connection settings #####
 mpd_host               = "localhost"
 mpd_port               = "6600"
-mpd_music_dir          = "/share/eihort/music"
+mpd_music_dir          = "~/media/music"
 mpd_connection_timeout = "5"
 mpd_crossfade_time     = "5"
 
