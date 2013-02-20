@@ -6,6 +6,6 @@ setxkbmap gb
 setxkbmap -option compose:rctrl
 setxkbmap -option terminate:ctrl_alt_bksp
 
-xrdb -load ~/projects/home/config/xorg/Xdefaults
+xrdb -load ~/.Xdefaults
 
 xsetroot -cursor_name left_ptr
