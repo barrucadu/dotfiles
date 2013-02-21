@@ -14,6 +14,17 @@ function re()
     exit
 }
 
+# Security
+function sign-key ()
+{
+    key=$1
+    keyserver=pgp.mit.edu
+
+    gpg --keyserver $keyserver --recv-key $key &&
+    gpg --sign-key $key &&
+    gpg --keyserver $keyserver --send-key $key
+}
+
 # Misc
 function extract ()
 {
