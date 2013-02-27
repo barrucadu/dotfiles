@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""wot.
+
+A tool to render a GPG web of trust for a given set of keys. Depends
+on gpg, sig2dot, and docopt. The keys may be given in the form of key
+IDs, names, email addresses, or any other value that will cause `gpg
+--list-keys` to identify the key. If multiple keys are found, all are
+used.
+
+Usage:
+  wot [-r <bin>] [-n] [-f <fmt>] [-o <file>] <key> ...
+  wot -h | --help
+
+Options:
+  -h, --help  Show this screen
+  -r <bin>    Name of the (graphviz-compatible) program to render the
+              web [default: twopi]
+  -n          Do not retrieve the keys before rendering
+  -f <fmt>    Specify the format of the output file [default: svg]
+  -o <file>   Specify the name of the output file [default: wot.svg]
+"""
+
+from docopt import docopt
+import subprocess
+
+
+def get_key_id(key):
+    """Return all the key IDs produced by gpg --list-keys when given
+    the key/enail/name/whatever.
+    """
+
+    out = subprocess.getoutput(
+        r"gpg --list-keys {} | grep pub | sed 's:.*/\([^ ]*\).*:\1:'".format(
+            key))
+
+    return out.splitlines()
+
+
+def recv_keys(keys):
+    """Retrieve the given keys.
+    """
+
+    subprocess.call(r"gpg --recv-keys {}".format(" ".join(keys)), shell=True)
+
+
+def render(keys, outputfile, fmt, renderer):
+    """Get the list of signatures and pass it through sig2dot for the
+    given keys, rendering it with the given tool, and saving the
+    output to the given file.
+    """
+
+    subprocess.call(
+        r"gpg --list-sigs {} | sig2dot | {} -T{} -o{}".format(
+            " ".join(keys), renderer, fmt, outputfile), shell=True)
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__)
+
+    # Get the list of keys
+    keys = [keyid
+            for key in arguments['<key>']
+            for keyid in get_key_id(key)]
+
+    # Retrieve them
+    if not arguments['-n']:
+        recv_keys(keys)
+
+    # Generate the dot file with sig2dot
+    render(keys, arguments['-o'], arguments['-f'], arguments['-r'])
