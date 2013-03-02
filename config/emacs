@@ -51,7 +51,7 @@
 (setq-default tab-width 4)
 
 ; Spell checking
-(setq ispell-program-name "asell")
+(setq ispell-program-name "aspell")
 
 ; Backup files
 (setq make-backup-files nil)
