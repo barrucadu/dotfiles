@@ -130,6 +130,7 @@
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 
 (setq auto-mode-alist (append '(("/*..tex$" . LaTeX-mode))
                               auto-mode-alist))
