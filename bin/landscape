@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+# Configure the display to be one landscapemonitor.
+
+# Rotate
+xrandr --output DVI-I-2 --rotate normal
+
+# Wallpaper
+WALLPAPERDIR=`default $1 /mnt/data/wallpaper`
+LANDDIR=$WALLPAPERDIR/landscape
+feh --bg-scale "$LANDDIR/`ls $LANDDIR | shuf -n1`"
