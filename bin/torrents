@@ -49,10 +49,29 @@ class Torrent:
                       for i in range(0, self.numfiles)]
         self.files.sort()
 
-        self.complete = proxy.d.get_complete(infohash)
-        self.checking = proxy.d.is_hash_checking(infohash)
-        self.hashing = proxy.d.get_hashing(infohash)
-        self.active = proxy.d.is_active(infohash)
+    def complete(self):
+        """Check if complete.
+        """
+
+        return self.proxy.d.get_complete(self.infohash)
+
+    def hashing(self):
+        """Check if hash checking.
+        """
+
+        return self.proxy.d.is_hash_checking(self.infohash)
+
+    def queued(self):
+        """Check if queued for hash checking.
+        """
+
+        return self.proxy.d.get_hashing(self.infohash)
+
+    def active(self):
+        """Check if active.
+        """
+
+        return self.proxy.d.is_active(self.infohash)
 
     def start(self):
         """Try to start.
@@ -82,9 +101,9 @@ class Torrent:
         return "{}{}{} {} {} [files: {}]".format(
             self.name,
             self.pad,
-            '[A]' if self.active else ' - ',
-            '[C]' if self.complete else ' - ',
-            '[H]' if self.checking else '[Q]' if self.hashing else ' - ',
+            '[A]' if self.active() else ' - ',
+            '[C]' if self.complete() else ' - ',
+            '[H]' if self.hashing() else '[Q]' if self.queued() else ' - ',
             self.numfiles)
 
 
