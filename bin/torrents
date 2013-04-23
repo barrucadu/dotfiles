@@ -133,15 +133,13 @@ if __name__ == "__main__":
     try:
         for torrent in get_matching_torrents(proxy, pattern):
             if arguments['start']:
-                print("Starting " + torrent.name)
                 torrent.start()
             elif arguments['stop']:
-                print("Stopping " + torrent.name)
                 torrent.stop()
             elif arguments['hash']:
-                print("Starting hashing " + torrent.name)
                 torrent.hash()
-            elif arguments['--files']:
+
+            if arguments['--files']:
                 for file in torrent.files:
                     print(file)
             else:
