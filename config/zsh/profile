@@ -1,7 +1,7 @@
 ## -*- shell-script -*-
 
 # Environmental Variables
-export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:/home/barrucadu/.cabal/bin:/home/barrucadu/.gem/ruby/1.9.1/bin:/home/barrucadu/.local/bin:$PATH:/usr/share/java/apache-ant/bin"
+export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:/home/barrucadu/.cabal/bin:/home/barrucadu/.gem/ruby/2.0.0/bin:/home/barrucadu/.local/bin:$PATH:/usr/share/java/apache-ant/bin"
     # Programs
 export BROWSER=chromium
 export EDITOR="emacs"
