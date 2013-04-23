@@ -9,7 +9,7 @@ Options:
   start        Start the matching torrents.
   stop         Stop the matching torrents.
   hash         Hash-check the matching torrents.
-  --url=<url>  XMLRPC URL. [default: http://locahost/]
+  --url=<url>  XMLRPC URL. [default: http://localhost/]
   -i           Be case insensitive when filtering.
   <filter>     Regex to filter torrents by.
   --files      List the files of each matching torrent.
