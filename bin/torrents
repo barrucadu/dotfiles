@@ -39,8 +39,8 @@ class Torrent:
         self.infohash = infohash
         self.name = proxy.d.get_name(infohash)
 
-        base_dir = proxy.get_directory()
-        self.dir = proxy.d.get_directory(infohash)[len(base_dir) + 1:]
+        self.base_dir = proxy.get_directory()
+        self.dir = proxy.d.get_directory(infohash)[len(self.base_dir) + 1:]
         if self.dir:
             self.dir += '/'
 
