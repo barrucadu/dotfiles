@@ -18,6 +18,61 @@ Options:
 from docopt import docopt
 from xmlrpc.client import ServerProxy
 import re
+from functools import total_ordering
+
+
+@total_ordering
+class Torrent:
+    """Class to represent a torrent.
+    """
+
+    def __init__(self, proxy, infohash):
+        """Create a new torrent object.
+
+        :param proxy: The XMLRPC server proxy to use.
+        :param infohash: The infohash of the torrent.
+        """
+
+        self.proxy = proxy
+        self.infohash = infohash
+        self.name = proxy.d.get_name(infohash)
+
+        base_dir = proxy.get_directory()
+        self.dir = proxy.d.get_directory(infohash)[len(base_dir) + 1:]
+        if self.dir:
+            self.dir += '/'
+
+        self.numfiles = proxy.d.get_size_files(infohash)
+        self.files = [self.dir + proxy.f.get_path('{}:f{}'.format(infohash, i))
+                      for i in range(0, self.numfiles)]
+        self.files.sort()
+
+    def start(self):
+        """Try to start.
+        """
+
+        self.proxy.d.try_start(self.infohash)
+
+    def stop(self):
+        """Try to stop.
+        """
+
+        self.proxy.d.try_stop(self.infohash)
+
+    def hash(self):
+        """Start a hash-check.
+        """
+
+        self.proxy.d.check_hash(self.infohash)
+
+    def __eq__(self, other):
+        return self == other
+
+    def __lt__(self, other):
+        return self.name < other.name
+
+    def __str__(self):
+        return self.name
 
 
 def get_matching_torrents(proxy, pattern):
@@ -27,63 +82,33 @@ def get_matching_torrents(proxy, pattern):
     :param pattern: Regex to match against.
     """
 
-    torrents = [(proxy.d.get_name(infohash), infohash)
-                for infohash in proxy.download_list()
-                if pattern.search(proxy.d.get_name(infohash))]
+    torrents = filter(lambda t: pattern.search(t.name),
+                      [Torrent(proxy, infohash)
+                       for infohash in proxy.download_list()])
 
     return sorted(torrents)
-
-
-def get_torrent_files(proxy, infohash):
-    """Get the file list of a torrent.
-
-    :param proxy:    XMLRPC server proxy.
-    :param infohash: Infohash of the torrent to look up.
-
-    If the infohash is not found, an empty list is returned.
-    """
-
-    try:
-        base_dir = proxy.get_directory()
-        torrent_dir = proxy.d.get_directory(infohash)[len(base_dir) + 1:]
-        if torrent_dir:
-            torrent_dir += '/'
-
-        files = [torrent_dir + proxy.f.get_path('{}:f{}'.format(infohash, i))
-                 for i in range(0, proxy.d.get_size_files(infohash))]
-
-        return sorted(files)
-    except:
-        return []
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)
     proxy = ServerProxy(arguments['--url'])
-    filter = re.compile(arguments['<filter>'] or "",
-                        flags=re.I if arguments['-i'] else 0)
+    pattern = re.compile(arguments['<filter>'] or "",
+                         flags=re.I if arguments['-i'] else 0)
 
     try:
-        torrents = get_matching_torrents(proxy, filter)
-
-        if arguments['--files']:
-            for filelist in [get_torrent_files(proxy, infohash)
-                             for name, infohash in torrents]:
-                for file in filelist:
+        for torrent in get_matching_torrents(proxy, pattern):
+            if arguments['start']:
+                print("Starting " + torrent.name)
+                torrent.start()
+            elif arguments['stop']:
+                print("Stopping " + torrent.name)
+                torrent.stop()
+            elif arguments['hash']:
+                print("Starting hashing " + torrent.name)
+                torrent.hash()
+            elif arguments['--files']:
+                for file in torrent.files:
                     print(file)
-        else:
-            for name, infohash in torrents:
-                print(name)
-
-        if arguments['start']:
-            for name, infohash in torrents:
-                proxy.d.try_start(infohash)
-
-        if arguments['stop']:
-            for name, infohash in torrents:
-                proxy.d.try_stop(infohash)
-
-        if arguments['hash']:
-            for name, infohash in torrents:
-                proxy.d.check_hash(infohash)
+            else:
+                print(torrent)
     except:
         print("XMLRPC error. Check URL.")
