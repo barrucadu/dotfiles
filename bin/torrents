@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+
+"""torrents. Get information about a running rtorrent instance.
+
+Usage:
+  torrents [--url=<url>] [-i] [<filter>] [--files]
+
+Options:
+  --url=<url>  XMLRPC URL. [default: http://locahost/]
+  -i           Be case insensitive when filtering.
+  <filter>     Regex to filter torrents by.
+  --files      List the files of each matching torrent.
+"""
+
+from docopt import docopt
+from xmlrpc.client import ServerProxy
+import re
+
+
+def get_matching_torrents(proxy, pattern):
+    """Get the list of torrent ID/name tuples which match the filter.
+
+    :param proxy:   XMLRPC server proxy.
+    :param pattern: Regex to match against.
+    """
+
+    torrents = [(proxy.d.get_name(infohash), infohash)
+                for infohash in proxy.download_list()
+                if pattern.search(proxy.d.get_name(infohash))]
+
+    return sorted(torrents)
+
+
+def get_torrent_files(proxy, infohash):
+    """Get the file list of a torrent.
+
+    :param proxy:    XMLRPC server proxy.
+    :param infohash: Infohash of the torrent to look up.
+
+    If the infohash is not found, an empty list is returned.
+    """
+
+    try:
+        base_dir = proxy.get_directory()
+        torrent_dir = proxy.d.get_directory(infohash)[len(base_dir) + 1:]
+        if torrent_dir:
+            torrent_dir += '/'
+
+        files = [torrent_dir + proxy.f.get_path('{}:f{}'.format(infohash, i))
+                 for i in range(0, proxy.d.get_size_files(infohash))]
+
+        return sorted(files)
+    except:
+        return []
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__)
+    proxy = ServerProxy(arguments['--url'])
+    filter = re.compile(arguments['<filter>'] or "",
+                        flags=re.I if arguments['-i'] else 0)
+
+    try:
+        torrents = get_matching_torrents(proxy, filter)
+
+        if arguments['--files']:
+            for filelist in [get_torrent_files(proxy, infohash)
+                             for name, infohash in torrents]:
+                for file in filelist:
+                    print(file)
+        else:
+            for name, infohash in torrents:
+                print(name)
+    except:
+        print("XMLRPC error. Check URL.")
