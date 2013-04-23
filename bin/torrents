@@ -82,9 +82,9 @@ class Torrent:
         return "{}{}{} {} {}".format(
             self.name,
             self.pad,
-            '[A]' if self.active else '   ',
-            '[C]' if self.complete else '   ',
-            '[H]' if self.checking else '[Q]' if self.hashing else '   ')
+            '[A]' if self.active else ' - ',
+            '[C]' if self.complete else ' - ',
+            '[H]' if self.checking else '[Q]' if self.hashing else ' - ')
 
 
 def get_matching_torrents(proxy, pattern):
