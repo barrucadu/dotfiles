@@ -3,9 +3,12 @@
 """torrents. Get information about a running rtorrent instance.
 
 Usage:
-  torrents [--url=<url>] [-i] [<filter>] [--files]
+  torrents [(start | stop | hash)] [--url=<url>] [-i] [<filter>] [--files]
 
 Options:
+  start        Start the matching torrents.
+  stop         Stop the matching torrents.
+  hash         Hash-check the matching torrents.
   --url=<url>  XMLRPC URL. [default: http://locahost/]
   -i           Be case insensitive when filtering.
   <filter>     Regex to filter torrents by.
@@ -70,5 +73,17 @@ if __name__ == "__main__":
         else:
             for name, infohash in torrents:
                 print(name)
+
+        if arguments['start']:
+            for name, infohash in torrents:
+                proxy.d.try_start(infohash)
+
+        if arguments['stop']:
+            for name, infohash in torrents:
+                proxy.d.try_stop(infohash)
+
+        if arguments['hash']:
+            for name, infohash in torrents:
+                proxy.d.check_hash(infohash)
     except:
         print("XMLRPC error. Check URL.")
