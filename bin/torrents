@@ -79,12 +79,13 @@ class Torrent:
         return self.name < other.name
 
     def __str__(self):
-        return "{}{}{} {} {}".format(
+        return "{}{}{} {} {} [files: {}]".format(
             self.name,
             self.pad,
             '[A]' if self.active else ' - ',
             '[C]' if self.complete else ' - ',
-            '[H]' if self.checking else '[Q]' if self.hashing else ' - ')
+            '[H]' if self.checking else '[Q]' if self.hashing else ' - ',
+            self.numfiles)
 
 
 def get_matching_torrents(proxy, pattern):
