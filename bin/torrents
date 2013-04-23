@@ -33,6 +33,8 @@ class Torrent:
         :param infohash: The infohash of the torrent.
         """
 
+        self.pad = ' '
+
         self.proxy = proxy
         self.infohash = infohash
         self.name = proxy.d.get_name(infohash)
@@ -46,6 +48,11 @@ class Torrent:
         self.files = [self.dir + proxy.f.get_path('{}:f{}'.format(infohash, i))
                       for i in range(0, self.numfiles)]
         self.files.sort()
+
+        self.complete = proxy.d.get_complete(infohash)
+        self.checking = proxy.d.is_hash_checking(infohash)
+        self.hashing = proxy.d.get_hashing(infohash)
+        self.active = proxy.d.is_active(infohash)
 
     def start(self):
         """Try to start.
@@ -72,7 +79,12 @@ class Torrent:
         return self.name < other.name
 
     def __str__(self):
-        return self.name
+        return "{}{}{} {} {}".format(
+            self.name,
+            self.pad,
+            '[A]' if self.active else '   ',
+            '[C]' if self.complete else '   ',
+            '[H]' if self.checking else '[Q]' if self.hashing else '   ')
 
 
 def get_matching_torrents(proxy, pattern):
@@ -82,9 +94,13 @@ def get_matching_torrents(proxy, pattern):
     :param pattern: Regex to match against.
     """
 
-    torrents = filter(lambda t: pattern.search(t.name),
-                      [Torrent(proxy, infohash)
-                       for infohash in proxy.download_list()])
+    torrents = list(filter(lambda t: pattern.search(t.name),
+                           [Torrent(proxy, infohash)
+                            for infohash in proxy.download_list()]))
+
+    maxlen = len(max(torrents, key=lambda t: len(t.name)).name)
+    for torrent in torrents:
+        torrent.pad = ' ' * (maxlen - len(torrent.name) + 4)
 
     return sorted(torrents)
 
