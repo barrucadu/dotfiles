@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+
+"""mkv2gif. Convert portions of Matroska videos into animated gifs.
+
+Usage:
+  mkv2gif <mkv> <gif> <duration> [-s <start>] [-r <res>] [-S <track>]
+  mkv2gif -h | --help
+
+Options:
+  <mkv>                                 Path of the input Matroska file.
+  <gif>                                 Path of the output gif file.
+  <duration>                            Duration of the clip.
+  -s <start>, --start <start>           Start position of the clip. [default: 00:00:00]
+  -r <res>,   --resolution=<res>        Resolution of the gif. [default: 560x315]
+  -S <track>, --subtitle-track=<track>  Subtitle track (if not given, no subtitles are embedded).
+  -h,         --help                    Show this screen.
+"""
+
+from docopt import docopt
+from tempfile import mkdtemp
+import subprocess
+import os
+from shutil import rmtree
+
+arguments = docopt(__doc__)
+
+tmpdir = mkdtemp()
+
+subs = os.path.join(tmpdir, "subs.ass")
+clip = os.path.join(tmpdir, "clip.mp4")
+gif = os.path.join(tmpdir, "uncompressed.gif")
+
+if arguments['--subtitle-track']:
+    print("Extracting subs...")
+    subprocess.call(["mkvextract",
+                     "tracks",
+                     arguments['<mkv>'],
+                     "{}:{}".format(arguments['--subtitle-track'], subs)])
+else:
+    subs = None
+
+print("Extracting video clip...")
+subprocess.call(["ffmpeg",
+                 "-i",
+                 arguments['<mkv>'],
+                 "-strict",
+                 "-2",
+                 "-sn",
+                 "-vcodec",
+                 "libx264",
+                 "-ss",
+                 arguments['--start'],
+                 "-t",
+                 arguments['<duration>']] +
+                 (["-vf", subs] if subs else []) +
+                 [clip])
+
+print("Transcoding to gif...")
+subprocess.call(["ffmpeg",
+                 "-i",
+                 clip,
+                 "-pix_fmt",
+                 "rgb24",
+                 "-r",
+                 "10",
+                 "-s",
+                 arguments['-r'],
+                 gif])
+
+print("Optimising gif...")
+subprocess.call(["convert",
+                 "-layers",
+                 "Optimize",
+                 gif,
+                 arguments['<gif>']])
+
+
+rmtree(tmpdir)
