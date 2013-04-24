@@ -21,6 +21,7 @@ from tempfile import mkdtemp
 import subprocess
 import os
 from shutil import rmtree
+from shlex import quote
 
 arguments = docopt(__doc__)
 
@@ -32,47 +33,39 @@ gif = os.path.join(tmpdir, "uncompressed.gif")
 
 if arguments['--subtitle-track']:
     print("Extracting subs...")
-    subprocess.call(["mkvextract",
-                     "tracks",
-                     arguments['<mkv>'],
-                     "{}:{}".format(arguments['--subtitle-track'], subs)])
+    subprocess.call(
+        "mkvextract tracks {} {}:{}".format(
+            arguments['<mkv>'],
+            arguments['--subtitle-track'],
+            subs),
+        shell=True)
 else:
     subs = None
 
 print("Extracting video clip...")
-subprocess.call(["ffmpeg",
-                 "-i",
-                 arguments['<mkv>'],
-                 "-strict",
-                 "-2",
-                 "-sn",
-                 "-vcodec",
-                 "libx264",
-                 "-ss",
-                 arguments['--start'],
-                 "-t",
-                 arguments['<duration>']] +
-                 (["-vf", subs] if subs else []) +
-                 [clip])
+subprocess.call(
+    "ffmpeg -i {} -strict -2 -sn -vcodec libx264 -ss {} -t {} {} {}".format(
+        quote(arguments['<mkv>']),
+        arguments['--start'],
+        arguments['<duration>'],
+        "-vf " + subs if subs else "",
+        clip),
+    shell=True)
 
 print("Transcoding to gif...")
-subprocess.call(["ffmpeg",
-                 "-i",
-                 clip,
-                 "-pix_fmt",
-                 "rgb24",
-                 "-r",
-                 "10",
-                 "-s",
-                 arguments['-r'],
-                 gif])
+subprocess.call(
+    "ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {} {}".format(
+        clip,
+        arguments['-r'],
+        gif),
+    shell=True)
 
 print("Optimising gif...")
-subprocess.call(["convert",
-                 "-layers",
-                 "Optimize",
-                 gif,
-                 arguments['<gif>']])
+subprocess.call(
+    "convert -layers Optimize {} {}".format(
+        gif,
+        quote(arguments['<gif>'])),
+    shell=True)
 
 
 rmtree(tmpdir)
