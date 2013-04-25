@@ -35,7 +35,7 @@ Xft.rgba:       rgb
 *underlineFont: FONT_UNDERLINE
 
 !! Terminal
-URxvt.urlLauncher:       chromium
+URxvt.url-launcher:      chromium
 URxvt.matcher.button:    1
 URxvt.perl-ext-common:   default,matcher
 URxvt.colorUL:           #86a2be
