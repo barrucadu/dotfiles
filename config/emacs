@@ -4,7 +4,8 @@
 ; - emacs-pkgbuild-mode-git (AUR)
 ; - solarized-theme (Marmalade)
 ; - markdown-mode (Marmalade)
-; - agda2 (Hackage)
+; - agda (Hackage)
+; - lua-mode (Marmalade)
 
 ;;;;; Package Management ;;;;;
 (require 'package)
@@ -134,6 +135,10 @@
 
 (setq auto-mode-alist (append '(("/*..tex$" . LaTeX-mode))
                               auto-mode-alist))
+
+; lua-mode
+(require 'lua-mode)
+(add-to-list 'auto-mode-alist '("/*..lua$" . lua-mode))
 
 ;;;;; Helper Commands ;;;;;
 (defun latex-wizard ()
