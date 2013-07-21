@@ -22,11 +22,6 @@ export XDG_DOCUMENTS_DIR=~/docs
 export XDG_MUSIC_DIR=~/music
 export XDG_PICTURES_DIR=~/graphics
 export XDG_VIDEOS_DIR=~/movies
-    # Input
-export XCOMPOSEFILE=~/.XCompose
-export QT_XFT=1
-export GDK_USE_XFT=1
-export GTK_IM_MODULE=xim
     # Locale
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
