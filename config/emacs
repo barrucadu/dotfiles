@@ -6,6 +6,8 @@
 ; - markdown-mode (Marmalade)
 ; - agda (Hackage)
 ; - lua-mode (Marmalade)
+; - haskell-mode (Marmalade)
+; - sml-mode (Marmalade)
 
 ;;;;; Package Management ;;;;;
 (require 'package)
@@ -88,6 +90,11 @@
 (global-set-key [?\C-x ?\C-x]   'switch-to-previous-buffer)
 
 ;;;;; Editing Modes ;;;;;
+; org-mode
+(add-hook 'org-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook 'visual-line-mode)
+
 ; pkgbuild-mode
 (require 'pkgbuild-mode)
 (add-to-list 'auto-mode-alist '("/PKGBUILD$" . pkgbuild-mode))
@@ -141,6 +148,12 @@
 ; lua-mode
 (require 'lua-mode)
 (add-to-list 'auto-mode-alist '("/*..lua$" . lua-mode))
+
+; hol
+(autoload 'hol "/opt/hol/tools/hol-mode"
+  "Runs a HOL session in a comint window.
+   With a numeric prefix argument, runs it niced to that level
+   or at level 10 with a bare prefix. " t)
 
 ;;;;; Helper Commands ;;;;;
 (defun latex-wizard ()
