@@ -39,3 +39,16 @@ function chromium-socks ()
     chromium --proxy-server="socks://localhost:$port" --user-data-dir=~/.config/chromium_secure &>/dev/null &
     disown %%
 }
+
+# Shortcuts
+function sshh ()
+{
+    name=$1
+    host=$2
+    user=`default $3 \`whoami\``
+    cat >> ~/.ssh/config << EOF
+Host $name
+    HostName $host
+    User $user
+EOF
+}
