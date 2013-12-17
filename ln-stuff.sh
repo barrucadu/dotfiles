@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-HOMEFILES=(emacs mplayer ncmpcpp tmux.conf zsh)
+HOMEFILES=(emacs mplayer ncmpcpp tmux.conf zsh gitconfig)
 
 force=""
 if [[ $1 == "-f" ]]; then

@@ -1,0 +1,14 @@
+[user]
+	name = Michael Walker
+	email = mike@barrucadu.co.uk
+	signingkey = 9F58FC68
+[push]
+	default = matching
+[alias]
+	st = status
+	d = diff
+	cim = commit -m
+	ca = commit -a
+	cam = commit -a -m
+	p = push
+	l = log
