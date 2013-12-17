@@ -59,6 +59,7 @@ function a ()
     shift
     val=$*
     echo "alias $name='$val'" >> ~/.zsh/aliases
+    source ~/.zsh/aliases
 }
 
 function ga ()
