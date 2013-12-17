@@ -72,6 +72,9 @@
 ; Change yes-or-no to y-or-n
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+; Word completion
+(global-set-key "\M- " 'hippie-expand)
+
 ;;;;; Keybindings ;;;;;
 ; Helper functions
 (defun switch-to-previous-buffer ()
