@@ -52,3 +52,19 @@ Host $name
     User $user
 EOF
 }
+
+function a ()
+{
+    name=$1
+    shift
+    val=$*
+    echo "alias $name='$val'" >> ~/.zsh/aliases
+}
+
+function ga ()
+{
+    alias=$1
+    shift
+    val=$*
+    git config --global alias.$alias $val
+}
