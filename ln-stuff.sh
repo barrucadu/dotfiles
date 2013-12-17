@@ -32,3 +32,6 @@ popd
 
 mkdir $HOME/.xmonad
 ln -s $force $dir/config/xmonad.hs $HOME/.xmonad/xmonad.hs
+
+mkdir $HOME/.ssh
+ln -s $force $dir/config/ssh-config $HOME/.ssh/config
