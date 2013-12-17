@@ -24,3 +24,18 @@ function sign-key ()
     gpg --sign-key $key &&
     gpg --keyserver $keyserver --send-key $key
 }
+
+# Proxying
+function socks ()
+{
+    port=`default $2 8080`
+    ssh -TND $port $1 &
+    disown %%
+}
+
+function chromium-socks ()
+{
+    port=`default $1 8080`
+    chromium --proxy-server="socks://localhost:$port" --user-data-dir=~/.config/chromium_secure &>/dev/null &
+    disown %%
+}
