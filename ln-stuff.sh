@@ -35,3 +35,10 @@ ln -s $force $dir/config/xmonad.hs $HOME/.xmonad/xmonad.hs
 
 mkdir $HOME/.ssh
 ln -s $force $dir/config/ssh-config $HOME/.ssh/config
+
+pushd $dir/config/emacs.d
+mkdir $HOME/.emacs.d
+for file in $; do
+    ln -s $force $dir/config/emacs.d/$file $HOME/.emacs.d/$file
+done
+popd

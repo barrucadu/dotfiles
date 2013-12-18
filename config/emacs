@@ -17,6 +17,17 @@
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 
+;;;;; Configuration ;;;;;
+(defun load-directory (base)
+  (dolist (f (directory-files base))
+    (let ((name (concat base "/" f)))
+      (cond ((file-regular-p name) (load-file name))
+            ((and (file-directory-p name)
+                  (not (equal f ".."))
+                  (not (equal f "."))) (load-directory name))))))
+
+(load-directory "~/.emacs.d/init")
+
 ;;;;; Appearence ;;;;;
 ; Colour theme
 (load-theme 'solarized-dark t)
@@ -72,7 +83,8 @@
 ; Change yes-or-no to y-or-n
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-; Word completion
+; Completion
+(setq default-abbrev-mode t)
 (global-set-key "\M- " 'hippie-expand)
 
 ;;;;; Keybindings ;;;;;
@@ -91,119 +103,3 @@
 (global-set-key [?\M-O <left>]  'forward-word)
 (global-set-key [?\M-O <right>] 'backward-word)
 (global-set-key [?\C-x ?\C-x]   'switch-to-previous-buffer)
-
-;;;;; Editing Modes ;;;;;
-; org-mode
-(add-hook 'org-mode-hook 'flyspell-mode)
-(add-hook 'org-mode-hook 'org-indent-mode)
-(add-hook 'org-mode-hook 'visual-line-mode)
-
-; pkgbuild-mode
-(require 'pkgbuild-mode)
-(add-to-list 'auto-mode-alist '("/PKGBUILD$" . pkgbuild-mode))
-
-; python-mode
-(autoload 'python-mode "python-mode" "Python editing mode." t)
-(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
-
-; haskell-mode
-(require 'haskell-mode)
-(require 'inf-haskell)
-
-(add-to-list 'auto-mode-alist '("\\.hs$"  . haskell-mode))
-(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
-
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-
-(setq haskell-font-lock-symbols t)
-
-; markdown-mode
-(require 'markdown-mode)
-(add-to-list 'auto-mode-alist '("/*..md$" . markdown-mode))
-(add-to-list 'auto-mode-alist '("/*..markdown$" . markdown-mode))
-
-; c-mode
-(setq c-default-style "gnu")
-(setq c-basic-offset  2)
-
-; agda2-mode
-(add-to-list 'load-path (expand-file-name "~/.cabal/share/x86_64-linux-ghc-7.6.3/Agda-2.3.2.2/emacs-mode/"))
-(require 'agda2-mode)
-(setq agda2-include-dirs `(,(expand-file-name "~/agda/lib-0.7/src") "."))
-(agda2-highlight-set-faces 'agda2-highlight 'default-faces)
-
-; auctex
-(load "auctex.el" nil t t)
-
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-(setq TeX-electric-sub-and-superscript t)
-
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
-(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-
-(setq auto-mode-alist (append '(("/*..tex$" . LaTeX-mode))
-                              auto-mode-alist))
-
-; lua-mode
-(require 'lua-mode)
-(add-to-list 'auto-mode-alist '("/*..lua$" . lua-mode))
-
-; hol
-(autoload 'hol "/opt/hol/tools/hol-mode"
-  "Runs a HOL session in a comint window.
-   With a numeric prefix argument, runs it niced to that level
-   or at level 10 with a bare prefix. " t)
-
-;;;;; Helper Commands ;;;;;
-(defun latex-wizard ()
-  "Insert all the basic code required to create a usable LaTeX document which can be compiled into a PDF file."
-  (interactive)
-  (insert "\\documentclass[12pt,a4paper]{article}\n")
-  (insert "\\pagestyle{headings}\n\n")
-  (insert "\\usepackage[utf8x]{inputenc}\n")
-  (insert "\\usepackage{amsmath}\n")
-  (insert "\\usepackage{amsfonts}\n")
-  (insert "\\usepackage{amssymb}\n")
-  (insert "\\usepackage{amsthm}\n")
-  (insert "\\usepackage{graphicx}\n")
-  (insert "\\usepackage[margin=0.9in]{geometry}\n")
-  (insert "\\usepackage{ucs}\n")
-  (insert "\\usepackage[british]{babel}\n")
-  (insert "\\usepackage[nodayofweek]{datetime}\n")
-  (insert "\\usepackage{enumitem}\n")
-  (insert "\\usepackage{multirow}\n")
-  (insert "\\usepackage{tabularx}\n")
-  (insert "\\usepackage{float}\n")
-  (insert "\\usepackage{listings}\n")
-  (insert "\\usepackage{pdflscape}\n")
-  (insert "\\usepackage[usenames,dvipsnames]{color}\n")
-  (insert "\\usepackage{cite}\n")
-  (insert "\n")
-  (insert "\\lstset{basicstyle=\\small\\ttfamily}\n")
-  (insert "\\lstset{showstringspaces=false}\n")
-  (insert "\\lstset{numbers=left, numberstyle=\\tiny, stepnumber=1, numbersep=5pt}\n")
-  (insert "\\lstset{keywordstyle=\\color{MidnightBlue}\\bfseries}\n")
-  (insert "\\lstset{commentstyle=\\color{JungleGreen}}\n")
-  (insert "\\lstset{identifierstyle=\\color{OliveGreen}}\n")
-  (insert "\\lstset{stringstyle=\\color{Red}}\n")
-  (insert "\\lstset{backgroundcolor=\\color{LightGray}}\n")
-  (insert "\\lstset{breaklines=true}\n")
-  (insert "\n")
-  (insert "\\definecolor{LightGray}{rgb}{0.9,0.9,0.9}\n")
-  (insert "\n")
-  (insert "\\floatstyle{boxed}\n")
-  (insert "\\restylefloat{figure}\n")
-  (insert "\n")
-  (insert "\\author{Michael Walker}\n")
-  (insert "\\title{}\n\n")
-  (insert "\\begin{document}\n")
-  (insert "\n")
-  (insert "\\maketitle{}\n")
-  (insert "\n")
-  (insert "\n")
-  (insert "\n")
-  (insert "\\end{document}"))
