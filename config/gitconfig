@@ -12,3 +12,4 @@
 	cam = commit -a -m
 	p = push
 	l = log
+	a = add
