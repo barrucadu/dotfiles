@@ -28,14 +28,14 @@ function sign-key ()
 # Proxying
 function socks ()
 {
-    port=`default $2 8080`
+    port=${2:-8080}
     ssh -TND $port $1 &
     disown %%
 }
 
 function chromium-socks ()
 {
-    port=`default $1 8080`
+    port=${1:-8080}
     chromium --proxy-server="socks://localhost:$port" --user-data-dir=~/.config/chromium_secure &>/dev/null &
     disown %%
 }
@@ -45,7 +45,7 @@ function sshh ()
 {
     name=$1
     host=$2
-    user=`default $3 \`whoami\``
+    user=${3:-`whoami`}
     cat >> ~/.ssh/config << EOF
 Host $name
     HostName $host
