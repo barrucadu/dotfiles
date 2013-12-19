@@ -6,6 +6,12 @@
 xrandr --output DVI-I-2 --rotate left
 
 # Wallpaper
-WALLPAPERDIR=`default $1 /mnt/data/wallpaper`
+WALLPAPERDIR=${1:-/mnt/data/wallpaper}
 PORTDIR=$WALLPAPERDIR/portrait
+
+if [[ ! -d $PORTDIR ]]; then
+    echo "Missing wallpaper directory"
+    exit
+fi
+
 feh --bg-scale "$PORTDIR/`ls $PORTDIR | shuf -n1`"

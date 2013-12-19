@@ -6,6 +6,12 @@
 xrandr --output DVI-I-2 --rotate normal
 
 # Wallpaper
-WALLPAPERDIR=`default $1 /mnt/data/wallpaper`
+WALLPAPERDIR=${1:-/mnt/data/wallpaper}
 LANDDIR=$WALLPAPERDIR/landscape
+
+if [[ ! -d $LANDDIR ]]; then
+    echo "Missing wallpaper directory"
+    exit
+fi
+
 feh --bg-scale "$LANDDIR/`ls $LANDDIR | shuf -n1`"

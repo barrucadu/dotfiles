@@ -1,9 +1,14 @@
 #!/bin/zsh
 
 # Set the wallpaper directories
-WALLPAPERDIR=`default $1 /mnt/data/wallpaper`
+WALLPAPERDIR=${1:-/mnt/data/wallpaper}
 LANDDIR=$WALLPAPERDIR/landscape
 PORTDIR=$WALLPAPERDIR/portrait
+
+if [[ ! -d $LANDDIR ]] || [[ ! -d $PORTDIR ]]; then
+    echo "Missing wallpaper directories"
+    exit
+fi
 
 # Pick random landscape and portrait wallpapers.
 landscape="$LANDDIR/`ls $LANDDIR | shuf -n1`"
