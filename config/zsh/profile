@@ -1,39 +1,6 @@
 ## -*- shell-script -*-
 
-# Environmental Variables
-export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:/home/barrucadu/.cabal/bin:/home/barrucadu/.gem/ruby/2.0.0/bin:/home/barrucadu/.local/bin:$PATH:/usr/share/java/apache-ant/bin"
-    # Programs
-export BROWSER=chromium
-export EDITOR="emacs"
-export VISUAL="emacs"
-export PAGER=most
-    # History
-export HISTFILE=~/.data/zsh/history
-export HISTSIZE=1000
-export SAVEHIST=1000
-export DIRSTACKSIZE=16
-    # XDG
-export XDG_CACHE_HOME=~/.cache
-export XDG_CONFIG_HOME=~/.config
-export XDG_DATA_HOME=~/.data
-export XDG_DESKTOP_DIR=~/
-export XDG_DOWNLOAD_DIR=~/tmp/downloads
-export XDG_DOCUMENTS_DIR=~/docs
-export XDG_MUSIC_DIR=~/music
-export XDG_PICTURES_DIR=~/graphics
-export XDG_VIDEOS_DIR=~/movies
-    # Locale
-export LANG=en_GB.UTF-8
-export LC_ALL=en_GB.UTF-8
-export LC_CTYPE=en_GB.UTF-8
-    # Misc
-export TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
-export CVS_RSH=ssh
-export CFLAGS="-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Winit-self -Wmissing-prototypes -Wstrict-prototypes -Wconversion -pedantic -O2"
-export CXXFLAGS="-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Winline -Wno-long-long -Winit-self -Wconversion -pedantic -O2"
-    # Prompt
-export PROMPT2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
-export PROMPT3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "
+##### Colours
 
 # Framebuffer zenburn colours
 if [ "$TERM" = "linux" ]; then
@@ -72,6 +39,37 @@ done
 
 export PR_NO_COLOR="%{$terminfo[sgr0]%}"
 
+##### Environment
+export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:/home/barrucadu/.cabal/bin:/home/barrucadu/.gem/ruby/2.0.0/bin:/home/barrucadu/.local/bin:$PATH:/usr/share/java/apache-ant/bin"
+
+export BROWSER=chromium
+export EDITOR=vim
+export VISUAL=$EDITOR
+
+export LANG=en_GB.UTF-8
+export LC_ALL=en_GB.UTF-8
+export LC_CTYPE=en_GB.UTF-8
+
+##### History
+export HISTFILE=${XDG_DATA_HOME:-~/local/share}/zsh/history
+export HISTSIZE=1000
+export SAVEHIST=1000
+export DIRSTACKSIZE=16
+
+setopt hist_ignore_dups
+setopt hist_no_functions
+setopt hist_reduce_blanks
+setopt hist_verify
+setopt share_history
+
+
+# Compilation
+export CFLAGS="-Wall -Wextra -Wcast-align -Wconversion -Winit-self -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wwrite-strings -pedantic -O2"
+export CPPFLAGS=$CFLAGS
+export CXXFLAGS=$CFLAGS
+
+##### Prompt
+
 # prompt
 function prompt_git_dirty() {
     gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
@@ -92,16 +90,9 @@ function prompt_current_branch() {
 
 function prompt_hostname()
 {
-    case "`hostname`" in
-        "azathoth")
-            echo -n "${PR_LIGHT_BLUE}azathoth${PR_NO_COLOR}";;
-        "randolph")
-            echo -n "${PR_LIGHT_CYAN}randolph${PR_NO_COLOR}";;
-        "eihort")
-            echo -n "${PR_LIGHT_MAGENTA}eihort${PR_NO_COLOR}";;
-        *)
-            echo -n "${PR_LIGHT_RED}`hostname`${PR_NO_COLOR}";;
-    esac
+    host=`hostname`
+    colour="PR_`grep \"^$host\" ~/.zsh/host_colours | sed 's/.*:\s*//' | tr '[:lower:] ' '[:upper:]_'`"
+    echo -n "${(P)colour:-$PR_LIGHT_RED}${host}${PR_NO_COLOR}"
 }
 
 function precmd() # Uses: setting user/root PROMPT1 variable and rehashing commands list
@@ -118,15 +109,18 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
     # Git branch
     git="[branch: `prompt_git_dirty``prompt_current_branch`${PR_NO_COLOR}]"
 
-    export PROMPT="
+    export PS1="
 ${usercolour}%n${PR_NO_COLOR} on `prompt_hostname` in ${dircolour}%~${PR_NO_COLOR} `prompt_current_branch &>/dev/null && echo -n $git`
  ${sadface}${usercolour2}>>>${PR_NO_COLOR}  "
 }
 
-# Emacs shell mode
+export PS2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
+export PS3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "
+
+##### Emacs shell mode
 [[ $EMACS = t ]] && unsetopt zle
 
-# Keybindings - I'm not actually sure which ones are required.
+##### Keybindings
 bindkey "\e[1~"  beginning-of-line
 bindkey "\e[4~"  end-of-line
 bindkey "\e[5~"  beginning-of-history
@@ -148,10 +142,10 @@ bindkey "\e[H"   beginning-of-line
 bindkey "\e[F"   end-of-line
 bindkey '^i'     expand-or-complete-prefix
 
-# Colourful Directory Listings
+##### Colourful directory listings
 eval `dircolors -b`
 
-# Tab Completion
+##### Tab completion
 zle -C complete-file complete-word _generic
 
 zstyle ':completion:*'                 completer _complete _match _approximate
@@ -164,27 +158,23 @@ zstyle ':completion:*'                 completer _complete _ignored _files
 autoload -Uz compinit
 compinit
 
-# Misc Settings
-setopt auto_cd # directory navigation
+setopt menu_complete
+setopt hash_list_all
+
+##### Directory navigation
+setopt auto_cd
 setopt auto_pushd
 setopt pushd_silent
 setopt pushd_to_home
 setopt chase_links
 
-setopt menu_complete # completion
-setopt hash_list_all
-
-setopt extended_glob # globbing
+##### Globbing
+setopt extended_glob
 setopt glob_dots
 setopt mark_dirs
 setopt multibyte
 setopt null_glob
 
-setopt hist_ignore_dups # history
-setopt hist_no_functions
-setopt hist_reduce_blanks
-setopt hist_verify
-setopt share_history
-
-setopt interactive_comments # miscellanious
+##### Misc
+setopt interactive_comments
 setopt correct
