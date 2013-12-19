@@ -13,3 +13,4 @@
 	p = push
 	l = log
 	a = add
+	pl = pull
