@@ -25,3 +25,6 @@ Host leng
 Host reimu
     HostName 213.138.110.51
     User barrucadu
+Host shinai
+    HostName shinai.uzbl.org
+    User barrucadu
