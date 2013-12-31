@@ -4,7 +4,7 @@ GRPDIR=${GRPDIR:-/tmp/hacksoc-grp}
 
 if [[ ! -e $GRPDIR/bin ]]; then
     mkdir -p $GRPDIR
-    sshfs -o follow_symlinks,transform_symlinks grp@klaxon.hacksoc.org: $GRPDIR
+    sshfs -o reconnect grp@klaxon.hacksoc.org: $GRPDIR
 fi
 
 export PATH=$GRPDIR/bin:$PATH
