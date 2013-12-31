@@ -1,0 +1,12 @@
+#!/usr/bin/zsh
+
+GRPDIR=${GRPDIR:-/tmp/hacksoc-grp}
+
+if [[ ! -e $GRPDIR/bin ]]; then
+    mkdir -p $GRPDIR
+    sshfs -o follow_symlinks,transform_symlinks grp@klaxon.hacksoc.org: $GRPDIR
+fi
+
+export PATH=$GRPDIR/bin:$PATH
+export LD_LIBRARY_PATH=$GRPDIR/lib:$LD_LIBRARY_PATH
+export PYTHONPATH=$GRPDIR/lib/python3.3/site-packages:$PYTHONPATH
