@@ -18,7 +18,7 @@ function grprun() {
     local GRPDIR=${GRPDIR:-/tmp/hacksoc-grp}
 
     PATH=$GRPDIR/bin:$PATH \
-    yLD_LIBRARY_PATH=$GRPDIR/lib:$LD_LIBRARY_PATH \
+    LD_LIBRARY_PATH=$GRPDIR/lib:$LD_LIBRARY_PATH \
     PYTHONPATH=$GRPDIR/lib/python3.3/site-packages:$PYTHONPATH \
     $*
 }
