@@ -40,7 +40,7 @@ done
 export PR_NO_COLOR="%{$terminfo[sgr0]%}"
 
 ##### Environment
-export PATH="/usr/local/bin:/usr/local/sbin:/home/barrucadu/bin:/home/barrucadu/.cabal/bin:/home/barrucadu/.gem/ruby/2.0.0/bin:/home/barrucadu/.local/bin:$PATH:/usr/share/java/apache-ant/bin"
+export PATH="/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/.cabal/bin:$HOME/.gem/ruby/2.0.0/bin:$HOME/.local/bin:$PATH:/usr/share/java/apache-ant/bin"
 
 export BROWSER=chromium
 export EDITOR=vim
