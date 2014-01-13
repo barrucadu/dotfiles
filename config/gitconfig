@@ -14,3 +14,4 @@
 	l = log
 	a = add
 	pl = pull
+	co = checkout
