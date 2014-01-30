@@ -17,3 +17,5 @@
 	co = checkout
 	f = fetch
 	r = rebase
+	rem = remote
+	b = branch
