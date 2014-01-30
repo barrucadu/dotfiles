@@ -15,3 +15,5 @@
 	a = add
 	pl = pull
 	co = checkout
+	f = fetch
+	r = rebase
