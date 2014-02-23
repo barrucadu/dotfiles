@@ -28,3 +28,6 @@ Host reimu
 Host shinai
     HostName shinai.uzbl.org
     User barrucadu
+Host patchouli
+    HostName patchouli.archhurd.org
+    User barrucadu
