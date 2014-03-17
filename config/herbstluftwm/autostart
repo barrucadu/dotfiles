@@ -21,6 +21,7 @@ hc keybind $Mod-Shift-c close
 # Spawning programs
 hc keybind $Mod-Return    spawn urxvt
 hc keybind $Mod-backslash spawn urxvt -e newtmux
+hc keybind $Mod-x         spawn gmrun
 hc keybind 0xffc2         spawn chromium   # XF86HomePage
 hc keybind 0xffc3         spawn claws-mail # XF86Mail
 hc keybind XF86Sleep      spawn slock
@@ -156,6 +157,7 @@ hc rule focus=off
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' pseudotile=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
+hc rule class=Gmrun pseudotile=on focus=on
 
 # unlock, just to be sure
 hc unlock
