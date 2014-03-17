@@ -17,7 +17,23 @@ Mod=Mod4   # Use the super key as the main modifier
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Return spawn urxvt
+
+# Spawning programs
+hc keybind $Mod-Return    spawn urxvt
+hc keybind $Mod-backslash spawn urxvt -e newtmux
+hc keybind 0xffc2         spawn chromium   # XF86HomePage
+hc keybind 0xffc3         spawn claws-mail # XF86Mail
+hc keybind XF86Sleep      spawn slock
+hc keybind Print          spawn scrot ~/tmp/screenshot.png
+
+# Media keys
+hc keybind XF86AudioPlay        spawn mpc toggle
+hc keybind XF86AudioStop        spawn mpc stop
+hc keybind XF86AudioPrev        spawn mpc prev
+hc keybind XF86AudioNext        spawn mpc next
+hc keybind XF86AudioMute        spawn amixer set Master toggle
+hc keybind XF86AudioLowerVolume spawn amixer set Master 1%-
+hc keybind XF86AudioRaiseVolume spawn amixer set Master 1%+
 
 # basic movement
 # focusing clients
