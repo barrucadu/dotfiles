@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 HOMEFILES=(emacs mplayer ncmpcpp tmux.conf zsh gitconfig)
+CONFFILES=(herbstluftwm)
 
 force=""
 if [[ $1 == "-f" ]]; then
@@ -12,6 +13,10 @@ dir=`pwd`
 
 for file in $HOMEFILES; do
     ln -s $force $dir/config/$file $HOME/.$file
+done
+
+for file in $CONFFILES; do
+    ln -s $force $dir/config/$file $HOME/.config/$file
 done
 
 pushd $dir/config/xorg

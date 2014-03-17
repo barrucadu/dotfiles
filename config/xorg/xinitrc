@@ -27,7 +27,8 @@ if [[ "$WM" != "" ]]; then
     urxvt &
     exec $WM
 else
-    exec xmonad
+    exec herbstluftwm
+    #exec xmonad
 fi
 
 # /WM
