@@ -1,6 +1,9 @@
 hc attr theme.tiling.reset   1
 hc attr theme.floating.reset 1
 
+### Frame backgrounds
+hc set frame_bg_transparent 1
+
 ### Frame Borders
 hc set frame_border_active_color "#222222"
 hc set frame_border_normal_color "#101010"
