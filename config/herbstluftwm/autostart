@@ -95,6 +95,7 @@ hc keybind $Mod-Tab         cycle_all +1
 hc keybind $Mod-Shift-Tab   cycle_all -1
 hc keybind $Mod-c cycle
 hc keybind $Mod-i jumpto urgent
+hc set focus_follows_mouse 1
 
 # them
 hc attr theme.tiling.reset 1
@@ -135,7 +136,7 @@ hc set mouse_recenter_gap 0
 
 # rules
 hc unrule -F
-hc rule focus=on # normally do not focus new clients
+hc rule focus=off
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' pseudotile=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
