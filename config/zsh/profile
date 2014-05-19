@@ -63,6 +63,9 @@ setopt hist_reduce_blanks
 setopt hist_verify
 setopt share_history
 
+# Input
+export GTK_IM_MODULE=xim
+export QT_IM_MODULE=xim
 
 # Compilation
 export CFLAGS="-Wall -Wextra -Wcast-align -Wconversion -Winit-self -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wwrite-strings -pedantic -O2"
