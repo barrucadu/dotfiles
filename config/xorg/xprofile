@@ -7,8 +7,3 @@ setxkbmap -option terminate:ctrl_alt_bksp
 xrdb -load ~/.Xdefaults
 
 xsetroot -cursor_name left_ptr
-
-XMODIFIERS=@im=SCIM
-GTK_IM_MODULE="scim"
-QT_IM_MODULE="scim"
-scim -d
