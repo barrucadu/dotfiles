@@ -19,3 +19,6 @@
 	r = rebase
 	rem = remote
 	b = branch
+	cism = commit -S -m
+	casm = commit -S -a -m
+	t = tag -s
