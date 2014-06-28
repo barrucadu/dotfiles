@@ -23,12 +23,13 @@ randombg
 
 # WM
 
-if [[ "$WM" != "" ]]; then
-    urxvt &
-    exec $WM
-else
-    exec herbstluftwm
-    #exec xmonad
-fi
+for winman in $WM herbstluftwm openbox twm; do
+    if [[ -x `which $winman` ]]; then
+        exec $winman
+    fi
+done
+
+echo "No window manager. Correct issue and delete ~/.noX to re-enable auto-start."
+touch ~/.noX
 
 # /WM
