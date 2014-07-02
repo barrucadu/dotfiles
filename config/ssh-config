@@ -13,18 +13,6 @@ Host klaxon
 Host arkham
     HostName 213.138.101.68
     User barrucadu
-Host yuggoth
-    HostName 178.79.143.222
-    User barrucadu
-Host carcosa
-    HostName 46.105.102.135
-    User barrucadu
-Host leng
-    HostName 94.23.43.51
-    User barrucadu
-Host reimu
-    HostName 213.138.110.51
-    User barrucadu
 Host shinai
     HostName shinai.uzbl.org
     User barrucadu
