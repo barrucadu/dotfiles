@@ -1,6 +1,9 @@
 Host csteach0
     HostName csteach0.york.ac.uk
     User msw504
+Host csteach1
+    HostName csteach1.york.ac.uk
+    User msw504
 Host sftp
     HostName sftp.york.ac.uk
     User msw504
