@@ -51,3 +51,5 @@ alias g='git'
 alias m='mosh'
 alias sshc='ssh-copy-id'
 alias p='sudo pacman'
+alias hadd='cabal haddock --hyperlink-source --html-location=https://hackage.haskell.org/package/\$pkg-\$version/docs'
+
