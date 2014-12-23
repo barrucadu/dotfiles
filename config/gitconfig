@@ -22,3 +22,4 @@
 	cism = commit -S -m
 	casm = commit -S -a -m
 	t = tag -s
+	su = submodule foreach git pull
