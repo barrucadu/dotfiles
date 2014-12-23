@@ -15,3 +15,5 @@ if [[ ! -d $PORTDIR ]]; then
 fi
 
 feh --bg-scale "$PORTDIR/`ls $PORTDIR | shuf -n1`"
+
+herbstclient detect_monitors
