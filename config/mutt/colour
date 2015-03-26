@@ -1,0 +1,73 @@
+###
+# mutt colors file
+###
+
+# set default
+  color normal     white        default
+
+# main colors
+  color tree       brightmagenta default
+  color error      brightred     default
+  color message    brightgreen   default
+
+# color all ML mails
+  color index      blue          default "~u"
+
+# uncolor certain messages
+uncolor index "~P"
+uncolor index "~C @.com"
+uncolor index "~N ~u"
+uncolor index "~N !~u" 
+uncolor index "~T"
+uncolor index "~D"
+
+# and recolor them appropriately
+  color index      brightyellow  default "~P"
+  color index      green         default "~C @.com"
+  color index      red           default "~N ~u"  # new ML mail
+  color index      brightred     default "~N !~u" # new non-ML mail
+  color index      brightgreen   default "~T"
+  color index      brightblack   default "~D"
+
+# set up the headers
+  color header     brightmagenta default "^from:"
+  color header     green         default "^to:"
+  color header     yellow        default "^cc:"
+  color header     blue          default "^date:"
+  color header     brightgreen   default "^subject:"
+
+# message bodies
+  color attachment brightblack   default
+  color search     red           brightblack
+  color signature  cyan          default
+  color tilde      brightblack   default
+  color hdrdefault yellow        default
+  color bold       brightyellow  default
+
+# urls
+  color body       brightblue    default "(^|<| )mailto:[^ ]+@[^ ]( |>|$)"
+  color body       brightblue    default "(^|<| )(http|https|ftp|file|telnet|news|finger)://[^ ]+( |>|$)"
+
+# smileys, the right way and the backward-ass euro way
+  color body       brightmagenta default "(^| )+(|[<>|])[8;:](|[^ ])[)(/|DOPS]( |$)+"
+  color body       brightmagenta default "(^| )+[)(/|DOPS](|[^ ])[8;:](|[<>|])( |$)+"
+
+# *bold*, _underline_, and /italic/
+  color body       brightcyan    default "(^| )\\*[^ ]+\\*( |$)"
+  color body       brightcyan    default "(^| )_[^ ]+_( |$)"
+  color body       brightcyan    default "(^| )/[^ ]+/( |$)"
+
+# quote blocks
+  color quoted     magenta       default
+  color quoted1    cyan          default
+  color quoted2    green         default
+  color quoted3    yellow        default
+  color quoted4    brightmagenta default
+  color quoted5    brightgreen   default
+  color quoted6    brightyellow  default
+  color quoted7    brightcyan    default
+     
+# PGP messages
+  color body      brightgreen    default "^gpg: Good signature .*"
+  color body      yellow         default "^gpg: "
+  color body      brightred      default "^gpg: BAD signature from. *"

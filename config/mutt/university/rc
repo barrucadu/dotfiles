@@ -1,0 +1,5 @@
+set from      = "msw504@york.ac.uk"
+set mbox      = "+university/INBOX"
+set record    = "+university/sent"
+set postponed = "+university/drafts"
+set signature = "~/.mutt/university/sig"

@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-HOMEFILES=(emacs mplayer ncmpcpp tmux.conf zsh gitconfig)
+HOMEFILES=(emacs mplayer ncmpcpp tmux.conf zsh gitconfig mutt)
 CONFFILES=(herbstluftwm)
 
 force=""
