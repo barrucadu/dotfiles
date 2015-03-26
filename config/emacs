@@ -2,7 +2,6 @@
 
 ;;;;; Dependencies ;;;;;
 ; - emacs-pkgbuild-mode-git (AUR)
-; - solarized-theme (Marmalade)
 ; - markdown-mode (Marmalade)
 ; - agda (Hackage)
 ; - lua-mode (Marmalade)
@@ -30,7 +29,7 @@
 
 ;;;;; Appearence ;;;;;
 ; Colour theme
-(load-theme 'solarized-dark t)
+(load-theme 'manoj-dark t)
 
 ; Hide menu bar
 (menu-bar-mode 0)
