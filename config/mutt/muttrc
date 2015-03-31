@@ -67,3 +67,4 @@ set status_format       = " %?M?%M/?%m Mails %?n?%n new, ?%?u?%u unread, ?%?p?%p
 
 # Misc
 set delete
+set mark_old = no
