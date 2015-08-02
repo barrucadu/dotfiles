@@ -16,6 +16,9 @@ Host klaxon
 Host arkham
     HostName 213.138.101.68
     User barrucadu
+Host innsmouth
+    HostName 139.162.211.161
+    User barrucadu
 Host shinai
     HostName shinai.uzbl.org
     User barrucadu
