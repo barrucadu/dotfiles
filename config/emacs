@@ -7,6 +7,8 @@
 ; - lua-mode (Marmalade)
 ; - haskell-mode (Marmalade)
 ; - sml-mode (Marmalade)
+; - auctex (Marmalade)
+; - erlang (Marmalade)
 
 ;;;;; Package Management ;;;;;
 (require 'package)
