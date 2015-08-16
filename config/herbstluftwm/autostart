@@ -22,7 +22,7 @@ hc keybind $Mod-Shift-c close
 hc keybind $Mod-Return    spawn urxvt
 hc keybind $Mod-backslash spawn urxvt -e newtmux
 hc keybind $Mod-x         spawn gmrun
-hc keybind XF86HomePage   spawn chromium --enable-ipv6
+hc keybind XF86HomePage   spawn chromium --enable-ipv6 --force-device-scale-factor
 hc keybind XF86Mail       spawn claws-mail
 hc keybind XF86Sleep      spawn slock
 hc keybind Print          spawn scrot ~/tmp/screenshot.png
