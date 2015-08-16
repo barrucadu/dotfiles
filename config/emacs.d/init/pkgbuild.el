@@ -1,3 +1,5 @@
+; Requires: emacs-pkgbuild-mode-git (AUR)
+
 (load-file "~/.emacs.d/init/utils.el")
 
 (with-library pkgbuild-mode

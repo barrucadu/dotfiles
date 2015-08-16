@@ -1,3 +1,5 @@
+; Requires: lua-mode
+
 (load-file "~/.emacs.d/init/utils.el")
 
 (with-library lua-mode

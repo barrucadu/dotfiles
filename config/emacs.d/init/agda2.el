@@ -1,3 +1,5 @@
+; Requires: agda (Hackage)
+
 (load-file "~/.emacs.d/init/utils.el")
 
 (dolist (file (sort (file-expand-wildcards "~/.cabal/share/*-ghc-*/Agda-*/emacs-mode") #'string<))

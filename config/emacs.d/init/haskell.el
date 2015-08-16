@@ -1,3 +1,5 @@
+; Requires: haskell-mode
+
 (load-file "~/.emacs.d/init/utils.el")
 
 (with-library haskell-mode

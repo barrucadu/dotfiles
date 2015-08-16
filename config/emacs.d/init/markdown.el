@@ -1,3 +1,5 @@
+; Requires: markdown-mode
+
 (load-file "~/.emacs.d/init/utils.el")
 
 (with-library markdown-mode

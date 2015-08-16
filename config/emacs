@@ -1,15 +1,5 @@
 ;; -*- lisp -*-
 
-;;;;; Dependencies ;;;;;
-; - emacs-pkgbuild-mode-git (AUR)
-; - markdown-mode (Marmalade)
-; - agda (Hackage)
-; - lua-mode (Marmalade)
-; - haskell-mode (Marmalade)
-; - sml-mode (Marmalade)
-; - auctex (Marmalade)
-; - erlang (Marmalade)
-
 ;;;;; Package Management ;;;;;
 (require 'package)
 (package-initialize)
