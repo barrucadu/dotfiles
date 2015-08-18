@@ -31,7 +31,9 @@ set folder    = ~/Mail
 set spoolfile = "+personal/INBOX"
 
 mailboxes "+personal/INBOX"   "+personal/drafts"   "+personal/sent"   "+personal/flagged"
+mailboxes "+personal/---"
 mailboxes "+university/INBOX" "+university/travel" "+university/finance" "+university/drafts" "+university/sent" "+university/flagged"
+mailboxes "+university/---"
 mailboxes "+hacksoc/INBOX"    "+hacksoc/drafts"    "+hacksoc/sent"    "+hacksoc/flagged"
 
 folder-hook personal/*   source ~/.mutt/personal/rc
