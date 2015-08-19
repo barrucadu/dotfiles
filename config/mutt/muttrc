@@ -30,15 +30,18 @@ set sort_aux = reverse-last-date-received
 set folder    = ~/Mail
 set spoolfile = "+personal/INBOX"
 
-mailboxes "+personal/INBOX"   "+personal/drafts"   "+personal/sent"   "+personal/flagged"
-mailboxes "+personal/---"
+mailboxes "+personal/INBOX" "+personal/drafts" "+personal/sent" "+personal/flagged"
+mailboxes "+1/--"
 mailboxes "+university/INBOX" "+university/travel" "+university/finance" "+university/drafts" "+university/sent" "+university/flagged"
-mailboxes "+university/---"
-mailboxes "+hacksoc/INBOX"    "+hacksoc/drafts"    "+hacksoc/sent"    "+hacksoc/flagged"
+mailboxes "+2/--"
+mailboxes "+hacksoc/INBOX" "+hacksoc/drafts" "+hacksoc/sent" "+hacksoc/flagged"
+mailboxes "+3/--"
+mailboxes "+hacksocchair/INBOX" "+hacksocchair/drafts" "+hacksocchair/sent" "+hacksocchair/flagged"
 
-folder-hook personal/*   source ~/.mutt/personal/rc
-folder-hook university/* source ~/.mutt/university/rc
-folder-hook hacksoc/*    source ~/.mutt/hacksoc/rc
+folder-hook personal/*     source ~/.mutt/personal/rc
+folder-hook university/*   source ~/.mutt/university/rc
+folder-hook hacksoc/*      source ~/.mutt/hacksoc/rc
+folder-hook hacksocchair/* source ~/.mutt/hacksocchair/rc
 
 macro index Z "<shell-escape>/usr/bin/offlineimap -q -o -u ttyui<enter>" "sync IMAP"
 

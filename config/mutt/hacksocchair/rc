@@ -1,0 +1,5 @@
+set from      = "chair@hacksoc.org"
+set mbox      = "+hacksocchair/INBOX"
+set record    = "+hacksocchair/sent"
+set postponed = "+hacksocchair/drafts"
+set signature = "~/.mutt/hacksocchair/sig"
