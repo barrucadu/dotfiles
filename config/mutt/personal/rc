@@ -1,5 +1,0 @@
-set from      = "mike@barrucadu.co.uk"
-set mbox      = "+personal/INBOX"
-set record    = "+personal/sent"
-set postponed = "+personal/drafts"
-set signature = "~/.mutt/personal/sig"

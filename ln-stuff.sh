@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-HOMEFILES=(emacs mplayer ncmpcpp tmux.conf zsh gitconfig mutt)
+HOMEFILES=(emacs ncmpcpp tmux.conf zsh gitconfig)
 CONFFILES=(herbstluftwm)
 
 force=""
@@ -34,9 +34,6 @@ for file in $dir/bin/*; do
     ln -s $force $file .
 done
 popd
-
-mkdir $HOME/.xmonad
-ln -s $force $dir/config/xmonad.hs $HOME/.xmonad/xmonad.hs
 
 mkdir $HOME/.ssh
 ln -s $force $dir/config/ssh-config $HOME/.ssh/config

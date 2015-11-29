@@ -1,5 +1,0 @@
-set from      = "hack@yusu.org"
-set mbox      = "+hacksoc/INBOX"
-set record    = "+hacksoc/sent"
-set postponed = "+hacksoc/drafts"
-set signature = "~/.mutt/hacksoc/sig"
