@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-HOMEFILES=(emacs ncmpcpp tmux.conf zsh gitconfig)
+HOMEFILES=(emacs ncmpcpp tmux.conf zsh gitconfig email)
 CONFFILES=(herbstluftwm)
 
 force=""
