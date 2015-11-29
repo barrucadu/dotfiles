@@ -87,12 +87,7 @@
   (switch-to-buffer (other-buffer)))
 
 ; Bindings
-(global-set-key [?\C-x ?w]      'delete-horizontal-space)
-(global-set-key [?\C-x ?g]      'goto-line)
-(global-set-key [?\C-x ?i]      'indent-according-to-mode)
-(global-set-key [?\C-x ?\C-u]   'undo)
-(global-set-key [?\M-O <up>]    'backward-paragraph)
-(global-set-key [?\M-O <down>]  'forward-paragraph)
-(global-set-key [?\M-O <left>]  'forward-word)
-(global-set-key [?\M-O <right>] 'backward-word)
-(global-set-key [?\C-x ?\C-x]   'switch-to-previous-buffer)
+(global-set-key (kbd "C-x w")   'delete-horizontal-space)
+(global-set-key (kbd "C-x g")   'goto-line)
+(global-set-key (kbd "C-x C-u") 'undo)
+(global-set-key (kbd "C-x C-x") 'switch-to-previous-buffer)
