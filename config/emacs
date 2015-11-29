@@ -80,6 +80,9 @@
 (setq default-abbrev-mode t)
 (global-set-key "\M- " 'hippie-expand)
 
+; Disable overzealous indenting
+(electric-indent-mode 0)
+
 ;;;;; Keybindings ;;;;;
 ; Helper functions
 (defun switch-to-previous-buffer ()
