@@ -1,0 +1,39 @@
+#!/bin/zsh
+
+album=$1
+artist=$2
+
+if [[ -z "$album" ]] || [[ -z "$artist" ]]; then
+    echo "USAGE: $0 album artist [track ...]"
+    exit 1
+fi
+
+shift 2
+
+n=1
+for track in $*; do
+  tracknum="$n"
+  if [[ $n -lt 10 ]]; then
+      tracknum="0$n"
+  fi
+
+  fname="$tracknum. $track"
+  wavfile=$fname.wav
+  inffile=$fname.inf
+  flacfile=$fname.flac
+
+  echo "Ripping $tracknum. $track..."
+  cdda2wav -D /dev/sr0 -t $n $wavfile &>/dev/null
+
+  flac $wavfile &>/dev/null
+  rm $inffile $wavfile
+
+  metaflac --set-tag="tracknumber=$n" $flacfile
+  metaflac --set-tag="title=$track"   $flacfile
+  metaflac --set-tag="artist=$artist" $flacfile
+  metaflac --set-tag="album=$album"   $flacfile
+
+  ((n++))
+done
+
+rm audio.cddb audio.cdindex
