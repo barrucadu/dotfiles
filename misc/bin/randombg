@@ -5,6 +5,11 @@ WALLPAPERDIR=${1:-/mnt/data/wallpaper}
 LANDDIR=$WALLPAPERDIR/landscape
 PORTDIR=$WALLPAPERDIR/portrait
 
+if [[ `xrandr | grep " connected" | wc -l` = 1 ]]; then
+    landscape $WALLPAPERDIR
+    exit
+fi
+
 if [[ ! -d $LANDDIR ]] || [[ ! -d $PORTDIR ]]; then
     echo "Missing wallpaper directories"
     exit
