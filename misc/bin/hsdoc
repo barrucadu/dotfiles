@@ -1,0 +1,49 @@
+#!/bin/bash
+
+hsfiles=$(find . \( ! -regex '.*/\..*' ! -regex "./Setup.hs" \) -type f -name '*.hs')
+
+dir=${1:-"docs"}
+url=${2:-"http://barrucadu.github.io/$name"}
+css=${3:-"tango"}
+
+stack="/home/barrucadu/.local/bin/stack"
+hscolour="/home/barrucadu/.local/bin/HsColour"
+haddock="/home/barrucadu/.local/bin/haddock"
+
+# Highlight source
+
+mkdir -p $dir/source
+
+for file in $hsfiles; do
+  $hscolour "$file" -css -anchor \
+    -o"$dir/source/`echo $file | sed 's:^\./\(.*\)\.hs$:\1:' | sed 's:/:-:g'`.html"
+done
+
+# Grab CSS file
+
+wget "https://raw.githubusercontent.com/houshuang/hackage-css/master/generated_css/$css.css" -O "$dir/source/hscolour.css"
+
+# Extract package description
+
+tmpfile=`mktemp`
+
+cat *.cabal | sed '1,/description:/d' | sed '/^$/,$d' | sed 's/^ *. *$//'> $tmpfile
+
+# Generate documentation
+
+name=$(grep "^name:" *.cabal | sed 's/name: *//')
+version=$(grep "^version:" *.cabal | sed 's/version: *//')
+synopsis=$(grep "^synopsis:" *.cabal | sed 's/synopsis: *//')
+
+$stack exec -- \
+  $haddock $hsfiles -o "$dir" \
+    --title="$name-$version: $synopsis" \
+    --prologue=$tmpfile \
+    --html --built-in-themes \
+    --source-module="$url/source/%{MODULE/./-}.html" \
+    --source-entity="$url/source/%{MODULE/./-}.html#%N" \
+    --source-entity-line="$url/source/%{MODULE/./-}.html#%L"
+
+# Clean up
+
+rm $tmpfile
