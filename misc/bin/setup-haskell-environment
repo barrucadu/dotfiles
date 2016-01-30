@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Grab everything I use for Haskell devel.
+
+dir=$(mktemp -d)
+cd $dir
+
+# Get stack
+if which stack &>/dev/null; then
+    echo "Using existing stack..."
+else
+    wget "https://www.stackage.org/stack/linux-x86_64"
+    tar xf linux-x86_64
+    cp $(tar tf linux-x86_64 | grep "/stack$") ~/.local/bin/stack
+    chmod +x ~/.local/bin/stack
+fi
+
+# lamefun's patched haddock with new theme
+stack-git https://gitlab.com/lamefun/haddock.git
+
+# Syntax highlighting
+stack install highlighting-kate hscolour --flag highlighting-kate:executable
+
+# Linters & quality checkers
+stack install argon hlint
+
+rm -r $dir
