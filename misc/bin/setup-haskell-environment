@@ -24,4 +24,7 @@ stack build --copy-bins highlighting-kate hscolour --flag highlighting-kate:exec
 # Linters & quality checkers
 stack build --copy-bins argon hlint
 
+# Preprocessors
+stack build --copy-bins cpphs
+
 rm -r $dir
