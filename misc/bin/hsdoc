@@ -2,6 +2,10 @@
 
 hsfiles=$(find . -type f -name '*.hs' | grep '^./[A-Z].*/.*')
 
+name=$(grep "^name:" *.cabal | sed 's/name: *//')
+version=$(grep "^version:" *.cabal | sed 's/version: *//')
+synopsis=$(grep "^synopsis:" *.cabal | sed 's/synopsis: *//')
+
 dir=${1:-"docs"}
 url=${2:-"http://barrucadu.github.io/$name"}
 css=${3:-"tango"}
@@ -26,10 +30,6 @@ done
 
 # Generate documentation
 
-name=$(grep "^name:" *.cabal | sed 's/name: *//')
-version=$(grep "^version:" *.cabal | sed 's/version: *//')
-synopsis=$(grep "^synopsis:" *.cabal | sed 's/synopsis: *//')
-
 cat *.cabal | sed '1,/description:/d' | sed '/^$/,$d' | sed 's/^ *. *$//' > "$tmpdir/description"
 
 macros=$(find . -type f -wholename "./.stack-work/*/autogen/cabal_macros.h")
@@ -40,16 +40,18 @@ for file in $hsfiles; do
   $cpphs "$file" -O"$efile" \
     --include="$macros" \
     --strip --strip-eol
-
-  $stack exec -- \
-    $haddock $efile -o "$dir" \
-      --title="$name-$version: $synopsis" \
-      --prologue="$tmpdir/description" \
-      --html --built-in-themes \
-      --source-module="$url/source/%{MODULE/./-}.html" \
-      --source-entity="$url/source/%{MODULE/./-}.html#%N" \
-      --source-entity-line="$url/source/%{MODULE/./-}.html#line-%L"
 done
+
+processedfiles=$(find "$tmpdir" -type f -name '*.hs')
+
+$stack exec -- \
+  $haddock $processedfiles -o "$dir" \
+    --title="$name-$version: $synopsis" \
+    --prologue="$tmpdir/description" \
+    --html --built-in-themes \
+    --source-module="$url/source/%{MODULE/./-}.html" \
+    --source-entity="$url/source/%{MODULE/./-}.html#%N" \
+    --source-entity-line="$url/source/%{MODULE/./-}.html#line-%L"
 
 # Clean up
 
