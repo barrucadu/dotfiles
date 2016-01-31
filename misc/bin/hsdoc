@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hsfiles=$(find . \( ! -regex '.*/\..*' ! -regex "./Setup.hs" \) -type f -name '*.hs')
+hsfiles=$(find . -type f -name '*.hs' | grep '^./[A-Z].*/.*')
 
 dir=${1:-"docs"}
 url=${2:-"http://barrucadu.github.io/$name"}
