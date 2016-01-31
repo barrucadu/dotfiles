@@ -6,9 +6,9 @@ dir=${1:-"docs"}
 url=${2:-"http://barrucadu.github.io/$name"}
 css=${3:-"tango"}
 
-stack="/home/barrucadu/.local/bin/stack"
-hscolour="/home/barrucadu/.local/bin/HsColour"
-haddock="/home/barrucadu/.local/bin/haddock"
+stack="$HOME/.local/bin/stack"
+hscolour="$HOME/.local/bin/HsColour"
+haddock="$HOME/.local/bin/haddock"
 
 # Highlight source
 
