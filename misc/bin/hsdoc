@@ -1,10 +1,10 @@
 #!/bin/bash
 
-hsfiles=$(find . -type f -name '*.hs' | grep '^./[A-Z].*/.*')
+hsfiles=$(cabal-info exposed-modules | sed -e 's:\.:/:g' -e 's:$:.hs:')
 
-name=$(grep "^name:" *.cabal | sed 's/name: *//')
-version=$(grep "^version:" *.cabal | sed 's/version: *//')
-synopsis=$(grep "^synopsis:" *.cabal | sed 's/synopsis: *//')
+name=$(cabal-info name)
+version=$(cabal-info version)
+synopsis=$(cabal-info synopsis)
 
 dir=${1:-"docs"}
 url=${2:-"http://barrucadu.github.io/$name"}
@@ -30,7 +30,7 @@ done
 
 # Generate documentation
 
-cat *.cabal | sed '1,/description:/d' | sed '/^$/,$d' | sed 's/^ *. *$//' > "$tmpdir/description"
+cabal-info description > "$tmpdir/description"
 
 macros=$(find . -type f -wholename "./.stack-work/*/autogen/cabal_macros.h")
 
@@ -43,6 +43,7 @@ for file in $hsfiles; do
 done
 
 processedfiles=$(find "$tmpdir" -type f -name '*.hs')
+hidefiles=$(cabal-info other-modules | sed 's:^:--hide=:' | tr '\n' ' ')
 
 $stack exec -- \
   $haddock $processedfiles -o "$dir" \
@@ -51,7 +52,8 @@ $stack exec -- \
     --html --built-in-themes \
     --source-module="$url/source/%{MODULE/./-}.html" \
     --source-entity="$url/source/%{MODULE/./-}.html#%N" \
-    --source-entity-line="$url/source/%{MODULE/./-}.html#line-%L"
+    --source-entity-line="$url/source/%{MODULE/./-}.html#line-%L" \
+    $hidefiles
 
 # Clean up
 

@@ -27,4 +27,7 @@ stack build --copy-bins argon hlint
 # Preprocessors
 stack build --copy-bins cpphs
 
+# Misc
+stack-git https://github.com/barrucadu/cabal-info.git
+
 rm -r $dir
