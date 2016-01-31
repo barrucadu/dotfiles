@@ -19,9 +19,9 @@ fi
 stack-git https://gitlab.com/lamefun/haddock.git
 
 # Syntax highlighting
-stack install highlighting-kate hscolour --flag highlighting-kate:executable
+stack build --copy-bins highlighting-kate hscolour --flag highlighting-kate:executable
 
 # Linters & quality checkers
-stack install argon hlint
+stack build --copy-bins argon hlint
 
 rm -r $dir
