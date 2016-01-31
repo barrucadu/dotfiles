@@ -8,26 +8,21 @@ css=${3:-"tango"}
 
 stack="$HOME/.local/bin/stack"
 hscolour="$HOME/.local/bin/HsColour"
+cpphs="$HOME/.local/bin/cpphs"
 haddock="$HOME/.local/bin/haddock"
+
+tmpdir=`mktemp -d`
 
 # Highlight source
 
 mkdir -p $dir/source
 
+wget "https://raw.githubusercontent.com/houshuang/hackage-css/master/generated_css/$css.css" -O "$dir/source/hscolour.css"
+
 for file in $hsfiles; do
   $hscolour "$file" -css -anchor \
     -o"$dir/source/`echo $file | sed 's:^\./\(.*\)\.hs$:\1:' | sed 's:/:-:g'`.html"
 done
-
-# Grab CSS file
-
-wget "https://raw.githubusercontent.com/houshuang/hackage-css/master/generated_css/$css.css" -O "$dir/source/hscolour.css"
-
-# Extract package description
-
-tmpfile=`mktemp`
-
-cat *.cabal | sed '1,/description:/d' | sed '/^$/,$d' | sed 's/^ *. *$//'> $tmpfile
 
 # Generate documentation
 
@@ -35,15 +30,27 @@ name=$(grep "^name:" *.cabal | sed 's/name: *//')
 version=$(grep "^version:" *.cabal | sed 's/version: *//')
 synopsis=$(grep "^synopsis:" *.cabal | sed 's/synopsis: *//')
 
-$stack exec -- \
-  $haddock $hsfiles -o "$dir" \
-    --title="$name-$version: $synopsis" \
-    --prologue=$tmpfile \
-    --html --built-in-themes \
-    --source-module="$url/source/%{MODULE/./-}.html" \
-    --source-entity="$url/source/%{MODULE/./-}.html#%N" \
-    --source-entity-line="$url/source/%{MODULE/./-}.html#%L"
+cat *.cabal | sed '1,/description:/d' | sed '/^$/,$d' | sed 's/^ *. *$//' > "$tmpdir/description"
+
+macros=$(find . -type f -wholename "./.stack-work/*/autogen/cabal_macros.h")
+
+for file in $hsfiles; do
+  mkdir -p "$tmpdir/`dirname $file`"
+  efile="$tmpdir/`dirname $file`/`basename $file`"
+  $cpphs "$file" -O"$efile" \
+    --include="$macros" \
+    --strip --strip-eol
+
+  $stack exec -- \
+    $haddock $efile -o "$dir" \
+      --title="$name-$version: $synopsis" \
+      --prologue="$tmpdir/description" \
+      --html --built-in-themes \
+      --source-module="$url/source/%{MODULE/./-}.html" \
+      --source-entity="$url/source/%{MODULE/./-}.html#%N" \
+      --source-entity-line="$url/source/%{MODULE/./-}.html#line-%L"
+done
 
 # Clean up
 
-rm $tmpfile
+rm -rf $tmpdir
