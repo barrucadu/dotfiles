@@ -1,6 +1,7 @@
 #!/bin/bash
 
 hsfiles=$(cabal-info exposed-modules | sed -e 's:\.:/:g' -e 's:$:.hs:')
+otherfiles=$(cabal-info other-modules | sed -e 's:\.:/:g' -e 's:$:.hs:')
 
 name=$(cabal-info name)
 version=$(cabal-info version)
@@ -35,6 +36,14 @@ cabal-info description > "$tmpdir/description"
 macros=$(find . -type f -wholename "./.stack-work/*/autogen/cabal_macros.h")
 
 for file in $hsfiles; do
+  mkdir -p "$tmpdir/`dirname $file`"
+  efile="$tmpdir/`dirname $file`/`basename $file`"
+  $cpphs "$file" -O"$efile" \
+    --include="$macros" \
+    --strip --strip-eol
+done
+
+for file in $otherfiles; do
   mkdir -p "$tmpdir/`dirname $file`"
   efile="$tmpdir/`dirname $file`/`basename $file`"
   $cpphs "$file" -O"$efile" \
