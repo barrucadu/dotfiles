@@ -1,5 +1,6 @@
 #!/bin/bash
 
+srcdir=$(cabal-info hs-source-dirs)
 hsfiles=$(cabal-info exposed-modules | sed -e 's:\.:/:g' -e 's:$:.hs:')
 otherfiles=$(cabal-info other-modules | sed -e 's:\.:/:g' -e 's:$:.hs:')
 
@@ -25,7 +26,7 @@ mkdir -p $dir/source
 wget "https://raw.githubusercontent.com/houshuang/hackage-css/master/generated_css/$css.css" -O "$dir/source/hscolour.css"
 
 for file in $hsfiles; do
-  $hscolour "$file" -css -anchor \
+  $hscolour "$srcdir/$file" -css -anchor \
     -o"$dir/source/`echo $file | sed 's:^\./\(.*\)\.hs$:\1:' | sed 's:/:-:g'`.html"
 done
 
@@ -38,7 +39,7 @@ macros=$(find . -type f -wholename "./.stack-work/*/autogen/cabal_macros.h")
 for file in $hsfiles; do
   mkdir -p "$tmpdir/`dirname $file`"
   efile="$tmpdir/`dirname $file`/`basename $file`"
-  $cpphs "$file" -O"$efile" \
+  $cpphs "$srcdir/$file" -O"$efile" \
     --include="$macros" \
     --strip --strip-eol
 done
@@ -46,7 +47,7 @@ done
 for file in $otherfiles; do
   mkdir -p "$tmpdir/`dirname $file`"
   efile="$tmpdir/`dirname $file`/`basename $file`"
-  $cpphs "$file" -O"$efile" \
+  $cpphs "$srcdir/$file" -O"$efile" \
     --include="$macros" \
     --strip --strip-eol
 done
