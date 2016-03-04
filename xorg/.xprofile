@@ -1,9 +1,0 @@
-xrandr --output DVI-I-3 --rotate left --left-of DVI-I-0
-
-setxkbmap gb
-setxkbmap -option compose:rctrl
-setxkbmap -option terminate:ctrl_alt_bksp
-
-xrdb -load ~/.Xdefaults
-
-xsetroot -cursor_name left_ptr
