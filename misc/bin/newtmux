@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 if tmux list-sessions | grep -v attached; then
     session=`tmux list-sessions | grep -v attached | head -n1 | sed "s/:.*//"`

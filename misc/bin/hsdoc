@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 srcdir=$(cabal-info hs-source-dirs)
 hsfiles=$(cabal-info exposed-modules | sed -e 's:\.:/:g' -e 's:$:.hs:')

@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # Set the wallpaper directories
 WALLPAPERDIR=${1:-/mnt/data/wallpaper}
