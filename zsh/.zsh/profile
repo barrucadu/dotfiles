@@ -111,11 +111,10 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
     dircolour=`[ -w "\`pwd\`" ] && echo $PR_CYAN       || echo $PR_RED`
 
     # Git branch
-    git="[branch: `prompt_git_dirty``prompt_current_branch`${PR_NO_COLOR}]"
+    git="[branch: `prompt_git_dirty``prompt_current_branch`${PR_NO_COLOR}] "
 
-    export PS1="
-${usercolour}%n${PR_NO_COLOR} on `prompt_hostname` in ${dircolour}%~${PR_NO_COLOR} `prompt_current_branch &>/dev/null && echo -n $git`
- ${sadface}${usercolour2}>>>${PR_NO_COLOR}  "
+    export PS1="${usercolour}%n${PR_NO_COLOR} on `prompt_hostname` `prompt_current_branch &>/dev/null && echo -n $git`${sadface}${usercolour2}>>>${PR_NO_COLOR}  "
+    export RPROMPT="${dircolour}%~${PR_NO_COLOR}"
 }
 
 export PS2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
