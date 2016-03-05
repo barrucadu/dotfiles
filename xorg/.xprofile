@@ -1,0 +1,13 @@
+# xprofile: read when a display manager is used
+
+setxkbmap gb
+setxkbmap -option compose:rctrl
+setxkbmap -option terminate:ctrl_alt_bksp
+
+xrandr --output DVI-I-3 --rotate left --left-of DVI-I-0
+
+xrdb -load ~/.Xdefaults
+
+urxvtd -q -f -o
+
+randombg
