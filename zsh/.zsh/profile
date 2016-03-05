@@ -39,18 +39,6 @@ done
 
 export PR_NO_COLOR="%{$terminfo[sgr0]%}"
 
-##### Environment
-GEMDIR=`ruby -rubygems -e "puts Gem.user_dir"`
-export PATH="/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/.cabal/bin:$GEMDIR/bin:$HOME/.local/bin:$PATH:/usr/share/java/apache-ant/bin"
-
-export BROWSER=chromium
-export EDITOR=vim
-export VISUAL=$EDITOR
-
-export LANG=en_GB.UTF-8
-export LC_ALL=en_GB.UTF-8
-export LC_CTYPE=en_GB.UTF-8
-
 ##### History
 export HISTFILE=${XDG_DATA_HOME:-~/.local/share}/zsh/history
 export HISTSIZE=1000
@@ -62,15 +50,6 @@ setopt hist_no_functions
 setopt hist_reduce_blanks
 setopt hist_verify
 setopt share_history
-
-# Input
-export GTK_IM_MODULE=xim
-export QT_IM_MODULE=xim
-
-# Compilation
-export CFLAGS="-Wall -Wextra -Wcast-align -Wconversion -Winit-self -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wwrite-strings -pedantic -O2"
-export CPPFLAGS=$CFLAGS
-export CXXFLAGS=$CFLAGS
 
 ##### Prompt
 
@@ -119,9 +98,6 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
 
 export PS2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
 export PS3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "
-
-##### Emacs shell mode
-[[ $EMACS = t ]] && unsetopt zle
 
 ##### Keybindings
 bindkey "\e[1~"  beginning-of-line
