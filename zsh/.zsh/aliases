@@ -15,7 +15,7 @@ alias top='htop'
 
 # File management
 alias ls='ls --color=auto'
-alias lls='/bin/ls'
+alias lls='env ls'
 alias la='ls --color=auto -lA'
 alias cp='cp -rpv'
 alias mv='mv -v'
