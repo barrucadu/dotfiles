@@ -1,8 +1,8 @@
 !!! Fonts
-#define FONT           xft:DejaVu Sans Mono:pixelsize=11:antialias=true:autohinting=true
-#define FONT_BOLD      xft:DejaVu Sans Mono:bold:pixelsize=11:antialias=true:autohinting=true
-#define FONT_ITALIC    xft:DejaVu Sans Mono:italic:pixelsize=11:antialias=true:autohinting=true
-#define FONT_UNDERLINE xft:DejaVu Sans Mono:underline:pixelsize=11:antialias=true:autohinting=true
+#define FONT           xft:Source Code Pro:size=10
+#define FONT_BOLD      xft:Source Code Pro:bold:size=10
+#define FONT_ITALIC    xft:Source Code Pro:italic:size=10
+#define FONT_UNDERLINE xft:Source Code Pro:underline:size=10
 
 !! Colours
 #include "/home/barrucadu/dotfiles/xorg/.Xdefaults.d/daisuke"
@@ -57,7 +57,7 @@ URxvt.iso14755_52:       0
 URxvt.letterSpace:       -1
 
 !! Emacs
-Emacs*font:               DejaVu Sans Mono-8
+Emacs*font:               Source Code Pro-10
 Emacs*fullscreen:         fullboth
 Emacs*toolBar:            0
 Emacs*verticalScrollBars: off
