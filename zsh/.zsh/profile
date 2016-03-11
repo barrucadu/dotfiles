@@ -27,16 +27,18 @@ fi
 autoload colors zsh/terminfo
 colors
 
-colnames=(black red green yellow blue magenta cyan white default)
+colnames=(black red green yellow blue magenta cyan white)
 for color in $colnames; do
 	eval f$color='%{$fg[${color}]%}'
 	eval fb$color='%{$terminfo[bold]$fg[${color}]%}'
 	eval b$color='%{$bg[${color}]%}'
 done
 
-foregrounds=($fblack $fred $fgreen $fyellow $fblue $fmagenta $fcyan $fwhite $fdefault
-             $fbblack $fbred $fbgreen $fbyellow $fbblue $fbmagenta $fbcyan $fbwhite $fbdefault)
-backgrounds=($bblack $bred $bgreen $byellow $bblue $bmagenta $bcyan $bwhite $bdefault)
+foregrounds=($fblack $fred $fgreen $fyellow $fblue $fmagenta $fcyan $fwhite
+             $fbblack $fbred $fbgreen $fbyellow $fbblue $fbmagenta $fbcyan $fbwhite)
+backgrounds=($bblack $bred $bgreen $byellow $bblue $bmagenta $bcyan $bwhite)
+
+default="%{$terminfo[sgr0]%}"
 
 ##### History
 export HISTFILE=${XDG_DATA_HOME:-~/.local/share}/zsh/history
@@ -55,7 +57,7 @@ setopt share_history
 function _static_ps1() {
     # User
     local usercolour=`[ $UID != 0 ] && echo $fbgreen || echo $fred`
-    local prompt_user="${usercolour}${USER}${fdefault}"
+    local prompt_user="${usercolour}${USER}${default}"
 
     # Host
     local chash=0
@@ -63,7 +65,7 @@ function _static_ps1() {
         ((chash += #letter))
     done
     local hostcolour=$foregrounds[$(( $chash % $#foregrounds ))]
-    local prompt_host="${hostcolour}${HOST}${fdefault}"
+    local prompt_host="${hostcolour}${HOST}${default}"
 
     echo "${prompt_user} on ${prompt_host}"
 }
@@ -94,21 +96,21 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
 {
     # Last command status
     local cmdstatus=$?
-    local sadface=`[ "$cmdstatus" != "0" ] && echo "${fred}:(${fdefault} "`
+    local sadface=`[ "$cmdstatus" != "0" ] && echo "${fred}:(${default} "`
 
     # Colours
-    local usrcolour=`[ $UID != 0 ]    && echo $fblue  || echo $fred`
-    local dircolour=`[ -w "\`pwd\`" ] && echo $fbcyan || echo $fred`
+    local usrcolour=`[ $UID != 0 ]    && echo $fbblue || echo $fbred`
+    local dircolour=`[ -w "\`pwd\`" ] && echo $fbcyan || echo $fbred`
 
     # Git branch
-    local git="[branch: `prompt_git_dirty``prompt_current_branch`${fdefault}] "
+    local git="[branch: `prompt_git_dirty``prompt_current_branch`${default}] "
 
-    export PS1="${static_ps1} `prompt_current_branch &>/dev/null && echo -n $git`${sadface}${usrcolour}>>>${fdefault}  "
-    export RPROMPT="${dircolour}%~${fdefault}"
+    export PS1="${static_ps1} `prompt_current_branch &>/dev/null && echo -n $git`${sadface}${usrcolour}>>>${default}  "
+    export RPROMPT="${dircolour}%~${default}"
 }
 
-export PS2="${fblue}%B%_%b >${fdefault} "
-export PS3="${fyellow}%Bselect%b:${fdefault} "
+export PS2="${fblue}%B%_%b >${default} "
+export PS3="${fyellow}%Bselect%b:${default} "
 
 ##### Keybindings
 bindkey "\e[1~"  beginning-of-line
