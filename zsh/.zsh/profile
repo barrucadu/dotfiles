@@ -70,12 +70,16 @@ function _static_ps1() {
 static_ps1=$(_static_ps1)
 
 function prompt_git_dirty() {
-    local gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
+    local gitstat=$(git status 2>/dev/null)
     
-    if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
+    if [[ $(echo ${gitstat} | grep -c "^Changes to be committed:$") > 0 ]]; then
         echo -n $fyellow
-    elif [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
+    elif [[ $(echo ${gitstat} | grep -c "^\(Untracked files:\|Changed but not updated:\)$") > 0 ]]; then
         echo -n $fred
+    elif [[ $(echo ${gitstat} | grep "^Your branch is behind") ]]; then
+        echo -n $fmagenta
+    elif [[ $(echo ${gitstat} | grep "^Your branch is ahead") ]]; then
+        echo -n $fmagenta
     else
         echo -n $fgreen
     fi
