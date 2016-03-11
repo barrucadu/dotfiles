@@ -71,12 +71,19 @@ function prompt_current_branch() {
     echo ${ref#refs/heads/}
 }
 
-function prompt_hostname()
+function _prompt_hostname_colour()
 {
-    host=`hostname`
-    colour="PR_`grep \"^$host\" ~/.zsh/host_colours | sed 's/.*:\s*//' | tr '[:lower:] ' '[:upper:]_'`"
-    echo -n "${(P)colour:-$PR_LIGHT_RED}${host}${PR_NO_COLOR}"
+    local colours=( $PR_RED $PR_LIGHT_RED $PR_GREEN $PR_LIGHT_GREEN $PR_YELLOW $PR_LIGHT_YELLOW $PR_BLUE $PR_LIGHT_BLUE $PR_MAGENTA $PR_LIGHT_MAGENTA $PR_CYAN $PR_LIGHT_CYAN $PR_WHITE $PR_LIGHT_WHITE)
+
+    local chash=0
+    for letter in $HOST; do
+        ((chash += #letter))
+    done
+
+    echo $colours[$(( $chash % $#colours ))]
 }
+
+hostname_colour=$(_prompt_hostname_colour)
 
 function precmd() # Uses: setting user/root PROMPT1 variable and rehashing commands list
 {
@@ -92,7 +99,10 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
     # Git branch
     git="[branch: `prompt_git_dirty``prompt_current_branch`${PR_NO_COLOR}] "
 
-    export PS1="${usercolour}%n${PR_NO_COLOR} on `prompt_hostname` `prompt_current_branch &>/dev/null && echo -n $git`${sadface}${usercolour2}>>>${PR_NO_COLOR}  "
+    # Hostname
+    prompt_hostname="${hostname_colour}${HOST}${PR_NO_COLOR}"
+
+    export PS1="${usercolour}%n${PR_NO_COLOR} on ${prompt_hostname} `prompt_current_branch &>/dev/null && echo -n $git`${sadface}${usercolour2}>>>${PR_NO_COLOR}  "
     export RPROMPT="${dircolour}%~${PR_NO_COLOR}"
 }
 
