@@ -25,19 +25,18 @@ fi
 
 # Terminal colours
 autoload colors zsh/terminfo
-if [[ "$terminfo[colors]" -ge 8 ]]; then
-	colors
-fi
+colors
 
-for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-	eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
-
-	export PR_$color
-	export PR_LIGHT_$color
+colnames=(black red green yellow blue magenta cyan white default)
+for color in $colnames; do
+	eval f$color='%{$fg[${color}]%}'
+	eval fb$color='%{$terminfo[bold]$fg[${color}]%}'
+	eval b$color='%{$bg[${color}]%}'
 done
 
-export PR_NO_COLOR="%{$terminfo[sgr0]%}"
+foregrounds=($fblack $fred $fgreen $fyellow $fblue $fmagenta $fcyan $fwhite $fdefault
+             $fbblack $fbred $fbgreen $fbyellow $fbblue $fbmagenta $fbcyan $fbwhite $fbdefault)
+backgrounds=($bblack $bred $bgreen $byellow $bblue $bmagenta $bcyan $bwhite $bdefault)
 
 ##### History
 export HISTFILE=${XDG_DATA_HOME:-~/.local/share}/zsh/history
@@ -55,14 +54,14 @@ setopt share_history
 
 # prompt
 function prompt_git_dirty() {
-    gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
+    local gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
     
     if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
-        echo -n $PR_LIGHT_YELLOW
+        echo -n $fyellow
     elif [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
-        echo -n $PR_LIGHT_RED
+        echo -n $fred
     else
-        echo -n $PR_LIGHT_MAGENTA
+        echo -n $fmagenta
     fi
 }
 
@@ -73,14 +72,12 @@ function prompt_current_branch() {
 
 function _prompt_hostname_colour()
 {
-    local colours=( $PR_RED $PR_LIGHT_RED $PR_GREEN $PR_LIGHT_GREEN $PR_YELLOW $PR_LIGHT_YELLOW $PR_BLUE $PR_LIGHT_BLUE $PR_MAGENTA $PR_LIGHT_MAGENTA $PR_CYAN $PR_LIGHT_CYAN $PR_WHITE $PR_LIGHT_WHITE)
-
     local chash=0
     for letter in $HOST; do
         ((chash += #letter))
     done
 
-    echo $colours[$(( $chash % $#colours ))]
+    echo $foregrounds[$(( $chash % $#foregrounds ))]
 }
 
 hostname_colour=$(_prompt_hostname_colour)
@@ -89,25 +86,25 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
 {
     # Last command status
     cmdstatus=$?
-    sadface=`[ "$cmdstatus" != "0" ] && echo "${PR_RED}:(${PR_NO_COLOR} "`
+    sadface=`[ "$cmdstatus" != "0" ] && echo "${fred}:(${fdefault} "`
 
     # Colours
-    usercolour=`[ $UID != 0 ]   && echo $PR_GREEN      || echo $PR_RED`
-    usercolour2=`[ $UID != 0 ]  && echo $PR_LIGHT_BLUE || echo $PR_RED`
-    dircolour=`[ -w "\`pwd\`" ] && echo $PR_CYAN       || echo $PR_RED`
+    usercolour=`[ $UID != 0 ]   && echo $fbgreen || echo $fred`
+    usercolour2=`[ $UID != 0 ]  && echo $fblue   || echo $fred`
+    dircolour=`[ -w "\`pwd\`" ] && echo $fbcyan  || echo $fred`
 
     # Git branch
-    git="[branch: `prompt_git_dirty``prompt_current_branch`${PR_NO_COLOR}] "
+    git="[branch: `prompt_git_dirty``prompt_current_branch`${fdefault}] "
 
     # Hostname
-    prompt_hostname="${hostname_colour}${HOST}${PR_NO_COLOR}"
+    prompt_hostname="${hostname_colour}${HOST}${fdefault}"
 
-    export PS1="${usercolour}%n${PR_NO_COLOR} on ${prompt_hostname} `prompt_current_branch &>/dev/null && echo -n $git`${sadface}${usercolour2}>>>${PR_NO_COLOR}  "
-    export RPROMPT="${dircolour}%~${PR_NO_COLOR}"
+    export PS1="${usercolour}%n${fdefault} on ${prompt_hostname} `prompt_current_branch &>/dev/null && echo -n $git`${sadface}${usercolour2}>>>${fdefault}  "
+    export RPROMPT="${dircolour}%~${fdefault}"
 }
 
-export PS2="$PR_BLUE%B%_%b >$PR_NO_COLOR "
-export PS3="$PR_YELLOW%Bselect%b:$PR_NO_COLOR "
+export PS2="${fblue}%B%_%b >${fdefault} "
+export PS3="${fyellow}%Bselect%b:${fdefault} "
 
 ##### Keybindings
 bindkey "\e[1~"  beginning-of-line
