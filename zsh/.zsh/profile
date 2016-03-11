@@ -72,7 +72,7 @@ function _static_ps1() {
 static_ps1=$(_static_ps1)
 
 function prompt_git_dirty() {
-    local gitstat=$(git status 2>/dev/null)
+    local gitstat="`git status 2>/dev/null`"
     
     if [[ $(echo ${gitstat} | grep -c "^Changes to be committed:$") > 0 ]]; then
         echo -n $fyellow
