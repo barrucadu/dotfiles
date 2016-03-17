@@ -12,11 +12,6 @@ dir=${1:-"docs"}
 url=${2:-"http://barrucadu.github.io/$name"}
 css=${3:-"tango"}
 
-stack="$HOME/.local/bin/stack"
-hscolour="$HOME/.local/bin/HsColour"
-cpphs="$HOME/.local/bin/cpphs"
-haddock="$HOME/.local/bin/haddock"
-
 tmpdir=`mktemp -d`
 
 # Highlight source
@@ -26,7 +21,7 @@ mkdir -p $dir/source
 wget "https://raw.githubusercontent.com/houshuang/hackage-css/master/generated_css/$css.css" -O "$dir/source/hscolour.css"
 
 for file in $hsfiles; do
-  $hscolour "$srcdir/$file" -css -anchor \
+  HsColour "$srcdir/$file" -css -anchor \
     -o"$dir/source/`echo $file | sed 's:^\./\(.*\)\.hs$:\1:' | sed 's:/:-:g'`.html"
 done
 
@@ -34,12 +29,12 @@ done
 
 cabal-info description > "$tmpdir/description"
 
-macros=$(find . -type f -wholename "./.stack-work/*/autogen/cabal_macros.h")
+macros=$(find . -type f -wholename "./.stack-work/dist/*/autogen/cabal_macros.h")
 
 for file in $hsfiles; do
   mkdir -p "$tmpdir/`dirname $file`"
   efile="$tmpdir/`dirname $file`/`basename $file`"
-  $cpphs "$srcdir/$file" -O"$efile" \
+  cpphs "$srcdir/$file" -O"$efile" \
     --include="$macros" \
     --strip --strip-eol
 done
@@ -47,7 +42,7 @@ done
 for file in $otherfiles; do
   mkdir -p "$tmpdir/`dirname $file`"
   efile="$tmpdir/`dirname $file`/`basename $file`"
-  $cpphs "$srcdir/$file" -O"$efile" \
+  cpphs "$srcdir/$file" -O"$efile" \
     --include="$macros" \
     --strip --strip-eol
 done
@@ -55,8 +50,13 @@ done
 processedfiles=$(find "$tmpdir" -type f -name '*.hs')
 hidefiles=$(cabal-info other-modules | sed 's:^:--hide=:' | tr '\n' ' ')
 
-$stack exec -- \
-  $haddock $processedfiles -o "$dir" \
+stackopts="exec"
+if [[ -e ".stack-work/dist/x86_64-linux-nix" ]]; then
+  stackopts="--nix exec"
+fi
+
+stack $stackopts -- \
+  haddock $processedfiles -o "$dir" \
     --title="$name-$version: $synopsis" \
     --prologue="$tmpdir/description" \
     --html --built-in-themes \
