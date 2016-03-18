@@ -31,6 +31,8 @@ cabal-info description > "$tmpdir/description"
 
 macros=$(find . -type f -wholename "./.stack-work/dist/*/autogen/cabal_macros.h")
 
+find . -type f -wholename "./.stack-work/dist/*/autogen/*.hs" -exec cp '{}' . \;
+
 for file in $hsfiles; do
   mkdir -p "$tmpdir/`dirname $file`"
   efile="$tmpdir/`dirname $file`/`basename $file`"
