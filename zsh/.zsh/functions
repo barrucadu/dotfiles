@@ -24,3 +24,10 @@ function grprun() {
     PYTHONPATH=$GRPDIR/lib/python3.3/site-packages:$PYTHONPATH \
     $*
 }
+
+# List a directory, restricting by some regex, and tabulate the result.
+function lsby() {
+    local regex=$1
+    shift
+    ls $* | grep $regex | column -c `tput cols`
+}
