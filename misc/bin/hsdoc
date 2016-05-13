@@ -22,7 +22,7 @@ wget "https://raw.githubusercontent.com/houshuang/hackage-css/master/generated_c
 
 for file in $hsfiles; do
   HsColour "$srcdir/$file" -css -anchor \
-    -o"$dir/source/`echo $file | sed 's:^\./\(.*\)\.hs$:\1:' | sed 's:/:-:g'`.html"
+    -o"$dir/source/`echo $file | sed 's:^\(.*\)\.hs$:\1:' | sed 's:/:-:g'`.html"
 done
 
 # Generate documentation
