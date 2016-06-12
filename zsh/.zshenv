@@ -42,3 +42,17 @@ export LC_CTYPE=en_GB.UTF-8
 
 ### Emacs shell mode
 [[ $EMACS = t ]] && unsetopt zle
+
+### Operating system
+
+if [[ `uname -o 2>/dev/null` == "GNU/Linux" ]]; then
+  export IS_GNULINUX=true
+else
+  export IS_GNULINUX=false
+fi
+
+if [[ `uname -s` == "Darwin" ]]; then
+  export IS_OSX=true
+else
+  export IS_OSX=false
+fi

@@ -23,9 +23,13 @@ alias grep='grep --color=tty -d skip'
 alias top='htop'
 
 # File management
-alias ls='ls --color=auto'
+if $IS_GNULINUX; then
+  alias ls='ls --color=auto'
+  alias la='ls --color=auto -lA'
+else
+  alias la='ls -lA'
+fi
 alias lls='env ls'
-alias la='ls --color=auto -lA'
 alias cp='cp -rpv'
 alias mv='mv -v'
 alias mkdir='mkdir -p'

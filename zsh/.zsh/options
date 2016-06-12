@@ -35,7 +35,9 @@ bindkey "\e[F"   end-of-line
 bindkey '^i'     expand-or-complete-prefix
 
 ##### Colourful directory listings
-eval `dircolors -b`
+if $IS_GNULINUX; then
+  eval `dircolors -b`
+fi
 
 ##### Tab completion
 zle -C complete-file complete-word _generic
