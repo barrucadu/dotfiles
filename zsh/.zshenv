@@ -7,7 +7,8 @@ export XDG_DOWNLOAD_DIR="$HOME/tmp"
 export XDG_MUSIC_DIR="$HOME/nfs/music"
 
 # Environment
-export PATH="/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
 
 export BROWSER=chromium
 export EDITOR=vim
