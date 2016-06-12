@@ -8,7 +8,11 @@ export XDG_MUSIC_DIR="$HOME/nfs/music"
 
 # Environment
 export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
+
+newpath="$GOPATH/bin:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin"
+if [[ "${PATH#*$newpath}" == "$PATH" ]]; then
+  export PATH="$newpath:$PATH"
+fi
 
 export BROWSER=chromium
 export EDITOR=vim
