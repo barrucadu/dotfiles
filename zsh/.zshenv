@@ -16,6 +16,12 @@ export TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S'
 
 export GOPATH="$HOME/go"
 
+# add /use/local/go/bin
+gopath="/usr/local/go/bin"
+if [[ -d $gopath ]] && [[ "${PATH#*$gopath}" == "$PATH" ]]; then
+  export PATH="$gopath:$PATH"
+fi
+
 # add /usr/local/bin ahead of defaults
 localpath="/usr/local/bin"
 if [[ "${PATH#*$localpath}" == "$PATH" ]]; then
