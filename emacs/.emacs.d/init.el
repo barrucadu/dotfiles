@@ -443,21 +443,6 @@
   :defer t
   :init (add-hook 'ibuffer-hook #'ibuffer-projectile-set-filter-groups))
 
-;;;; File tree
-(use-package neotree
-  :ensure t
-  :bind (("C-c f t" . neotree-toggle))
-  :config (setq neo-window-width 32
-                neo-create-file-auto-open t
-                neo-banner-message nil
-                neo-show-updir-line nil
-                neo-mode-line-type 'neotree
-                neo-smart-open t
-                neo-dont-be-alone t
-                neo-persist-show nil
-                neo-show-hidden-files t
-                neo-auto-indent-point t))
-
 ;;;; Save place in files
 (use-package saveplace
   :init (setq-default sace-place t)
