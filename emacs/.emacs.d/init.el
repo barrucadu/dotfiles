@@ -399,6 +399,10 @@
   :ensure t
   :bind (("C-c t r" . writeroom-mode)))
 
+(use-package focus
+  :ensure t
+  :bind (("C-c t f" . focus-mode)))
+
 ;;;; Use anzu search-and-replace
 (use-package anzu
   :ensure t
