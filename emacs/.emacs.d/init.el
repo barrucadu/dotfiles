@@ -35,23 +35,24 @@
   :ensure t
   :init (load-theme 'zenburn 'no-confirm))
 
-;;;; Highlight cursor on window scroll
+;;;; Highlights
+;;;;; ...cursor on window scroll
 (use-package beacon
   :ensure t
   :init (beacon-mode 1)
   :diminish beacon-mode)
 
-;;;; Highlight current line
+;;;;; ...current line
 (use-package hl-line
   :init (global-hl-line-mode 1))
 
-;;;; Highlight TODOs in buffers
+;;;;; ...TODOs in buffers
 (use-package hl-todo
   :ensure t
   :defer t
   :init (global-hl-todo-mode))
 
-;;;; Highlight matching parens
+;;;;; ...matching parens
 (setq show-paren-delay 0)
 (show-paren-mode 1)
 
@@ -60,6 +61,15 @@
   :defer t
   :init (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
           (add-hook hook #'rainbow-delimiters-mode)))
+
+;;;;; ...sentences
+(setq sentence-end-double-space nil) ; Adopt the double-space convention?
+(use-package hl-sentence
+  :ensure t
+  :config
+  (set-face-attribute 'hl-sentence-face nil :foreground "#bbbbff")
+  (dolist (hook '(LaTeX-mode-hook markdown-mode-hook text-mode-hook))
+    (add-hook hook #'hl-sentence-mode)))
 
 ;;;; The mode line
 (line-number-mode)
