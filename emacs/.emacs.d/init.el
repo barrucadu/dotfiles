@@ -412,37 +412,6 @@
 (use-package uniquify
   :config (setq uniquify-buffer-name-style 'forward))
 
-;;;; Better buffer list
-(use-package ibuffer
-  :bind (([remap list-buffers] . ibuffer))
-  :config
-    (setq ibuffer-formats
-          '((mark modified read-only vc-status-mini " "
-                  (name 18 18 :left :elide)
-                  " "
-                  (size 9 -1 :right)
-                  " "
-                  (mode 16 16 :left :elide)
-                  " "
-                  (vc-status 16 16 :left)
-                  " "
-                  filename-and-process)
-            (mark modified read-only " "
-                  (name 18 18 :left :elide)
-                  " "
-                  (size 9 -1 :right)
-                  " "
-                  (mode 16 16 :left :elide)
-                  " "
-                  filename-and-process)
-            (mark " " (name 16 -1) " " filename))))
-
-(use-package ibuffer-vc
-  :ensure t
-  :disabled t
-  :defer t
-  :init (add-hook 'ibuffer-hook #'ibuffer-projectile-set-filter-groups))
-
 ;;;; Save place in files
 (use-package saveplace
   :init (setq-default sace-place t)
