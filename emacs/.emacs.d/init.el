@@ -290,6 +290,11 @@
   :config (setq sh-indentation 2
                 sh-basic-offset 2))
 
+;;; TOML
+(use-package toml-mode
+  :ensure t
+  :mode ("\\.toml``'" . toml-mode))
+
 ;;; Version control
 (use-package vc-hooks
   :defer t
