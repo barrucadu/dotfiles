@@ -463,10 +463,10 @@
   :ensure t
   :defer t
   :commands (outshine-hook-function)
-  :init (progn (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
-                 (add-hook hook #'outline-minor-mode))
-               (add-hook 'outline-minor-mode-hook 'outshine-hook-function))
-  :config (progn (require 'outshine)))
+  :init
+  (add-hook 'outline-minor-mode-hook 'outshine-hook-function)
+  (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+  :config (require 'outshine))
 
 ;;;; Edit text with multiple cursors
 (use-package multiple-cursors
