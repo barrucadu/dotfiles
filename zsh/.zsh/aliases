@@ -8,7 +8,13 @@ alias o=$EDITOR
 alias O='sudoedit'
 alias g='git'
 alias m='mosh'
-alias p='sudo pacman'
+
+# Pipeline
+alias -g '.G'='| grep'
+alias -g '.S'='| sed'
+alias -g '.A'='| awk'
+alias -g '.L'='| less'
+alias -g '.1'='2>&1'
 
 # Basic commands
 alias su='su - '
@@ -24,15 +30,21 @@ alias cp='cp -rpv'
 alias mv='mv -v'
 alias mkdir='mkdir -p'
 
-# Coding
+# Programming
 alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
 alias gdb='gdb -ex run -ex backtrace --args'
+alias gopp='go tool pprof'
 
-# Miscellanious
-alias shutdown='sudo shutdown -hP now'
-alias reboot='sudo reboot'
-alias reload='source ~/.zshrc'
-alias xreload='xrdb -load ~/.Xdefaults'
+# Nix
 alias nixos-up='sudo nixos-rebuild switch --upgrade'
 alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
+
+# Power management
+alias shutdown='sudo shutdown -hP now'
+alias reboot='sudo reboot'
+
+# Miscellanious
+alias reload='source ~/.zshrc'
+alias xreload='xrdb -load ~/.Xdefaults'
 alias columns='column -c `tput cols`'
+alias pgfl='pgrep -fl'

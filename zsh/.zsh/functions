@@ -31,3 +31,33 @@ function lsby() {
     shift
     ls $* | grep $regex | column -c `tput cols`
 }
+
+# Short alias for stack, with abbreviated subcommands.
+function s() {
+  local command=$1
+  shift
+
+  case "$command" in
+    b) stack build   $* ;;
+    B) stack bench   $* ;;
+    c) stack clean   $* ;;
+    e) stack exec    $* ;;
+    g) stack ghci    $* ;;
+    i) stack install $* ;;
+    t) stack test    $* ;;
+    "-h" | "--help")
+      echo "s: shorthand for 'stack"
+      echo "USAGE: s <command or alias> <args>\n"
+      echo "Aliases:\n"
+      echo "    b: build"
+      echo "    B: bench"
+      echo "    c: clean"
+      echo "    e: exec"
+      echo "    g: ghci"
+      echo "    i: install"
+      echo "    t: test\n"
+      echo "For stack help, see 'stack --help'"
+      ;;
+    *) stack $command $* ;;
+  esac
+}
