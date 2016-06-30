@@ -40,6 +40,6 @@ git clone https://github.com/barrucadu/dotfiles.git
 cd dotfiles
 
 stow zsh
-show git
+stow git
 ...
 ```
