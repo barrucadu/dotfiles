@@ -10,6 +10,8 @@ export XDG_MUSIC_DIR="$HOME/nfs/music"
 
 export GOPATH="$HOME/go"
 
+export LEDGER_FILE="$HOME/.hledger.journals/current.journal"
+
 #### Path
 
 # add /usr/local/bin ahead of defaults
