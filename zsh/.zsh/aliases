@@ -13,7 +13,7 @@ alias m='mosh'
 alias -g '.G'='| grep'
 alias -g '.S'='| sed'
 alias -g '.A'='| awk'
-alias -g '.L'='| smartless'
+alias -g '.L'='2>&1 | smartless'
 alias -g '.1'='2>&1'
 
 # Basic commands
