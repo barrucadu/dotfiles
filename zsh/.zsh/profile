@@ -112,6 +112,20 @@ function precmd() # Uses: setting user/root PROMPT1 variable and rehashing comma
 export PS2="${fblue}%B%_%b >${default} "
 export PS3="${fyellow}%Bselect%b:${default} "
 
+##### Command-not-found
+
+function command_not_found_handler() {
+  if [[ -e $1 ]] && [[ -z $2 ]]; then
+    if file $1 | grep ' text$' >/dev/null; then
+      $EDITOR $1
+    else
+      file $1
+    fi
+  else
+    echo "Command not found: $*" >&2
+  fi
+}
+
 ##### Keybindings
 bindkey "\e[1~"  beginning-of-line
 bindkey "\e[4~"  end-of-line
