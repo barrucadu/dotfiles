@@ -8,11 +8,13 @@ export XDG_MUSIC_DIR="$HOME/nfs/music"
 
 ### Environment
 
-export GOPATH="$HOME/go"
-
 export LEDGER_FILE="$HOME/.hledger.journals/current.journal"
 
+export TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S'
+
 #### Path
+
+export GOPATH="$HOME/go"
 
 # add /usr/local/bin ahead of defaults
 localpath="/usr/local/bin"
