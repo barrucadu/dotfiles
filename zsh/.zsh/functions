@@ -67,3 +67,17 @@ function s() {
 function has() {
   type $1 &>/dev/null
 }
+
+# A smarter `less`: doesn't start the pager unles the output is too
+# long for the terminal.
+function smartless() {
+  local out="`$* 2>&1`"
+  local outlines="`echo $out | wc -l`"
+  local termlines="`tput lines`"
+
+  if [[ $outlines -gt $termlines ]]; then
+    echo $out | less
+  else
+    echo $out
+  fi
+}
