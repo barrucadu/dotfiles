@@ -61,3 +61,9 @@ function s() {
     *) stack $command $* ;;
   esac
 }
+
+# Check if a command exists, can be a binary in PATH or a shell
+# alias/function.
+function has() {
+  type $1 &>/dev/null
+}
