@@ -1,0 +1,32 @@
+## -*- shell-script -*-
+
+function command_not_found_handler() {
+  if [[ -e $1 ]] && [[ -z $2 ]]; then
+    # Open it if it's a text file.
+    if file $1 | grep ' text$' >/dev/null; then
+      $EDITOR $1
+    else
+      file $1
+    fi
+
+  else
+    # Attempt to suggest a command to install it otherwise.
+    local command=""
+
+    if has brew; then
+      pkg=`brew which-formula $1`
+      if [[ ! -z $pkg ]]; then
+        command="brew install $pkg"
+      fi
+    fi
+
+    # TODO: Add command-not-found (see nixos-channel-scripts issue #4)
+
+    if [[ ! -z $command ]]; then
+      echo "The program '$1' is not currently installed. You can install it by typing:" >&2
+      echo "  $command" >&2
+    else
+      echo "Command not found: '$1'" >&2
+    fi
+  fi
+}

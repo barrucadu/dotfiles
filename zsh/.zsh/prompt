@@ -1,0 +1,76 @@
+## -*- shell-script -*-
+
+### Static info
+
+function _prompt_static_ps1() {
+  # User
+  local usercolour=`[ $UID != 0 ] && echo $fbgreen || echo $fred`
+  local prompt_user="${usercolour}${USER}${default}"
+
+  # Host
+  local chash=0
+  for letter in $HOST; do
+    ((chash += #letter))
+  done
+  local hostcolour=$foregrounds[$(( $chash % $#foregrounds ))]
+  local prompt_host="${hostcolour}${HOST}${default}"
+
+  echo "${prompt_user} on ${prompt_host}"
+}
+
+_static_ps1=$(_prompt_static_ps1)
+
+### VC info -- only does git for now.
+
+function _prompt_vc_git() {
+  if git status &>/dev/null; then
+    local gitstat="`git status 2>/dev/null`"
+    local colour=$fgreen
+
+    if [[ $(echo ${gitstat} | grep -c "^Changes to be committed:$") > 0 ]]; then
+      colour=$fyellow
+    elif [[ $(echo ${gitstat} | grep -c "^\(Untracked files:\|Changed but not updated:\)$") > 0 ]]; then
+      colour=$fred
+    elif [[ $(echo ${gitstat} | grep "^Your branch is behind") ]]; then
+      colour=$fmagenta
+    elif [[ $(echo ${gitstat} | grep "^Your branch is ahead") ]]; then
+      ccolour=$fmagenta
+    fi
+
+    local ref=$(git symbolic-ref HEAD 2> /dev/null) || return 1
+    local branch=${ref#refs/heads/}
+
+    echo "[branch: ${colour}${branch}${default}]"
+  fi
+}
+
+function _prompt_vc() {
+  _prompt_vc_git
+}
+
+### Setting the prompt
+
+function _prompt_precmd()
+{
+  # Last command status
+  local cmdstatus=$?
+  local sadface=`[ "$cmdstatus" != "0" ] && echo " ${fred}:(${default} "`
+
+  # Colours
+  local usrcolour=`[ $UID != 0 ]    && echo $fbblue || echo $fbred`
+  local dircolour=`[ -w "\`pwd\`" ] && echo $fbcyan || echo $fbred`
+
+  # Version control
+  local vc=`_prompt_vc`
+  if [[ ! -z  $vc ]]; then
+    vc=" $vc"
+  fi
+
+  export PS1="${_static_ps1}${vc}${sadface} ${usrcolour}>>>${default}  "
+  export RPROMPT="${dircolour}%~${default}"
+}
+
+export PS2="${fblue}%B%_%b >${default} "
+export PS3="${fyellow}%Bselect%b:${default} "
+
+precmd_functions+=(_prompt_precmd)
