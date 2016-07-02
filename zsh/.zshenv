@@ -12,26 +12,25 @@ export LEDGER_FILE="$HOME/.hledger.journals/current.journal"
 
 export TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S'
 
-#### Path
-
 export GOPATH="$HOME/go"
 
-# add /use/local/go/bin
-gopath="/usr/local/go/bin"
-if [[ -d $gopath ]] && [[ "${PATH#*$gopath}" == "$PATH" ]]; then
-  export PATH="$gopath:$PATH"
-fi
+#### Path
 
-# add /usr/local/bin ahead of defaults
-localpath="/usr/local/bin"
-if [[ "${PATH#*$localpath}" == "$PATH" ]]; then
-  export PATH="$localpath:$PATH"
-fi
+if [[ -z $DONE_PATH_MODIFICATIONS ]]; then
+  # add /usr/local/go/bin if it exists
+  gopath="/usr/local/go/bin"
+  if [[ -d $gopath ]]; then
+    export PATH="$gopath:$PATH"
+  fi
 
-# add things in ~ ahead of all
-newpath="$GOPATH/bin:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin"
-if [[ "${PATH#*$newpath}" == "$PATH" ]]; then
-  export PATH="$newpath:$PATH"
+  # add /usr/local/bin ahead of defaults
+  export PATH="/usr/local/bin:$PATH"
+
+  # add things in ~ ahead of all
+  export PATH="$GOPATH/bin:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
+
+  # don't recursively mess up the PATH
+  export DONE_PATH_MODIFICATIONS=true
 fi
 
 #### Programs
