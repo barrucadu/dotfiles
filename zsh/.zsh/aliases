@@ -17,7 +17,7 @@ alias -g '.L'='2>&1 | smartless'
 alias -g '.1'='2>&1'
 
 # Basic commands
-alias su='su - '
+alias su='sudo su - '
 alias free='free -mt'
 alias grep='grep --color=tty -d skip'
 alias top='htop'
