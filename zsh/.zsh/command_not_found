@@ -9,6 +9,10 @@ function command_not_found_handler() {
       file $1
     fi
 
+  elif is_host $1 && [[ -z $2 ]]; then
+    # SSH in if it's a network host.
+    smartmosh $1
+
   else
     # Attempt to suggest a command to install it otherwise.
     local command=""
