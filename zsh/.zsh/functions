@@ -62,11 +62,25 @@ function s() {
   esac
 }
 
+### Predicates
+
 # Check if a command exists, can be a binary in PATH or a shell
 # alias/function.
 function has() {
   type $1 &>/dev/null
 }
+
+# Check if a string is a hostname we can ssh into.
+function is_host() {
+  grep "^Host $1$" ~/.ssh/config &>/dev/null || ping -c1 $1 &>/dev/null
+}
+
+# Check if a host supports mosh connections.
+function use_mosh() {
+  grep "^$1$" ~/.ssh/use_mosh &>/dev/null
+}
+
+### Smarter versions of regular commands
 
 # A smarter `less`: doesn't start the pager unles the output is too
 # long for the terminal.
@@ -79,5 +93,15 @@ function smartless() {
     echo $out | less
   else
     echo $out
+  fi
+}
+
+# A smarter `mosh`/`ssh`: connects using `mosh` if installed and the
+# target supports it (see ~/.ssh/use_mosh)
+function smartmosh() {
+  if use_mosh $1 && has mosh; then
+    mosh $1
+  else
+    ssh $1
   fi
 }

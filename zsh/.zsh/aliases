@@ -7,7 +7,7 @@ alias e='exit'
 alias o=$EDITOR
 alias O='sudoedit'
 alias g='git'
-alias m='mosh'
+alias m='smartmosh'
 
 # Pipeline
 alias -g '.G'='| grep'
