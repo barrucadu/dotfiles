@@ -35,31 +35,22 @@ function lsby() {
 # Short alias for stack, with abbreviated subcommands.
 function s() {
   local command=$1
-  shift
 
-  case "$command" in
-    b) stack build   $* ;;
-    B) stack bench   $* ;;
-    c) stack clean   $* ;;
-    e) stack exec    $* ;;
-    g) stack ghci    $* ;;
-    i) stack install $* ;;
-    t) stack test    $* ;;
-    "-h" | "--help")
-      echo "s: shorthand for 'stack"
-      echo "USAGE: s <command or alias> <args>\n"
-      echo "Aliases:\n"
-      echo "    b: build"
-      echo "    B: bench"
-      echo "    c: clean"
-      echo "    e: exec"
-      echo "    g: ghci"
-      echo "    i: install"
-      echo "    t: test\n"
-      echo "For stack help, see 'stack --help'"
-      ;;
-    *) stack $command $* ;;
-  esac
+  typeset -A subcommands
+  local subcommands=(b build c clean e exec eg "exec ghci" g ghci i install t test)
+
+  if [[ $command == "-h" ]] || [[ $command == "--help" ]]; then
+    echo "Usage: s <command or alias> <args>"
+    echo "Shorthand for 'stack'\n"
+    echo "Aliases:"
+    for k in "${(@ko)subcommands}"; do
+      echo "    ${(r:2:: :)${k}} -> $subcommands[$k]"
+    done
+    echo "\nFor stack help, see 'stack --help' (or just 's')"
+  else
+    shift 2>/dev/null
+    stack ${=subcommands[$command]:-$command} $*
+  fi
 }
 
 ### Predicates
