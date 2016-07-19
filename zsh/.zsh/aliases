@@ -47,6 +47,9 @@ alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
 alias shutdown='sudo shutdown -hP now'
 alias reboot='sudo reboot'
 
+# hledger
+alias bal='hledger balance -ATM --tree'
+
 # Miscellanious
 alias reload='source ~/.zshrc'
 alias xreload='xrdb -load ~/.Xdefaults'
