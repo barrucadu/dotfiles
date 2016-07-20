@@ -120,7 +120,8 @@
     "C-c o"   "cursors"
     "C-c s"   "search"
     "C-c t"   "toggle"
-    "C-c x"   "text")
+    "C-c x"   "text"
+    "C-c d"   "selective display")
 
   ;; Prefixes for major modes
   (which-key-declare-prefixes-for-mode 'markdown-mode
@@ -390,6 +391,17 @@
   :diminish whitespace-mode)
 
 (global-set-key (kbd "C-c x d") 'delete-horizontal-space)
+
+(global-set-key (kbd "C-c d 0") (lambda () (interactive) (set-selective-display (* tab-width 0))))
+(global-set-key (kbd "C-c d 1") (lambda () (interactive) (set-selective-display (* tab-width 1))))
+(global-set-key (kbd "C-c d 2") (lambda () (interactive) (set-selective-display (* tab-width 2))))
+(global-set-key (kbd "C-c d 3") (lambda () (interactive) (set-selective-display (* tab-width 3))))
+(global-set-key (kbd "C-c d 4") (lambda () (interactive) (set-selective-display (* tab-width 4))))
+(global-set-key (kbd "C-c d 5") (lambda () (interactive) (set-selective-display (* tab-width 5))))
+(global-set-key (kbd "C-c d 6") (lambda () (interactive) (set-selective-display (* tab-width 6))))
+(global-set-key (kbd "C-c d 7") (lambda () (interactive) (set-selective-display (* tab-width 7))))
+(global-set-key (kbd "C-c d 8") (lambda () (interactive) (set-selective-display (* tab-width 8))))
+(global-set-key (kbd "C-c d 9") (lambda () (interactive) (set-selective-display (* tab-width 9))))
 
 (setq-default show-trailing-whitespace t)
 
