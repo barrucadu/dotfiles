@@ -522,6 +522,22 @@
                  (define-key flyspell-mouse-map [mouse-2] nil))
   :diminish flyspell-mode)
 
+;;;; Plaintext accounting
+(use-package flycheck-ledger
+  :ensure t)
+
+(use-package ledger-mode
+  :ensure t
+  :mode "\\.ledger\\'\\|\\.journal\\'"
+  :config
+  (setq ledger-binary-path "~/.local/bin/hledger"
+        ledger-mode-should-check-version nil
+        ledger-init-file-name " "
+        ledger-post-amount-alignment-column 0
+        ledger-highlight-xact-under-point nil)
+  (add-hook 'ledger-mode-hook (lambda () (setq tab-width 1)))
+  (add-hook 'ledger-mode-hook 'orgstruct-mode))
+
 ;;;; org-mode
 (setq initial-major-mode 'org-mode)
 (add-hook 'org-mode-hook 'flyspell-mode)
