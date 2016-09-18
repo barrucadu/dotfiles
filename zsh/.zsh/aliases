@@ -18,7 +18,8 @@ alias -g '.1'='2>&1'
 
 # Basic commands
 alias su='sudo su - '
-alias free='free -mt'
+alias free='free -ht'
+alias df='df -h'
 alias grep='grep --color=tty -d skip'
 alias top='htop'
 
