@@ -73,20 +73,6 @@ function use_mosh() {
 
 ### Smarter versions of regular commands
 
-# A smarter `less`: doesn't start the pager unles the output is too
-# long for the terminal.
-function smartless() {
-  local out="`$* 2>&1`"
-  local outlines="`echo $out | wc -l`"
-  local termlines="`tput lines`"
-
-  if [[ $outlines -gt $termlines ]]; then
-    echo $out | less
-  else
-    echo $out
-  fi
-}
-
 # A smarter `mosh`/`ssh`: connects using `mosh` if installed and the
 # target supports it (see ~/.ssh/use_mosh)
 function smartmosh() {
