@@ -27,13 +27,13 @@ function _prompt_vc_git() {
     local gitstat="`git status 2>/dev/null`"
     local colour=$fgreen
 
-    if [[ $(echo ${gitstat} | grep -c "^Changes to be committed:$") > 0 ]]; then
+    if [[ $(echo "${gitstat}" | grep -c "^Changes to be committed:$") > 0 ]]; then
       colour=$fyellow
-    elif [[ $(echo ${gitstat} | grep -c "^\(Untracked files:\|Changed but not updated:\)$") > 0 ]]; then
+    elif [[ $(echo "${gitstat}" | grep -c "^\(Untracked files:\|Changed but not updated:\)$") > 0 ]]; then
       colour=$fred
-    elif [[ $(echo ${gitstat} | grep "^Your branch is behind") ]]; then
+    elif echo ${gitstat} | grep "^Your branch is behind" &>/dev/null; then
       colour=$fmagenta
-    elif [[ $(echo ${gitstat} | grep "^Your branch is ahead") ]]; then
+    elif echo ${gitstat} | grep "^Your branch is ahead" &>/dev/null; then
       ccolour=$fmagenta
     fi
 
