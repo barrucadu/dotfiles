@@ -62,15 +62,6 @@
   :init (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
           (add-hook hook #'rainbow-delimiters-mode)))
 
-;;;;; ...sentences
-(setq sentence-end-double-space nil) ; Adopt the double-space convention?
-(use-package hl-sentence
-  :ensure t
-  :config
-  (set-face-attribute 'hl-sentence-face nil :foreground "#bbbbff")
-  (dolist (hook '(LaTeX-mode-hook markdown-mode-hook text-mode-hook))
-    (add-hook hook #'hl-sentence-mode)))
-
 ;;;; The mode line
 (line-number-mode)
 (column-number-mode)
