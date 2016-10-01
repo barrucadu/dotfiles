@@ -8,22 +8,15 @@ function command_not_found_handler() {
     else
       file $1
     fi
-
   elif is_host $1 && [[ -z $2 ]]; then
     # SSH in if it's a network host.
     smartmosh $1
-
+  elif has command-not-found; then
+    # Use the nixos comamnd-not-found script to suggest a package, or
+    # report the error if unknown.
+    command-not-found $1
   else
-    # Attempt to suggest a command to install it otherwise.
-    local command=""
-
-    # TODO: Add command-not-found (see nixos-channel-scripts issue #4)
-
-    if [[ ! -z $command ]]; then
-      echo "The program '$1' is not currently installed. You can install it by typing:" >&2
-      echo "  $command" >&2
-    else
-      echo "Command not found: '$1'" >&2
-    fi
+    # Just tell the user off
+    echo "$1: command not found" >&2
   fi
 }
