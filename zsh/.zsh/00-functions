@@ -63,7 +63,7 @@ function has() {
 
 # Check if a string is a hostname we can ssh into.
 function is_host() {
-  grep "^Host $1$" ~/.ssh/config &>/dev/null || ping -c1 $1 &>/dev/null
+  grep "^Host $1$" ~/.ssh/config &>/dev/null || grep " $1\b" /etc/hosts &>/dev/null
 }
 
 # Check if a host supports mosh connections.
