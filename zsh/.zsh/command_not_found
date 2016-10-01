@@ -17,13 +17,6 @@ function command_not_found_handler() {
     # Attempt to suggest a command to install it otherwise.
     local command=""
 
-    if has brew; then
-      pkg=`brew which-formula $1`
-      if [[ ! -z $pkg ]]; then
-        command="brew install $pkg"
-      fi
-    fi
-
     # TODO: Add command-not-found (see nixos-channel-scripts issue #4)
 
     if [[ ! -z $command ]]; then
