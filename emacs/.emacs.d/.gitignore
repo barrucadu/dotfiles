@@ -1,5 +1,3 @@
-auto-save-list
-elpa
-flycheck_*
-saved-places
-var
+*
+!init.el
+!configuration.el.org
