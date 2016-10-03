@@ -560,3 +560,39 @@ visible):
     :bind (("C-c s r" . vr/query-replace)
            ("C-c s R" . vr/replace)))
 #+END_SRC
+
+*** Helm
+
+The [[https://emacs-helm.github.io/helm/][=helm=]] package provides incremental completion of lots of things,
+so I enable it globally. For example, this makes =M-x= much nicer.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :bind ("M-x" . helm-M-x)
+    :init (helm-mode 1)
+    :diminish helm-mode)
+#+END_SRC
+
+Manage buffers with =helm=:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-buffers
+    :ensure helm
+    :defer t
+    :bind (([remap switch-to-buffer] . helm-mini))
+    :config (setq helm-buffers-fuzzy-matching t))
+#+END_SRC
+
+Manage files with =helm=:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-files
+    :ensure helm
+    :defer t
+    :bind (([remap find-file] . helm-find-files)
+           ("C-c f f" . helm-for-files)
+           ("C-c f r" . helm-recentf))
+    :config (setq helm-recentf-fuzzy-match t
+                  helm-ff-file-name-history-use-recentf t
+                  helm-ff-search-library-in-sexp t))
+#+END_SRC
