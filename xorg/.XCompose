@@ -3,32 +3,10 @@
 include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 
 # Maths
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/maths-constants"
 include "/home/barrucadu/dotfiles/xorg/.XCompose.d/maths-symbols"
-
-# Symbols of the planets
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/planets"
-
-# Signs of the Zodiac
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/zodiac"
-
-# Six-sided die faces
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/die"
-
-# Chess Pieces
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/chess"
 
 # Greek
 include "/home/barrucadu/dotfiles/xorg/.XCompose.d/greek"
 
-# Elder Futhark
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/futhark"
-
-# Fancy punctuation
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/typography"
-
 # Other Symbols
 include "/home/barrucadu/dotfiles/xorg/.XCompose.d/other"
-
-# Phrases
-include "/home/barrucadu/dotfiles/xorg/.XCompose.d/phrases"

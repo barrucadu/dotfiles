@@ -1,7 +1,0 @@
-## -*- conf -*-
-
-<Multi_key> <numbersign> <p> <i>     : "3.1415926535"	
-<Multi_key> <numbersign> <e>         : "2.7182818284"
-<Multi_key> <numbersign> <p> <h> <i> : "1.6180339887"
-<Multi_key> <numbersign> <m>         : "1.2096"
-<Multi_key> <numbersign> <d>         : "2.434841368"
