@@ -162,7 +162,7 @@ on this scheme.
       "C-c @"   "outline"
       "C-c !"   "flycheck"
       ;; Prefixes for my personal bindings
-      "C-c b"   "bufers"
+      "C-c b"   "buffers"
       "C-c c"   "comments"
       "C-c f"   "files"
       "C-c g"   "git"
