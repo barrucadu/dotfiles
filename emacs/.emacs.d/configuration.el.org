@@ -169,6 +169,7 @@ on this scheme.
       "C-c l"   "language/spelling"
       "C-c m"   "major-mode"
       "C-c o"   "cursors"
+      "C-c p"   "projectile"
       "C-c s"   "search"
       "C-c t"   "toggle"
       "C-c x"   "text")
@@ -595,4 +596,27 @@ Manage files with =helm=:
     :config (setq helm-recentf-fuzzy-match t
                   helm-ff-file-name-history-use-recentf t
                   helm-ff-search-library-in-sexp t))
+#+END_SRC
+
+*** Projectile
+
+The [[https://github.com/bbatsov/projectile][=projectile=]] package is a project integration library, providing
+nice functionality at the level of all files in a git repository
+(amongst others).
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :init (projectile-global-mode)
+    :config (setq projectile-completion-system 'helm))
+#+END_SRC
+
+Use =helm= for autocompletion:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-projectile
+    :after projectile
+    :bind ("C-c f p" . helm-projectile)
+    :config
+    (helm-projectile-on)
+    (setq projectile-switch-project-action 'helm-projectile))
 #+END_SRC
