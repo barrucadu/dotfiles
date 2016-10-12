@@ -299,7 +299,8 @@ Ok, that's it for preliminaries.
                 ("<f5>"    . haskell-compile))
     :config (setq haskell-compile-cabal-build-command "stack build"))
 
-  (use-package cabal-mode
+  (use-package haskell-cabal-mode
+    :mode "\\.cabal\\'"
     :ensure haskell-mode)
 #+END_SRC
 
