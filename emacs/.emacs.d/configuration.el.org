@@ -435,12 +435,6 @@ I use =org-mode= as my default major-mode, not just for org files.
 
 ** Version control
 
-Follow symlinks to version-controlled files without asking:
-
-#+BEGIN_SRC emacs-lisp
-  (setq vc-follow-symlinks t)
-#+END_SRC
-
 Highlight diffs in the buffer:
 
 #+BEGIN_SRC emacs-lisp
