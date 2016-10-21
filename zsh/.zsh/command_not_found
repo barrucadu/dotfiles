@@ -3,7 +3,7 @@
 function command_not_found_handler() {
   if [[ -e $1 ]] && [[ -z $2 ]]; then
     # Open it if it's a text file.
-    if file $1 | grep ' text$' >/dev/null; then
+    if file $1 | grep ' text\b' >/dev/null; then
       $EDITOR $1
     else
       file $1
