@@ -14,6 +14,8 @@ alias -g '.G'='| grep'
 alias -g '.S'='| sed'
 alias -g '.A'='| awk'
 alias -g '.L'='2>&1 | less -FXS'
+alias -g '.H'='2>&1 | head'
+alias -g '.T'='2>&1 | tail'
 alias -g '.1'='2>&1'
 
 # Basic commands
