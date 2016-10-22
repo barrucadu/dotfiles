@@ -17,6 +17,12 @@ export GOPATH="$HOME/go"
 #### Path
 
 if [[ -z $DONE_PATH_MODIFICATIONS ]]; then
+  # add MacTeX if it exists
+  texpath="/usr/local/texlive/2016/bin/x86_64-darwin"
+  if [[ -d $texpath ]]; then
+    export PATH="$texpath:$PATH"
+  fi
+
   # add /usr/local/go/bin if it exists
   gopath="/usr/local/go/bin"
   if [[ -d $gopath ]]; then
