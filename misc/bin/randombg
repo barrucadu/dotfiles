@@ -1,30 +1,10 @@
 #!/usr/bin/env zsh
 
-# Set the wallpaper directories
-WALLPAPERDIR=${1:-/mnt/data/wallpaper}
-LANDDIR=$WALLPAPERDIR/landscape
-PORTDIR=$WALLPAPERDIR/portrait
+WALLPAPERDIR=${1:-/mnt/data/wallpaper/landscape}
 
-if [[ `xrandr | grep " connected" | wc -l` = 1 ]]; then
-    landscape $WALLPAPERDIR
-    exit
+if [[ ! -d $WALLPAPERDIR ]]; then
+  echo "Missing wallpaper directory."
+  exit
 fi
 
-if [[ ! -d $LANDDIR ]] || [[ ! -d $PORTDIR ]]; then
-    echo "Missing wallpaper directories"
-    exit
-fi
-
-# Pick random landscape and portrait wallpapers.
-landscape="$LANDDIR/`ls $LANDDIR | shuf -n1`"
-portrait="$PORTDIR/`ls $PORTDIR | shuf -n1`"
-
-# Make the new wallpaper
-wall=`mktemp`.png
-montage $portrait $landscape -tile 2x1 -geometry "3000x1920+0+0" -mode concatenate $wall
-
-# Set the wallpaper
-feh --bg-tile $wall
-
-# Delete the temporary image
-rm $wall
+feh --bg-tile "$WALLPAPERDIR/`ls $WALLPAPERDIR | shuf -n1`"
