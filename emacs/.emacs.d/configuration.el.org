@@ -163,7 +163,6 @@ on this scheme.
       "C-c !"   "flycheck"
       ;; Prefixes for my personal bindings
       "C-c b"   "buffers"
-      "C-c B"   "bbdb"
       "C-c c"   "comments"
       "C-c f"   "files"
       "C-c g"   "git"
@@ -631,8 +630,6 @@ The [[http://savannah.nongnu.org/projects/bbdb/][=bbdb=]] package is an address 
 
 #+BEGIN_SRC emacs-lisp
   (use-package bbdb
-    :mode "\\.bbdb\\'"
-    :bind (("C-c b c" . bbdb-create))
     :config (setq bbdb-file "~/s/contacts.bbdb")
             (bbdb-initialize))
 #+END_SRC
