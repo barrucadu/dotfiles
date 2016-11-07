@@ -8,7 +8,7 @@ export XDG_MUSIC_DIR="$HOME/nfs/music"
 
 ### Environment
 
-export LEDGER_FILE="$HOME/.hledger.journals/current.journal"
+export LEDGER_FILE="$HOME/s/ledger/current.journal"
 
 export TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S'
 

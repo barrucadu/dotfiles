@@ -163,6 +163,7 @@ on this scheme.
       "C-c !"   "flycheck"
       ;; Prefixes for my personal bindings
       "C-c b"   "buffers"
+      "C-c B"   "bbdb"
       "C-c c"   "comments"
       "C-c f"   "files"
       "C-c g"   "git"
@@ -427,7 +428,7 @@ I use =org-mode= as my default major-mode, not just for org files.
         org-enforce-todo-checkbox-dependencies t
         org-agenda-dim-blocked-tasks t
         org-log-done 'time
-        org-agenda-files '("~/org"))
+        org-agenda-files '("~/s/org"))
   (require 'org-habit)
   (add-to-list 'org-modules 'org-habit)
   (bind-key "C-c a" 'org-agenda)
@@ -622,4 +623,16 @@ Use =helm= for autocompletion:
     :config
     (helm-projectile-on)
     (setq projectile-switch-project-action 'helm-projectile))
+#+END_SRC
+
+*** The Insidious Big Brother Database
+
+The [[http://savannah.nongnu.org/projects/bbdb/][=bbdb=]] package is an address book for emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bbdb
+    :mode "\\.bbdb\\'"
+    :bind (("C-c b c" . bbdb-create))
+    :config (setq bbdb-file "~/s/contacts.bbdb")
+            (bbdb-initialize))
 #+END_SRC
