@@ -406,6 +406,41 @@ I mean" in figuring out what the main tex file is.
         TeX-master 'dwim)
 #+END_SRC
 
+Some help for managing bibtex databases: I like my formatting
+consistent.
+
+#+BEGIN_SRC emacs-lisp
+  (setq bibtex-entry-format `(opts-or-alts numerical-fields page-dashes
+                              last-comma delimiters unify-case sort-fields)
+        bibtex-entry-delimiters 'braces
+        bibtex-field-delimiters 'double-quotes
+        bibtex-comma-after-last-field nil)
+
+  (defvar barrucadu/bibtex-fields-ignore-list
+    '("abstract" "acmid" "address" "annotation" "articleno" "doi" "eprint"
+      "file" "isbn" "issn" "issue_date" "keywords" "language" "location"
+      "month" "numpages" "url"))
+
+  (defun barrucadu/bibtex-clean-entry-drop-fields ()
+    (save-excursion
+      (let (bounds)
+        (when (looking-at bibtex-entry-maybe-empty-head)
+          (goto-char (match-end 0))
+          (while (setq bounds (bibtex-parse-field))
+            (goto-char (bibtex-start-of-field bounds))
+            (if (member (bibtex-name-in-field bounds)
+                        barrucadu/bibtex-fields-ignore-list)
+                (kill-region (caar bounds) (nth 3 bounds))
+              (goto-char (bibtex-end-of-field bounds))))))))
+
+  (defun barrucadu/bibtex-clean-entry-newline ()
+    (save-excursion
+      (progn (bibtex-end-of-entry) (left-char) (newline))))
+
+  (add-hook 'bibtex-clean-entry-hook 'barrucadu/bibtex-clean-entry-newline)
+  (add-hook 'bibtex-clean-entry-hook 'barrucadu/bibtex-clean-entry-drop-fields)
+#+END_SRC
+
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp
