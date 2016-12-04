@@ -47,8 +47,13 @@ alias nixos-up='sudo nixos-rebuild switch --upgrade'
 alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
 
 # Power management
-alias shutdown='sudo shutdown -hP now'
-alias reboot='sudo reboot'
+if has systemctl; then
+  alias shutdown='systemctl poweroff'
+  alias reboot='systemctl reboot'
+else
+  alias shutdown='sudo shutdown -hP now'
+  alias reboot='sudo reboot'
+fi
 
 # hledger
 alias bal='hledger balance -ATM --tree'
