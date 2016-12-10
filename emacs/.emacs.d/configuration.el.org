@@ -354,6 +354,18 @@ This runs =gofmt= on save, which is really convenient.
     :mode "\\.nix\\'")
 #+END_SRC
 
+*** Rust
+
+Like with Go, this formats code on save.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+    :mode "\\.rs\\'"
+    :config  (setq rust-format-on-save t))
+  (use-package flycheck-rust
+    :init (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
+#+END_SRC
+
 *** Shell
 
 #+BEGIN_SRC emacs-lisp
