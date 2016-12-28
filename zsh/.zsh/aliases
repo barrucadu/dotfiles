@@ -8,6 +8,7 @@ alias o=$EDITOR
 alias O='sudoedit'
 alias g='git'
 alias m='smartmosh'
+alias t='task'
 
 # Pipeline
 alias -g '.G'='| grep'
