@@ -57,7 +57,7 @@ else
 fi
 
 # hledger
-alias bal='hledger balance -ATM --tree'
+alias bal='hledger balance -ATMB --tree'
 
 # Miscellanious
 alias reload='source ~/.zshrc'
