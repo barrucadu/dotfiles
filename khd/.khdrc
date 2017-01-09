@@ -1,0 +1,46 @@
+# -*- mode:conf -*-
+
+khd kwm on
+
+# meta
+ctrl + shift + alt - q  :  kwmc quit
+ctrl + shift + alt - r  :  khd -e "reload"
+
+# launch applications
+ctrl + shift - t        :  open -na /Applications/iTerm2.app
+ctrl + shift - w        :  open -na /Applications/Google\ Chrome.app
+
+# tiling mode
+ctrl + shift - a        :  kwmc space -t bsp
+ctrl + shift - s        :  kwmc space -t monocle
+ctrl + shift - d        :  kwmc space -t float
+ctrl + shift - f        :  kwmc window -z fullscreen
+ctrl + shift - r        :  kwmc tree rotate 90
+
+# focusing clients
+ctrl - up               :  kwmc window -f north
+ctrl - down             :  kwmc window -f south
+ctrl - left             :  kwmc window -f west
+ctrl - right            :  kwmc window -f east
+
+# moving clients
+ctrl + shift - up       :  kwmc window -s north
+ctrl + shift - down     :  kwmc window -s south
+ctrl + shift - left     :  kwmc window -s west
+ctrl + shift - right    :  kwmc window -s east
+
+# resizing frames
+ctrl + alt - up         :  kwmc space -g increase vertical
+ctrl + alt - down       :  kwmc space -g decrease vertical
+ctrl + alt - left       :  kwmc space -g increase horizontal
+ctrl + alt - right      :  kwmc space -g decrease horizontal
+
+# spaces (0x2B is comma, 0x2F is period)
+ctrl - 0x2B             :  kwmc space -fExperimental left
+ctrl - 0x2F             :  kwmc space -fExperimental right
+ctrl + shift - 0x2B     :  kwmc window -m space left
+ctrl + shift - 0x2F     :  kwmc window -m space right
+
+# displays
+ctrl + alt - 0x2B       :  kwmc display -f prev
+ctrl + alt - 0x2F       :  kwmc display -f next
