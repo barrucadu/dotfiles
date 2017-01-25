@@ -20,7 +20,7 @@ urgency.user.project.finance.coefficient=1.0
 urgency.user.project.overleaf.coefficient=1.0
 urgency.user.project.phd.coefficient=1.0
 urgency.user.project.sote.coefficient=1.0
-urgency.user.project.swarm.coefficient=1.0
+urgency.user.project.research.coefficient=1.0
 
 # The "misc" project has lower urgency than everything else.
 urgency.user.project.misc.coefficient=-2.0
@@ -41,7 +41,7 @@ data.location=~/s/tasks
 
 # Contexts
 context.work=project:sote or project:overleaf
-context.research=project:swarm or project:testgen or project:phd
+context.research=project:research or project:phd
 context.me=project:finance or project:misc
 context.code=project:dejafu or project:irc
 
