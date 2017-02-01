@@ -62,7 +62,7 @@ function s() {
   local command=$1
 
   typeset -A subcommands
-  local subcommands=(b build c clean e exec eg "exec ghci" g ghci i install t test)
+  local subcommands=(b build c clean e exec eg "exec ghci" g ghci i install r runghc t test)
 
   if [[ $command == "-h" ]] || [[ $command == "--help" ]]; then
     echo "Usage: s <command or alias> <args>"
