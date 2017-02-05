@@ -281,6 +281,13 @@ remember, "dwim" is an acronym for "do what I mean".
 
 Ok, that's it for preliminaries.
 
+*** Forth
+
+#+BEGIN_SRC emacs-lisp
+  (use-package forth-mode
+    :mode "\\.fs\\'")
+#+END_SRC
+
 *** Haskell
 
 #+BEGIN_SRC emacs-lisp
