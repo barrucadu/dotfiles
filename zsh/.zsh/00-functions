@@ -20,7 +20,7 @@ function status(){
   else
     local nextm=`date -v+1m +"%Y-%m-01"`
   fi
-  hledger balance -N -B --begin=$thism --end=$nextm --tree budget | sed '1d' | sed 's:^            ::'
+  hledger balance -N -B -H --begin=$thism --end=$nextm --tree budget | sed -e 1d -e 2d -e 3d -e 4d | sed 's:^            ::' | sed 's:          :  :'
 
   echo
 }
