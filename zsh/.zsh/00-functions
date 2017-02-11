@@ -14,13 +14,12 @@ function status(){
 
   # This month's budget
   echo "\n$(date +%B) Budget:"
-  local thism=`date +"%Y-%m-01"`
   if $IS_GNULINUX; then
     local nextm=`date --date=+1month +"%Y-%m-01"`
   else
     local nextm=`date -v+1m +"%Y-%m-01"`
   fi
-  hledger balance -N -B -H --begin=$thism --end=$nextm --tree budget | sed -e 1d -e 2d -e 3d -e 4d | sed 's:^            ::' | sed 's:          :  :'
+  hledger balance -N -B -H --end=$nextm --tree budget | sed -e 1d -e 2d -e 3d -e 4d | sed 's:^            ::' | sed 's:          :  :'
 
   echo
 }
