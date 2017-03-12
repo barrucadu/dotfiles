@@ -1,0 +1,4 @@
+system-ghc: true
+
+nix:
+  enable: true
