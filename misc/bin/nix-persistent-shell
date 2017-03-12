@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+if [[ "$NIX_PERSISTENT_ENV" != "" ]]; then
+  echo "shells should be nested with care, unset \$NIX_PERSISTENT_ENV to force" >&2
+  exit 1
+fi
+
+NIX_ENV_DIR=$HOME/.nixpkgs/environments
+
+REBUILD=false
+if [[ "$1" == "-r" ]] || [[ "$1" == "-R" ]]; then
+  REBUILD=true
+  shift
+fi
+
+ENV=$1
+
+if [[ "$ENV" == "" ]]; then
+  echo "usage: nix-persistent-shell [-r] <environment>" >&2
+  exit 1
+fi
+
+function nixfile_from_packages {
+  pkgfile=$1
+  nixfile=$2
+
+  if $REBUILD || [[ ! -e "$nixfile" ]]; then
+    echo "Building $nixfile from $pkgfile..."
+
+    echo "with import <nixpkgs> {}; { ${ENV}Env =" > "$nixfile"
+    echo "  stdenv.mkDerivation {" >> "$nixfile"
+    echo "    name=\"$ENV-env\";" >> "$nixfile"
+    echo "    buildInputs = with pkgs; [" >> "$nixfile"
+    cat "$pkgfile" >> "$nixfile"
+    echo "    ];" >> "$nixfile"
+    echo "  };" >> "$nixfile"
+    echo "}" >> "$nixfile"
+  fi
+}
+
+function instantiate_and_shell {
+  nixfile=$1
+  drvfile=$2
+
+  if $REBUILD || [[ ! -e "$drvfile" ]]; then
+    echo "Instantiating $drvfile from $nixfile..."
+
+    nix-instantiate "$nixfile" --indirect --add-root "$drvfile" || exit 1
+  fi
+  nix-shell "$drvfile" --command "NIX_PERSISTENT_ENV=$ENV zsh"
+}
+
+if [[ -e "$NIX_ENV_DIR/$ENV.packages" ]]; then
+  nixfile_from_packages "$NIX_ENV_DIR/$ENV.packages" "$NIX_ENV_DIR/gen/$ENV.nix"
+  instantiate_and_shell "$NIX_ENV_DIR/gen/$ENV.nix" "$NIX_ENV_DIR/gen/$ENV.drv"
+elif [[ -e "$NIX_ENV_DIR/$ENV.nix" ]]; then
+  instantiate_and_shell "$NIX_ENV_DIR/$ENV.nix" "$NIX_ENV_DIR/gen/$ENV.drv"
+elif [[ -e "$ENV.packages" ]]; then
+  nixfile_from_packages "$ENV.packages" "$ENV.nix"
+  instantiate_and_shell "$ENV.nix" "$ENV.drv"
+elif [[ -e "$ENV.nix" ]]; then
+  instantiate_and_shell "$ENV.nix" "$ENV.drv"
+else
+  echo "could not find $ENV.packages or $ENV.nix in . or $NIX_ENV_DIR" >&2
+  exit 1
+fi

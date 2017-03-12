@@ -15,7 +15,11 @@ function _prompt_static_ps1() {
   local hostcolour=$foregrounds[$(( $chash % $#foregrounds ))]
   local prompt_host="${hostcolour}${HOST}${default}"
 
-  echo "${prompt_user} on ${prompt_host}"
+  if [[ $NIX_PERSISTENT_ENV == "" ]]; then
+    echo "${prompt_user} on ${prompt_host}"
+  else
+    echo "${fbmagenta}{${NIX_PERSISTENT_ENV}}${default} ${prompt_user} on ${prompt_host}"
+  fi
 }
 
 _static_ps1=$(_prompt_static_ps1)

@@ -1,0 +1,8 @@
+cabal-install
+cabal2nix
+ghc802Packages.ghc
+ghc802Packages.cpphs
+ghc802Packages.haddock
+ghc802Packages.hlint
+ghc802Packages.hscolour
+stack

@@ -1,0 +1,7 @@
+clang
+gcc
+gdb
+gnumake
+m4
+pkgconfig
+valgrind
