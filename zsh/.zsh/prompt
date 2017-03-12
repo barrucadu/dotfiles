@@ -1,29 +1,5 @@
 ## -*- shell-script -*-
 
-### Static info
-
-function _prompt_static_ps1() {
-  # User
-  local usercolour=`[ $UID != 0 ] && echo $fbgreen || echo $fred`
-  local prompt_user="${usercolour}${USER}${default}"
-
-  # Host
-  local chash=0
-  for letter in $HOST; do
-    ((chash += #letter))
-  done
-  local hostcolour=$foregrounds[$(( $chash % $#foregrounds ))]
-  local prompt_host="${hostcolour}${HOST}${default}"
-
-  if [[ $NIX_PERSISTENT_ENV == "" ]]; then
-    echo "${prompt_user} on ${prompt_host}"
-  else
-    echo "${fbmagenta}{${NIX_PERSISTENT_ENV}}${default} ${prompt_user} on ${prompt_host}"
-  fi
-}
-
-_static_ps1=$(_prompt_static_ps1)
-
 ### VC info -- only does git for now.
 
 function _prompt_vc_git() {
@@ -44,7 +20,7 @@ function _prompt_vc_git() {
     local ref=$(git symbolic-ref HEAD 2> /dev/null) || return 1
     local branch=${ref#refs/heads/}
 
-    echo "[branch: ${colour}${branch}${default}]"
+    echo "${colour}[${branch}]${default}"
   fi
 }
 
@@ -64,13 +40,19 @@ function _prompt_precmd()
   local usrcolour=`[ $UID != 0 ]    && echo $fbblue || echo $fbred`
   local dircolour=`[ -w "\`pwd\`" ] && echo $fbcyan || echo $fbred`
 
+  # Host
+  local prompt_host="${fbyellow}${HOST}${default}"
+
+  # Environment
+  local prompt_env=`[ ! -z $NIX_PERSISTENT_ENV ] && echo " ${fbmagenta}{${NIX_PERSISTENT_ENV}}${default}"`
+
   # Version control
-  local vc=`_prompt_vc`
-  if [[ ! -z  $vc ]]; then
-    vc=" $vc"
+  local prompt_vc=`_prompt_vc`
+  if [[ ! -z $prompt_vc ]]; then
+    prompt_vc=" $prompt_vc"
   fi
 
-  export PS1="${_static_ps1}${vc}${sadface} ${usrcolour}>>>${default}  "
+  export PROMPT="${prompt_host}${prompt_env}${prompt_vc}${sadface} ${usrcolour}>>>${default}  "
   export RPROMPT="${dircolour}%~${default}"
 }
 
