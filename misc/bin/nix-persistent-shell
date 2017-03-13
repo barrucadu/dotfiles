@@ -38,28 +38,23 @@ function nixfile_from_packages {
   fi
 }
 
-function instantiate_and_shell {
+function nix_shell {
   nixfile=$1
-  drvfile=$2
+  gcrootdir=$2
 
-  if $REBUILD || [[ ! -e "$drvfile" ]]; then
-    echo "Instantiating $drvfile from $nixfile..."
-
-    nix-instantiate "$nixfile" --indirect --add-root "$drvfile" || exit 1
-  fi
-  nix-shell "$drvfile" --command "NIX_PERSISTENT_ENV=$ENV zsh"
+  nix-shell "$nixfile" --indirect --add-root "$gcrootdir/gc" --command "NIX_PERSISTENT_ENV=$ENV zsh"
 }
 
 if [[ -e "$NIX_ENV_DIR/$ENV.packages" ]]; then
-  nixfile_from_packages "$NIX_ENV_DIR/$ENV.packages" "$NIX_ENV_DIR/gen/$ENV.nix"
-  instantiate_and_shell "$NIX_ENV_DIR/gen/$ENV.nix" "$NIX_ENV_DIR/gen/$ENV.drv"
+  nixfile_from_packages "$NIX_ENV_DIR/$ENV.packages" "$NIX_ENV_DIR/$ENV.gen.nix"
+  nix_shell "$NIX_ENV_DIR/$ENV.gen.nix" "$NIX_ENV_DIR/.gcroots/$ENV"
 elif [[ -e "$NIX_ENV_DIR/$ENV.nix" ]]; then
-  instantiate_and_shell "$NIX_ENV_DIR/$ENV.nix" "$NIX_ENV_DIR/gen/$ENV.drv"
+  nix_shell "$NIX_ENV_DIR/$ENV.nix" "$NIX_ENV_DIR/.gcroots/$ENV"
 elif [[ -e "$ENV.packages" ]]; then
   nixfile_from_packages "$ENV.packages" "$ENV.nix"
-  instantiate_and_shell "$ENV.nix" "$ENV.drv"
+  nix_shell "$ENV.nix" ".gcroots/$ENV"
 elif [[ -e "$ENV.nix" ]]; then
-  instantiate_and_shell "$ENV.nix" "$ENV.drv"
+  nix_shell "$ENV.nix" ".gcroots/$ENV"
 else
   echo "could not find $ENV.packages or $ENV.nix in . or $NIX_ENV_DIR" >&2
   exit 1
