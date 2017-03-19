@@ -43,8 +43,8 @@ function _prompt_precmd()
   # Host
   local prompt_host="${fbyellow}%m${default}"
 
-  # Environment
-  local prompt_env=`[ ! -z $NIX_PERSISTENT_ENV ] && echo " ${fbmagenta}{${NIX_PERSISTENT_ENV}}${default}"`
+  # Tag
+  local prompt_tag=`[ ! -z $PROMPT_TAG ] && echo " ${fbmagenta}{${PROMPT_TAG}}${default}"`
 
   # Version control
   local prompt_vc=`_prompt_vc`
@@ -52,7 +52,7 @@ function _prompt_precmd()
     prompt_vc=" $prompt_vc"
   fi
 
-  export PROMPT="${prompt_host}${prompt_env}${prompt_vc}${sadface} ${usrcolour}>>>${default}  "
+  export PROMPT="${prompt_host}${prompt_tag}${prompt_vc}${sadface} ${usrcolour}>>>${default}  "
   export RPROMPT="${dircolour}%2~${default}"
 }
 

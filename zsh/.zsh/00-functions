@@ -118,3 +118,33 @@ function sshfwd() {
 function knit() {
   ssh -ND $2 $1
 }
+
+### Prompt tag
+
+
+# Set the prompt tag.
+function ptag(){
+  PROMPT_TAG=$1
+}
+
+# Unset the prompt tag.
+function puntag(){
+  PROMPT_TAG=""
+}
+
+# Push to the prompt tag
+function ptag_push(){
+  if [[ -z $PROMPT_TAG ]]; then
+    PROMPT_TAG=$1
+  else
+    PROMPT_TAG=$PROMPT_TAG/$1
+  fi
+}
+
+# Pop from the prompt tag.
+function ptag_pop(){
+  PROMPT_TAG=`dirname $PROMPT_TAG`
+  if [[ "$PROMPT_TAG" == "." ]]; then
+    PROMPT_TAG=""
+  fi
+}

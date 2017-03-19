@@ -26,7 +26,7 @@ function nix_shell {
   local nixfile=$1
   local gcrootdir=$2
 
-  nix-shell "$nixfile" --indirect --add-root "$gcrootdir/gc" --command "NIX_PERSISTENT_ENV=$env zsh"
+  nix-shell "$nixfile" --indirect --add-root "$gcrootdir/gc" --command "NIX_PERSISTENT_ENV=$env PROMPT_TAG=$env zsh"
 }
 
 for arg in "$@"; do
