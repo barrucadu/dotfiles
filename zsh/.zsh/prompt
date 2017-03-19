@@ -41,7 +41,7 @@ function _prompt_precmd()
   local dircolour=`[ -w "\`pwd\`" ] && echo $fbcyan || echo $fbred`
 
   # Host
-  local prompt_host="${fbyellow}${HOST}${default}"
+  local prompt_host="${fbyellow}%m${default}"
 
   # Environment
   local prompt_env=`[ ! -z $NIX_PERSISTENT_ENV ] && echo " ${fbmagenta}{${NIX_PERSISTENT_ENV}}${default}"`
