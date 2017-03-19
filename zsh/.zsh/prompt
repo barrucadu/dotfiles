@@ -53,7 +53,7 @@ function _prompt_precmd()
   fi
 
   export PROMPT="${prompt_host}${prompt_env}${prompt_vc}${sadface} ${usrcolour}>>>${default}  "
-  export RPROMPT="${dircolour}%~${default}"
+  export RPROMPT="${dircolour}%2~${default}"
 }
 
 export PS2="${fblue}%B%_%b >${default} "
