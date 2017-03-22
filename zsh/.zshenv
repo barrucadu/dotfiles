@@ -1,5 +1,29 @@
 ## -*- shell-script -*-
 
+# Source the system profile BEFORE setting up the user environment, so
+# the PATH and stuff is configured properly. This is copied from the
+# NixOS "zprofile_zwc_is_used" file.
+if test -e /etc/NIXOS; then
+  if test -r /etc/zprofile; then
+    . /etc/zprofile
+  else
+    emulate bash
+    alias shopt=false
+    . /etc/profile
+    unalias shopt
+    emulate zsh
+  fi
+  if test -r /etc/zprofile.local; then
+    . /etc/zprofile.local
+  fi
+else
+  # on non-nixos we just source the global /etc/zprofile as if we did
+  # not use the configure flag
+  if test -r /etc/zprofile; then
+    . /etc/zprofile
+  fi
+fi
+
 ### XDG User Dirs
 export XDG_DESKTOP_DIR="$HOME/tmp"
 export XDG_DOCUMENTS_DIR="$HOME/tmp"
