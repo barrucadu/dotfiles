@@ -24,9 +24,9 @@ hc keybind XF86HomePage spawn chromium --enable-ipv6 --force-device-scale-factor
 hc keybind XF86Mail     spawn claws-mail
 hc keybind Print        spawn scrot ~/tmp/screenshot.png
 
-if type urxvt &>/dev/null; then
-  hc keybind $Mod-Return    spawn urxvt
-  hc keybind $Mod-backslash spawn urxvt -e newtmux
+if type urxvtc &>/dev/null; then
+  hc keybind $Mod-Return    spawn urxvtc
+  hc keybind $Mod-backslash spawn urxvtc -e newtmux
 elif type xfce4-terminal &>/dev/null; then
   hc keybind $Mod-Return    spawn xfce4-terminal
   hc keybind $Mod-backslash spawn xfce4-terminal -e newtmux

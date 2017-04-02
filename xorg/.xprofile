@@ -6,6 +6,4 @@ setxkbmap -option terminate:ctrl_alt_bksp
 
 xrdb -load ~/.Xdefaults
 
-urxvtd -q -f -o
-
 randombg
