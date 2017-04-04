@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys
+
+def cmd(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+    print("\x1b[1;37m{}\x1b[0m".format(" ".join(argv)))
+    p = subprocess.run(argv, stdout=stdout, stderr=stderr, check=True)
+    return p
+
+def browse(where):
+    p = cmd(["rsync", "-s", "--list-only", where])
+    lines = p.stdout.decode("ascii").split("\n")
+    entries = dict()
+    n = 0
+    for line in lines:
+        try:
+            permission, _, _, _, path = line.split(maxsplit=4)
+            # Don't bother including the current directory
+            if path == ".":
+                continue
+            entries[str(n)] = (path, permission[0] == 'd', line)
+            n = n + 1
+        except:
+            pass
+    return entries
+
+try:
+    where = [sys.argv[1]]
+    running = True
+    while running:
+        entries = browse(where[-1])
+
+        # print entries
+        for n in range(0, len(entries)):
+            path, _, line = entries[str(n)]
+            pad = ' ' * (len(str(len(entries))) - len(str(n)))
+            print("    \x1b[1;33m[{}{}]\x1b[0m {}".format(pad, n, line))
+
+        # prompt for one to access
+        chosen = None
+        force_download = False
+        while True:
+            if len(where) > 1:
+                choice = input("Enter a number (or '!num' to download a directory, or 'u' to go up, or 'q' to quit): ")
+            else:
+                choice = input("Enter a number (or '!num' to download a directory, or 'q' to quit): ")
+            if choice == 'q':
+                running = False
+                break
+            elif choice == 'u' and len(where) > 1:
+                where.pop()
+                break
+            elif choice[0] == '!' and choice[1:] in entries:
+                chosen = choice[1:]
+                force_download = True
+                break
+            elif choice in entries:
+                chosen = choice
+                break
+            else:
+                print("?")
+
+        # either list directory or download file
+        if chosen is not None:
+            path, isdir, _ = entries[chosen]
+            if isdir and not force_download:
+                where.append(where[-1] + path + "/")
+            else:
+                cmd(["rsync", "-a", "-s", "--append-verify", "--progress", where[-1] + path, "."], stdout=None, stderr=None)
+
+except subprocess.CalledProcessError as e:
+    print("\x1b[1;31mfailed with exit status {}:\x1b[0m".format(e.returncode))
+    for line in e.stderr.decode("ascii").split("\n"):
+        print("    " + line)
+except:
+    pass
