@@ -201,15 +201,7 @@ I use =org-mode= as my default major-mode, not just for org files.
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'visual-line-mode)
   (setq org-src-tab-acts-natively t
-        org-src-fontify-natively t
-        org-enforce-todo-dependencies t
-        org-enforce-todo-checkbox-dependencies t
-        org-agenda-dim-blocked-tasks t
-        org-log-done 'time
-        org-agenda-files '("~/s/org"))
-  (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (bind-key "C-c a" 'org-agenda)
+        org-src-fontify-natively  t)
 #+END_SRC
 
 ** Flycheck and Flyspell
