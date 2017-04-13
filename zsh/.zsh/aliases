@@ -61,7 +61,7 @@ fi
 alias bal='hledger balance -MB --tree'
 
 # Miscellanious
-alias reload='source ~/.zshrc'
+alias reload='source ~/.zshenv; source ~/.zshrc'
 alias xreload='xrdb -load ~/.Xdefaults'
 alias columns='column -c `tput cols`'
 alias pgfl='pgrep -fl'
