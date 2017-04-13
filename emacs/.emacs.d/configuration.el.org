@@ -268,8 +268,7 @@ I use =aspell= for =flyspell-mode=:
 ** Accounting
 
 I use [[http://plaintextaccounting.org/][plaintext accounting]], and in particular [[http://hledger.org/][hledger]], to manage my
-finances. It's really nice and I highly recommend it. I have a page
-about it [[https://wiki.barrucadu.co.uk/finance.shelf.html][on my wiki]].
+finances. It's really nice and I highly recommend it.
 
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-ledger)
