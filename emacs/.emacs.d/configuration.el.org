@@ -62,7 +62,7 @@ This is the first use of =use-package= in the configuration. This
 snippet requires the =color-theme= and =gruvbox-theme= packages to be
 installed (and will fetch them if not, due to the =(setq
 use-package-always-ensure t)= in the =use-package= configuration), and
-loads the zenburn theme at start-up.
+loads the gruvbox theme at start-up.
 
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme)
