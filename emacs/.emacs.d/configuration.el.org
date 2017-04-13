@@ -56,18 +56,18 @@ use of it]].
   (setq inhibit-splash-screen t)
 #+END_SRC
 
-*** Zenburn colour theme
+*** Gruvbox colour theme
 
 This is the first use of =use-package= in the configuration. This
-snippet requires the =color-theme= and =zenburn-theme= packages to be
+snippet requires the =color-theme= and =gruvbox-theme= packages to be
 installed (and will fetch them if not, due to the =(setq
 use-package-always-ensure t)= in the =use-package= configuration), and
 loads the zenburn theme at start-up.
 
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme)
-  (use-package zenburn-theme
-    :init (load-theme 'zenburn 'no-confirm))
+  (use-package gruvbox-theme
+    :init (load-theme 'gruvbox 'no-confirm))
 #+END_SRC
 
 *** Highlights
