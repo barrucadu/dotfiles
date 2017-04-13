@@ -68,8 +68,9 @@ fi
 #### Programs
 
 export BROWSER=chromium
-export EDITOR=vim
+export EDITOR=emacsclient
 export VISUAL=$EDITOR
+export ALTERNATE_EDITOR=vim
 
 #### Locale
 
