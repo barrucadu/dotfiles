@@ -1,0 +1,5 @@
+#!/bin/sh
+
+xrandr --output "`xrandr -q | grep ' connected' | cut -d' ' -f1`" --rotate $1
+herbstclient detect_monitors
+randombg

@@ -51,6 +51,10 @@ hc keybind XF86AudioMute        spawn amixer set Master toggle
 hc keybind XF86AudioLowerVolume spawn amixer set Master 1%-
 hc keybind XF86AudioRaiseVolume spawn amixer set Master 1%+
 
+# Displays
+hc keybind $Mod-Control-l spawn landscape
+hc keybind $Mod-Control-p spawn portrait
+
 # basic movement
 # focusing clients
 hc keybind $Mod-Left  focus left
