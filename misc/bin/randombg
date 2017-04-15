@@ -1,6 +1,12 @@
 #!/usr/bin/env zsh
 
-WALLPAPERDIR=${1:-/mnt/data/wallpaper/landscape}
+WALLPAPERDIR=${1:-/mnt/data/wallpaper}
+
+if `xrandr -q --verbose | grep ' connected' | cut -d' ' -f6 | grep -q normal`; then
+  WALLPAPERDIR="$WALLPAPERDIR/landscape"
+else
+  WALLPAPERDIR="$WALLPAPERDIR/portrait"
+fi
 
 if [[ ! -d $WALLPAPERDIR ]]; then
   echo "Missing wallpaper directory."
