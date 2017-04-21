@@ -1,18 +1,11 @@
 ## -*- shell-script -*-
 
 function command_not_found_handler() {
-  if [[ -e $1 ]] && [[ -z $2 ]]; then
-    # Open it if it's a text file.
-    if file $1 | grep ' text\b' >/dev/null; then
-      $EDITOR $1
-    else
-      file $1
-    fi
-  elif is_host $1 && [[ -z $2 ]]; then
-    # SSH in if it's a network host.
-    smartmosh $1
+  if has dwim; then
+    # Use my "do-what-I-mean" function if it's available.
+    dwim $*
   elif has command-not-found; then
-    # Use the nixos comamnd-not-found script to suggest a package, or
+    # Use the nixos command-not-found script to suggest a package, or
     # report the error if unknown.
     command-not-found $1
   else

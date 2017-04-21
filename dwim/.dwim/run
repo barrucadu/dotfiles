@@ -1,0 +1,4 @@
+#!/usr/bin/env clisp
+
+(load (merge-pathnames #P".dwim/rules.lisp" (user-homedir-pathname)))
+(select-rule)
