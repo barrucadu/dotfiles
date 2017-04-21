@@ -78,9 +78,9 @@ function s() {
 }
 
 # Do what I mean
-if type clisp &>/dev/null && [[ -x ~/.dwim/run ]]; then
+if type sbcl &>/dev/null && [[ -e ~/.dwim/run.lisp ]]; then
   function dwim() {
-    ~/.dwim/run $*
+    sbcl --script ~/.dwim/run.lisp $*
   }
 
   alias d=dwim

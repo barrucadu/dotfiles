@@ -14,7 +14,7 @@
 ;; Check if a binary is on the $PATH.
 (defun has-p (exe)
   (let ((check (lambda (path) (probe-file (merge-pathnames exe (concat path "/"))))))
-    (some check (split-on (ext:getenv "PATH") ":"))))
+    (some check (split-on (sb-ext:posix-getenv "PATH") ":"))))
 
 ;; Check if mosh is on the $PATH and the hostname is in ~/.ssh/use_mosh.
 (defun use-mosh-p (host)

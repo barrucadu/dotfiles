@@ -1,8 +1,13 @@
+(require 'sb-posix)
+
+;; The current working directory
+(defconstant *cwd* (parse-namestring (concatenate 'string (sb-posix:getcwd) "/")))
+
 ;; The argument list and count.  *ARGV-RAW* is the unmolested values,
 ;; whereas *ARGV* has everything converted to absolute paths.
-(defconstant *argn* (length ext:*args*))
-(defconstant *argv* (mapcar #'(lambda (arg) (merge-pathnames (parse-namestring arg) (ext:cd))) ext:*args*))
-(defconstant *argv-raw* ext:*args*)
+(defconstant *argv-raw* (cdr sb-ext:*posix-argv*)) ; first argument is "sbcl", throw that away.
+(defconstant *argn*     (length *argv-raw*))
+(defconstant *argv*     (mapcar #'(lambda (arg) (merge-pathnames (parse-namestring arg) *cwd*)) *argv-raw*))
 
 ;; The list of all rules.  Populated by RULE.
 (defparameter *rules* nil)
@@ -11,14 +16,38 @@
 ;; least this priority are added to *RULES*.
 (defparameter *rule-priority* 0)
 
-;; Run a command and return its output.
+;; Stringify every element in a list with FORMAT.
+(defun stringify-list (xs)
+  (mapcar #'(lambda (x) (format nil "~A" x)) xs))
+
+;; Start a process and return a stdin/stdout stream.
+(defun stream-process-in-out (cmd &optional args)
+  (let ((process (sb-ext:run-program cmd (stringify-list args)
+                                     :input  :stream
+                                     :error  nil
+                                     :output :stream
+                                     :wait   nil
+                                     :search t)))
+    (when process
+      (make-two-way-stream (sb-ext:process-output process)
+                           (sb-ext:process-input  process)))))
+
+;; Start a process with STREAM-PROCESS-IN-OUT and immediately close
+;; the stdin stream.
+(defun stream-process-out (cmd &optional args)
+  (let ((*stream* (stream-process-in-out cmd args)))
+    (finish-output *stream*)
+    *stream*))
+
+;; Run a process and return its output.
 (defun system (cmd &optional args)
-  (string-right-trim '(#\Newline)
-     (with-open-stream (s (ext:run-program cmd :arguments args :output :stream))
-      (with-output-to-string (o)
-        (loop for line = (read-line s nil nil)
-              while line
-              do (write-line line o))))))
+  (let* ((*stream* (stream-process-out cmd args))
+         (out (with-output-to-string (o)
+                (loop for line = (read-line *stream* nil nil)
+                      while line
+                      do (write-line line o)))))
+    (close *stream*)
+    (string-right-trim '(#\Newline) out)))
 
 ;; Concatenate strings.
 (defun concat (&rest rest)
@@ -43,7 +72,12 @@
 
 ;; Run a command
 (defun do-cmd (cmd &key pre-args (args *argv-raw*) post-args)
-  (ext:run-program cmd :arguments (append pre-args args post-args)))
+  (sb-ext:run-program cmd (stringify-list (append pre-args args post-args))
+                      :input  t
+                      :error  t
+                      :output t
+                      :wait   t
+                      :search t))
 
 ;; Run a rule
 (defun do-rule (name cmds)
@@ -69,6 +103,7 @@
                  (apply #'format-rule rule)
                  (setf i (+ i 1))))
              (format t "Multiple rules match, enter a number: ")
+             (finish-output)
              (let ((choice (read)))
                (if (typep choice 'integer)
                    (if (and (>= choice 0) (< choice (length rules)))
