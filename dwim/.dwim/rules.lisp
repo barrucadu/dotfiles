@@ -25,6 +25,11 @@
 (defun current-hostname-p (host)
   (string= host (system-1 "hostname")))
 
+;; Check if a tmux session exists
+(defun tmux-p (session)
+  (and (has-p "tmux")
+       (equal 0 (system-2 "tmux" (list "has" "-t" session)))))
+
 ;; Produce a predicate to check if a file has a given extension.
 (defun has-filetype-p (ext)
   #'(lambda (path) (string= ext (pathname-type path))))
@@ -38,7 +43,8 @@
   (let ((*arg*     (car *argv*))
         (*arg-raw* (car *argv-raw*)))
     (defrule :edit-text-file (is-text-file-p *arg*)     '(("emacs")))
-    (defrule :ssh-to-host    (is-host-name-p *arg-raw*) `((,(if (use-mosh-p *arg-raw*) "mosh" "ssh") :args ,*argv-raw*)))))
+    (defrule :ssh-to-host    (is-host-name-p *arg-raw*) `((,(if (use-mosh-p *arg-raw*) "mosh" "ssh") :args ,*argv-raw*)))
+    (defrule :attach-tmux    (tmux-p         *arg-raw*) `(("tmux" :args ("attach-session" "-d" "-t" ,*arg-raw*))))))
 
 (when (current-hostname-p "azathoth")
   (let ((torrent-watch-dir   #P"/home/barrucadu/nfs/torrents/watch")
