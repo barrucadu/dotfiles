@@ -50,7 +50,7 @@
   (let ((torrent-watch-dir   #P"/home/barrucadu/nfs/torrents/watch")
         (torrent-seedbox-dir #P"/home/barrucadu/nfs/torrents/on_seedbox")
         (download-dir        #P"/home/barrucadu/tmp"))
-    (defrule :move-torrent-files (every (has-filetype-p "torrent" *argv))
+    (defrule :move-torrent-files (every (has-filetype-p "torrent") *argv*)
       (cond ((every (in-directory-p download-dir)        *argv*) '(("mv" :post-args (torrent-seedbox-dir))))
             ((every (in-directory-p torrent-seedbox-dir) *argv*) '(("mv" :post-args (torrent-watch-dir))))))))
 
