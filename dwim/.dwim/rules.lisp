@@ -2,14 +2,14 @@
 
 ;; Check if a file is a text file (or empty).
 (defun is-text-file-p (path)
-  (let ((mime (system "file" (list path))))
+  (let ((mime (system-1 "file" (list path))))
     (or (search " text" mime) (search " empty" mime))))
 
 ;; Check if a name is in ~/.ssh/config or /etc/hosts.
 (defun is-host-name-p (host)
-  (let ((grep (lambda (fn) (system "grep" (list (concat "\\b" host "\\b") fn)))))
-    (or (search host (funcall grep (merge-pathnames ".ssh/config" (user-homedir-pathname))))
-        (search host (funcall grep #P"/etc/hosts")))))
+  (let ((grep (lambda (fn) (system-2 "grep" (list (concat "\\b" host "\\b") fn)))))
+    (or (equal 0 (funcall grep (merge-pathnames ".ssh/config" (user-homedir-pathname))))
+        (equal 0 (funcall grep #P"/etc/hosts")))))
 
 ;; Check if a binary is on the $PATH.
 (defun has-p (exe)
@@ -19,11 +19,11 @@
 ;; Check if mosh is on the $PATH and the hostname is in ~/.ssh/use_mosh.
 (defun use-mosh-p (host)
   (and (has-p "mosh")
-       (search host (system "grep" (list (concat "^" host "$") (merge-pathnames ".ssh/use_mosh" (user-homedir-pathname)))))))
+       (equal 0 (system-2 "grep" (list (concat "^" host "$") (merge-pathnames ".ssh/use_mosh" (user-homedir-pathname)))))))
 
 ;; Check if the current hostname matches a string.
 (defun current-hostname-p (host)
-  (string= host (system "hostname")))
+  (string= host (system-1 "hostname")))
 
 ;; Produce a predicate to check if a file has a given extension.
 (defun has-filetype-p (ext)
@@ -37,7 +37,7 @@
 (when (eq 1 *argn*)
   (let ((*arg*     (car *argv*))
         (*arg-raw* (car *argv-raw*)))
-    (defrule :edit-text-file (is-text-file-p *arg*) '(("emacs")))
+    (defrule :edit-text-file (is-text-file-p *arg*)     '(("emacs")))
     (defrule :ssh-to-host    (is-host-name-p *arg-raw*) `((,(if (use-mosh-p *arg-raw*) "mosh" "ssh") :args ,*argv-raw*)))))
 
 (when (current-hostname-p "azathoth")

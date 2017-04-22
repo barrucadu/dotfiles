@@ -22,32 +22,43 @@
 
 ;; Start a process and return a stdin/stdout stream.
 (defun stream-process-in-out (cmd &optional args)
-  (let ((process (sb-ext:run-program cmd (stringify-list args)
-                                     :input  :stream
-                                     :error  nil
-                                     :output :stream
-                                     :wait   nil
-                                     :search t)))
-    (when process
-      (make-two-way-stream (sb-ext:process-output process)
-                           (sb-ext:process-input  process)))))
+  (let* ((p (sb-ext:run-program cmd (stringify-list args)
+                                :input  :stream
+                                :error  nil
+                                :output :stream
+                                :wait   nil
+                                :search t))
+         (s (make-two-way-stream (sb-ext:process-output p)
+                                 (sb-ext:process-input  p))))
+    (cons p s)))
 
 ;; Start a process with STREAM-PROCESS-IN-OUT and immediately close
 ;; the stdin stream.
 (defun stream-process-out (cmd &optional args)
-  (let ((*stream* (stream-process-in-out cmd args)))
-    (finish-output *stream*)
-    *stream*))
+  (let ((ps (stream-process-in-out cmd args)))
+    (finish-output (cdr ps))
+    ps))
 
-;; Run a process and return its output.
+;; Run a process and return the output and exit code.
 (defun system (cmd &optional args)
-  (let* ((*stream* (stream-process-out cmd args))
+  (let* ((ps (stream-process-out cmd args))
+         (p  (car ps))
+         (s  (cdr ps))
          (out (with-output-to-string (o)
-                (loop for line = (read-line *stream* nil nil)
+                (loop for line = (read-line s nil nil)
                       while line
                       do (write-line line o)))))
-    (close *stream*)
-    (string-right-trim '(#\Newline) out)))
+    (close s)
+    (sb-ext:process-wait p)
+    (cons (string-right-trim '(#\Newline) out) (sb-ext:process-exit-code p))))
+
+;; Run a process and return its output.
+(defun system-1 (cmd &optional args)
+  (car (system cmd args)))
+
+;; Run a process and return its exit code.
+(defun system-2 (cmd &optional args)
+  (cdr (system cmd args)))
 
 ;; Concatenate strings.
 (defun concat (&rest rest)
