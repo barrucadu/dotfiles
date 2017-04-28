@@ -47,16 +47,6 @@ function re()
     exit
 }
 
-# Run a program with the grp environment
-function grprun() {
-    local GRPDIR=${GRPDIR:-/tmp/hacksoc-grp}
-
-    PATH=$GRPDIR/bin:$PATH \
-    LD_LIBRARY_PATH=$GRPDIR/lib:$LD_LIBRARY_PATH \
-    PYTHONPATH=$GRPDIR/lib/python3.3/site-packages:$PYTHONPATH \
-    $*
-}
-
 # List a directory, restricting by some regex, and tabulate the result.
 function lsby() {
     local regex=$1
