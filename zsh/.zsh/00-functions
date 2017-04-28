@@ -54,44 +54,43 @@ function lsby() {
     ls $* | grep $regex | column -c `tput cols`
 }
 
-# Short alias for stack, with abbreviated subcommands.
-function s() {
-  local command=$1
-
-  typeset -A subcommands
-  local subcommands=(b build c clean e exec eg "exec ghci" g ghci i install r runghc t test)
-
-  if [[ $command == "-h" ]] || [[ $command == "--help" ]]; then
-    echo "Usage: s <command or alias> <args>"
-    echo "Shorthand for 'stack'\n"
-    echo "Aliases:"
-    for k in "${(@ko)subcommands}"; do
-      echo "    ${(r:2:: :)${k}} -> $subcommands[$k]"
-    done
-    echo "\nFor stack help, see 'stack --help' (or just 's')"
-  else
-    shift 2>/dev/null
-    stack ${=subcommands[$command]:-$command} $*
-  fi
+# Check if a command exists, can be a binary in PATH or a shell
+# alias/function.
+function has() {
+  type $1 &>/dev/null
 }
 
+# Short alias for stack, with abbreviated subcommands.
+if has stack; then
+  function s() {
+    local command=$1
+
+    typeset -A subcommands
+    local subcommands=(b build c clean e exec eg "exec ghci" g ghci i install r runghc t test)
+
+    if [[ $command == "-h" ]] || [[ $command == "--help" ]]; then
+      echo "Usage: s <command or alias> <args>"
+      echo "Shorthand for 'stack'\n"
+      echo "Aliases:"
+      for k in "${(@ko)subcommands}"; do
+        echo "    ${(r:2:: :)${k}} -> $subcommands[$k]"
+      done
+      echo "\nFor stack help, see 'stack --help' (or just 's')"
+    else
+      shift 2>/dev/null
+      stack ${=subcommands[$command]:-$command} $*
+    fi
+  }
+fi
+
 # Do what I mean
-if type sbcl &>/dev/null && [[ -e ~/.dwim/run.lisp ]]; then
+if has sbcl && [[ -e ~/.dwim/run.lisp ]]; then
   function dwim() {
     sbcl --script ~/.dwim/run.lisp $*
   }
 
   alias d=dwim
 fi
-
-
-### Predicates
-
-# Check if a command exists, can be a binary in PATH or a shell
-# alias/function.
-function has() {
-  type $1 &>/dev/null
-}
 
 ### I can never remember the argument order for ssh stuff.
 
