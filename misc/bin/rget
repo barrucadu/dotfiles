@@ -73,5 +73,3 @@ except subprocess.CalledProcessError as e:
     print("\x1b[1;31mfailed with exit status {}:\x1b[0m".format(e.returncode))
     for line in e.stderr.decode("ascii").split("\n"):
         print("    " + line)
-except:
-    pass
