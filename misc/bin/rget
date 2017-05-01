@@ -10,7 +10,7 @@ def cmd(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
 
 def browse(where):
     p = cmd(["rsync", "-s", "--list-only", where])
-    lines = p.stdout.decode("ascii").split("\n")
+    lines = p.stdout.decode("utf-8").split("\n")
     entries = dict()
     n = 0
     for line in lines:
