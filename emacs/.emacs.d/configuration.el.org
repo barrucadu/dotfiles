@@ -265,6 +265,33 @@ I use =aspell= for =flyspell-mode=:
                   ispell-choices-win-default-height 5))
 #+END_SRC
 
+=proselint= is a Python program for linting prose, as the name may
+suggest. It's not a spelling or grammar checker, instead it focuses on
+logic and style.
+
+#+BEGIN_SRC emacs-lisp
+  (flycheck-define-checker proselint
+    "A linter for prose."
+    :command ("proselint" source-inplace)
+    :error-patterns
+    ((warning line-start (file-name) ":" line ":" column ": "
+              (id (one-or-more (not (any " "))))
+              (message (one-or-more not-newline)
+                       (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+              line-end))
+    :error-filter
+    (lambda (errors)
+      (delq nil
+            (mapcar
+             (lambda (err) (and (not (string-prefix-p "typography.symbols" (flycheck-error-id err))) err))
+             (flycheck-sanitize-errors errors))))
+    :modes (text-mode markdown-mode latex-mode))
+
+  (add-to-list 'flycheck-checkers 'proselint t)
+  (flycheck-add-next-checker 'tex-chktex  'proselint t)
+  (flycheck-add-next-checker 'tex-lacheck 'proselint t)
+#+END_SRC
+
 ** Accounting
 
 I use [[http://plaintextaccounting.org/][plaintext accounting]], and in particular [[http://hledger.org/][hledger]], to manage my
