@@ -4,6 +4,12 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+;; Use a non-version-controlled file for customised variables.  I
+;; generally don't use this, but some things like to vomit custom
+;; things in here.
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
 ;; Follow symlinks to version-controlled files without asking. This
 ;; has to be here, rather than in the configuration.el.org, as that
 ;; file is version-controlled: whenever it changes emacs asks for
