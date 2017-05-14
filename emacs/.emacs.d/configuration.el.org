@@ -279,12 +279,6 @@ logic and style.
               (message (one-or-more not-newline)
                        (zero-or-more "\n" (any " ") (one-or-more not-newline)))
               line-end))
-    :error-filter
-    (lambda (errors)
-      (delq nil
-            (mapcar
-             (lambda (err) (and (not (string-prefix-p "typography.symbols" (flycheck-error-id err))) err))
-             (flycheck-sanitize-errors errors))))
     :modes (text-mode markdown-mode latex-mode))
 
   (add-to-list 'flycheck-checkers 'proselint t)
