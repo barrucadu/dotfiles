@@ -32,6 +32,12 @@ use of it]].
   (setq use-package-always-ensure t)
 #+END_SRC
 
+Some things don't come in packages, alas.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/lisp/")
+#+END_SRC
+
 ** User interface
 *** Get rid of the tool bar, menu bar, and scroll bar.
 
@@ -282,8 +288,24 @@ logic and style.
     :modes (text-mode markdown-mode latex-mode))
 
   (add-to-list 'flycheck-checkers 'proselint t)
+#+END_SRC
+
+=vale= is another prose style linter, but rather more opinionated than
+=proselint=.
+
+#+BEGIN_SRC emacs-lisp
+  (customize-set-variable 'flycheck-vale-modes '(text-mode markdown-mode latex-mode))
+  (require 'flycheck-vale)
+  (add-to-list 'flycheck-checkers 'vale t)
+#+END_SRC
+
+Finally, we want both =vale= and =proselint= to work nicely together
+and in LaTeX documents.
+
+#+BEGIN_SRC emacs-lisp
   (flycheck-add-next-checker 'tex-chktex  'proselint t)
   (flycheck-add-next-checker 'tex-lacheck 'proselint t)
+  (flycheck-add-next-checker 'proselint   'vale      t)
 #+END_SRC
 
 ** Accounting
