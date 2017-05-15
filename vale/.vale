@@ -1,0 +1,12 @@
+[*]
+vale.Annotations    = suggestion
+vale.ComplexWords   = NO
+vale.Editorializing = warning
+vale.GenderBias     = suggestion
+vale.Hedging        = NO
+vale.Litotes        = suggestion
+vale.PassiveVoice   = NO
+vale.Redundancy     = error
+vale.Repetition     = error
+vale.Uncomparables  = error
+vale.Wordiness      = warning
