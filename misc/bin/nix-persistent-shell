@@ -42,8 +42,14 @@ for arg in "$@"; do
 done
 
 if [[ "$env" == "" ]]; then
-  show_help
-  exit 1
+  if [[ -e "shell.nix" ]]; then
+    env=shell
+    NIX_ENV_DIR=.
+    GC_ROOT_DIR=.gcroots
+  else
+    show_help
+    exit 1
+  fi
 fi
 
 # delete gc roots
