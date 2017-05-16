@@ -1,12 +1,30 @@
 [*]
-vale.Annotations    = suggestion
-vale.ComplexWords   = NO
-vale.Editorializing = warning
-vale.GenderBias     = suggestion
-vale.Hedging        = NO
-vale.Litotes        = suggestion
-vale.PassiveVoice   = NO
-vale.Redundancy     = error
-vale.Repetition     = error
-vale.Uncomparables  = error
-vale.Wordiness      = warning
+BasedOnStyles = vale
+
+# Disable some checkers I disagree with:
+
+# Change "provide" to "give" or "offer"; "demonstrate" to "show" or "prove"; "modify" to "change".
+#
+# Those are all common words.  This check comes from the Federal Plain
+# Language Guidelines, which seems to be aiming for a reading level
+# somewhat below the typical computer science conference, or technical
+# memo.
+vale.ComplexWords = NO
+
+# "In (5), if the interference were to empty a full MVar then the
+# right term could restore its original value." (complains about use
+# of "could").
+#
+# This sentence is necessarily about possibility, the event happens in
+# some cases but not others, and these cases are hard to predict.  I
+# found most of the hedging complaints were similar, but that may just
+# be due to the paper I ran it on.
+vale.Hedging = NO
+
+# "The tool is based on testing" ("is based" is passive).
+#
+# "The tool uses testing" would be a less-passive alternative, but
+# testing is really the core concept, so it doesn't have the same
+# nuance.  "The tool extensively uses testing" is just a longer way of
+# saying the original sentence.
+vale.PassiveVoice = NO
