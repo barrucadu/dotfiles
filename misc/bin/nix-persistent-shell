@@ -6,7 +6,6 @@ GC_ROOT_DIR=$NIX_ENV_DIR/.gcroots
 
 # arguments
 env=""
-rebuild=false
 delete=false
 
 # sanity check to avoid confusion
@@ -16,10 +15,9 @@ if [[ "$NIX_PERSISTENT_ENV" != "" ]]; then
 fi
 
 function show_help {
-  echo "usage: nix-persistent-shell [-d | --delete] [-r | --rebuild] <environment>"
+  echo "usage: nix-persistent-shell [-d | --delete] <environment>"
   echo ""
-  echo "  -d | --delete    delete generated .nix file and gc roots."
-  echo "  -r | --rebuild   rebuild generated .nix file."
+  echo "  -d | --delete    delete gc roots."
 }
 
 function nix_shell {
@@ -37,9 +35,6 @@ for arg in "$@"; do
     -d | --delete)
       delete=true
       shift;;
-    -r | --rebuild)
-      rebuild=true
-      shift;;
     *)
       env=$arg
       shift;;
@@ -51,49 +46,21 @@ if [[ "$env" == "" ]]; then
   exit 1
 fi
 
-# delete generated nix file and gc roots
+# delete gc roots
 if $delete; then
-  if [[ -e "$NIX_ENV_DIR/$env.gen.nix" ]]; then
-    rm "$NIX_ENV_DIR/$env.gen.nix"
-  fi
   if [[ -d "$GC_ROOT_DIR/$env" ]]; then
     rm -r "$GC_ROOT_DIR/$env"
+    exit 0
   else
     echo "could not find $env in $GC_ROOT_DIR" >&2
     exit 1
   fi
-  # if deleting, just do that; don't continue.
-  exit 0
-fi
-
-# delete generated nix file
-if $rebuild; then
-  if [[ -e "$NIX_ENV_DIR/$env.gen.nix" ]]; then
-    rm "$NIX_ENV_DIR/$env.gen.nix"
-  else
-    # this is not fatal
-    echo "could not find $env.gen.nix in $NIX_ENV_DIR, ignoring..." >&2
-  fi
-fi
-
-# generate nix file
-if [[ -e "$NIX_ENV_DIR/$env.packages" ]] && [[ ! -e "$NIX_ENV_DIR/$env.gen.nix" ]]; then
-    echo "with import <nixpkgs> {}; { ${ENV}Env =" > "$NIX_ENV_DIR/$env.gen.nix"
-    echo "  stdenv.mkDerivation {" >> "$NIX_ENV_DIR/$env.gen.nix"
-    echo "    name=\"$env-env\";" >> "$NIX_ENV_DIR/$env.gen.nix"
-    echo "    buildInputs = with pkgs; [" >> "$NIX_ENV_DIR/$env.gen.nix"
-    cat "$NIX_ENV_DIR/$env.packages" >> "$NIX_ENV_DIR/$env.gen.nix"
-    echo "    ];" >> "$NIX_ENV_DIR/$env.gen.nix"
-    echo "  };" >> "$NIX_ENV_DIR/$env.gen.nix"
-    echo "}" >> "$NIX_ENV_DIR/$env.gen.nix"
 fi
 
 # launch environment
 if [[ -e "$NIX_ENV_DIR/$env.nix" ]]; then
   nix_shell "$NIX_ENV_DIR/$env.nix" "$GC_ROOT_DIR/$env"
-elif [[ -e "$NIX_ENV_DIR/$env.gen.nix" ]]; then
-  nix_shell "$NIX_ENV_DIR/$env.gen.nix" "$GC_ROOT_DIR/$env"
 else
-  echo "could not find $env.packages or $env.nix in . or $NIX_ENV_DIR" >&2
+  echo "could not find $env.nix in $NIX_ENV_DIR" >&2
   exit 1
 fi
