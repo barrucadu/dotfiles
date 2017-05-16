@@ -15,7 +15,7 @@ if [[ "$NIX_PERSISTENT_ENV" != "" ]]; then
 fi
 
 function show_help {
-  echo "usage: nix-persistent-shell [-d | --delete] <environment>"
+  echo "usage: nix-pshell [-d | --delete] <environment>"
   echo ""
   echo "  -d | --delete    delete gc roots."
 }
