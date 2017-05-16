@@ -5,8 +5,7 @@ NIX_ENV_DIR=$HOME/.nixpkgs/environments
 GC_ROOT_DIR=$NIX_ENV_DIR/.gcroots
 
 # arguments
-env=""
-delete=false
+env=$1
 
 # sanity check to avoid confusion
 if [[ "$NIX_PERSISTENT_ENV" != "" ]]; then
@@ -14,58 +13,24 @@ if [[ "$NIX_PERSISTENT_ENV" != "" ]]; then
   exit 1
 fi
 
-function show_help {
-  echo "usage: nix-pshell [-d | --delete] <environment>"
-  echo ""
-  echo "  -d | --delete    delete gc roots."
-}
-
 function nix_shell {
-  local nixfile=$1
-  local gcrootdir=$2
+  local tag=$1
+  local nixfile=$2
+  local gcrootdir=$3
 
-  nix-shell "$nixfile" --indirect --add-root "$gcrootdir/gc" --command "NIX_PERSISTENT_ENV=$env PROMPT_TAG=$env zsh"
+  nix-shell "$nixfile" --indirect --add-root "$gcrootdir/gc" --command "NIX_PERSISTENT_ENV=$tag PROMPT_TAG=$tag zsh"
 }
-
-for arg in "$@"; do
-  case $arg in
-    -h | -H | --help)
-      show_help
-      exit 0;;
-    -d | --delete)
-      delete=true
-      shift;;
-    *)
-      env=$arg
-      shift;;
-  esac
-done
-
-if [[ "$env" == "" ]]; then
-  if [[ -e "shell.nix" ]]; then
-    env=shell
-    NIX_ENV_DIR=.
-    GC_ROOT_DIR=.gcroots
-  else
-    show_help
-    exit 1
-  fi
-fi
-
-# delete gc roots
-if $delete; then
-  if [[ -d "$GC_ROOT_DIR/$env" ]]; then
-    rm -r "$GC_ROOT_DIR/$env"
-    exit 0
-  else
-    echo "could not find $env in $GC_ROOT_DIR" >&2
-    exit 1
-  fi
-fi
 
 # launch environment
-if [[ -e "$NIX_ENV_DIR/$env.nix" ]]; then
-  nix_shell "$NIX_ENV_DIR/$env.nix" "$GC_ROOT_DIR/$env"
+if [[ -z "$env" ]]; then
+  if [[ -e shell.nix ]]; then
+    nix_shell "`basename $(pwd)`" shell.nix .gcroots
+  else
+    echo "no environment given and no shell.nix in the current directory" >&2
+    exit 1
+  fi
+elif [[ -e "$NIX_ENV_DIR/$env.nix" ]]; then
+  nix_shell "$env" "$NIX_ENV_DIR/$env.nix" "$GC_ROOT_DIR/$env"
 else
   echo "could not find $env.nix in $NIX_ENV_DIR" >&2
   exit 1
