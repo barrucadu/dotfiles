@@ -11,6 +11,22 @@ about 20 minutes in.
         user-mail-address "mike@barrucadu.co.uk")
 #+END_SRC
 
+** Configuration
+
+Firstly, let's set up some stuff relating to my emacs configuration
+itself.
+
+I don't really use the emacs =customize= system, preferring to keep
+things in this file. I use a separate, non-version-controlled, file
+for its settings:
+
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+
+  (when (file-exists-p custom-file)
+    (load custom-file))
+#+END_SRC
+
 ** Package management
 
 I use [[https://github.com/jwiegley/use-package][=use-package=]] to manage most of my configuration, which includes
@@ -19,11 +35,11 @@ readable config. There's a great blog post by Sebastian Wiesner [[http://www.lun
 use of it]].
 
 #+BEGIN_SRC emacs-lisp
+  (package-initialize)
+
   (require 'package)
   (setq package-enable-at-startup nil)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-
-  (package-initialize)
 
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
