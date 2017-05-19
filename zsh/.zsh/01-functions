@@ -96,7 +96,7 @@ fi
 
 # Forward a port on a remote machine to the same local port.
 function sshfwd() {
-  ssh -NL $2:localhost:$2 $1
+  ssh -NL ${2}:localhost:$2 $1
 }
 
 # Set up a SOCKS proxy to a remote machine.
