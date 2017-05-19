@@ -8,4 +8,11 @@
 (setq vc-follow-symlinks t)
 
 ;; Load the rest of the configuration.
-(org-babel-load-file "~/.emacs.d/configuration.el.org")
+(defconst *configuration-org-file* (expand-file-name (concat user-emacs-directory "configuration.el.org")))
+(defconst *configuration-el-file*  (expand-file-name (concat user-emacs-directory "configuration.el.el")))
+;; If the .el file exists and is not older than the .org file, load
+;; it. Otherwise tangle and load the .org file.
+(if (and (file-exists-p *configuration-el-file*) (not (time-less-p (nth 5 (file-attributes *configuration-el-file*))
+                                                                   (nth 5 (file-attributes *configuration-org-file*)))))
+    (load-file *configuration-el-file*)
+    (org-babel-load-file *configuration-org-file*))
