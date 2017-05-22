@@ -524,7 +524,7 @@ consistent.
         bibtex-comma-after-last-field nil)
 
   (defvar barrucadu/bibtex-fields-ignore-list
-    '("abstract" "acmid" "address" "annotation" "articleno" "doi" "eprint"
+    '("abstract" "acmid" "address" "annotation" "articleno" "eprint"
       "file" "isbn" "issn" "issue_date" "keywords" "language" "location"
       "month" "numpages" "url"))
 
