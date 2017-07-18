@@ -20,6 +20,9 @@ alias -g '.H'='2>&1 | head'
 alias -g '.T'='2>&1 | tail'
 alias -g '.1'='2>&1'
 
+# I can't spell
+alias -g gerp='grep'
+
 # Basic commands
 alias su='sudo su - '
 alias free='free -ht'
