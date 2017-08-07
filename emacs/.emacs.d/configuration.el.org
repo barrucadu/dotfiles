@@ -206,24 +206,6 @@ I use =org-mode= as my default major-mode, not just for org files.
         org-src-fontify-natively  t)
 #+END_SRC
 
-I use =org-capture= to handle adding notes to various files:
-
-#+BEGIN_SRC emacs-lisp
-  (bind-key "<f6>" 'org-capture)
-
-  (defconst barrucadu/ledger-file        (expand-file-name "~/s/ledger/current.journal.org"))
-  (defconst barrucadu/ledger-time-format "%m/%d")
-
-  (defun barrucadu/org-read-date-to-time ()
-    (date-to-time (concat (org-read-date nil nil org-read-date-final-answer) " 00:00:00")))
-
-  (setq org-capture-templates
-    '(("l" "Ledger" plain (file+datetree barrucadu/ledger-file)
-       "%(format-time-string barrucadu/ledger-time-format) %^{Description}\n    %?")
-      ("L" "Ledger (with custom date)" plain (file+datetree+prompt barrucadu/ledger-file)
-       "%(format-time-string barrucadu/ledger-time-format (barrucadu/org-read-date-to-time)) %^{Description}\n    %?")))
-#+END_SRC
-
 ** Flycheck and Flyspell
 
 The [[http://www.flycheck.org/][=flycheck=]] package is a fantastically useful piece of work, it

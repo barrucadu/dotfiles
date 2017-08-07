@@ -1,12 +1,5 @@
 ## -*- shell-script -*-
 
-# Update the ledger
-function lup(){
-  pushd $(dirname $LEDGER_FILE)
-  m4 $LEDGER_FILE.org > $LEDGER_FILE
-  popd
-}
-
 # Display information about the state of the world.
 function status(){
   clear
@@ -20,14 +13,13 @@ function status(){
   task next limit:10
 
   # This month's budget
-  lup
   echo "\n$(date +%B) Budget:"
   if $IS_GNULINUX; then
     local nextm=`date --date=+1month +"%Y-%m-01"`
   else
     local nextm=`date -v+1m +"%Y-%m-01"`
   fi
-  hledger balance -N -B -H --end=$nextm --tree budget | sed -e 1d -e 2d -e 3d -e 4d | sed 's:^            ::' | sed 's:          :  :'
+  hledger balance -N -B -H --end=$nextm --tree budget | sed -e 1d -e 2d -e 3d -e 4d -e 5d | sed 's:^            ::' | sed 's:            :  :'
 
   echo
 }
