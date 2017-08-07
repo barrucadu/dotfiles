@@ -133,37 +133,6 @@ parentheses, making them easier to visually track.
                  (add-hook 'conf-mode-hook 'rainbow-delimiters-mode)))
 #+END_SRC
 
-*** The mode line
-
-Basically copied from spacemacs. I'm using [[https://github.com/milkypostman/powerline][=powerline=]] for the fancy
-modeline, and am using [[https://github.com/TheBB/spaceline][=spaceline=]] to get a spacemacs-like mode
-line. The =:ensure spaceline= fetches and installs the =spaceline=
-package if it's not already present. The =:after spaceline-config=
-ensures that =powerline= is only started after =spaceline-config= has
-successfully run.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package spaceline-config
-    :ensure spaceline
-    :config (spaceline-compile
-      'barrucadu
-      '(((buffer-modified buffer-size input-method) :face highlight-face)
-        anzu
-        '(buffer-id remote-host buffer-encoding-abbrev)
-        ((point-position line-column buffer-position selection-info)
-         :separator " | ")
-        major-mode
-        process
-        (flycheck-error flycheck-warning flycheck-info)
-        ((minor-modes :separator spaceline-minor-modes-separator) :when active))
-      '((version-control :when active)))
-      (setq-default mode-line-format '("%e" (:eval (spaceline-ml-barrucadu)))))
-
-  (use-package powerline
-    :after spaceline-config
-    :config (setq powerline-height (truncate (* 1.0 (frame-char-height)))
-                  powerline-default-separator 'utf-8))
-#+END_SRC
 
 ** Keybindings
 
