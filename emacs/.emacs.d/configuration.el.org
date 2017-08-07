@@ -133,7 +133,17 @@ parentheses, making them easier to visually track.
                  (add-hook 'conf-mode-hook 'rainbow-delimiters-mode)))
 #+END_SRC
 
+*** Workspaces
 
+#+BEGIN_SRC emacs-lisp
+  (use-package eyebrowse
+    :ensure t
+    :config
+    (setq eyebrowse-mode-line-separator " "
+          eyebrowse-new-workspace t)
+
+    (eyebrowse-mode t))
+#+END_SRC
 ** Keybindings
 
 I use a simple prefix scheme for all my custom keybindings, pretty
@@ -152,6 +162,7 @@ on this scheme.
       ;; Global prefixes and minor modes
       "C-c @"   "outline"
       "C-c !"   "flycheck"
+      "C-c C-w" "eyebrowse"
       ;; Prefixes for my personal bindings
       "C-c b"   "buffers"
       "C-c c"   "comments"
