@@ -84,6 +84,21 @@ if has sbcl && [[ -e ~/.dwim/run.lisp ]]; then
   alias d=dwim
 fi
 
+### The nix command-line interface is awful
+if has nix-env; then
+  function nix-cshell() {
+    local channel=$1
+    shift
+    nix-shell -I "nixpkgs=$HOME/.nix-defexpr/channels/$channel/nixpkgs" $@
+  }
+
+  function nix-cenv() {
+    local channel=$1
+    shift
+    nix-env -f "$HOME/.nix-defexpr/channels/$channel/nixpkgs" $@
+  }
+fi
+
 ### I can never remember the argument order for ssh stuff.
 
 # Forward a port on a remote machine to the same local port.
