@@ -206,6 +206,30 @@ I use =org-mode= as my default major-mode, not just for org files.
         org-src-fontify-natively  t)
 #+END_SRC
 
+I'm also experimenting with org for persistent personal organisation,
+rather than just one-off todo lists:
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files '("~/s/org/inbox.org"
+                           "~/s/org/todo.org"
+                           "~/s/org/someday.org"))
+
+  (bind-key "<f6>"  'org-capture)
+  (bind-key "<f7>"  'org-refile)
+
+  (setq org-capture-templates '(("t" "Todo [inbox]"   entry (file "~/s/org/inbox.org")   "* TODO %i%?")
+                                ("T" "Todo [someday]" entry (file "~/s/org/someday.org") "* TODO %i%?")))
+
+  (setq org-refile-targets '((nil :maxlevel . 9)
+                             (org-agenda-files :maxlevel . 9)))
+
+  (setq org-outline-path-complete-in-steps nil)
+
+  (setq org-refile-use-outline-path t)
+
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)" "REFILED(r)")))
+#+END_SRC
+
 ** Flycheck and Flyspell
 
 The [[http://www.flycheck.org/][=flycheck=]] package is a fantastically useful piece of work, it
