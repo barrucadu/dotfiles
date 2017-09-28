@@ -9,9 +9,6 @@ function status(){
     fortune | sed "s:^:>  :"
   fi
 
-  # The top 10 most urgent tasks
-  task next limit:10
-
   # This month's budget
   echo "\n$(date +%B) Budget:"
   if $IS_GNULINUX; then
