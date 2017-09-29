@@ -8,7 +8,6 @@ alias o=$EDITOR
 alias O='sudoedit'
 alias g='git'
 alias m='smartmosh'
-alias t='task'
 alias '?'='status'
 
 # Pipeline
