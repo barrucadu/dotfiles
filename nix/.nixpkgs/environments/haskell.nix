@@ -12,6 +12,7 @@
       ghc802Packages.hlint
       ghc802Packages.hscolour
       ghc802Packages.stylish-haskell
+      ghc802Packages.weeder
       stack
     ];
   };
