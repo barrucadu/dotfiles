@@ -5,6 +5,7 @@
   packageOverrides = super: let self = super.pkgs; in with self; rec {
     # Development
     ghc802Packages = super.haskell.packages.ghc802;
+    llvm5Debug = super.llvm_5.override { debugVersion = true; };
 
     profiledHaskellPackages = self.haskellPackages.override {
       overrides = self: super: {
