@@ -9,6 +9,7 @@
       gcc
       gdb
       gnumake
+      llvm
       m4
       pkgconfig
       valgrind
