@@ -227,7 +227,7 @@ rather than just one-off todo lists:
 
   (setq org-refile-use-outline-path t)
 
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)" "REFILED(r)")))
+  (setq org-todo-keywords '((sequence "TODO(t)" "IN-PROGRESS(p)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)" "REFILED(r)")))
 #+END_SRC
 
 ** Flycheck and Flyspell
