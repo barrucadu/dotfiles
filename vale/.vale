@@ -3,6 +3,10 @@ StylesPath = .nix-profile/share/vale/styles
 [*]
 BasedOnStyles = vale
 
+# Enable some extra checkers
+Joblint.Gendered = YES
+TheEconomist.Terms = YES
+
 # Disable some checkers I disagree with:
 
 # Change "provide" to "give" or "offer"; "demonstrate" to "show" or "prove"; "modify" to "change".
