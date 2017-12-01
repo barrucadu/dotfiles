@@ -13,6 +13,11 @@ with pkgs; buildGoPackage rec {
     sha256 = "1xaj0y6v7sv47ihaz6zs5y7dxasiingma6akr1wggzb3h457nj20";
   };
 
+  postInstall = ''
+    mkdir -p $bin/share/vale/
+    mv go/src/github.com/ValeLint/vale/styles $bin/share/vale/
+  '';
+
   # For some reason this needs to be a separate file.  SAD!
   goDeps = ./vale-deps.nix;
 

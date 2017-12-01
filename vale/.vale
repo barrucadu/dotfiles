@@ -1,3 +1,5 @@
+StylesPath = .nix-profile/share/vale/styles
+
 [*]
 BasedOnStyles = vale
 
