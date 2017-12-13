@@ -16,7 +16,7 @@ function status(){
   else
     local nextm=`date -v+1m +"%Y-%m-01"`
   fi
-  hledger balance -N -B -H --end=$nextm --tree accum month | sed -e 1d -e 2d -e 3d -e 4d | sed 's:^          ::' | sed 's:          :  :'
+  hledger balance -N -B -H --end=$nextm --tree accum month saved | sed -e 1d -e 2d -e 3d -e 4d | sed 's:^          ::' | sed 's:          :  :'
 
   echo
 }
