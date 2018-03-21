@@ -72,15 +72,6 @@ if has stack; then
   }
 fi
 
-# Do what I mean
-if has sbcl && [[ -e ~/.dwim/run.lisp ]]; then
-  function dwim() {
-    sbcl --script ~/.dwim/run.lisp $*
-  }
-
-  alias d=dwim
-fi
-
 ### The nix command-line interface is awful
 if has nix-env; then
   function nix-cshell() {
