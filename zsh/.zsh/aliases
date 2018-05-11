@@ -64,7 +64,7 @@ else
 fi
 
 # hledger
-alias bal="hledger balance -MB --tree"
+alias bal="hledger balance -M --tree"
 
 # Miscellanious
 alias reload='source ~/.zshenv; source ~/.zshrc'
