@@ -463,6 +463,13 @@ Like with Go, this formats code on save.
     :mode ("\\.toml``'" . toml-mode))
 #+END_SRC
 
+*** TypeScript
+
+#+BEGIN_SRC emacs-lisp
+  (use-package typescript-mode
+    :mode ("\\.ts\\'" "\\.tsx\\'"))
+#+END_SRC
+
 *** YAML
 
 #+BEGIN_SRC emacs-lisp
