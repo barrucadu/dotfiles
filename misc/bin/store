@@ -1,0 +1,55 @@
+#!/usr/bin/env zsh
+
+LOCAL_HTTP_DIR=$HOME/http
+REMOTE_HTTP_DIR=innsmouth:~/http
+HTTP_HOST="https://misc.barrucadu.co.uk"
+
+ty=$1
+delete=false
+shift
+
+if [[ $ty == "-d" ]]; then
+  ty=$1
+  delete=true
+  shift
+fi
+
+if [[ $ty != "7day" ]] && [[ $ty != "14day" ]] && [[ $ty != "28day" ]] && [[ $ty != "forever" ]]; then
+  echo "expected one of: 7day, 14day, 28day, forever"
+  exit 1
+fi
+
+for file in "$@"; do
+  checksum="bad"
+  if [[ -f $file ]]; then
+    checksum=`md5sum -b $file | sed 's: .*::'`
+  elif [[ -d $file ]]; then
+    checksum=`ls -R $file | md5sum - | sed 's: .*::'`
+  else
+    echo "no such file: '$file'"
+    continue
+  fi
+
+  if [[ `hostname` == "innsmouth" ]]; then
+    dest=$LOCAL_HTTP_DIR/$ty/$checksum
+    mkdir -p $dest
+    if $delete; then
+      mv $file $dest
+    else
+      cp -r $file $dest
+    fi
+  else
+    tmp=`mktemp -d`
+    mkdir -p $tmp/$checksum
+    cp -r $file $tmp/$checksum
+
+    scp -r $tmp/$checksum $REMOTE_HTTP_DIR/$ty >/dev/null || exit 1
+    rm -r $tmp
+
+    if $delete; then
+      rm -r $file
+    fi
+  fi
+
+  echo "$HTTP_HOST/$ty/$checksum/$file"
+done
