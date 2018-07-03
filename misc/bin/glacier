@@ -1,0 +1,61 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python3Packages.boto
+
+'''
+A quick Python uploader script for pushing files to AWS Glacier storage.
+Copied from https://gist.github.com/saulcosta/ec1bc5c9db6fff962d6a
+'''
+
+import argparse
+import os.path
+import sys
+
+from datetime import datetime
+
+from boto.glacier.concurrent import ConcurrentUploader
+from boto.glacier.layer1 import Layer1
+
+
+def upload_archive(glacier_layer, archive, description, vault):
+    '''
+    Upload the archive.
+    @glacier_layer: connection to aws
+    @archive: absolute path to archive file to upload
+    @description: description for the archive file you want to upload
+    @vault: vault you want to upload the archive to
+    '''
+    # Make sure the archive exists
+    if not os.path.isfile(archive):
+        raise ValueError('%s does not exist!')
+
+    # Upload the archive
+    print('Started upload for %s to %s at %s.' % (archive, vault, datetime.utcnow()))
+    uploader = ConcurrentUploader(glacier_layer, vault, part_size=128*1024*1024, num_threads=4)
+    archive_id = uploader.upload(archive, description)
+    print('%s was uploaded to %s (archive ID: %s)' % (archive, vault, archive_id))
+
+
+arg_parser = argparse.ArgumentParser(description=__doc__)
+arg_parser.add_argument(
+    '-a', dest='archive', required=True, help='Absolute path for archive file to upload.')
+arg_parser.add_argument(
+    '-d', dest='description', required=True, help='Description for archive file.')
+arg_parser.add_argument(
+    '-R', dest='region', required=False, help='Region to use.', default='eu-west-2')
+arg_parser.add_argument(
+    '-v', dest='vault', required=True, help='Vault to store the archive in.')
+parsed_args = arg_parser.parse_args()
+
+# Try to load the environment variables
+try:
+    aws_access_key_id = os.environ['AWS_ACCESS_KEY_ID']
+    aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY']
+except KeyError as ex:
+    raise ValueError('%s environment variable is not set!' % ex)
+
+glacier_layer = Layer1(
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
+    region_name=parsed_args.region)
+
+upload_archive(glacier_layer, parsed_args.archive, parsed_args.description, parsed_args.vault)
