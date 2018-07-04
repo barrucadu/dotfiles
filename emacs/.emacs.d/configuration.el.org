@@ -456,6 +456,13 @@ Like with Go, this formats code on save.
                   sh-basic-offset 2))
 #+END_SRC
 
+*** Terraform
+
+#+BEGIN_SRC emacs-lisp
+  (use-package terraform-mode
+    :mode ("\\.tf``'" . terraform-mode))
+#+END_SRC
+
 *** TOML
 
 #+BEGIN_SRC emacs-lisp
