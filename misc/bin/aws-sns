@@ -1,0 +1,33 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python3Packages.boto3
+
+'''
+A script to push a message from stdin to a SNS topic.
+'''
+
+import argparse
+import boto3
+import sys
+
+arg_parser = argparse.ArgumentParser(description=__doc__)
+arg_parser.add_argument(
+    '-t', dest='topic', required=True, help='Topic ARN.')
+arg_parser.add_argument(
+    '-s', dest='subject', required=True, help='Subject for email.')
+arg_parser.add_argument(
+    '-R', dest='region', required=False, help='Region to use.', default='eu-west-1')
+parsed_args = arg_parser.parse_args()
+
+# boto3 checks for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env
+# vars automatically.
+client = boto3.client('sns', region_name=parsed_args.region)
+
+# message body is stdin
+message = sys.stdin.read()
+
+response = client.publish(
+    TopicArn=parsed_args.topic,
+    Subject=parsed_args.subject,
+    Message=message
+)
+print('Message ID: %s' % response['MessageId'])
