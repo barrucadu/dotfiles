@@ -442,6 +442,12 @@ This runs =gofmt= on save, which is really convenient.
     :mode "\\.nix\\'")
 #+END_SRC
 
+*** Puppet
+
+#+BEGIN_SRC emacs-lisp
+  (use-package puppet-mode
+    :mode "\\.pp\\'")
+#+END_SRC
 *** Rust
 
 Like with Go, this formats code on save.
