@@ -460,6 +460,12 @@ Like with Go, this formats code on save.
     :init (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
 #+END_SRC
 
+*** Ruby
+
+#+BEGIN_SRC emacs-lisp
+(setq ruby-insert-encoding-magic-comment nil)
+#+END_SRC
+
 *** Shell
 
 #+BEGIN_SRC emacs-lisp
