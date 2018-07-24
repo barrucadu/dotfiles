@@ -421,6 +421,13 @@ This runs =gofmt= on save, which is really convenient.
                  (add-hook 'before-save-hook 'barrucadu/maybe-gofmt-before-save)))
 #+END_SRC
 
+*** Groovy
+
+#+BEGIN_SRC emacs-lisp
+  (use-package groovy-mode
+    :mode "\\.groovy\\'")
+#+END_SRC
+
 *** Lua
 
 #+BEGIN_SRC emacs-lisp
