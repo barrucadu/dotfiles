@@ -1,0 +1,64 @@
+# set up ssh config like https://github.com/alphagov/govuk-puppet/blob/master/development-vm/ssh_config
+
+GOVUK_DIR=$HOME/govuk
+
+# gssh env class [arg...]   - connect to a machine
+# gaws env arg...           - run an awscli command
+#
+# if `shyaml` is in path:
+#   gnode env app           - look up the machine class an app runs on
+#   gconsole env app        - open an app console
+#
+# otherwise:
+#   gconsole env class app  - open an app console on the given machine class
+#
+# these functions are only defined if ~/govuk exists
+
+if [[ -d "$GOVUK_DIR" ]]; then
+  function gssh(){
+    env=$1
+    class=$2
+    shift
+    shift
+    ssh $(ssh $env "govuk_node_list --single-node -c $class").$env "$@"
+  }
+
+  function gaws(){
+    env=$1
+    shift
+    aws --profile "govuk-$env" "$@"
+  }
+
+  # `has` is defined in 01-functions
+  if has shyaml; then
+    function gclass(){
+      env=$1
+      app=$2
+
+      yamlfile="$GOVUK_DIR/govuk-puppet/hieradata/common.yaml"
+      if [[ "$env" == "integration" ]]; then
+        yamlfile="$GOVUK_DIR/govuk-puppet/hieradata_aws/common.yaml"
+      fi
+
+      shyaml get-value node_class < $yamlfile | grep -v '^ ' | sed 's/://' | while read class; do
+        if shyaml get-value "node_class.$class.apps" < $yamlfile | grep -q "^- ${app}$"; then
+          echo $class
+          return
+        fi
+      done
+    }
+
+    function gconsole(){
+      env=$1
+      app=$2
+      gssh $env $(gclass $env $app) -t "exec govuk_app_console $app"
+    }
+  else
+    function gconsole(){
+      env=$1
+      class=$2
+      app=$3
+      gssh $env $class -t "exec govuk_app_console $app"
+    }
+  fi
+fi
