@@ -24,3 +24,5 @@
 	t = tag -s
 	su = submodule foreach git pull
 	G = grep
+[github]
+	user = barrucadu

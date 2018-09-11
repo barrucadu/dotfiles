@@ -610,6 +610,17 @@ The [[https://magit.vc/][=magit=]] package is the best thing since sliced bread:
                   ("Path"    99 magit-repolist-column-path                   ()))))
 #+END_SRC
 
+The =magithub= package extends =magit= with GitHub API stuff (eg,
+creating PRs and forking repos):
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magithub
+    :after magit
+    :config
+    (magithub-feature-autoinject t)
+    (setq magithub-clone-default-directory "~/projects"))
+#+END_SRC
+
 The [[https://github.com/pidu/git-timemachine][=git-timemachine=]] package is quite handy for stepping through old
 versions of things:
 
