@@ -72,6 +72,32 @@ if has stack; then
   }
 fi
 
+# Fetch many git repositories
+function git-fetchall() {
+  for d in *; do
+    if [[ -e $d/.git ]]; then
+      pushd $d
+      echo $d
+      git fetch --prune --all
+      git gc --auto --aggressive --prune
+      popd
+    fi
+  done
+}
+
+# Recent git history, across repositories
+function git-history() {
+  local since=$1
+  for d in *; do
+    if [[ -e $d/.git ]]; then
+      pushd $d;
+      local repo=`printf '%-16s' "$d"`
+      git log --since=$since --pretty=format:"${repo:0:16} %ai (%h):  %s" --author='Michael Walker' --all
+      popd
+    fi
+  done
+}
+
 ### The nix command-line interface is awful
 if has nix-env; then
   function nix-cshell() {
