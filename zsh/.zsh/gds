@@ -6,7 +6,7 @@ GOVUK_DIR=$HOME/govuk
 # gaws env arg...           - run an awscli command
 #
 # if `shyaml` is in path:
-#   gnode env app           - look up the machine class an app runs on
+#   gclass env app          - look up the machine class an app runs on
 #   gconsole env app        - open an app console
 #
 # if `crudini` is in path:
