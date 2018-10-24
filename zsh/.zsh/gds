@@ -10,7 +10,10 @@ GOVUK_DIR=$HOME/govuk
 #   gconsole env app        - open an app console
 #
 # if `crudini` is in path:
-#   gassume env             - assume-role in AWS
+#   gaws-assume env         - assume-role in AWS
+#   gaws-run env arg...     - assume-role and run `arg...` with credentials in env vars
+#   gaws-sh env             - shorthand for `gaws-run $env zsh`, also changing the prompt
+#   gaws-invoke env arg...  - shorthand for `gaws-run $env aws arg...`
 #
 # these functions are only defined if ~/govuk exists
 
@@ -56,12 +59,39 @@ if [[ -d "$GOVUK_DIR" ]]; then
   fi
 
   if has crudini; then
-    function gassume(){
+    function gaws-assume(){
       env=$1
       profile="govuk-$env"
       aws --profile $profile sts assume-role \
           --role-arn `crudini --get ~/.aws/config "profile $profile" role_arn` \
           --role-session-name $USER
+    }
+
+    function gaws-sh(){
+      env=$1
+      shift
+      PROMPT_TAG="aws:$env" gaws-run $env zsh "$@"
+    }
+
+    function gaws-invoke(){
+      env=$1
+      shift
+      gaws-run $env aws "$@"
+    }
+
+    function gaws-run(){
+      function _get_credentials_key {
+        echo $credentials | ruby -e "require 'json'; c = JSON.parse(STDIN.read)['Credentials']; STDOUT << c['$1']"
+      }
+
+      env=$1
+      shift
+      credentials=$(gaws-assume $env) || exit $?
+      AWS_ACCESS_KEY_ID=$(_get_credentials_key AccessKeyId)         \
+      AWS_SECRET_ACCESS_KEY=$(_get_credentials_key SecretAccessKey) \
+      AWS_SESSION_TOKEN=$(_get_credentials_key SessionToken)        \
+      AWS_EXPIRATION=$(_get_credentials_key Expiration)             \
+      "$@"
     }
   fi
 fi
