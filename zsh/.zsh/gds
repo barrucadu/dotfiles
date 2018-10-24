@@ -12,6 +12,9 @@ GOVUK_DIR=$HOME/govuk
 # otherwise:
 #   gconsole env class app  - open an app console on the given machine class
 #
+# if `crudini` is in path:
+#   gassume env             - assume-role in AWS
+#
 # these functions are only defined if ~/govuk exists
 
 if [[ -d "$GOVUK_DIR" ]]; then
@@ -59,6 +62,16 @@ if [[ -d "$GOVUK_DIR" ]]; then
       class=$2
       app=$3
       gssh $env $class -t "exec govuk_app_console $app"
+    }
+  fi
+
+  if has crudini; then
+    function gassume(){
+      env=$1
+      profile="govuk-$env"
+      aws --profile $profile sts assume-role \
+          --role-arn `crudini --get ~/.aws/config "profile $profile" role_arn` \
+          --role-session-name $USER
     }
   fi
 fi
