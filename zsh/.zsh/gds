@@ -9,9 +9,6 @@ GOVUK_DIR=$HOME/govuk
 #   gnode env app           - look up the machine class an app runs on
 #   gconsole env app        - open an app console
 #
-# otherwise:
-#   gconsole env class app  - open an app console on the given machine class
-#
 # if `crudini` is in path:
 #   gassume env             - assume-role in AWS
 #
@@ -55,13 +52,6 @@ if [[ -d "$GOVUK_DIR" ]]; then
       env=$1
       app=$2
       gssh $env $(gclass $env $app) -t "exec govuk_app_console $app"
-    }
-  else
-    function gconsole(){
-      env=$1
-      class=$2
-      app=$3
-      gssh $env $class -t "exec govuk_app_console $app"
     }
   fi
 
