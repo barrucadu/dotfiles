@@ -466,6 +466,13 @@ Like with Go, this formats code on save.
 (setq ruby-insert-encoding-magic-comment nil)
 #+END_SRC
 
+*** Scala
+
+#+BEGIN_SRC emacs-lisp
+  (use-package scala-mode
+    :mode "\\.scala\\'")
+#+END_SRC
+
 *** Shell
 
 #+BEGIN_SRC emacs-lisp
