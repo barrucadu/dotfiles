@@ -3,7 +3,6 @@
 GOVUK_DIR=$HOME/govuk
 
 # gssh env class [arg...]   - connect to a machine
-# gaws env arg...           - run an awscli command
 #
 # if `shyaml` is in path:
 #   gclass env app          - look up the machine class an app runs on
@@ -24,12 +23,6 @@ if [[ -d "$GOVUK_DIR" ]]; then
     shift
     shift
     ssh $(ssh $env "govuk_node_list --single-node -c $class").$env "$@"
-  }
-
-  function gaws(){
-    env=$1
-    shift
-    aws --profile "govuk-$env" "$@"
   }
 
   # `has` is defined in 01-functions
