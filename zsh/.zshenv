@@ -58,6 +58,12 @@ if [[ -z $DONE_PATH_MODIFICATIONS ]]; then
   # add /usr/local/bin ahead of defaults
   export PATH="/usr/local/bin:$PATH"
 
+  # add user-level python things
+  pypath="$HOME/Library/Python/3.6/bin"
+  if [[ -d $pypath ]]; then
+    export PATH="$pypath:$PATH"
+  fi
+
   # add things in ~ ahead of all
   export PATH="$GOPATH/bin:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
 
