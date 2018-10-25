@@ -6,6 +6,7 @@ GOVUK_DIR=$HOME/govuk
 #
 # if `shyaml` is in path:
 #   gclass env app          - look up the machine class an app runs on
+#   goto env app [arg...]   - connect to a machine, looking up the class
 #   gconsole env app        - open an app console
 #
 # if `crudini` is in path:
@@ -44,10 +45,18 @@ if [[ -d "$GOVUK_DIR" ]]; then
       done
     }
 
+    function goto(){
+      env=$1
+      app=$2
+      shift
+      shift
+      gssh $env $(gclass $env $app)
+    }
+
     function gconsole(){
       env=$1
       app=$2
-      gssh $env $(gclass $env $app) -t "exec govuk_app_console $app"
+      goto $env $app -t "exec govuk_app_console $app"
     }
   fi
 
