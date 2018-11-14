@@ -355,13 +355,19 @@ remember, "dwim" is an acronym for "do what I mean".
 
 Ok, that's it for preliminaries.
 
+*** Elixir
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elixir-mode
+    :mode "\\.ex\\'\\|\\.exs\\'")
+#+END_SRC
+
 *** Forth
 
 #+BEGIN_SRC emacs-lisp
   (use-package forth-mode
     :mode "\\.fs\\'")
 #+END_SRC
-
 *** Haskell
 
 #+BEGIN_SRC emacs-lisp
