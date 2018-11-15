@@ -50,7 +50,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
       app=$2
       shift
       shift
-      gssh $env $(gclass $env $app)
+      gssh $env $(gclass $env $app) "$@"
     }
 
     function gconsole(){
