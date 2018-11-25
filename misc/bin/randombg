@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-WALLPAPERDIR=${1:-/mnt/data/wallpaper}
+WALLPAPERDIR=${1:-~/s/wallpaper}
 
 if `xrandr -q --verbose | grep ' connected' | cut -d' ' -f6 | grep -q normal`; then
   WALLPAPERDIR="$WALLPAPERDIR/landscape"
