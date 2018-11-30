@@ -9,6 +9,8 @@ function gds(){
 
 if [[ -d "$GOVUK_DIR" ]]; then
   function gds(){
+    echo 'gclasses env              - list classes'
+    echo 'gnodes env [class]        - list nodes, optionally restricted by class'
     echo 'gssh env class [arg...]   - connect to a machine'
 
     if has shyaml; then
@@ -27,6 +29,21 @@ if [[ -d "$GOVUK_DIR" ]]; then
       echo 'gaws-run env arg...       - assume-role and run `arg...` with credentials in env vars'
       echo 'gaws-sh env               - shorthand for `gaws-run $env zsh`, also changing the prompt'
       echo 'gaws-do env arg...        - shorthand for `gaws-run $env aws arg...`'
+    fi
+  }
+
+  function gclasses(){
+    env=$1
+    ssh $env "govuk_node_list --classes"
+  }
+
+  function gnodes(){
+    env=$1
+    class=$2
+    if [[ -z $class ]]; then
+      ssh $env govuk_node_list
+    else
+      ssh $env "govuk_node_list -c $2"
     fi
   }
 
