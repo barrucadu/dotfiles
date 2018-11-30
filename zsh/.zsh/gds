@@ -2,21 +2,34 @@
 
 GOVUK_DIR=$HOME/govuk
 
-# gssh env class [arg...]   - connect to a machine
-#
-# if `shyaml` is in path:
-#   gclass env app          - look up the machine class an app runs on
-#   goto env app [arg...]   - connect to a machine, looking up the class
-#
-# if `crudini` is in path:
-#   gaws-assume env         - assume-role in AWS
-#   gaws-run env arg...     - assume-role and run `arg...` with credentials in env vars
-#   gaws-sh env             - shorthand for `gaws-run $env zsh`, also changing the prompt
-#   gaws-do env arg...      - shorthand for `gaws-run $env aws arg...`
-#
-# these functions are only defined if ~/govuk exists
+function gds(){
+  echo 'no gds functions'
+  exit 1
+}
 
 if [[ -d "$GOVUK_DIR" ]]; then
+  function gds(){
+    echo 'gssh env class [arg...]   - connect to a machine'
+
+    if has shyaml; then
+      echo
+      echo '== apps'
+      echo
+      echo 'gclass env app            - look up the machine class an app runs on'
+      echo 'goto env app [arg...]     - connect to a machine, looking up the class'
+    fi
+
+    if has crudini; then
+      echo
+      echo '== aws'
+      echo
+      echo 'gaws-assume env           - assume-role in AWS'
+      echo 'gaws-run env arg...       - assume-role and run `arg...` with credentials in env vars'
+      echo 'gaws-sh env               - shorthand for `gaws-run $env zsh`, also changing the prompt'
+      echo 'gaws-do env arg...        - shorthand for `gaws-run $env aws arg...`'
+    fi
+  }
+
   function gssh(){
     env=$1
     class=$2
