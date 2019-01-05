@@ -1,5 +1,32 @@
 ## -*- shell-script -*-
 
+# Set the prompt tag.
+function ptag(){
+  PROMPT_TAG=$1
+}
+
+# Unset the prompt tag.
+function puntag(){
+  PROMPT_TAG=""
+}
+
+# Push to the prompt tag
+function ptag_push(){
+  if [[ -z $PROMPT_TAG ]]; then
+    PROMPT_TAG=$1
+  else
+    PROMPT_TAG=$PROMPT_TAG/$1
+  fi
+}
+
+# Pop from the prompt tag.
+function ptag_pop(){
+  PROMPT_TAG=`dirname $PROMPT_TAG`
+  if [[ "$PROMPT_TAG" == "." ]]; then
+    PROMPT_TAG=""
+  fi
+}
+
 # Display information about the state of the world.
 function status(){
   clear
@@ -111,6 +138,13 @@ if has nix-env; then
     shift
     nix-env -f "$HOME/.nix-defexpr/channels/$channel/nixpkgs" $@
   }
+
+  function with() {
+    packages=$@
+    ptag_push "nix"
+    PROMPT_TAG=$PROMPT_TAG nix-shell -p $packages --run zsh
+    ptag_pop
+  }
 fi
 
 ### I can never remember the argument order for ssh stuff.
@@ -123,34 +157,4 @@ function sshfwd() {
 # Set up a SOCKS proxy to a remote machine.
 function knit() {
   ssh -ND $2 $1
-}
-
-### Prompt tag
-
-
-# Set the prompt tag.
-function ptag(){
-  PROMPT_TAG=$1
-}
-
-# Unset the prompt tag.
-function puntag(){
-  PROMPT_TAG=""
-}
-
-# Push to the prompt tag
-function ptag_push(){
-  if [[ -z $PROMPT_TAG ]]; then
-    PROMPT_TAG=$1
-  else
-    PROMPT_TAG=$PROMPT_TAG/$1
-  fi
-}
-
-# Pop from the prompt tag.
-function ptag_pop(){
-  PROMPT_TAG=`dirname $PROMPT_TAG`
-  if [[ "$PROMPT_TAG" == "." ]]; then
-    PROMPT_TAG=""
-  fi
 }
