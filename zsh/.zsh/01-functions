@@ -126,13 +126,7 @@ function git-history() {
 }
 
 ### The nix command-line interface is awful
-if has nix-env; then
-  function nix-cenv() {
-    local channel=$1
-    shift
-    nix-env -f "$HOME/.nix-defexpr/channels/$channel/nixpkgs" $@
-  }
-
+if has nix-shell; then
   function with() {
     packages=$@
     ptag_push "nix"
