@@ -128,8 +128,13 @@ function git-history() {
 ### The nix command-line interface is awful
 if has nix-shell; then
   function with() {
-    ptag_push "nix"
-    PROMPT_TAG=$PROMPT_TAG nix-shell -p $@ --run zsh
+    if [[ -z $WITH ]]; then
+      NEW_WITH=$@
+    else
+      NEW_WITH=$WITH/$@
+    fi
+    ptag_push "with"
+    PROMPT_TAG=$PROMPT_TAG WITH=$NEW_WITH nix-shell -p $@ --run zsh
     ptag_pop
   }
 fi
