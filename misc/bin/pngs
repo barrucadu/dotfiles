@@ -1,0 +1,9 @@
+#!/run/current-system/sw/bin/env nix-shell
+#!nix-shell -i bash -p pngcrush
+
+for file in $@; do
+  outfile=`mktemp`
+  pngcrush -brute -reduce $file $outfile
+  mv $outfile $file
+done
+
