@@ -8,6 +8,12 @@ function gds(){
 }
 
 if [[ -d "$GOVUK_DIR" ]]; then
+  # terraform version manager, installed with homebrew
+  if [[ -f /usr/local/share/chtf/chtf.sh ]]; then
+    source /usr/local/share/chtf/chtf.sh
+  fi
+
+  # functions
   function gds(){
     echo 'gclasses env              - list classes'
     echo 'gnodes env [class]        - list nodes, optionally restricted by class'
