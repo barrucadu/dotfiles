@@ -20,6 +20,8 @@ if [[ -d "$GOVUK_DIR" ]]; then
     echo 'gclasses env              - list classes'
     echo 'gnodes env [class]        - list nodes, optionally restricted by class'
     echo 'gssh env class [arg...]   - connect to a machine'
+    echo 'gforeach env class arg... - run the command on each node of that class in that environment'
+    echo '                          - use `gforeach env "" arg...` to run on all nodes'
 
     if has shyaml; then
       echo
@@ -61,6 +63,16 @@ if [[ -d "$GOVUK_DIR" ]]; then
     shift
     shift
     ssh $(ssh $env "govuk_node_list --single-node -c $class").$env "$@"
+  }
+
+  function gforeach(){
+    env=$1
+    class=$2
+    shift
+    shift
+    for ip in `gnodes $env $class`; do
+      ssh "$ip.$env" "$@"
+    done
   }
 
   # `has` is defined in 01-functions
