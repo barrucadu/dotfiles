@@ -1,3 +1,5 @@
+## -*- shell-script -*-
+
 # set up ssh config like https://github.com/alphagov/govuk-puppet/blob/master/development-vm/ssh_config
 
 GOVUK_DIR=$HOME/govuk

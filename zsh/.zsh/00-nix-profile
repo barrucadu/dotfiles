@@ -1,3 +1,5 @@
+## -*- shell-script -*-
+
 if [[ -e ~/.nix-profile/etc/profile.d/nix.sh ]] && [[ "$NIX_LINK" == "" ]]; then
   source ~/.nix-profile/etc/profile.d/nix.sh
 fi
