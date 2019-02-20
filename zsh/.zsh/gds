@@ -6,7 +6,6 @@ GOVUK_DIR=$HOME/govuk
 
 function gds(){
   echo 'no gds functions'
-  exit 1
 }
 
 if [[ -d "$GOVUK_DIR" ]]; then
