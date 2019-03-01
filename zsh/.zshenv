@@ -40,6 +40,8 @@ export TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S'
 
 export GOPATH="$HOME/go"
 
+export LESS="-FXRS"
+
 #### Path
 
 if [[ -z $DONE_PATH_MODIFICATIONS ]]; then
