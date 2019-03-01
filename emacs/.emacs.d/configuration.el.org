@@ -323,7 +323,7 @@ finances. It's really nice and I highly recommend it.
     (setq ledger-binary-path (executable-find "hledger")
           ledger-mode-should-check-version nil
           ledger-init-file-name " "
-          ledger-post-amount-alignment-column 64
+          ledger-post-amount-alignment-column 80
           ledger-highlight-xact-under-point nil)
     (add-hook 'ledger-mode-hook (lambda () (setq tab-width 1)))
     (add-hook 'ledger-mode-hook 'orgstruct-mode))
