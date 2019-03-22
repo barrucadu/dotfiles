@@ -20,26 +20,22 @@ if [[ $ty != "7day" ]] && [[ $ty != "14day" ]] && [[ $ty != "28day" ]] && [[ $ty
 fi
 
 for file in "$@"; do
-  checksum="bad"
-  if [[ -f $file ]]; then
-    checksum=`md5sum -b $file | sed 's: .*::'`
-  elif [[ -d $file ]]; then
-    checksum=`ls -R $file | md5sum - | sed 's: .*::'`
-  else
+  if [[ ! -e $file ]]; then
     echo "no such file: '$file'"
     continue
   fi
 
+  uuid=$(uuidgen)
   tmp=`mktemp -d`
-  mkdir -p $tmp/$checksum
-  cp -r $file $tmp/$checksum
+  mkdir -p $tmp/$uuid
+  cp -r $file $tmp/$uuid
 
-  scp -r $tmp/$checksum $REMOTE_HTTP_DIR/$ty >/dev/null || exit 1
+  scp -r $tmp/$uuid $REMOTE_HTTP_DIR/$ty >/dev/null || exit 1
   rm -r $tmp
 
   if $delete; then
       rm -r $file
   fi
 
-  echo "$HTTP_HOST/$ty/$checksum/$file"
+  echo "$HTTP_HOST/$ty/$uuid/$file"
 done
