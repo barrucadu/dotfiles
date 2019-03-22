@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 LOCAL_HTTP_DIR=$HOME/http
-REMOTE_HTTP_DIR=innsmouth:~/http
+REMOTE_HTTP_DIR=barrucadu.co.uk:~/http
 HTTP_HOST="https://misc.barrucadu.co.uk"
 
 ty=$1
@@ -30,25 +30,15 @@ for file in "$@"; do
     continue
   fi
 
-  if [[ `hostname` == "innsmouth" ]]; then
-    dest=$LOCAL_HTTP_DIR/$ty/$checksum
-    mkdir -p $dest
-    if $delete; then
-      mv $file $dest
-    else
-      cp -r $file $dest
-    fi
-  else
-    tmp=`mktemp -d`
-    mkdir -p $tmp/$checksum
-    cp -r $file $tmp/$checksum
+  tmp=`mktemp -d`
+  mkdir -p $tmp/$checksum
+  cp -r $file $tmp/$checksum
 
-    scp -r $tmp/$checksum $REMOTE_HTTP_DIR/$ty >/dev/null || exit 1
-    rm -r $tmp
+  scp -r $tmp/$checksum $REMOTE_HTTP_DIR/$ty >/dev/null || exit 1
+  rm -r $tmp
 
-    if $delete; then
+  if $delete; then
       rm -r $file
-    fi
   fi
 
   echo "$HTTP_HOST/$ty/$checksum/$file"
