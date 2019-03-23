@@ -63,15 +63,15 @@ zstyle ':completion:*'                 completer _complete _ignored _files
 autoload -Uz compinit
 compinit
 
-setopt menu_complete
 setopt hash_list_all
+setopt menu_complete
 
 ##### Directory navigation
 setopt auto_cd
 setopt auto_pushd
+setopt chase_links
 setopt pushd_silent
 setopt pushd_to_home
-setopt chase_links
 
 ##### Globbing
 setopt extended_glob
@@ -81,5 +81,5 @@ setopt multibyte
 setopt null_glob
 
 ##### Misc
-setopt interactive_comments
 setopt correct
+setopt interactive_comments
