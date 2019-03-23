@@ -63,6 +63,7 @@ zstyle ':completion:*'                 completer _complete _ignored _files
 autoload -Uz compinit
 compinit
 
+setopt complete_aliases
 setopt hash_list_all
 setopt menu_complete
 
