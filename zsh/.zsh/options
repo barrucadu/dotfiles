@@ -13,26 +13,37 @@ setopt hist_verify
 setopt share_history
 
 ##### Keybindings
-bindkey "\e[1~"  beginning-of-line
-bindkey "\e[4~"  end-of-line
-bindkey "\e[5~"  beginning-of-history
-bindkey "\e[6~"  end-of-history
-bindkey "\e[3~"  delete-char
-bindkey "\e[2~"  quoted-insert
-bindkey "\e[5C"  forward-word
-bindkey "\eOc"   emacs-forward-word
-bindkey "\e[5D"  backward-word
-bindkey "\eOd"   emacs-backward-word
-bindkey "\e\e[C" forward-word
-bindkey "\e\e[D" backward-word
-bindkey "^H"     backward-delete-word
-bindkey "\e[8~"  end-of-line
-bindkey "\e[7~"  beginning-of-line
-bindkey "\eOH"   beginning-of-line
-bindkey "\eOF"   end-of-line
-bindkey "\e[H"   beginning-of-line
-bindkey "\e[F"   end-of-line
-bindkey '^i'     expand-or-complete-prefix
+typeset -A key
+key=(
+    Home     "${terminfo[khome]}"
+    End      "${terminfo[kend]}"
+    Insert   "${terminfo[kich1]}"
+    Delete   "${terminfo[kdch1]}"
+    Up       "${terminfo[kcuu1]}"
+    Down     "${terminfo[kcud1]}"
+    Left     "${terminfo[kcub1]}"
+    Right    "${terminfo[kcuf1]}"
+    PageUp   "${terminfo[kpp]}"
+    PageDown "${terminfo[knp]}"
+)
+
+autoload -U history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+bindkey -e
+bindkey "^R"             history-incremental-search-backward
+bindkey "^F"             history-incremental-pattern-search-forward
+bindkey ${key[Home]}     beginning-of-line
+bindkey "^A"             beginning-of-line
+bindkey ${key[End]}      end-of-line
+bindkey "^E"             end-of-line
+bindkey ${key[Insert]}   overwrite-mode
+bindkey ${key[Delete]}   delete-char
+bindkey ${key[Left]}     backward-char
+bindkey ${key[Right]}    forward-char
+bindkey ${key[Up]}       history-beginning-search-backward-end
+bindkey ${key[Down]}     history-beginning-search-forward-end
 
 ##### Colourful directory listings
 if $IS_GNULINUX; then
