@@ -47,7 +47,7 @@ bindkey ${key[Down]}     history-beginning-search-forward-end
 
 ##### Colourful directory listings
 if $IS_GNULINUX; then
-  eval `dircolors -b`
+  eval $(dircolors -b)
 fi
 
 ##### Tab completion

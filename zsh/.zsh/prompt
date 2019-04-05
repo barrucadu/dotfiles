@@ -4,7 +4,7 @@
 
 function _prompt_vc_git() {
   if git status &>/dev/null; then
-    local gitstat="`git status 2>/dev/null`"
+    local gitstat="$(git status 2>/dev/null)"
     local colour=$fgreen
 
     if [[ $(echo "${gitstat}" | grep -c "^Changes to be committed:$") > 0 ]]; then
@@ -34,20 +34,20 @@ function _prompt_precmd()
 {
   # Last command status
   local cmdstatus=$?
-  local sadface=`[ "$cmdstatus" != "0" ] && echo " ${fred}:(${default} "`
+  local sadface=$([ "$cmdstatus" != "0" ] && echo " ${fred}:(${default} ")
 
   # Colours
-  local usrcolour=`[ $UID != 0 ]    && echo $fbblue || echo $fbred`
-  local dircolour=`[ -w "\`pwd\`" ] && echo $fbcyan || echo $fbred`
+  local usrcolour=$([ $UID != 0 ]    && echo $fbblue || echo $fbred)
+  local dircolour=$([ -w "$(pwd)" ] && echo $fbcyan || echo $fbred)
 
   # Host
   local prompt_host="${fbyellow}%m${default}"
 
   # Tag
-  local prompt_tag=`[ ! -z $PROMPT_TAG ] && echo " ${fbmagenta}{${PROMPT_TAG}}${default}"`
+  local prompt_tag=$([ ! -z $PROMPT_TAG ] && echo " ${fbmagenta}{${PROMPT_TAG}}${default}")
 
   # Version control
-  local prompt_vc=`_prompt_vc`
+  local prompt_vc=$(_prompt_vc)
   if [[ ! -z $prompt_vc ]]; then
     prompt_vc=" $prompt_vc"
   fi

@@ -69,7 +69,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
     class=$2
     shift
     shift
-    for ip in `gnodes $env $class`; do
+    for ip in $(gnodes $env $class); do
       ssh "$ip.$env" "$@"
     done
   }
@@ -107,7 +107,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
       env=$1
       profile="govuk-$env"
       aws --profile $profile sts assume-role \
-          --role-arn `crudini --get ~/.aws/config "profile $profile" role_arn` \
+          --role-arn $(crudini --get ~/.aws/config "profile $profile" role_arn) \
           --role-session-name $USER
     }
 

@@ -69,6 +69,6 @@ alias bal="hledger balance -M --tree"
 # Miscellanious
 alias reload='source ~/.zshenv; source ~/.zshrc'
 alias xreload='xrdb -load ~/.Xdefaults'
-alias columns='column -c `tput cols`'
+alias columns='column -c $(tput cols)'
 alias pgfl='pgrep -fl'
 alias weather='curl wttr.in/York'

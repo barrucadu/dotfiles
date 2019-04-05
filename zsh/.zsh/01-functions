@@ -21,7 +21,7 @@ function ptag_push(){
 
 # Pop from the prompt tag.
 function ptag_pop(){
-  PROMPT_TAG=`dirname $PROMPT_TAG`
+  PROMPT_TAG=$(dirname $PROMPT_TAG)
   if [[ "$PROMPT_TAG" == "." ]]; then
     PROMPT_TAG=""
   fi
@@ -39,9 +39,9 @@ function status(){
   # This month's budget
   echo "\n$(date +%B) Budget:"
   if $IS_GNULINUX; then
-    local nextm=`date --date=+1month +"%Y-%m-01"`
+    local nextm=$(date --date=+1month +"%Y-%m-01")
   else
-    local nextm=`date -v+1m +"%Y-%m-01"`
+    local nextm=$(date -v+1m +"%Y-%m-01")
   fi
   hledger balance -N -B -H --end=$nextm --tree goal month saved | sed -e 1d -e 2d -e 3d -e 4d | sed 's:^          ::' | sed 's:          :  :'
 
@@ -67,7 +67,7 @@ function re()
 function lsby() {
     local regex=$1
     shift
-    ls $* | grep $regex | column -c `tput cols`
+    ls $* | grep $regex | column -c $(tput cols)
 }
 
 # Check if a command exists, can be a binary in PATH or a shell
@@ -118,7 +118,7 @@ function git-history() {
   for d in *; do
     if [[ -e $d/.git ]]; then
       pushd $d;
-      local repo=`printf '%-16s' "$d"`
+      local repo=$(printf '%-16s' "$d")
       git log --since=$since --pretty=format:"${repo:0:16} %ai (%h):  %s" --author='Michael Walker' --all
       popd
     fi
