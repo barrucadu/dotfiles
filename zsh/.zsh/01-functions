@@ -125,6 +125,12 @@ function git-history() {
   done
 }
 
+# Make a directory and cd to it
+function mkd() {
+  local target=$1
+  mkdir -p $target && cd $target
+}
+
 ### The nix command-line interface is awful
 if has nix-shell; then
   function with() {

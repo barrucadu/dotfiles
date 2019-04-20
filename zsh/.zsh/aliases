@@ -9,6 +9,8 @@ alias O='sudoedit'
 alias g='git'
 alias m='mosh'
 alias '?'='status'
+alias d='docker'
+alias v='vagrant'
 alias G=grep
 
 # Pipeline
@@ -30,6 +32,7 @@ alias -g gerp='grep'
 alias su='sudo su - '
 alias free='free -ht'
 alias df='df -h'
+alias du='du -shc'
 alias grep='grep --color=tty -d skip'
 alias top='htop'
 
@@ -67,8 +70,6 @@ fi
 alias bal="hledger balance -M --tree"
 
 # Miscellanious
+alias ta='tmux attach-session -d -t'
 alias reload='source ~/.zshenv; source ~/.zshrc'
-alias xreload='xrdb -load ~/.Xdefaults'
-alias columns='column -c $(tput cols)'
 alias pgfl='pgrep -fl'
-alias weather='curl wttr.in/York'
