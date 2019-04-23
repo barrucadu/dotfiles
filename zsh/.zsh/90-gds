@@ -9,6 +9,12 @@ function gds(){
 }
 
 if [[ -d "$GOVUK_DIR" ]]; then
+  alias -g _i='integration'
+  alias -g _s='staging'
+  alias -g _sa='staging-aws'
+  alias -g _p='production'
+  alias -g _pa='production-aws'
+
   # terraform version manager, installed with homebrew
   if [[ -f /usr/local/share/chtf/chtf.sh ]]; then
     source /usr/local/share/chtf/chtf.sh
