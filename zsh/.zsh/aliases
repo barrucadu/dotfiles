@@ -5,7 +5,6 @@ alias !='sudo'
 alias c='clear'
 alias e='exit'
 alias o=$EDITOR
-alias O='sudoedit'
 alias g='git'
 alias m='mosh'
 alias '?'='status'
@@ -47,23 +46,9 @@ alias cp='cp -rpv'
 alias mv='mv -v'
 alias mkdir='mkdir -p'
 
-# Programming
-alias val='valgrind --tool=memcheck --leak-check=full --show-reachable=yes'
-alias gdb='gdb -ex run -ex backtrace --args'
-alias gopp='go tool pprof'
-
 # Nix
 alias nixos-up='sudo nixos-rebuild switch --upgrade'
 alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
-
-# Power management
-if has systemctl; then
-  alias shutdown='systemctl poweroff'
-  alias reboot='systemctl reboot'
-else
-  alias shutdown='sudo shutdown -hP now'
-  alias reboot='sudo reboot'
-fi
 
 # hledger
 alias bal="hledger balance -M --tree"
