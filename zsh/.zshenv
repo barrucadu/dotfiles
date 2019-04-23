@@ -42,6 +42,8 @@ export GOPATH="$HOME/go"
 
 export LESS="-FXRS"
 
+export FZF_DEFAULT_OPTS="--height=25% --min-height=15 --reverse"
+
 #### Path
 
 if [[ -z $DONE_PATH_MODIFICATIONS ]]; then
