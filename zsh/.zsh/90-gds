@@ -18,7 +18,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
   function gds(){
     echo 'gclasses env              - list classes'
     echo 'gnodes env [class]        - list nodes, optionally restricted by class'
-    echo 'gssh env class [arg...]   - connect to a machine'
+    echo 'gssh env class [arg...]   - connect to an arbitrary node of that class in that environment'
     echo 'gforeach env class arg... - run the command on each node of that class in that environment'
     echo '                          - use `gforeach env "" arg...` to run on all nodes'
 
@@ -38,6 +38,13 @@ if [[ -d "$GOVUK_DIR" ]]; then
       echo 'gaws-run env arg...       - assume-role and run `arg...` with credentials in env vars'
       echo 'gaws-sh env               - shorthand for `gaws-run $env zsh`, also changing the prompt'
       echo 'gaws-do env arg...        - shorthand for `gaws-run $env aws arg...`'
+    fi
+
+    if has fzf; then
+      echo
+      echo '== fuzzy-find'
+      echo
+      echo 'gssh, env class [arg...]  - fuzzy-find by hostname'
     fi
   }
 
@@ -136,6 +143,16 @@ if [[ -d "$GOVUK_DIR" ]]; then
       AWS_SESSION_TOKEN=$(_get_credentials_key SessionToken)        \
       AWS_EXPIRATION=$(_get_credentials_key Expiration)             \
       "$@"
+    }
+  fi
+
+  if has fzf; then
+    function gssh,(){
+      env=$1
+      class=$2
+      shift
+      shift
+      ssh $(ssh $env "govuk_node_list -c $class" | fzf).$env "$@"
     }
   fi
 fi

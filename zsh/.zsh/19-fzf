@@ -1,0 +1,23 @@
+## -*- shell-script -*-
+
+# functions with fuzzy-find for arguments
+
+if has fzf; then
+  function ,f() {
+    local dir="${1:-.}"
+    find $dir -type f | fzf
+  }
+
+  function ,d() {
+    local dir="${1:-.}"
+    find $dir -type d | fzf
+  }
+
+  function o,() {
+    o $(,f "$@")
+  }
+
+  function cd,() {
+    cd $(,d "$@")
+  }
+fi
