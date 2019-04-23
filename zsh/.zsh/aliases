@@ -18,7 +18,6 @@ alias -g '.G'='| grep'
 alias -g '.S'='| sed'
 alias -g '.A'='| awk'
 alias -g '.U'='| sort | uniq'
-alias -g '.C'='| cut'
 alias -g '.F'="| fzf"
 alias -g '.L'='2>&1 | less'
 alias -g '.H'='2>&1 | head'
