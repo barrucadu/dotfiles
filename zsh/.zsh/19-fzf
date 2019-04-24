@@ -20,4 +20,8 @@ if has fzf; then
   function cd,() {
     cd $(,d "$@")
   }
+
+  function cat,() {
+    cat $(,f "$@")
+  }
 fi
