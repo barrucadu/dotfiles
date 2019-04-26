@@ -3,25 +3,23 @@
 # functions with fuzzy-find for arguments
 
 if has fzf; then
-  function ,f() {
+  function __fzf_any() {
     local dir="${1:-.}"
-    find $dir -type f | fzf
+    find $dir | fzf "$2"
   }
 
-  function ,d() {
+  function __fzf_file() {
+    local dir="${1:-.}"
+    find $dir -type f | fzf "$2"
+  }
+
+  function __fzf_dir() {
     local dir="${1:-.}"
     find $dir -type d | fzf
   }
 
-  function o,() {
-    o $(,f "$@")
-  }
-
-  function cd,() {
-    cd $(,d "$@")
-  }
-
-  function cat,() {
-    cat $(,f "$@")
-  }
+  alias -g ,a='$(__fzf_any  . -m)'
+  alias -g ,f='$(__fzf_file . -m)'
+  alias -g ,d='$(__fzf_dir  . -m)'
+  alias -g ,=,f
 fi
