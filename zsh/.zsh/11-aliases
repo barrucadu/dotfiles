@@ -57,3 +57,5 @@ alias bal="hledger balance -M --tree"
 alias ta='tmux attach-session -d -t'
 alias reload='source ~/.zshenv; source ~/.zshrc'
 alias pgfl='pgrep -fl'
+alias jctl='sudo journalctl'
+alias sctl='sudo systemctl'
