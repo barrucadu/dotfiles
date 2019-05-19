@@ -476,14 +476,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config
   (global-evil-surround-mode 1))
 
-;;; Increment / decrement numbers
-(use-package evil-numbers
-  :general
-  (general-define-key
-    :keymaps 'evil-ex-map
-    "+" 'evil-numbers/inc-at-pt
-    "-" 'evil-numbers/dec-at-pt))
-
 ;;; Whitespace
 (use-package whitespace-cleanup-mode
   :diminish (whitespace-cleanup-mode . " [W]")
