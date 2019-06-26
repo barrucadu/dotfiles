@@ -15,6 +15,11 @@ if [[ -d "$GOVUK_DIR" ]]; then
   alias -g _p='production'
   alias -g _pa='production-aws'
 
+  if [[ -d "$HOME/.rbenv/shims" ]]; then
+    export PATH="$PATH:~/.rbenv/shims"
+    eval "$(rbenv init - zsh)"
+  fi
+
   # terraform version manager, installed with homebrew
   if [[ -f /usr/local/share/chtf/chtf.sh ]]; then
     source /usr/local/share/chtf/chtf.sh
