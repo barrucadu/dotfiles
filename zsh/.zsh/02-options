@@ -11,6 +11,7 @@ setopt hist_no_functions
 setopt hist_reduce_blanks
 setopt hist_verify
 setopt share_history
+setopt inc_append_history
 
 ##### Keybindings
 typeset -A key
