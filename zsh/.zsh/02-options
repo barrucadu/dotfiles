@@ -2,8 +2,8 @@
 
 ##### History
 export HISTFILE=${XDG_DATA_HOME:-~/.local/share}/zsh/history
-export HISTSIZE=1000
-export SAVEHIST=1000
+export HISTSIZE=10000
+export SAVEHIST=10000
 export DIRSTACKSIZE=16
 
 setopt hist_ignore_dups
