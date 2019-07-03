@@ -5,6 +5,8 @@
 GOVUK_DIR=$HOME/govuk
 
 if [[ -d "$GOVUK_DIR" ]]; then
+  export GOVUK_ROOT_DIR=$GOVUK_DIR
+
   alias -g _i='integration'
   alias -g _s='staging'
   alias -g _sa='staging-aws'
