@@ -112,24 +112,18 @@ if [[ -d "$GOVUK_DIR" ]]; then
         ;;
       'r'|'run')
         local app=$1
+        local stack=$2
         if [[ -z $app ]]; then
           __govuk_help
           return 1
         fi
-        if [[ ! -d $GOVUK_DIR/$app ]]; then
-          echo "no such directory $GOVUK_DIR/$app"
-          return 1
-        fi
         shift
-        local stack=$1
-        pushd $GOVUK_DIR/$app
         if [[ -z $stack ]]; then
-          govuk-docker run
+          GOVUK_DOCKER_SERVICE="$app" govuk-docker run
         else
           shift
-          govuk-docker run --stack $stack "$@"
+          GOVUK_DOCKER_SERVICE="$app" govuk-docker run --stack $stack "$@"
         fi
-        popd
         ;;
       'R'|'run-this')
         local stack=$1
