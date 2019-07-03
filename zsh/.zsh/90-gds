@@ -101,13 +101,15 @@ if [[ -d "$GOVUK_DIR" ]]; then
           __govuk_help
           return 1
         fi
-        cd $GOVUK_DIR/govuk-docker
+        pushd $GOVUK_DIR/govuk-docker
         make "$@"
+        popd
         ;;
       'S'|'setup-this')
         local this=$(basename $(pwd))
-        cd $GOVUK_DIR/govuk-docker
+        pushd $GOVUK_DIR/govuk-docker
         make $this
+        popd
         ;;
       'r'|'run')
         local app=$1
@@ -121,8 +123,9 @@ if [[ -d "$GOVUK_DIR" ]]; then
           return 1
         fi
         shift 2
-        cd $GOVUK_DIR/$app
+        pushd $GOVUK_DIR/$app
         govuk-docker run-this --stack $stack "$@"
+        popd
         ;;
       'R'|'run-this')
         local stack=$1
