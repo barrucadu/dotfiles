@@ -124,7 +124,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
         fi
         shift 2
         pushd $GOVUK_DIR/$app
-        govuk-docker run-this --stack $stack "$@"
+        govuk-docker run --stack $stack "$@"
         popd
         ;;
       'R'|'run-this')
@@ -134,7 +134,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
           return 1
         fi
         shift
-        govuk-docker run-this --stack $stack "$@"
+        govuk-docker run --stack $stack "$@"
         ;;
       'c'|'compose')
         if [[ -z "$1" ]]; then
