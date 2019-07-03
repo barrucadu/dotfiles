@@ -112,8 +112,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
         ;;
       'r'|'run')
         local app=$1
-        local stack=$2
-        if [[ -z $app ]] || [[ -z $stack ]]; then
+        if [[ -z $app ]]; then
           __govuk_help
           return 1
         fi
@@ -121,19 +120,25 @@ if [[ -d "$GOVUK_DIR" ]]; then
           echo "no such directory $GOVUK_DIR/$app"
           return 1
         fi
-        shift 2
+        shift
+        local stack=$1
         pushd $GOVUK_DIR/$app
-        govuk-docker run --stack $stack "$@"
+        if [[ -z $stack ]]; then
+          govuk-docker run
+        else
+          shift
+          govuk-docker run --stack $stack "$@"
+        fi
         popd
         ;;
       'R'|'run-this')
         local stack=$1
         if [[ -z $stack ]]; then
-          __govuk_help
-          return 1
+          govuk-docker run
+        else
+          shift
+          govuk-docker run --stack $stack "$@"
         fi
-        shift
-        govuk-docker run --stack $stack "$@"
         ;;
       'c'|'compose')
         if [[ -z "$1" ]]; then
@@ -211,26 +216,26 @@ if [[ -d "$GOVUK_DIR" ]]; then
 
   function __govuk_help {
     echo 'govuk (a | aws) $env'
-    echo '    (a | assume)                     - assume-role and print the credentials'
-    echo '    (e | exec) $arg...               - assume-role and run $arg... with credentials in the environment'
-    echo '    (s | sh)                         - shorthand for `$env exec zsh`, and updates the prompt'
-    echo '    (d | do) $arg...                 - shorthand for `$env exec aws $arg...`'
+    echo '    (a | assume)                       - assume-role and print the credentials'
+    echo '    (e | exec) $arg...                 - assume-role and run $arg... with credentials in the environment'
+    echo '    (s | sh)                           - shorthand for `$env exec zsh`, and updates the prompt'
+    echo '    (d | do) $arg...                   - shorthand for `$env exec aws $arg...`'
     echo
     echo 'govuk (d | docker)'
-    echo '    (s | setup) $app...              - set up apps and their dependencies'
-    echo '    (S | setup-this)                 - set up this app and its dependencies'
-    echo '    (r | run) $app $stack [$arg...]  - run a stack for an app, with an optional command'
-    echo '    (R | run-this) $stack [$arg...]  - run a stack for this app, with an optional command'
-    echo '    (c | compose) $arg...            - run a docker-compose command'
-    echo '    (p | prune)                      - prune stale containers, volumes, and images'
-    echo '    (! | stop)                       - shorthand for `compose stop`'
-    echo '    (? | stacks) [$pat]              - shorthand for `compose ps --services`, optinally grepping by a pattern'
+    echo '    (s | setup) $app...                - set up apps and their dependencies'
+    echo '    (S | setup-this)                   - set up this app and its dependencies'
+    echo '    (r | run) $app [$stack [$arg...]]  - run a stack for an app, with an optional command'
+    echo '    (R | run-this) [$stack [$arg...]]  - run a stack for this app, with an optional command'
+    echo '    (c | compose) $arg...              - run a docker-compose command'
+    echo '    (p | prune)                        - prune stale containers, volumes, and images'
+    echo '    (! | stop)                         - shorthand for `compose stop`'
+    echo '    (? | stacks) [$pat]                - shorthand for `compose ps --services`, optinally grepping by a pattern'
     echo
     echo 'govuk (r | remote) $env'
-    echo '    (c | classes)                    - list node classes'
-    echo '    (n | nodes) [$class]             - list nodes in a class'
-    echo '    (s | ssh) $class [$arg...]       - connect to an arbitrary node in a class'
-    echo '    (f | foreach) $class $arg...     - run the a command on every node in a class'
+    echo '    (c | classes)                      - list node classes'
+    echo '    (n | nodes) [$class]               - list nodes in a class'
+    echo '    (s | ssh) $class [$arg...]         - connect to an arbitrary node in a class'
+    echo '    (f | foreach) $class $arg...       - run the a command on every node in a class'
   }
 
   # there must be a better way of doing this
