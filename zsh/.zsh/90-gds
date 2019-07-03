@@ -103,14 +103,11 @@ if [[ -d "$GOVUK_DIR" ]]; then
           __govuk_help
           return 1
         fi
-        pushd $GOVUK_DIR/govuk-docker
-        make "$@"
-        popd
+        make -f "$GOVUK_DIR/govuk-docker/Makefile" "$@"
         ;;
       'S'|'setup-this')
         local this=$(basename $(pwd))
-        pushd $GOVUK_DIR/govuk-docker
-        make $this
+        make -f "$GOVUK_DIR/govuk-docker/Makefile" "$this"
         popd
         ;;
       'r'|'run')
