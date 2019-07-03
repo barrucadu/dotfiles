@@ -120,8 +120,9 @@ if [[ -d "$GOVUK_DIR" ]]; then
           echo "no such directory $GOVUK_DIR/$app"
           return 1
         fi
+        shift 2
         cd $GOVUK_DIR/$app
-        govuk-docker run-this $stack
+        govuk-docker run-this --stack $stack "$@"
         ;;
       'R'|'run-this')
         local stack=$1
@@ -129,7 +130,8 @@ if [[ -d "$GOVUK_DIR" ]]; then
           __govuk_help
           return 1
         fi
-        govuk-docker run-this $stack
+        shift
+        govuk-docker run-this --stack $stack "$@"
         ;;
       *)
         __govuk_help
@@ -186,22 +188,22 @@ if [[ -d "$GOVUK_DIR" ]]; then
 
   function __govuk_help {
     echo 'govuk (a | aws) $env'
-    echo '    (a | assume)                   - assume-role and print the credentials'
-    echo '    (e | exec) $arg...             - assume-role and run $arg... with credentials in the environment'
-    echo '    (s | sh)                       - shorthand for `$env exec zsh`, and updates the prompt'
-    echo '    (d | do) $arg...               - shorthand for `$env exec aws $arg...`'
+    echo '    (a | assume)                     - assume-role and print the credentials'
+    echo '    (e | exec) $arg...               - assume-role and run $arg... with credentials in the environment'
+    echo '    (s | sh)                         - shorthand for `$env exec zsh`, and updates the prompt'
+    echo '    (d | do) $arg...                 - shorthand for `$env exec aws $arg...`'
     echo
     echo 'govuk (d | docker)'
-    echo '    (s | setup) $app...            - set up apps and their dependencies'
-    echo '    (S | setup-this)               - set up this app and its dependencies'
-    echo '    (r | run) $app $stack          - run a stack for an app'
-    echo '    (R | run-this) $stack          - run a stack for this app'
+    echo '    (s | setup) $app...              - set up apps and their dependencies'
+    echo '    (S | setup-this)                 - set up this app and its dependencies'
+    echo '    (r | run) $app $stack [$arg...]  - run a stack for an app, with an optional command'
+    echo '    (R | run-this) $stack [$arg...]  - run a stack for this app, with an optional command'
     echo
     echo 'govuk (r | remote) $env'
-    echo '    (c | classes)                  - list node classes'
-    echo '    (n | nodes) [$class]           - list nodes in a class'
-    echo '    (s | ssh) $class [$arg...]     - connect to an arbitrary node in a class'
-    echo '    (f | foreach) $class $arg...   - run the a command on every node in a class'
+    echo '    (c | classes)                    - list node classes'
+    echo '    (n | nodes) [$class]             - list nodes in a class'
+    echo '    (s | ssh) $class [$arg...]       - connect to an arbitrary node in a class'
+    echo '    (f | foreach) $class $arg...     - run the a command on every node in a class'
   }
 
   # there must be a better way of doing this
