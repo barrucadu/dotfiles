@@ -149,6 +149,14 @@ if [[ -d "$GOVUK_DIR" ]]; then
       '!'|'stop')
         govuk docker compose stop
         ;;
+      '?'|'stacks')
+        local pat=$1
+        if [[ -z $pat ]]; then
+          govuk docker compose ps --services
+        else
+          govuk docker compose ps --services | grep $pat
+        fi
+        ;;
       *)
         __govuk_help
         ;;
@@ -217,6 +225,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
     echo '    (c | compose) $arg...            - run a docker-compose command'
     echo '    (p | prune)                      - prune stale containers, volumes, and images'
     echo '    (! | stop)                       - shorthand for `compose stop`'
+    echo '    (? | stacks) [$pat]              - shorthand for `compose ps --services`, optinally grepping by a pattern'
     echo
     echo 'govuk (r | remote) $env'
     echo '    (c | classes)                    - list node classes'
@@ -251,6 +260,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
   alias gkdc='govuk docker compose'
   alias gkdp='govuk docker prune'
   alias 'gkd!'='govuk docker stop'
+  alias 'gkd?'='govuk docker stacks'
   alias gkr='govuk remote'
   alias gkri='govuk remote integration'
   alias gkric='govuk remote integration classes'
