@@ -149,11 +149,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
         ;;
       '?'|'stacks')
         local pat=$1
-        if [[ -z $pat ]]; then
-          govuk docker compose ps --services
-        else
-          govuk docker compose ps --services | grep $pat
-        fi
+        govuk docker compose ps --services | grep "$pat"
         ;;
       *)
         __govuk_help
