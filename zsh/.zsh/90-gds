@@ -136,6 +136,19 @@ if [[ -d "$GOVUK_DIR" ]]; then
         shift
         govuk-docker run-this --stack $stack "$@"
         ;;
+      'c'|'compose')
+        if [[ -z "$1" ]]; then
+          __govuk_help
+          return 1
+        fi
+        govuk-docker compose "$@" | tail -n+2
+        ;;
+      'p'|'prune')
+        govuk-docker prune
+        ;;
+      '!'|'stop')
+        govuk docker compose stop
+        ;;
       *)
         __govuk_help
         ;;
@@ -201,6 +214,9 @@ if [[ -d "$GOVUK_DIR" ]]; then
     echo '    (S | setup-this)                 - set up this app and its dependencies'
     echo '    (r | run) $app $stack [$arg...]  - run a stack for an app, with an optional command'
     echo '    (R | run-this) $stack [$arg...]  - run a stack for this app, with an optional command'
+    echo '    (c | compose) $arg...            - run a docker-compose command'
+    echo '    (p | prune)                      - prune stale containers, volumes, and images'
+    echo '    (! | stop)                       - shorthand for `compose stop`'
     echo
     echo 'govuk (r | remote) $env'
     echo '    (c | classes)                    - list node classes'
@@ -232,6 +248,9 @@ if [[ -d "$GOVUK_DIR" ]]; then
   alias gkdS='govuk docker setup-this'
   alias gkdr='govuk docker run'
   alias gkdR='govuk docker run-this'
+  alias gkdc='govuk docker compose'
+  alias gkdp='govuk docker prune'
+  alias 'gkd!'='govuk docker stop'
   alias gkr='govuk remote'
   alias gkri='govuk remote integration'
   alias gkric='govuk remote integration classes'
