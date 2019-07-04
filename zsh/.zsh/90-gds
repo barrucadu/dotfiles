@@ -19,7 +19,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
   fi
 
   if [[ -d "$GOVUK_DIR/govuk-docker" ]]; then
-    export PATH=$PATH:~/govuk/govuk-docker/bin
+    export PATH="$PATH:$GOVUK_DIR/govuk-docker/bin"
   fi
 
   # terraform version manager, installed with homebrew
@@ -98,11 +98,11 @@ if [[ -d "$GOVUK_DIR" ]]; then
           __govuk_help
           return 1
         fi
-        make -f "$GOVUK_DIR/govuk-docker/Makefile" "$@"
+        make -f "$GOVUK_DOCKER_DIR/Makefile" "$@"
         ;;
       'S'|'setup-this')
         local this=$(basename $(pwd))
-        make -f "$GOVUK_DIR/govuk-docker/Makefile" "$this"
+        make -f "$GOVUK_DOCKER_DIR/Makefile" "$this"
         popd
         ;;
       'r'|'run')
