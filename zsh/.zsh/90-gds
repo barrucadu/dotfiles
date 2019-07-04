@@ -59,23 +59,18 @@ if [[ -d "$GOVUK_DIR" ]]; then
 
     case $command in
       'a'|'assume')
-        local credentials=$(__govuk_aws_assume) || exit $?
-        echo AWS_ACCESS_KEY_ID=$(__govuk_aws_get_credential_key AccessKeyId)
-        echo AWS_SECRET_ACCESS_KEY=$(__govuk_aws_get_credential_key SecretAccessKey)
-        echo AWS_SESSION_TOKEN=$(__govuk_aws_get_credential_key SessionToken)
-        echo AWS_EXPIRATION=$(__govuk_aws_get_credential_key Expiration)
+        local credentials=$(__govuk_aws_assume) || return $?
+        echo export AWS_ACCESS_KEY_ID=\'$(__govuk_aws_get_credential_key AccessKeyId)\'
+        echo export AWS_SECRET_ACCESS_KEY=\'$(__govuk_aws_get_credential_key SecretAccessKey)\'
+        echo export AWS_SESSION_TOKEN=\'$(__govuk_aws_get_credential_key SessionToken)\'
+        echo export AWS_EXPIRATION=\'$(__govuk_aws_get_credential_key Expiration)\'
         ;;
       'e'|'exec')
         if [[ -z $1 ]]; then
           __govuk_help
           return 1
         fi
-        local credentials=$(__govuk_aws_assume) || exit $?
-        AWS_ACCESS_KEY_ID=$(__govuk_aws_get_credential_key AccessKeyId)         \
-        AWS_SECRET_ACCESS_KEY=$(__govuk_aws_get_credential_key SecretAccessKey) \
-        AWS_SESSION_TOKEN=$(__govuk_aws_get_credential_key SessionToken)        \
-        AWS_EXPIRATION=$(__govuk_aws_get_credential_key Expiration)             \
-        "$@"
+        env "$(govuk aws $env assume)" "$@"
         ;;
       's'|'sh')
         PROMPT_TAG="aws:$env" govuk aws exec zsh "$@"
