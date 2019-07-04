@@ -8,8 +8,6 @@ alias o=$EDITOR
 alias g='git'
 alias m='mosh'
 alias '?'='status'
-alias d='docker'
-alias v='vagrant'
 alias G=grep
 
 # Pipeline
@@ -54,6 +52,7 @@ alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
 alias bal="hledger balance -M --tree"
 
 # Miscellanious
+alias din='docker run -it --rm'
 alias ta='tmux attach-session -d -t'
 alias reload='source ~/.zshenv; source ~/.zshrc'
 alias pgfl='pgrep -fl'
