@@ -166,7 +166,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
         ssh $env "govuk_node_list --classes"
         ;;
       'n'|'nodes')
-        local class=$3
+        local class=$1
         if [[ -z $class ]]; then
           ssh $env govuk_node_list
         else
@@ -174,7 +174,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
         fi
         ;;
       's'|'ssh')
-        local class=$3
+        local class=$1
         if [[ -z $class ]]; then
           __govuk_help
           return 1
@@ -183,7 +183,7 @@ if [[ -d "$GOVUK_DIR" ]]; then
         ssh $(ssh $env "govuk_node_list --single-node -c $class").$env "$@"
         ;;
       'f'|'foreach')
-        local class=$3
+        local class=$1
         if [[ -z $class ]] || [[ -z $2 ]]; then
           __govuk_help
           return 1
