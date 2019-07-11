@@ -2,11 +2,9 @@
 
 # set up ssh config like https://github.com/alphagov/govuk-puppet/blob/master/development-vm/ssh_config
 
-GOVUK_DIR=$HOME/govuk
+GOVUK_ROOT_DIR=$HOME/govuk
 
-if [[ -d "$GOVUK_DIR" ]]; then
-  export GOVUK_ROOT_DIR=$GOVUK_DIR
-
+if [[ -d "$GOVUK_ROOT_DIR" ]]; then
   alias -g _i='integration'
   alias -g _s='staging'
   alias -g _sa='staging-aws'
@@ -18,8 +16,9 @@ if [[ -d "$GOVUK_DIR" ]]; then
     eval "$(rbenv init - zsh)"
   fi
 
-  if [[ -d "$GOVUK_DIR/govuk-docker" ]]; then
-    export PATH="$PATH:$GOVUK_DIR/govuk-docker/bin"
+  if [[ -d "$GOVUK_ROOT_DIR/govuk-docker" ]]; then
+    export GOVUK_DOCKER_DIR="$GOVUK_DIR/govuk-docker"
+    export PATH="$PATH:$GOVUK_DOCKER_DIR/bin"
   fi
 
   # terraform version manager, installed with homebrew
