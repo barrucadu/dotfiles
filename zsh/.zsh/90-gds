@@ -103,7 +103,6 @@ if [[ -d "$GOVUK_DIR" ]]; then
       'S'|'setup-this')
         local this=$(basename $(pwd))
         make -f "$GOVUK_DOCKER_DIR/Makefile" "$this"
-        popd
         ;;
       'r'|'run')
         local app=$1
