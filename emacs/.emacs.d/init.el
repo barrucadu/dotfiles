@@ -95,7 +95,6 @@
 ;;;; Appearance
 
 ;; Colour theme
-(use-package color-theme)
 (use-package gruvbox-theme
   :init (load-theme 'gruvbox 'no-confirm))
 
