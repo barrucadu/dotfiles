@@ -37,7 +37,8 @@ if $IS_GNULINUX; then
   alias ls='ls --color=auto'
   alias la='ls --color=auto -lA'
 else
-  alias la='ls -lA'
+  alias ls='ls -G'
+  alias la='ls -GlA'
 fi
 alias lls='env ls'
 alias cp='cp -rpv'
