@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+
+export GOVUK_SCRIPT_DIR="$(dirname $0)/govuk-scripts"
+
+COMMAND=$1
+
+case $COMMAND in
+  'a'|'aws')    shift; $GOVUK_SCRIPT_DIR/aws.sh "$@";;
+  'd'|'docker') shift; $GOVUK_SCRIPT_DIR/docker.sh "$@";;
+  'r'|'remote') shift; $GOVUK_SCRIPT_DIR/remote.sh "$@";;
+  *)
+    echo 'govuk (a | aws) $env'
+    echo '    (a | assume)                       - assume-role and print the credentials'
+    echo '    (e | exec) $arg...                 - assume-role and run $arg... with credentials in the environment'
+    echo '    (s | sh)                           - shorthand for `$env exec zsh`, and updates the prompt'
+    echo '    (d | do) $arg...                   - shorthand for `$env exec aws $arg...`'
+    echo
+    echo 'govuk (d | docker)'
+    echo '    (b | build) $app...                - set up apps and their dependencies'
+    echo '    (B | build-this)                   - set up this app and its dependencies'
+    echo '    (r | run) $app [$stack [$arg...]]  - run a stack for an app, with an optional command'
+    echo '    (R | run-this) [$stack [$arg...]]  - run a stack for this app, with an optional command'
+    echo '    (c | compose) $arg...              - run a docker-compose command'
+    echo '    (p | prune)                        - prune stale containers, volumes, and images'
+    echo '    (s | sync)'
+    echo '        (e | elasticsearch)            - sync elasticsearch state (use e(lasticsearch)5/6 to restrict)'
+    echo '    (! | stop)                         - shorthand for `compose stop`'
+    echo '    (? | stacks) [$pat]                - shorthand for `compose ps --services`, optinally grepping by a pattern'
+    echo
+    echo 'govuk (r | remote) $env'
+    echo '    (c | classes)                      - list node classes'
+    echo '    (n | nodes) [$class]               - list nodes in a class'
+    echo '    (s | ssh) $class [$arg...]         - connect to an arbitrary node in a class'
+    echo '    (f | foreach) $class $arg...       - run the a command on every node in a class'
+    ;;
+esac
