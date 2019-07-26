@@ -17,7 +17,7 @@ if [[ -d "$GOVUK_ROOT_DIR" ]]; then
   fi
 
   if [[ -d "$GOVUK_ROOT_DIR/govuk-docker" ]]; then
-    export GOVUK_DOCKER_DIR="$GOVUK_DIR/govuk-docker"
+    export GOVUK_DOCKER_DIR="$GOVUK_ROOT_DIR/govuk-docker"
     export PATH="$PATH:$GOVUK_DOCKER_DIR/bin"
   fi
 
