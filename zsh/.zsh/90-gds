@@ -92,14 +92,14 @@ if [[ -d "$GOVUK_ROOT_DIR" ]]; then
     shift
 
     case $command in
-      's'|'setup')
+      'b'|'build')
         if [[ -z $1 ]]; then
           __govuk_help
           return 1
         fi
         make -f "$GOVUK_DOCKER_DIR/Makefile" "$@"
         ;;
-      'S'|'setup-this')
+      'B'|'build-this')
         local this=$(basename $(pwd))
         make -f "$GOVUK_DOCKER_DIR/Makefile" "$this"
         ;;
@@ -205,8 +205,8 @@ if [[ -d "$GOVUK_ROOT_DIR" ]]; then
     echo '    (d | do) $arg...                   - shorthand for `$env exec aws $arg...`'
     echo
     echo 'govuk (d | docker)'
-    echo '    (s | setup) $app...                - set up apps and their dependencies'
-    echo '    (S | setup-this)                   - set up this app and its dependencies'
+    echo '    (b | build) $app...                - set up apps and their dependencies'
+    echo '    (B | build-this)                   - set up this app and its dependencies'
     echo '    (r | run) $app [$stack [$arg...]]  - run a stack for an app, with an optional command'
     echo '    (R | run-this) [$stack [$arg...]]  - run a stack for this app, with an optional command'
     echo '    (c | compose) $arg...              - run a docker-compose command'
@@ -240,8 +240,8 @@ if [[ -d "$GOVUK_ROOT_DIR" ]]; then
   alias gkaps='govuk aws production sh'
   alias gkapd='govuk aws production do'
   alias gkd='govuk docker'
-  alias gkds='govuk docker setup'
-  alias gkdS='govuk docker setup-this'
+  alias gkdb='govuk docker build'
+  alias gkdB='govuk docker build-this'
   alias gkdr='govuk docker run'
   alias gkdR='govuk docker run-this'
   alias gkdc='govuk docker compose'
