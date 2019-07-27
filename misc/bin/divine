@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+import json
+import random
+import os
+
+# from https://github.com/dariusk/corpora
+tarot_file = os.path.join(os.path.expanduser('~'), 'share', 'tarot.json')
+with open(tarot_file) as f:
+    card = random.choice(json.load(f)['tarot_interpretations'])
+
+print(card["name"].upper())
+print('-'*len(card["name"]))
+print()
+
+print("[" + ", ".join(card["keywords"]) + "]")
+print()
+
+print("\n".join(card["fortune_telling"]))
+print()
+
+print('Meanings:')
+print("\n".join(map(lambda x: "    " + x, card["meanings"]["light"])))
+print()
+
+print('Reversed meanings:')
+print("\n".join(map(lambda x: "    " + x, card["meanings"]["shadow"])))
