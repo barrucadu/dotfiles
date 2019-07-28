@@ -2,7 +2,7 @@
 
 TARGET=$1
 if [[ -z $TARGET ]]; then
-  echo "(govuk docker) missing target"
+  echo "(govuk docker sync) missing target"
   echo
   govuk help
   exit 1
