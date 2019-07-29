@@ -52,10 +52,9 @@ function sync_elasticsearch {
   # `docker cp` reliably hangs after copying 6.4GB, so instead of
   # using that spin up a container with the host directory
   # bind-mounted and run `cp` inside the container.
-  local replication_dir="/replication/elasticsearch-${ver}"
   govuk docker compose run --rm -v $archive_path:/import "elasticsearch${ver}" bash -xc "
-    [[ -e '${replication_dir}' ]] && rm -r '${replication_dir}'
-    cp -a /import '${replication_dir}'
+    [[ -e '/replication/index.latest' ]] && rm -r '/replication/*'
+    cp -a /import/* /replication
   "
 
   govuk docker run search-api lite bash -xc "
@@ -66,7 +65,7 @@ function sync_elasticsearch {
       \"settings\": {
         \"compress\": true,
         \"readonly\": true,
-        \"location\": \"${replication_dir}\"
+        \"location\": \"/replication\"
       }
     }'
 
