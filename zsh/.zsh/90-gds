@@ -52,6 +52,7 @@ if [[ -d "$GOVUK_ROOT_DIR" ]]; then
   alias gkdp='govuk docker prune'
   alias 'gkd!'='govuk docker stop'
   alias 'gkd?'='govuk docker stacks'
+  alias 'gkds'='govuk docker sync'
   alias gkr='govuk remote'
   alias gkri='govuk remote integration'
   alias gkric='govuk remote integration classes'
