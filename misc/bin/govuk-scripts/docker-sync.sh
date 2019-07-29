@@ -53,7 +53,7 @@ function sync_elasticsearch {
   # using that spin up a container with the host directory
   # bind-mounted and run `cp` inside the container.
   govuk docker compose run --rm -v $archive_path:/import "elasticsearch${ver}" bash -xc "
-    [[ -e '/replication/index.latest' ]] && rm -r '/replication/*'
+    rm -r /replication/*
     cp -a /import/* /replication
   "
 
@@ -71,6 +71,10 @@ function sync_elasticsearch {
 
     snapshot_name=\$(curl \"\${es}\"/_snapshot/snapshots/_all | ruby -e 'require \"json\"; STDOUT << (JSON.parse(STDIN.read)[\"snapshots\"].map { |a| a[\"snapshot\"] }.sort.last)')
     curl -XPOST \"\${es}/_snapshot/snapshots/\${snapshot_name}/_restore?wait_for_completion=true\"
+  "
+
+  govuk docker compose run --rm "elasticsearch${ver}" bash -xc "
+    rm -r /replication/*
   "
 }
 
