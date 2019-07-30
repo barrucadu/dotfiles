@@ -19,7 +19,7 @@ case $COMMAND in
     if [[ -z $class ]]; then
       ssh $ENV govuk_node_list
     else
-      ssh $ENV "govuk_node_list -c $2"
+      ssh $ENV "govuk_node_list -c $class"
     fi
     ;;
   's'|'ssh')
@@ -42,8 +42,8 @@ case $COMMAND in
       exit 1
     fi
     shift
-    for ip in $(govuk remote nodes $env $class); do
-      ssh "${IP}.${ENV}" "$@"
+    for ip in $(govuk remote $ENV nodes $class); do
+      ssh "${ip}.${ENV}" "$@"
     done
     ;;
   *)
