@@ -11,11 +11,17 @@ shift
 
 CREDS=$(mktemp)
 LOCAL_ARCHIVE_PATH="$HOME/govuk-data-sync"
-trap "rm $CREDS" EXIT
+trap "rm $CREDS" EXIT # FIXME: not executed on C-c
 
 function aws_auth {
   govuk aws integration assume >> $CREDS
   source $CREDS
+}
+
+function wait_for_container {
+  until [[ "$(docker inspect -f {{.State.Health.Status}} $1)" == "healthy" ]]; do
+    sleep 0.1
+  done
 }
 
 function sync_elasticsearch {
@@ -49,33 +55,35 @@ function sync_elasticsearch {
     done
   fi
 
-  # `docker cp` reliably hangs after copying 6.4GB, so instead of
-  # using that spin up a container with the host directory
-  # bind-mounted and run `cp` inside the container.
-  govuk docker compose run --rm -v $archive_path:/import "elasticsearch${ver}" bash -xc "
-    rm -r /replication/*
-    cp -a /import/* /replication
-  "
+  # temporary config file because ES needs to be configured in advance
+  # for filesystem-based snapshots
+  local cfg_path=$(mktemp '/tmp/govuk-docker-data-sync.XXXXX')
+  trap "rm $cfg_path" EXIT # FIXME: not executed on C-c
+  echo "
+    cluster.name: 'docker-cluster'
+    network.host: 0.0.0.0
 
-  govuk docker run search-api lite bash -xc "
-    es='http://elasticsearch${ver}:9200'
-    curl -XDELETE \"\${es}/_all\"
-    curl \"\${es}/_snapshot/snapshots\" -X PUT -H 'Content-Type: application/json' -d '{
-      \"type\": \"fs\",
-      \"settings\": {
-        \"compress\": true,
-        \"readonly\": true,
-        \"location\": \"/replication\"
-      }
-    }'
+    discovery.zen.minimum_master_nodes: 1
+    path.repo: ['/replication']
+  " > $cfg_path
 
-    snapshot_name=\$(curl \"\${es}\"/_snapshot/snapshots/_all | ruby -e 'require \"json\"; STDOUT << (JSON.parse(STDIN.read)[\"snapshots\"].map { |a| a[\"snapshot\"] }.sort.last)')
-    curl -XPOST \"\${es}/_snapshot/snapshots/\${snapshot_name}/_restore?wait_for_completion=true\"
-  "
+  local container=$(govuk docker compose run -d --rm -v $archive_path:/replication -v $cfg_path:/usr/share/elasticsearch/config/elasticsearch.yml -p 9200:9200 "elasticsearch${ver}")
+  trap "docker stop $container" EXIT # FIXME: not executed on C-c
+  wait_for_container $container
 
-  govuk docker compose run --rm "elasticsearch${ver}" bash -xc "
-    rm -r /replication/*
-  "
+  local es=http://127.0.0.1:9200
+  curl -XDELETE "${es}/_all"
+  curl "${es}/_snapshot/snapshots" -X PUT -H 'Content-Type: application/json' -d '{
+    "type": "fs",
+    "settings": {
+      "compress": true,
+      "readonly": true,
+      "location": "/replication"
+    }
+  }'
+  sleep 1
+  local snapshot_name=$(curl "${es}/_snapshot/snapshots/_all" | ruby -e 'require "json"; STDOUT << (JSON.parse(STDIN.read)["snapshots"].map { |a| a["snapshot"] }.sort.last)')
+  curl -XPOST "${es}/_snapshot/snapshots/${snapshot_name}/_restore?wait_for_completion=true"
 }
 
 case $TARGET in
