@@ -9,14 +9,7 @@ if [[ -z $TARGET ]]; then
 fi
 shift
 
-CREDS=$(mktemp)
 LOCAL_ARCHIVE_PATH="$HOME/govuk-data-sync"
-trap "rm $CREDS" EXIT # FIXME: not executed on C-c
-
-function aws_auth {
-  govuk aws integration assume >> $CREDS
-  source $CREDS
-}
 
 function wait_for_container {
   until [[ "$(docker inspect -f {{.State.Health.Status}} $1)" == "healthy" ]]; do
@@ -34,25 +27,7 @@ function sync_elasticsearch {
   if [[ -e $archive_path ]]; then
     echo "Skipping download - remove ${archive_path} to force"
   else
-    mkdir -p $archive_path
-
-    aws_auth
-    local remote_config_paths=$(aws s3 ls "s3://${bucket}/" | grep -v '/$' | ruby -e 'STDOUT << STDIN.read.split("\n").map{|a| a.split(" ").last }.group_by { |n| n.split(/-\d/).first }.map { |_, d| d.sort.last.strip }.join(" ")')
-    echo "REMOTE CONFIG PATHS: ${remote_config_paths}"
-    for remote_config_path in "${(ps: :)remote_config_paths}"; do
-      echo "Syncing data from ${remote_config_path}"
-      aws_auth
-      aws s3 cp "s3://${bucket}/${remote_config_path}" "${archive_path}/"
-    done
-
-    aws_auth
-    local remote_file_details=$(aws s3 ls "s3://${bucket}/indices/")
-    local remote_paths=$(echo "$remote_file_details" | ruby -e 'STDOUT << STDIN.read.split("PRE").group_by { |n| n.split(/-\d/).first }.map { |_, d| d.sort.last.strip }.join(" ")')
-    for remote_path in "${(ps: :)remote_paths}"; do
-      echo "Syncing data from ${remote_path}"
-      aws_auth
-      aws s3 sync "s3://${bucket}/indices/${remote_path}" "${archive_path}/indices/${remote_path}/"
-    done
+    govuk aws integration do s3 sync "s3://${bucket}/" "${archive_path}/"
   fi
 
   # temporary config file because ES needs to be configured in advance
