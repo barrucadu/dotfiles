@@ -3,7 +3,7 @@
 ENV=$1
 COMMAND=$2
 if [[ -z $ENV ]] || [[ -z $COMMAND ]]; then
-  echo "(govuk docker) missing environment or subcommand"
+  echo "(govuk aws) missing environment or subcommand"
   echo
   govuk help
   exit 1
@@ -30,20 +30,8 @@ case $COMMAND in
     echo export AWS_SESSION_TOKEN=\'$(__govuk_aws_get_credential_key SessionToken)\'
     echo export AWS_EXPIRATION=\'$(__govuk_aws_get_credential_key Expiration)\'
     ;;
-  'e'|'exec')
-    if [[ -z $1 ]]; then
-      echo "(govuk aws ${ENV} exec) expected an argument"
-      echo
-      govuk help
-      exit 1
-    fi
-    env "$(govuk aws ${ENV} assume)" "$@"
-    ;;
-  's'|'sh')
-    PROMPT_TAG="aws:${ENV}" govuk aws exec zsh "$@"
-    ;;
   'd'|'do')
-    govuk aws exec aws "$@"
+    aws --profile $AWS_PROFILE "$@"
     ;;
   *)
     echo "(govuk aws ${ENV}) unknown subcommand '${COMMAND}'"

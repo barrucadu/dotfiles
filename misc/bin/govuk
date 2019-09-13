@@ -11,9 +11,7 @@ case $COMMAND in
   *)
     echo 'govuk (a | aws) $env'
     echo '    (a | assume)                       - assume-role and print the credentials'
-    echo '    (e | exec) $arg...                 - assume-role and run $arg... with credentials in the environment'
-    echo '    (s | sh)                           - shorthand for `$env exec zsh`, and updates the prompt'
-    echo '    (d | do) $arg...                   - shorthand for `$env exec aws $arg...`'
+    echo '    (d | do) $arg...                   - assume-role and run an AWS command'
     echo
     echo 'govuk (d | docker)'
     echo '    (b | build) $app...                - set up apps and their dependencies'
