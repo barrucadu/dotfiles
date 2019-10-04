@@ -62,7 +62,9 @@ case $COMMAND in
     govuk-docker compose "$@" | tail -n+2
     ;;
   'p'|'prune')
-    govuk-docker prune
+    docker system  prune -f
+    docker network prune -f
+    docker volume  prune -f
     ;;
   's'|'sync')
     $GOVUK_SCRIPT_DIR/docker-sync.sh "$@"
