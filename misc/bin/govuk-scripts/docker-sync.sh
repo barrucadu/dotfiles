@@ -62,13 +62,6 @@ function sync_elasticsearch {
 }
 
 case $TARGET in
-  'es'|'elasticsearch')
-    sync_elasticsearch 5
-    sync_elasticsearch 6
-    ;;
-  'es5'|'elasticsearch5')
-    sync_elasticsearch 5
-    ;;
   'es6'|'elasticsearch6')
     sync_elasticsearch 6
     ;;
