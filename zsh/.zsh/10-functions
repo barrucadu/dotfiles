@@ -132,7 +132,7 @@ function mkd() {
 }
 
 ### The nix command-line interface is awful
-if has nix-shell; then
+if has nix; then
   function with() {
     if [[ -z $WITH ]]; then
       NEW_WITH=$@
@@ -140,7 +140,7 @@ if has nix-shell; then
       NEW_WITH=$WITH/$@
     fi
     ptag_push "with"
-    PROMPT_TAG=$PROMPT_TAG WITH=$NEW_WITH nix-shell -p $@ --run zsh
+    PROMPT_TAG=$PROMPT_TAG WITH=$NEW_WITH nix run $@ -c zsh
     ptag_pop
   }
 fi
