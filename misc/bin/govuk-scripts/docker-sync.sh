@@ -11,8 +11,8 @@ shift
 
 LOCAL_ARCHIVE_PATH="$HOME/govuk-data-sync"
 
-function wait_for_container {
-  until [[ "$(docker inspect -f {{.State.Health.Status}} $1)" == "healthy" ]]; do
+function wait_for_http {
+  until curl $1 &>/dev/null; do
     sleep 0.1
   done
 }
@@ -44,9 +44,9 @@ function sync_elasticsearch {
 
   local container=$(govuk docker compose run -d --rm -v $archive_path:/replication -v $cfg_path:/usr/share/elasticsearch/config/elasticsearch.yml -p 9200:9200 "elasticsearch${ver}")
   trap "docker stop $container" EXIT # FIXME: not executed on C-c
-  wait_for_container $container
 
   local es=http://127.0.0.1:9200
+  wait_for_http $es
   curl -XDELETE "${es}/_all"
   curl "${es}/_snapshot/snapshots" -X PUT -H 'Content-Type: application/json' -d '{
     "type": "fs",
