@@ -21,9 +21,10 @@ case $COMMAND in
     echo '    (c | compose) $arg...              - run a docker-compose command'
     echo '    (p | prune)                        - prune stale containers, volumes, and images'
     echo '    (s | sync)'
-    echo '        (es  | elasticsearch)          - sync elasticsearch 5 and 6 state'
-    echo '        (es5 | elasticsearch5)         - sync elasticsearch 5 state'
-    echo '        (es6 | elasticsearch6)         - sync elasticsearch 6 state'
+    echo '        (e  | elasticsearch)           - sync elasticsearch state'
+    echo '        (mo | mongodb) $app            - sync mongodb state for an app'
+    echo '        (my | mysql) $app              - sync mysql state for an app'
+    echo '        (p  | postgresql) $app         - sync postgresql state for an app'
     echo '    (! | stop)                         - shorthand for `compose stop`'
     echo '    (? | stacks) [$pat]                - shorthand for `compose ps --services`, optinally grepping by a pattern'
     echo
