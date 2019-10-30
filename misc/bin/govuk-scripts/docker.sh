@@ -37,19 +37,20 @@ case $COMMAND in
     fi
     shift
     if [[ -z $stack ]]; then
-      GOVUK_DOCKER_SERVICE="$app" govuk-docker run
+      govuk-docker run "${app}-lite"
     else
       shift
-      GOVUK_DOCKER_SERVICE="$app" govuk-docker run --stack $stack "$@"
+      govuk-docker run "${app}-${stack}" "$@"
     fi
     ;;
   'R'|'run-this')
+    this=$(basename $(pwd))
     stack=$1
     if [[ -z $stack ]]; then
-      govuk-docker run
+      govuk-docker run "${this}-lite"
     else
       shift
-      govuk-docker run --stack $stack "$@"
+      govuk-docker run "${this}-${stack}" "$@"
     fi
     ;;
   'c'|'compose')
@@ -59,7 +60,7 @@ case $COMMAND in
       govuk help
       exit 1
     fi
-    govuk-docker compose "$@" | tail -n+2
+    govuk-docker "$@"
     ;;
   'p'|'prune')
     docker system  prune -f
@@ -70,11 +71,11 @@ case $COMMAND in
     $GOVUK_SCRIPT_DIR/docker-sync.sh "$@"
     ;;
   '!'|'stop')
-    govuk docker compose stop
+    govuk-docker stop
     ;;
   '?'|'stacks')
     pat=$1
-    govuk docker compose ps --services | grep "$pat"
+    govuk-docker ps --services | grep "$pat"
     ;;
   *)
     echo "(govuk docker) unknown subcommand '${COMMAND}'"
