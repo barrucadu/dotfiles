@@ -538,7 +538,8 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config
   (setq helm-recentf-fuzzy-match t
         helm-ff-file-name-history-use-recentf t
-        helm-ff-search-library-in-sexp t))
+        helm-ff-search-library-in-sexp t)
+  (customize-set-variable 'helm-ff-lynx-style-map t))
 
 ;;; Projectile
 (use-package projectile
