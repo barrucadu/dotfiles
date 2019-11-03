@@ -275,7 +275,12 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
         ledger-mode-should-check-version    nil
         ledger-init-file-name               " "
         ledger-post-amount-alignment-column 80
-        ledger-highlight-xact-under-point   nil))
+        ledger-highlight-xact-under-point   nil)
+  (add-hook 'ledger-mode-hook
+            (lambda ()
+              (setq-local tab-always-indent 'complete)
+              (setq-local completion-cycle-threshold t)
+              (setq-local ledger-complete-in-steps t))))
 
 ;;; Programming
 
