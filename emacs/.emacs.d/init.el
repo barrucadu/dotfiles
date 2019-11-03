@@ -9,6 +9,7 @@
 (setq user-mail-address "mike@barrucadu.co.uk")
 
 ;;; Package management
+(setq package-check-signature nil)
 (require 'package)
 
 (package-initialize)
