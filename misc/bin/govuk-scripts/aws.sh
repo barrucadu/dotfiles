@@ -10,28 +10,14 @@ if [[ -z $ENV ]] || [[ -z $COMMAND ]]; then
 fi
 shift 2
 
-AWS_PROFILE="govuk-${ENV}"
-
-function __govuk_aws_assume {
-  aws --profile $AWS_PROFILE sts assume-role \
-      --role-arn $(crudini --get ~/.aws/config "profile ${AWS_PROFILE}" role_arn) \
-      --role-session-name $USER
-}
-
-function __govuk_aws_get_credential_key {
-  echo $credentials | ruby -e "require 'json'; c = JSON.parse(STDIN.read)['Credentials']; STDOUT << c['$1']"
-}
+ROLE="govuk-${ENV}-platformhealth-poweruser"
 
 case $COMMAND in
   'a'|'assume')
-    credentials=$(__govuk_aws_assume) || return $?
-    echo export AWS_ACCESS_KEY_ID=\'$(__govuk_aws_get_credential_key AccessKeyId)\'
-    echo export AWS_SECRET_ACCESS_KEY=\'$(__govuk_aws_get_credential_key SecretAccessKey)\'
-    echo export AWS_SESSION_TOKEN=\'$(__govuk_aws_get_credential_key SessionToken)\'
-    echo export AWS_EXPIRATION=\'$(__govuk_aws_get_credential_key Expiration)\'
+    gds aws "$ROLE" -e
     ;;
   'd'|'do')
-    aws --profile $AWS_PROFILE "$@"
+    gds aws "$ROLE" "$@"
     ;;
   *)
     echo "(govuk aws ${ENV}) unknown subcommand '${COMMAND}'"

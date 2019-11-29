@@ -11,16 +11,16 @@ shift
 
 case $TARGET in
   'e'|'elasticsearch')
-    $GOVUK_DOCKER_DIR/bin/replicate-elasticsearch.sh "$@"
+    govuk aws integration do $GOVUK_DOCKER_DIR/bin/replicate-elasticsearch.sh "$@"
     ;;
   'mo'|'mongodb')
-    $GOVUK_DOCKER_DIR/bin/replicate-mongodb.sh "$@"
+    govuk aws integration do $GOVUK_DOCKER_DIR/bin/replicate-mongodb.sh "$@"
     ;;
   'my'|'mysql')
-    $GOVUK_DOCKER_DIR/bin/replicate-mysql.sh "$@"
+    govuk aws integration do $GOVUK_DOCKER_DIR/bin/replicate-mysql.sh "$@"
     ;;
   'p'|'postgresql')
-    $GOVUK_DOCKER_DIR/bin/replicate-postgresql.sh "$@"
+    govuk aws integration do $GOVUK_DOCKER_DIR/bin/replicate-postgresql.sh "$@"
     ;;
   *)
     echo "(govuk docker sync) unknown target '${TARGET}'"
