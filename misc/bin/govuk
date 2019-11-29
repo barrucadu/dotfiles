@@ -36,6 +36,7 @@ case $COMMAND in
     echo '    (f | foreach) $class $arg...       - run the a command on every node in a class'
     echo
     echo 'govuk !'
+    echo '    alias                              - generate shell aliases'
     echo '    check                              - check dependencies are in PATH'
     ;;
 esac
