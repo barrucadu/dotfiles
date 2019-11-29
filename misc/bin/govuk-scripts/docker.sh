@@ -9,9 +9,6 @@ if [[ -z $COMMAND ]]; then
 fi
 shift
 
-# doesn't get exported from the larger environment
-eval "$(rbenv init - zsh)"
-
 case $COMMAND in
   'b'|'build')
     if [[ -z $1 ]]; then
