@@ -1,5 +1,23 @@
 #!/bin/sh
 
-xrandr --output "`xrandr -q | grep ' connected' | cut -d' ' -f1`" --rotate $1
-herbstclient detect_monitors
-randombg
+case "$1" in
+  "portrait")  rot1="left";;
+  "landscape") rot1="normal";;
+  *) echo "expected portrait or landscape, not '$1'" >&2; exit 1;;
+esac
+
+case "$2" in
+  "portrait")  rot2="left";;
+  "landscape") rot2="normal";;
+  *) echo "expected portrait or landscape, not '$2'" >&2; exit 1;;
+esac
+
+xrandr --output HDMI-0 --rotate $rot1
+xrandr --output HDMI-1 --rotate $rot2
+
+if [[ -z "$NO_DETECT" ]]; then
+  herbstclient detect_monitors
+fi
+
+cd ~/s/wallpaper
+feh --bg-max "$1/$(ls $1 | shuf -n)`" "$2/$(ls $2 | shuf -n)`"

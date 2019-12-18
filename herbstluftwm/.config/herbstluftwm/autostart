@@ -52,8 +52,10 @@ hc keybind XF86AudioLowerVolume spawn amixer set Master 1%-
 hc keybind XF86AudioRaiseVolume spawn amixer set Master 1%+
 
 # Displays
-hc keybind $Mod-Control-l spawn landscape
-hc keybind $Mod-Control-p spawn portrait
+hc keybind $Mod-Control-Shift-l spawn xrandr_rotate landscape landscape
+hc keybind $Mod-Control-l       spawn xrandr_rotate landscape portrait
+hc keybind $Mod-Control-p       spawn xrandr_rotate portrait  landscape
+hc keybind $Mod-Control-Shift-p spawn xrandr_rotate portrait  portrait
 
 # basic movement
 # focusing clients

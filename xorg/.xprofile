@@ -5,4 +5,4 @@ setxkbmap -option terminate:ctrl_alt_bksp
 
 xrdb -load ~/.Xdefaults
 
-randombg
+NO_DETECT=1 xrandr_rotate portrait portrait
