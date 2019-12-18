@@ -16,6 +16,9 @@ case $COMMAND in
   'a'|'assume')
     gds aws "$ROLE" -e
     ;;
+  'l'|'login')
+    gds aws "$ROLE" -l
+    ;;
   'd'|'do')
     gds aws "$ROLE" "$@"
     ;;

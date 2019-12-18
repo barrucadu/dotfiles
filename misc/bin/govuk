@@ -13,6 +13,7 @@ case $COMMAND in
     echo 'govuk (a | aws) $env'
     echo '    (a | assume)                       - assume-role and print the credentials'
     echo '    (d | do) $arg...                   - assume-role and run a command'
+    echo '    (l | login)                        - log in to the AWS console'
     echo
     echo 'govuk (d | docker)'
     echo '    (b | build) $app...                - set up apps and their dependencies'
