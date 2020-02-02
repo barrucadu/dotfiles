@@ -20,4 +20,4 @@ if [[ -z "$NO_DETECT" ]]; then
 fi
 
 cd ~/s/wallpaper
-feh --bg-max "$1/$(ls $1 | shuf -n)`" "$2/$(ls $2 | shuf -n)`"
+feh --bg-max "$1/$(ls $1 | shuf -n1)" "$2/$(ls $2 | shuf -n1)"
