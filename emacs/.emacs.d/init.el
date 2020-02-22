@@ -315,6 +315,9 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :hook
   (json-mode . (lambda () (setq-local js-indent-level 4))))
 
+(use-package jsonnet-mode
+  :mode "\\.jsonnet\\'")
+
 ;; Python
 (use-package python
   :mode ("``.py``'" . python-mode))
