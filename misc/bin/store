@@ -28,14 +28,22 @@ for file in "$@"; do
   uuid=$(uuidgen)
   tmp=`mktemp -d`
   mkdir -p $tmp/$uuid
-  cp -r $file $tmp/$uuid
+  if [[ -d $file ]]; then
+    cp -r $file/* $tmp/$uuid
+  else
+    cp -r $file $tmp/$uuid
+  fi
 
   scp -r $tmp/$uuid $REMOTE_HTTP_DIR/$ty >/dev/null || exit 1
   rm -r $tmp
 
+  if [[ -d $file ]]; then
+    echo "$HTTP_HOST/$ty/$uuid/"
+  else
+    echo "$HTTP_HOST/$ty/$uuid/$(basename $file)"
+  fi
+
   if $delete; then
       rm -r $file
   fi
-
-  echo "$HTTP_HOST/$ty/$uuid/$(basename $file)"
 done
