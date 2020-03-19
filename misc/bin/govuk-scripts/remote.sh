@@ -10,16 +10,33 @@ if [[ -z $ENV ]] || [[ -z $COMMAND ]]; then
 fi
 shift 2
 
+GCENV=$ENV
+GCTY=carrenza
+
+case "$ENV" in
+  'integration')
+    GCTY="aws"
+    ;;
+  'staging-aws')
+    GCENV="staging"
+    GCTY="aws"
+    ;;
+  'production-aws')
+    GCENV="production"
+    GCTY="aws"
+    ;;
+esac
+
 case $COMMAND in
   'c'|'classes')
-    ssh $ENV "govuk_node_list --classes"
+    govuk-connect ssh -e $GCENV "${GCTY}/jumpbox" "govuk_node_list --classes"
     ;;
   'n'|'nodes')
     class=$1
     if [[ -z $class ]]; then
-      ssh $ENV govuk_node_list
+      govuk-connect ssh -e $GCENV "${GCTY}/jumpbox" govuk_node_list
     else
-      ssh $ENV "govuk_node_list -c $class"
+      govuk-connect ssh -e $GCENV "${GCTY}/jumpbox" "govuk_node_list -c $class"
     fi
     ;;
   's'|'ssh')
@@ -31,7 +48,7 @@ case $COMMAND in
       exit 1
     fi
     shift
-    ssh $(ssh $ENV "govuk_node_list --single-node -c ${class}").$ENV "$@"
+    govuk-connect ssh -e $GCENV "${GCTY}/${class}" "$*"
     ;;
   'f'|'foreach')
     class=$1
@@ -42,8 +59,10 @@ case $COMMAND in
       exit 1
     fi
     shift
+    n=0
     for ip in $(govuk remote $ENV nodes $class); do
-      ssh "${ip}.${ENV}" "$@"
+      n=$((n+1))
+      govuk-connect ssh -e $GCENV "${GCTY}/${class}:${n}" "$*"
     done
     ;;
   *)
