@@ -51,6 +51,7 @@ alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
 
 # hledger
 alias bal="hledger balance -M --tree"
+alias forecast="hledger balance -M -H --tree --forecast --end 'next year'"
 
 # Miscellanious
 alias din='docker run -it --rm'
