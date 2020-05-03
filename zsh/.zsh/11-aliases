@@ -60,3 +60,8 @@ alias reload='source ~/.zshenv; source ~/.zshrc'
 alias pgfl='pgrep -fl'
 alias jctl='sudo journalctl'
 alias sctl='sudo systemctl'
+
+# Host-specific
+if [[ "$(hostname)" == "dreamlands" ]]; then
+  alias event-api-server-do='docker exec -i event-api-server_event_api_server_1'
+fi
