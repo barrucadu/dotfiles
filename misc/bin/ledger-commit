@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+export GIT_DIR=$HOME/ledger-git-dir
+export GIT_WORK_TREE=$HOME/s/ledger
+
+cd "$GIT_WORK_TREE"
+
+git add .
+git commit -m "${1:-Review}"
+git push
