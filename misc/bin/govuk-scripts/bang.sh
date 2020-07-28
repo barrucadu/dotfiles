@@ -61,6 +61,10 @@ case $COMMAND in
       echo '`gds` is not in $PATH'
       ret=1
     fi
+    if ! has govuk-connect; then
+      echo '`govuk-connect` is not in $PATH'
+      ret=1
+    fi
     if ! has govuk-docker; then
       echo '`govuk-docker` is not in $PATH'
       ret=1
