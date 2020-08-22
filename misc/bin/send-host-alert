@@ -1,0 +1,12 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p awscli
+
+# aws config
+AWS_PROFILE="monitoring"
+AWS_TOPIC_ARN="arn:aws:sns:eu-west-1:197544591260:host-notifications"
+
+aws sns publish \
+  --profile "${AWS_PROFILE}" \
+  --topic-arn "${AWS_TOPIC_ARN}" \
+  --subject "Alert: $(hostname)" \
+  --message "$1"
