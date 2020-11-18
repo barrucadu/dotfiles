@@ -27,3 +27,5 @@
 	G = grep
 [github]
 	user = barrucadu
+[init]
+	defaultBranch = master
