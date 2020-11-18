@@ -29,3 +29,5 @@
 	user = barrucadu
 [init]
 	defaultBranch = master
+[pull]
+	rebase = true
