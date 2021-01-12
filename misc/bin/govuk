@@ -7,6 +7,7 @@ COMMAND=$1
 case $COMMAND in
   'a'|'aws')    shift; $GOVUK_SCRIPT_DIR/aws.sh "$@";;
   'd'|'docker') shift; $GOVUK_SCRIPT_DIR/docker.sh "$@";;
+  'p'|'paas')   shift; $GOVUK_SCRIPT_DIR/paas.sh "$@";;
   'r'|'remote') shift; $GOVUK_SCRIPT_DIR/remote.sh "$@";;
   '!')          shift; $GOVUK_SCRIPT_DIR/bang.sh "$@";;
   *)
@@ -29,6 +30,9 @@ case $COMMAND in
     echo '        (p  | postgresql) $app         - sync postgresql state for an app'
     echo '    (! | stop)                         - shorthand for `compose stop`'
     echo '    (? | stacks) [$pat]                - shorthand for `compose ps --services`, optinally grepping by a pattern'
+    echo
+    echo 'govuk (p | paas) $loc'
+    echo '    (l | login)                        - log in to the CloudFoundry CLI'
     echo
     echo 'govuk (r | remote) $env'
     echo '    (c | classes)                      - list node classes'

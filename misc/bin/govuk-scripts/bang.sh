@@ -15,6 +15,14 @@ short_env_name() {
   esac
 }
 
+short_loc_name() {
+  loc="$1"
+  case $loc in
+    "london")  echo "l";;
+    "ireland") echo "i";;
+  esac
+}
+
 COMMAND=$1
 if [[ -z $COMMAND ]]; then
   echo "(govuk !) missing subcommand"
@@ -41,6 +49,14 @@ case $COMMAND in
     done
     for db in e mo my p; do
       echo "alias 'gkds${db}'='govuk docker sync ${db}'"
+    done
+    echo "alias 'gkp'='govuk paas'"
+    for loc in london ireland; do
+      short_loc=$(short_loc_name "$loc")
+      echo "alias 'gkp${short_loc}'='govuk paas ${loc}'"
+      for cmd in l; do
+        echo "alias 'gkp${short_loc}${cmd}'='govuk paas ${loc} ${cmd}'"
+      done
     done
     echo "alias 'gkr'='govuk remote'"
     for env in integration staging staging-aws production production-aws; do
@@ -71,6 +87,10 @@ case $COMMAND in
     fi
     if ! has make; then
       echo '`make` is not in $PATH'
+      ret=1
+    fi
+    if ! has cf; then
+      echo '`cf` is not in $PATH'
       ret=1
     fi
     exit $ret
