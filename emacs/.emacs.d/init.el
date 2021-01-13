@@ -460,7 +460,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
           ("Unpushed" 3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
           ("Path"    99 magit-repolist-column-path                   ())))
   :config
-  (define-key magit-file-mode-map (kbd "C-c M-g") nil)
   (setq magit-bury-buffer-function
         (lambda (con)
           (kill-buffer-and-window))))
