@@ -388,6 +388,10 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 (use-package typescript-mode
   :mode ("\\.ts\\'" "\\.tsx\\'"))
 
+;; VCL
+(use-package vcl-mode
+  :mode ("\\.vcl\\'"))
+
 ;; YAML
 (use-package yaml-mode
   :mode "\\.yaml\\'"
