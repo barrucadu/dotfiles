@@ -39,7 +39,7 @@ case $COMMAND in
     for env in integration staging production; do
       short_env=$(short_env_name "$env")
       echo "alias 'gka${short_env}'='govuk aws ${env}'"
-      for cmd in a d l; do
+      for cmd in a d l t; do
         echo "alias 'gka${short_env}${cmd}'='govuk aws ${env} ${cmd}'"
       done
     done
