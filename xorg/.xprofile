@@ -1,8 +1,0 @@
-# xprofile: read when a display manager is used
-
-setxkbmap -option compose:rctrl
-setxkbmap -option terminate:ctrl_alt_bksp
-
-xrdb -load ~/.Xdefaults
-
-NO_DETECT=1 xrandr_rotate portrait portrait

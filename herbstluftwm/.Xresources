@@ -5,7 +5,27 @@
 #define FONT_UNDERLINE xft:Source Code Pro:underline:size=10
 
 !! Colours
-#include "/home/barrucadu/dotfiles/xorg/.Xdefaults.d/daisuke"
+#define COLOUR_THEME_FG             #fffff0
+#define COLOUR_THEME_BG             #121212
+
+#define COLOUR_THEME_BLACK          #222222
+#define COLOUR_THEME_DARK_RED       #ff4500
+#define COLOUR_THEME_DARK_GREEN     #698b69
+#define COLOUR_THEME_DARK_YELLOW    #ffd700
+#define COLOUR_THEME_DARK_BLUE      #68838b
+#define COLOUR_THEME_DARK_MAGENTA   #c71585
+#define COLOUR_THEME_DARK_CYAN      #7fffd4
+#define COLOUR_THEME_LIGHT_GREY     #cccccc
+
+#define COLOUR_THEME_DARK_GREY      #999999
+#define COLOUR_THEME_LIGHT_RED      #ff7f00
+#define COLOUR_THEME_LIGHT_GREEN    #00ee76
+#define COLOUR_THEME_LIGHT_YELLOW   #ffff00
+#define COLOUR_THEME_LIGHT_BLUE     #00bfff
+#define COLOUR_THEME_LIGHT_MAGENTA  #da70d6
+#define COLOUR_THEME_LIGHT_CYAN     #add8e6
+#define COLOUR_THEME_WHITE          #f5fffa
+
 *color0:  COLOUR_THEME_BLACK
 *color8:  COLOUR_THEME_DARK_GREY
 *color1:  COLOUR_THEME_DARK_RED

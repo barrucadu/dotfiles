@@ -19,37 +19,12 @@ hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
 
 # Spawning programs
-hc keybind $Mod-x       spawn gmrun
-hc keybind XF86HomePage spawn chromium --enable-ipv6 --force-device-scale-factor
-hc keybind XF86Mail     spawn claws-mail
-hc keybind Print        spawn scrot ~/tmp/screenshot.png
-
-if type urxvtc &>/dev/null; then
-  hc keybind $Mod-Return    spawn urxvtc
-  hc keybind $Mod-backslash spawn urxvtc -e newtmux
-elif type xfce4-terminal &>/dev/null; then
-  hc keybind $Mod-Return    spawn xfce4-terminal
-  hc keybind $Mod-backslash spawn xfce4-terminal -e newtmux
-else
-  hc keybind $Mod-Return    spawn xterm
-  hc keybind $Mod-backslash spawn xterm -e newtmux
-fi
-if type dm-tool &>/dev/null; then
-  hc keybind XF86Sleep spawn dm-tool lock
-elif type slock &>/dev/null; then
-  hc keybind XF86Sleep spawn slock
-elif type xscreensaver-command &>/dev/null; then
-  hc keybind XF86Sleep spawn xscreensaver-command -lock
-fi
+hc keybind $Mod-x         spawn gmrun
+hc keybind $Mod-Return    spawn urxvtc
+hc keybind $Mod-backslash spawn urxvtc -e $HOME/bin/newtmux
 
 # Media keys
-hc keybind XF86AudioPlay        spawn mpc toggle
-hc keybind XF86AudioStop        spawn mpc stop
-hc keybind XF86AudioPrev        spawn mpc prev
-hc keybind XF86AudioNext        spawn mpc next
-hc keybind XF86AudioMute        spawn amixer set Master toggle
-hc keybind XF86AudioLowerVolume spawn amixer set Master 1%-
-hc keybind XF86AudioRaiseVolume spawn amixer set Master 1%+
+hc keybind Print spawn scrot ~/tmp/screenshot.png
 
 # Displays
 hc keybind $Mod-Control-Shift-l spawn xrandr_rotate landscape landscape
@@ -109,19 +84,10 @@ hc keybind $Mod-s floating toggle
 hc keybind $Mod-f fullscreen toggle
 hc keybind $Mod-p pseudotile toggle
 
-# mouse
-hc mouseunbind --all
-hc mousebind $Mod-Button1 move
-hc mousebind $Mod-Button2 zoom
-hc mousebind $Mod-Button3 resize
-hc set mouse_recenter_gap 0
-
 # focus
-hc keybind $Mod-BackSpace   cycle_monitor
-hc keybind $Mod-Tab         cycle_all +1
-hc keybind $Mod-Shift-Tab   cycle_all -1
-hc keybind $Mod-c cycle
-hc keybind $Mod-i jumpto urgent
+hc keybind $Mod-c         cycle
+hc keybind $Mod-Tab       cycle_all +1
+hc keybind $Mod-Shift-Tab cycle_all -1
 hc set focus_follows_mouse 1
 
 # theme
@@ -140,5 +106,8 @@ hc unlock
 
 herbstclient set tree_style '╾│ ├└╼─┐'
 
-# detect monitors
-hc detect_monitors
+# load Xresources
+xrdb -load ~/.Xresources
+
+# rotate displays & set wallpaper
+$HOME/bin/xrandr_rotate landscape portrait
