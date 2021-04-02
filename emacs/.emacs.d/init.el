@@ -187,6 +187,7 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
     "c"   '(nil :which-key "comments prefix")
     "f"   '(nil :which-key "files prefix")
     "g"   '(nil :which-key "git prefix")
+    "k"   '(nil :which-key "compilation prefix")
     "m"   '(nil :which-key "major mode prefix")
     "p"   '(nil :which-key "projectile prefix")
     "s"   '(nil :which-key "search prefix")
@@ -568,6 +569,32 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   :config
   (helm-projectile-on)
   (setq projectile-switch-project-action 'helm-projectile))
+
+;;; Compilation
+
+(require 'ansi-color)
+
+(defun barrucadu/colour-compilation-buffer ()
+  "Enable ANSI colours in a buffer."
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+(use-package compile
+  :after projectile
+  :general
+  (bind-in-top-level
+    "k c" 'compile
+    "k p" 'projectile-compile-project
+    "k r" 'recompile)
+  (general-define-key
+    :keymaps 'evil-ex-map
+    "k c" 'compile
+    "k p" 'projectile-compile-project
+    "k r" 'recompile)
+  :config
+  (setq compilation-scroll-output t)
+  :hook
+  (compilation-filter . barrucadu/colour-compilation-buffer))
 
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars)
