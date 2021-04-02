@@ -1,5 +1,0 @@
-system-ghc: true
-compiler-check: newer-minor
-
-nix:
-  enable: true
