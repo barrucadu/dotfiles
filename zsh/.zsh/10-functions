@@ -63,13 +63,6 @@ function re()
     exit
 }
 
-# List a directory, restricting by some regex, and tabulate the result.
-function lsby() {
-    local regex=$1
-    shift
-    ls $* | grep $regex | column -c $(tput cols)
-}
-
 # Check if a command exists, can be a binary in PATH or a shell
 # alias/function.
 function has() {

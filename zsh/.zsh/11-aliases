@@ -49,19 +49,9 @@ alias mkdir='mkdir -p'
 alias nixos-up='sudo nixos-rebuild switch --upgrade'
 alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
 
-# hledger
-alias bal="hledger balance -M --tree"
-alias forecast="hledger balance -M -H --tree --forecast --end 'next year'"
-
 # Miscellanious
+alias bal="hledger balance -M --tree"
 alias din='docker run -it --rm'
 alias ta='tmux attach-session -d -t'
 alias reload='source ~/.zshenv; source ~/.zshrc'
 alias pgfl='pgrep -fl'
-alias jctl='sudo journalctl'
-alias sctl='sudo systemctl'
-
-# Host-specific
-if [[ "$(hostname)" == "dreamlands" ]]; then
-  alias event-api-server-do='docker exec -i event-api-server_event_api_server_1 bin/event-api-server'
-fi
