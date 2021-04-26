@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# new (2021) laptop has a different local username
+export USER=michaelswalker
+
 ENV=$1
 COMMAND=$2
 if [[ -z $ENV ]] || [[ -z $COMMAND ]]; then
