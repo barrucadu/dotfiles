@@ -140,6 +140,8 @@
 (use-package evil
   :ensure t
   :demand t
+  :init
+  (setq evil-want-keybinding nil)
   :config
   (evil-mode 1)
   (defalias 'evil-insert-state 'evil-emacs-state)
@@ -152,6 +154,10 @@
   (advice-add 'evil-previous-line :around 'barrucadu/evil-previous-line)
   :hook
   (git-commit-mode . evil-emacs-state))
+
+(use-package evil-collection
+  :after evil
+  :init (evil-collection-init))
 
 (use-package which-key
   :init    (which-key-mode)
@@ -468,9 +474,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
   (setq magit-bury-buffer-function
         (lambda (con)
           (kill-buffer-and-window))))
-
-(use-package evil-magit
-  :after magit)
 
 (use-package git-timemachine
   :general
