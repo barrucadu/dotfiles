@@ -1,0 +1,15 @@
+## -*- shell-script -*-
+
+if [[ -e ~/.nix-profile/etc/profile.d/nix.sh ]] && [[ "$NIX_LINK" == "" ]]; then
+  source ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
+if [ -f ~/google-cloud-sdk/path.zsh.inc ] && [[ "$GCLOUD_INIT" == "" ]]; then
+  source ~/google-cloud-sdk/path.zsh.inc
+fi
+
+if [ -f ~/google-cloud-sdk/completion.zsh.inc ] && [[ "$GCLOUD_INIT" == "" ]]; then
+  source ~/google-cloud-sdk/completion.zsh.inc
+fi
+
+GCLOUD_INIT=1
