@@ -2,6 +2,8 @@
 
 set -e
 
+hledger check ordereddates
+
 export GIT_DIR=$HOME/ledger-git-dir
 export GIT_WORK_TREE=$HOME/s/ledger
 
