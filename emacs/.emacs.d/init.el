@@ -357,6 +357,10 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
 (use-package nix-mode
   :mode "\\.nix\\'")
 
+;; Pug
+(use-package pug-mode
+  :mode "\\.pug\\'")
+
 ;; Puppet
 (use-package puppet-mode
   :mode "\\.pp\\'")
