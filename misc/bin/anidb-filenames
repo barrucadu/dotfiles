@@ -1,0 +1,51 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages (ps: [ps.beautifulsoup4 ps.requests ps.docopt])"
+
+"""anidb-filenames
+
+Usage:
+  anidb-filenames <show-id> [--len=<n>]
+
+Options:
+  <show-id>  Number from https://anidb.net/anime/<show-id>
+  --len=<n>  Number of digits to pad to [default: 2]
+"""
+
+import re
+import requests
+import shlex
+import sys
+
+from bs4 import BeautifulSoup
+from docopt import docopt
+
+replacements = [
+    (":", " -"),
+    ("\"", "'"),
+    ("`", "'"),
+    ("[!\?/]+", " - "),
+    ("- -", "-"),
+    ("  +", " "),
+    (" - $", ""),
+    (" +$", ""),
+    ("([^\.])\.$", "\\1"),
+]
+
+args = docopt(__doc__)
+
+SHOW_ID = args['<show-id>']
+LEN = int(args['--len'])
+
+# anidb blocks the default user-agent
+headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:69.0) Gecko/20100101 Firefox/69.0"}
+
+html = requests.get(f"https://anidb.net/anime/{SHOW_ID}", headers=headers).text
+soup = BeautifulSoup(html, "html.parser")
+
+i = 1
+for title in soup.find(id="eplist").find("tbody").find_all(class_="title"):
+    episode_title = title.text.strip()
+    for pat, replacement in replacements:
+        episode_title = re.sub(pat, replacement, episode_title)
+    print(shlex.join(["lns", str(i).zfill(LEN), episode_title]))
+    i += 1
