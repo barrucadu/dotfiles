@@ -4,10 +4,11 @@
 """anidb-filenames
 
 Usage:
-  anidb-filenames <show-id> [--len=<n>]
+  anidb-filenames [<show-id>] [--len=<n>]
 
 Options:
   <show-id>  Number from https://anidb.net/anime/<show-id>
+             Can be inferred if the working directory name contains "anidb-<show-id>".
   --len=<n>  Number of digits to pad to [default: 2]
 """
 
@@ -15,6 +16,7 @@ import re
 import requests
 import shlex
 import sys
+import os
 
 from bs4 import BeautifulSoup
 from docopt import docopt
@@ -35,6 +37,15 @@ args = docopt(__doc__)
 
 SHOW_ID = args['<show-id>']
 LEN = int(args['--len'])
+
+if SHOW_ID is None:
+    cwd = os.path.basename(os.getcwd())
+    if "[anidb-" in cwd:
+        _, suff = cwd.split("[anidb-")
+        SHOW_ID, _ = suff.split("]")
+    else:
+        print("Must give a show ID")
+        sys.exit(1)
 
 # anidb blocks the default user-agent
 headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:69.0) Gecko/20100101 Firefox/69.0"}
