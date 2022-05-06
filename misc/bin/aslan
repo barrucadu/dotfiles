@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+
+import random
+import sys
+
+SYLLABLES = [
+    (3, "v"),
+    (3, "cv"),
+    (2, "vk"),
+    (2, "cvk"),
+]
+
+COMPONENTS = {
+    "c": [
+        (5, "f"),
+        (4, "ft"),
+        (7, "h"),
+        (2, "hf"),
+        (5, "hk"),
+        (3, "hl"),
+        (3, "hr"),
+        (5, "ht"),
+        (2, "hw"),
+        (7, "k"),
+        (6, "kh"),
+        (4, "kht"),
+        (4, "kt"),
+        (2, "l"),
+        (3, "r"),
+        (4, "s"),
+        (3, "st"),
+        (8, "t"),
+        (2, "tl"),
+        (2, "tr"),
+        (6, "w"),
+    ],
+    "v": [
+        (10, "a"),
+        (3, "ai"),
+        (2, "ao"),
+        (1, "au"),
+        (6, "e"),
+        (6, "ea"),
+        (2, "ei"),
+        (4, "i"),
+        (3, "iy"),
+        (2, "o"),
+        (1, "oa"),
+        (2, "oi"),
+        (1, "ou"),
+        (1, "u"),
+        (1, "ua"),
+        (1, "ui"),
+        (2, "ya"),
+        (1, "yu"),
+    ],
+    "k": [
+        (10, "kh"),
+        (4, "l"),
+        (7, "lr"),
+        (3, "r"),
+        (5, "rl"),
+        (4, "s"),
+        (5, "w"),
+        (6, "`"),
+    ],
+}
+
+
+def choose(freqlist):
+    index = random.uniform(0, sum(f for f, _ in freqlist))
+    for f, option in freqlist:
+        if index <= 0:
+            break
+        index -= f
+    return option
+
+
+def generate_word(syllable_length):
+    must_begin_with_vowel = False
+    vowel_to_skip = None
+    out = []
+    for _ in range(syllable_length):
+        if must_begin_with_vowel:
+            pattern = choose([s for s in SYLLABLES if s[1][0] == "v"])
+        else:
+            pattern = choose(SYLLABLES)
+
+        syllable = ""
+        vowel = None
+        for p in pattern:
+            if p == "v":
+                vowel = choose([c for c in COMPONENTS["v"] if c[1] != vowel_to_skip])
+                syllable += vowel
+            else:
+                syllable += choose(COMPONENTS[p])
+        out.append(syllable)
+
+        if pattern[-1] == "v" and len(vowel) == 1:
+            vowel_to_skip = vowel
+        must_begin_with_vowel = pattern[-1] != "v"
+
+    return out
+
+
+for _ in range(10):
+    print(
+        " ".join(
+            ".".join(generate_word(int(syllable_length)))
+            for syllable_length in sys.argv[1:]
+        )
+    )
