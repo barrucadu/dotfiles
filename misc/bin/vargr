@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+
+import random
+import sys
+
+SYLLABLES = [
+    (1, "v"),
+    (3, "cv"),
+    (3, "vk"),
+    (3, "cvk"),
+]
+
+COMPONENTS = {
+    "c": [
+        (5, "d"),
+        (5, "dh"),
+        (3, "dz"),
+        (4, "f"),
+        (10, "g"),
+        (6, "gh"),
+        (2, "gn"),
+        (4, "gv"),
+        (4, "gz"),
+        (10, "k"),
+        (3, "kf"),
+        (6, "kh"),
+        (3, "kn"),
+        (3, "ks"),
+        (4, "l"),
+        (4, "ll"),
+        (2, "n"),
+        (2, "ng"),
+        (5, "r"),
+        (4, "rr"),
+        (5, "s"),
+        (4, "t"),
+        (4, "th"),
+        (2, "ts"),
+        (5, "v"),
+        (6, "z"),
+    ],
+    "v": [
+        (5, "a"),
+        (4, "ae"),
+        (2, "e"),
+        (1, "i"),
+        (4, "o"),
+        (2, "oe"),
+        (2, "ou"),
+        (3, "u"),
+        (3, "ue"),
+    ],
+    "k": [
+        (1, "dh"),
+        (1, "dz"),
+        (3, "g"),
+        (2, "gh"),
+        (1, "ghz"),
+        (1, "gz"),
+        (2, "k"),
+        (2, "kh"),
+        (1, "khs"),
+        (1, "ks"),
+        (2, "l"),
+        (1, "ll"),
+        (5, "n"),
+        (5, "ng"),
+        (3, "r"),
+        (3, "rr"),
+        (1, "rrg"),
+        (1, "rrgh"),
+        (1, "rs"),
+        (1, "rz"),
+        (1, "s"),
+        (1, "th"),
+        (1, "ts"),
+        (2, "z"),
+    ],
+}
+
+
+def choose(freqlist):
+    index = random.uniform(0, sum(f for f, _ in freqlist))
+    for f, option in freqlist:
+        if index <= 0:
+            break
+        index -= f
+    return option
+
+
+def generate_word(syllable_length):
+    must_begin_with_consonant = False
+    out = []
+    for _ in range(syllable_length):
+        if must_begin_with_consonant:
+            pattern = choose([s for s in SYLLABLES if s[1][0] == "c"])
+        else:
+            pattern = choose(SYLLABLES)
+
+        syllable = ""
+        for p in pattern:
+            syllable += choose(COMPONENTS[p])
+        out.append(syllable)
+
+        must_begin_with_consonant = pattern[-1] == "v"
+
+    return out
+
+
+for _ in range(10):
+    print(
+        " ".join(
+            ".".join(generate_word(int(syllable_length)))
+            for syllable_length in sys.argv[1:]
+        )
+    )
