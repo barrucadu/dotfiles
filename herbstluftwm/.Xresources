@@ -1,8 +1,8 @@
 !!! Fonts
-#define FONT           xft:Source Code Pro:size=10
-#define FONT_BOLD      xft:Source Code Pro:bold:size=10
-#define FONT_ITALIC    xft:Source Code Pro:italic:size=10
-#define FONT_UNDERLINE xft:Source Code Pro:underline:size=10
+#define FONT           xft:Source Code Pro:size=12
+#define FONT_BOLD      xft:Source Code Pro:bold:size=12
+#define FONT_ITALIC    xft:Source Code Pro:italic:size=12
+#define FONT_UNDERLINE xft:Source Code Pro:underline:size=12
 
 !! Colours
 #define COLOUR_THEME_FG             #fffff0
@@ -77,7 +77,7 @@ URxvt.iso14755_52:       0
 URxvt.letterSpace:       -1
 
 !! Emacs
-Emacs*font:               Source Code Pro-10
+Emacs*font:               Source Code Pro-12
 Emacs*fullscreen:         fullboth
 Emacs*toolBar:            0
 Emacs*verticalScrollBars: off
