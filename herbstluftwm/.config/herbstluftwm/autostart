@@ -26,12 +26,6 @@ hc keybind $Mod-backslash spawn urxvtc -e $HOME/bin/newtmux
 # Media keys
 hc keybind Print spawn scrot ~/tmp/screenshot.png
 
-# Displays
-hc keybind $Mod-Control-Shift-l spawn xrandr_rotate landscape landscape
-hc keybind $Mod-Control-l       spawn xrandr_rotate landscape portrait
-hc keybind $Mod-Control-p       spawn xrandr_rotate portrait  landscape
-hc keybind $Mod-Control-Shift-p spawn xrandr_rotate portrait  portrait
-
 # basic movement
 # focusing clients
 hc keybind $Mod-Left  focus left
@@ -110,4 +104,4 @@ herbstclient set tree_style '╾│ ├└╼─┐'
 xrdb -load ~/.Xresources
 
 # rotate displays & set wallpaper
-$HOME/bin/xrandr_rotate landscape portrait
+$HOME/bin/xrandr_rotate landscape portrait portrait

@@ -12,12 +12,22 @@ case "$2" in
   *) echo "expected portrait or landscape, not '$2'" >&2; exit 1;;
 esac
 
-xrandr --output HDMI-0 --rotate $rot1
-xrandr --output HDMI-1 --rotate $rot2
+case "$3" in
+  "portrait")  rot3="left";;
+  "landscape") rot3="normal";;
+  *) echo "expected portrait or landscape, not '$3'" >&2; exit 1;;
+esac
+
+xrandr --output DP-0.1 --rotate $rot1
+xrandr --output DP-0.8 --rotate $rot2
+xrandr --output DP-2.8 --rotate $rot3
 
 if [[ -z "$NO_DETECT" ]]; then
   herbstclient detect_monitors
 fi
 
 cd ~/s/wallpaper
-feh --bg-max "$1/$(ls $1 | shuf -n1)" "$2/$(ls $2 | shuf -n1)"
+feh --bg-max \
+    "$3/$(ls $3 | shuf -n1)" \
+    "$2/$(ls $2 | shuf -n1)" \
+    "$1/$(ls $1 | shuf -n1)"
