@@ -133,7 +133,7 @@ if has nix; then
       NEW_WITH=$WITH/$@
     fi
     ptag_push "with"
-    PROMPT_TAG=$PROMPT_TAG WITH=$NEW_WITH nix --extra-experimental-features nix-command --extra-experimental-features flakes shell "$@" -c zsh
+    PROMPT_TAG=$PROMPT_TAG WITH=$NEW_WITH nix --extra-experimental-features nix-command --extra-experimental-features flakes shell -f "<nixpkgs>" "$@" -c zsh
     ptag_pop
   }
 fi
