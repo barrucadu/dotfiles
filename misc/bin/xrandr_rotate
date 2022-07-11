@@ -18,9 +18,9 @@ case "$3" in
   *) echo "expected portrait or landscape, not '$3'" >&2; exit 1;;
 esac
 
-xrandr --output DP-0.1 --rotate $rot1
-xrandr --output DP-0.8 --rotate $rot2
-xrandr --output DP-2.8 --rotate $rot3
+xrandr --output DP-2 --rotate $rot1
+xrandr --output DP-0.1.8 --rotate $rot2
+xrandr --output DP-0.8 --rotate $rot3
 
 if [[ -z "$NO_DETECT" ]]; then
   herbstclient detect_monitors
