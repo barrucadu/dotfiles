@@ -46,7 +46,7 @@ alias mv='mv -v'
 alias mkdir='mkdir -p'
 
 # Nix
-alias nixos-up='sudo nixos-rebuild switch --update-input nixpkgs --impure'
+alias nixos-up='sudo nixos-rebuild switch --update-input nixpkgs'
 alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
 
 # Miscellanious
