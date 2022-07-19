@@ -252,28 +252,6 @@ Unlike 'switch-to-prev-buffer', performing this function twice gets you back to 
         ispell-dictionary     "en_GB"
         ispell-silently-savep t))
 
-(flycheck-define-checker proselint
-  "A linter for prose."
-  :command ("proselint" source-inplace)
-  :error-patterns
-  ((warning line-start (file-name) ":" line ":" column ": "
-            (id (one-or-more (not (any " "))))
-            (message (one-or-more not-newline)
-                     (zero-or-more "\n" (any " ") (one-or-more not-newline)))
-            line-end))
-  :modes (text-mode markdown-mode latex-mode rst-mode))
-
-(add-to-list 'flycheck-checkers 'proselint t)
-(flycheck-add-next-checker 'tex-chktex  'proselint t)
-(flycheck-add-next-checker 'tex-lacheck 'proselint t)
-
-(use-package flycheck-vale
-  :after flycheck
-  :hook (flycheck-mode . flycheck-vale-setup)
-  :config
-  (flycheck-add-next-checker 'proselint 'vale t)
-  (flycheck-add-mode 'vale 'latex-mode))
-
 ;;; Accounting
 (use-package flycheck-ledger)
 (use-package ledger-mode
