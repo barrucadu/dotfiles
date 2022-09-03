@@ -1,5 +1,0 @@
-## -*- shell-script -*-
-
-if has rbenv; then
-  eval "$(rbenv init - zsh)"
-fi

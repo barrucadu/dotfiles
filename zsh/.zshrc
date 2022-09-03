@@ -1,7 +1,360 @@
 ## -*- shell-script -*-
 
-for file in ~/.zsh/*; do
-  if [[ -f $file ]] && [[ -x $file ]]; then
-    source $file
-  fi
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+
+# Check if a command exists, can be a binary in PATH or a shell
+# alias/function.
+function has() {
+  type $1 &>/dev/null
+}
+
+###############################################################################
+## OPTIONS
+###############################################################################
+
+# History
+export HISTFILE=${XDG_DATA_HOME:-~/.local/share}/zsh/history
+export HISTSIZE=10000
+export SAVEHIST=10000
+export DIRSTACKSIZE=16
+
+setopt hist_ignore_dups
+setopt hist_no_functions
+setopt hist_reduce_blanks
+setopt hist_verify
+setopt share_history
+setopt inc_append_history
+
+# Keybindings
+typeset -A key
+key=(
+    Home     "${terminfo[khome]}"
+    End      "${terminfo[kend]}"
+    Insert   "${terminfo[kich1]}"
+    Delete   "${terminfo[kdch1]}"
+    Up       "${terminfo[kcuu1]}"
+    Down     "${terminfo[kcud1]}"
+    Left     "${terminfo[kcub1]}"
+    Right    "${terminfo[kcuf1]}"
+    PageUp   "${terminfo[kpp]}"
+    PageDown "${terminfo[knp]}"
+)
+
+autoload -U history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+bindkey -e
+bindkey "^R"             history-incremental-search-backward
+bindkey "^F"             history-incremental-pattern-search-forward
+bindkey ${key[Home]}     beginning-of-line
+bindkey "^A"             beginning-of-line
+bindkey ${key[End]}      end-of-line
+bindkey "^E"             end-of-line
+bindkey ${key[Insert]}   overwrite-mode
+bindkey ${key[Delete]}   delete-char
+bindkey ${key[Left]}     backward-char
+bindkey ${key[Right]}    forward-char
+bindkey ${key[Up]}       history-beginning-search-backward-end
+bindkey ${key[Down]}     history-beginning-search-forward-end
+
+# Tab completion
+zle -C complete-file complete-word _generic
+
+zstyle ':completion:*'                 completer _complete _match _approximate
+zstyle ':completion:*:match:*'         original only
+zstyle ':completion:*:approximate:*'   max-errors 1 numeric
+zstyle ':completion:*:*'               original only
+zstyle ':completion:complete-file::::' completer _files
+zstyle ':completion:*'                 completer _complete _ignored _files
+
+autoload -Uz compinit
+compinit
+
+setopt complete_aliases
+setopt hash_list_all
+setopt menu_complete
+
+# Directory navigation
+setopt auto_cd
+setopt auto_pushd
+setopt chase_links
+setopt pushd_silent
+setopt pushd_to_home
+
+# Globbing
+setopt extended_glob
+setopt glob_dots
+setopt mark_dirs
+setopt multibyte
+setopt null_glob
+
+# Misc
+setopt correct
+setopt interactive_comments
+
+
+###############################################################################
+## COLOURS
+###############################################################################
+
+# Framebuffer zenburn colours
+if [ "$TERM" = "linux" ]; then
+  echo -en "\e]P01C1C20"
+  echo -en "\e]P84d4d4d"
+  echo -en "\e]P1CE5C00"
+  echo -en "\e]P9F57900"
+  echo -en "\e]P2B7CE42"
+  echo -en "\e]PABDE077"
+  echo -en "\e]P3B88B10"
+  echo -en "\e]PBFFC135"
+  echo -en "\e]P466AABB"
+  echo -en "\e]PCAACCBB"
+  echo -en "\e]P5B7416E"
+  echo -en "\e]PDBB4466"
+  echo -en "\e]P65E7175"
+  echo -en "\e]PEA3BABF"
+  echo -en "\e]P7D6D8D9"
+  echo -en "\e]PF6C887A"
+  clear
+fi
+
+# Terminal colours
+autoload colors zsh/terminfo
+colors
+
+colnames=(black red green yellow blue magenta cyan white)
+for color in $colnames; do
+  eval f$color='%{$fg[${color}]%}'
+  eval fb$color='%{$terminfo[bold]$fg[${color}]%}'
+  eval b$color='%{$bg[${color}]%}'
 done
+
+foregrounds=($fblack $fred $fgreen $fyellow $fblue $fmagenta $fcyan $fwhite
+             $fbblack $fbred $fbgreen $fbyellow $fbblue $fbmagenta $fbcyan $fbwhite)
+backgrounds=($bblack $bred $bgreen $byellow $bblue $bmagenta $bcyan $bwhite)
+
+fdefault="%{$terminfo[sgr0]%}"
+
+# Colourful directory listings
+if has dircolors; then
+  eval $(dircolors -b)
+fi
+
+
+###############################################################################
+## PROMPT
+###############################################################################
+
+function _prompt_precmd()
+{
+  # Last command status
+  local cmdstatus=$?
+  local sadface=$([ "$cmdstatus" != "0" ] && echo " ${fred}:(${fdefault} ")
+
+  # Colours
+  local dircolour=$([ -w "$(pwd)" ] && echo $fbcyan || echo $fbred)
+
+  # Host
+  local prompt_host="${fbyellow}%m${fdefault}"
+
+  # Tag
+  local prompt_tag=$([ ! -z $PROMPT_TAG ] && echo " ${fbmagenta}{${PROMPT_TAG}}${fdefault}")
+
+  # Git
+  local prompt_git=""
+  if git status &>/dev/null; then
+    local ref=$(git symbolic-ref HEAD 2> /dev/null) || return 1
+    local branch=${ref#refs/heads/}
+
+    prompt_git=" ${fgreen}[${branch}]${fdefault}"
+  fi
+
+  export PROMPT="${prompt_host}${prompt_tag}${prompt_git}${sadface} ${fbblue}>>>${fdefault}  "
+  export RPROMPT="${dircolour}%2~${fdefault}"
+}
+
+# Push to the prompt tag
+function ptag_push(){
+  if [[ -z $PROMPT_TAG ]]; then
+    PROMPT_TAG=$1
+  else
+    PROMPT_TAG=$PROMPT_TAG/$1
+  fi
+}
+
+# Pop from the prompt tag.
+function ptag_pop(){
+  PROMPT_TAG=$(dirname $PROMPT_TAG)
+  if [[ "$PROMPT_TAG" == "." ]]; then
+    PROMPT_TAG=""
+  fi
+}
+
+export PS2="${fblue}%B%_%b >${fdefault} "
+export PS3="${fyellow}%Bselect%b:${fdefault} "
+
+precmd_functions+=(_prompt_precmd)
+
+
+###############################################################################
+## FUNCTIONS & ALIASES
+###############################################################################
+
+# Display information about the state of the world.
+function status(){
+  clear
+
+  # Display a fortune
+  if has fortune; then
+    fortune | sed "s:^:>  :"
+  fi
+
+  # This month's budget
+  echo "\n$(date +%B) Budget:"
+  if $IS_GNULINUX; then
+    local nextm=$(date --date=+1month +"%Y-%m-01")
+  else
+    local nextm=$(date -v+1m +"%Y-%m-01")
+  fi
+  hledger balance -N -H --end=$nextm --tree discretionary goal saved | sed 1d | sed 's:^            : :'
+
+  echo
+}
+
+# Run and disown a program
+function r()
+{
+    $* &>/dev/null &
+    disown %%
+}
+
+# Run and disown a program, then terminate the shell
+function re()
+{
+    $* &>/dev/null &
+    disown %%
+    exit
+}
+
+if has fzf; then
+  function __fzf_any() {
+    local dir="${1:-.}"
+    find $dir | fzf "$2"
+  }
+
+  function __fzf_file() {
+    local dir="${1:-.}"
+    find $dir -type f | fzf "$2"
+  }
+
+  function __fzf_dir() {
+    local dir="${1:-.}"
+    find $dir -type d | fzf
+  }
+
+  alias -g ,a='$(__fzf_any  . -m)'
+  alias -g ,f='$(__fzf_file . -m)'
+  alias -g ,d='$(__fzf_dir  . -m)'
+  alias -g ,=,f
+  alias -g '.F'="| fzf"
+fi
+
+if has nix; then
+  # Launch a subshell with some packages available
+  function with() {
+    if [[ -z $WITH ]]; then
+      NEW_WITH=$@
+    else
+      NEW_WITH=$WITH/$@
+    fi
+    ptag_push "with"
+    PROMPT_TAG=$PROMPT_TAG WITH=$NEW_WITH nix --extra-experimental-features nix-command --extra-experimental-features flakes shell -f "<nixpkgs>" "$@" -c zsh
+    ptag_pop
+  }
+
+  alias nixos-up='sudo nixos-rebuild switch --update-input nixpkgs'
+  alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
+fi
+
+if has stack; then
+  # Short alias for stack, with abbreviated subcommands.
+  function s() {
+    local command=$1
+
+    typeset -A subcommands
+    local subcommands=(b build c clean e exec eg "exec ghci" g ghci i install r runghc t test)
+
+    if [[ $command == "-h" ]] || [[ $command == "--help" ]]; then
+      echo "Usage: s <command or alias> <args>"
+      echo "Shorthand for 'stack'\n"
+      echo "Aliases:"
+      for k in "${(@ko)subcommands}"; do
+        echo "    ${(r:2:: :)${k}} -> $subcommands[$k]"
+      done
+      echo "\nFor stack help, see 'stack --help' (or just 's')"
+    else
+      shift 2>/dev/null
+      stack ${=subcommands[$command]:-$command} $*
+    fi
+  }
+fi
+
+# Short aliases
+alias !='sudo'
+alias c='clear'
+alias e='exit'
+alias o=$EDITOR
+alias g='git'
+alias m='mosh'
+alias '?'='status'
+alias G=grep
+
+# Pipeline
+alias -g '.G'='| grep'
+alias -g '.S'='| sed'
+alias -g '.A'='| awk'
+alias -g '.U'='| sort | uniq'
+alias -g '.L'='2>&1 | less'
+alias -g '.H'='2>&1 | head'
+alias -g '.T'='2>&1 | tail'
+alias -g '.1'='2>&1'
+
+# Basic commands
+alias su='sudo su - '
+alias free='free -ht'
+alias df='df -h'
+alias du='du -shc'
+
+# File management
+case $KERNEL_NAME in
+  "linux")
+    alias ls='ls --color=auto'
+    alias la='ls --color=auto -lA'
+    ;;
+  "darwin")
+    alias ls='ls -G'
+    alias la='ls -GlA'
+    ;;
+esac
+
+alias lls='env ls'
+alias cp='cp -rpv'
+alias mv='mv -v'
+alias mkdir='mkdir -p'
+
+# Miscellanious
+alias bal="hledger balance -M --tree"
+alias din='docker run -it --rm'
+alias ta='tmux attach-session -d -t'
+alias reload='source ~/.zshenv; source ~/.zshrc'
+alias pgfl='pgrep -fl'
+
+
+###############################################################################
+## MISCELLANEOUS
+###############################################################################
+
+if has rbenv; then
+  eval "$(rbenv init - zsh)"
+fi
