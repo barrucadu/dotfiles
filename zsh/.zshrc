@@ -1,6 +1,6 @@
 ## -*- shell-script -*-
 
-export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/bin:$PATH"
 
 # Check if a command exists, can be a binary in PATH or a shell
 # alias/function.
