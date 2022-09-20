@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+import hashlib
+import os
+import sys
+
+LONLY_FMT = "{lpath},"
+BOTH_FMT = "{lpath},{rpath}"
+RONLY_FMT = ",{rpath}"
+
+if len(sys.argv) not in [3, 6]:
+    print(f"USAGE: {sys.argv[0]} <dir1> <dir2> [<lonly> <both> <ronly>]", file=sys.stderr)
+    print("", file=sys.stderr)
+    print(f"  <lonly>  default \"{LONLY_FMT}\"")
+    print(f"  <both>   default \"{BOTH_FMT}\"")
+    print(f"  <ronly>  default \"{RONLY_FMT}\"")
+    sys.exit(1)
+
+
+def hash_file(path):
+    hsh = hashlib.sha256()
+    with open(path, "rb") as f:
+        fb = f.read(65536)
+        while len(fb) > 0:
+            hsh.update(fb)
+            fb = f.read(65536)
+    return hsh.digest()
+
+
+def hash_tree(path):
+    out = {}
+    for root, _, files in os.walk(path):
+        for fname in files:
+            fpath = os.path.join(root, fname)
+            hsh = hash_file(fpath)
+
+            fpaths = out.get(hsh, [])
+            fpaths.append(fpath)
+            out[hsh] = fpaths
+    return out
+
+
+if len(sys.argv) == 6:
+    LONLY_FMT = sys.argv[3]
+    BOTH_FMT = sys.argv[4]
+    RONLY_FMT = sys.argv[5]
+
+left_file_hashes = hash_tree(sys.argv[1])
+right_file_hashes = hash_tree(sys.argv[2])
+
+left_hashes = set(left_file_hashes)
+right_hashes = set(right_file_hashes)
+
+in_left_only = left_hashes - right_hashes
+in_right_only = right_hashes - left_hashes
+in_left_and_right = left_hashes & right_hashes
+
+
+for hsh in in_left_only:
+    for lpath in left_file_hashes[hsh]:
+        print(LONLY_FMT.format(lpath=lpath))
+
+for hsh in in_left_and_right:
+    for lpath in left_file_hashes[hsh]:
+        for rpath in right_file_hashes[hsh]:
+            print(BOTH_FMT.format(lpath=lpath, rpath=rpath))
+
+for hsh in in_right_only:
+    for rpath in right_file_hashes[hsh]:
+        print(RONLY_FMT.format(rpath=rpath))
