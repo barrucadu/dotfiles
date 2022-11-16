@@ -68,6 +68,11 @@
 ;; Years of muscle-memory can't be overturned now!
 (setq sentence-end-double-space t)
 
+;; MacOS UK keyboard
+(when (eq system-type 'darwin)
+  (define-key key-translation-map (kbd "M-2") (kbd "€"))
+  (define-key key-translation-map (kbd "M-3") (kbd "#")))
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;
