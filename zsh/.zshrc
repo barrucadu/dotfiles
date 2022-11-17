@@ -12,19 +12,6 @@ function has() {
 ## OPTIONS
 ###############################################################################
 
-# History
-export HISTFILE=${XDG_DATA_HOME:-~/.local/share}/zsh/history
-export HISTSIZE=10000
-export SAVEHIST=10000
-export DIRSTACKSIZE=16
-
-setopt hist_ignore_dups
-setopt hist_no_functions
-setopt hist_reduce_blanks
-setopt hist_verify
-setopt share_history
-setopt inc_append_history
-
 # Keybindings
 typeset -A key
 key=(
@@ -40,13 +27,7 @@ key=(
     PageDown "${terminfo[knp]}"
 )
 
-autoload -U history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-
 bindkey -e
-bindkey "^R"             history-incremental-search-backward
-bindkey "^F"             history-incremental-pattern-search-forward
 bindkey ${key[Home]}     beginning-of-line
 bindkey "^A"             beginning-of-line
 bindkey ${key[End]}      end-of-line
@@ -55,8 +36,33 @@ bindkey ${key[Insert]}   overwrite-mode
 bindkey ${key[Delete]}   delete-char
 bindkey ${key[Left]}     backward-char
 bindkey ${key[Right]}    forward-char
-bindkey ${key[Up]}       history-beginning-search-backward-end
-bindkey ${key[Down]}     history-beginning-search-forward-end
+
+# History
+if has atuin; then
+  eval "$(atuin init zsh)"
+else
+  export HISTFILE=${XDG_DATA_HOME:-~/.local/share}/zsh/history
+  export HISTSIZE=10000
+  export SAVEHIST=10000
+  export DIRSTACKSIZE=16
+
+  setopt hist_ignore_dups
+  setopt hist_no_functions
+  setopt hist_reduce_blanks
+  setopt hist_verify
+  setopt share_history
+  setopt inc_append_history
+
+  autoload -U history-search-end
+  zle -N history-beginning-search-backward-end history-search-end
+  zle -N history-beginning-search-forward-end history-search-end
+
+  bindkey "^R"             history-incremental-search-backward
+  bindkey "^F"             history-incremental-pattern-search-forward
+  bindkey ${key[Up]}       history-beginning-search-backward-end
+  bindkey ${key[Down]}     history-beginning-search-forward-end
+fi
+
 
 # Tab completion
 zle -C complete-file complete-word _generic
