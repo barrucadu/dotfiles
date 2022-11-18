@@ -353,7 +353,7 @@ alias mkdir='mkdir -p'
 alias bal="hledger balance -M --tree"
 alias din='docker run -it --rm'
 alias ta='tmux attach-session -d -t'
-alias reload='source ~/.zshenv; source ~/.zshrc'
+alias reload='exec zsh'
 alias pgfl='pgrep -fl'
 
 
