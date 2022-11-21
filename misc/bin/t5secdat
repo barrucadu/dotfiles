@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+
+# T5 Column Delimited format
+# https://travellermap.com/doc/fileformats#t5-column-delimited-format
+
+import code
+import sys
+
+TRADE_CODES = [
+    ("Agricultural", "Ag", [
+        ("atmosphere_type", lambda x: x >= 4 and x <= 9),
+        ("hydrographics", lambda x: x >= 4 and x <= 8),
+        ("population", lambda x: x in [5, 6, 7])
+     ]),
+    ("Asteroid", "As", [
+        ("planet_size", lambda x: x == 0),
+        ("atmosphere_type", lambda x: x == 0),
+        ("hydrographics", lambda x: x == 0)
+    ]),
+    ("Barren", "Ba", [
+        ("population", lambda x: x == 0),
+        ("government_type", lambda x: x == 0),
+        ("law_level", lambda x: x == 0)
+    ]),
+    ("Desert", "De", [
+        ("atmosphere_type", lambda x: x >= 2),
+        ("hydrographics", lambda x: x == 0)
+    ]),
+    ("Fluid Oceans", "Fl", [
+        ("atmosphere_type", lambda x: x >= 10),
+        ("hydrographics", lambda x: x >= 1)
+    ]),
+    ("Garden", "Ga", [
+        ("planet_size", lambda x: x in [6, 7, 8]),
+        ("atmosphere_type", lambda x: x in [5, 6, 8]),
+        ("hydrographics", lambda x: x in [5, 6, 7])
+    ]),
+    ("High Population", "Hi", [
+        ("population", lambda x: x >= 9)
+    ]),
+    ("High Tech", "Ht", [
+        ("tech_level", lambda x: x >= 12)
+    ]),
+    ("Ice-Capped", "Ic", [
+        ("atmosphere_type", lambda x: x <= 1),
+        ("hydrographics", lambda x: x >= 1)
+    ]),
+    ("Industrial", "In", [
+        ("atmosphere_type", lambda x: x in [0, 1, 2, 4, 7, 9]),
+        ("population", lambda x: x >= 9)
+    ]),
+    ("Low Population", "Lo", [
+        ("population", lambda x: x <= 3)
+    ]),
+    ("Low Tech", "Lt", [
+        ("tech_level", lambda x: x <= 5)
+    ]),
+    ("Non-Agricultural", "Na", [
+        ("atmosphere_type", lambda x: x <= 3),
+        ("hydrographics", lambda x: x <= 3),
+        ("population", lambda x: x >= 6)
+    ]),
+    ("Non-Industrial", "Ni", [
+        ("population", lambda x: x <= 6)
+    ]),
+    ("Poor", "Po", [
+        ("atmosphere_type", lambda x: x >= 2 and x <= 5),
+        ("hydrographics", lambda x: x <= 3)
+    ]),
+    ("Rich", "Ri", [
+        ("atmosphere_type", lambda x: x in [6, 8]),
+        ("population", lambda x: x in [6, 7, 8]),
+        ("government_type", lambda x: x >= 4 and x <= 9)
+    ]),
+    ("Vacuum", "Va", [
+        ("atmosphere_type", lambda x: x == 0)
+    ]),
+    ("Water World", "Wa", [
+        ("hydrographics", lambda x: x >= 10)
+    ])
+]
+
+class World:
+    def __init__(self, row):
+        self.row = row
+
+    def __getattr__(self, name):
+        if name in self.row:
+            return self.row[name]
+        else:
+            raise AttributeError
+
+    def __str__(self):
+        return f"{self.hex} {self.name} {self.uwp}"
+
+    def __repr__(self):
+        return f"'{self}'"
+
+    def __uwp(self, pos):
+        value = self.row["uwp"][pos]
+        if value == "X":
+            return 0
+        else:
+            return int(value, 16)
+
+    def starport_quality(self):
+        return self.__uwp(0)
+
+    def planet_size(self):
+        return self.__uwp(1)
+
+    def atmosphere_type(self):
+        return self.__uwp(2)
+
+    def hydrographics(self):
+        return self.__uwp(3)
+
+    def population(self):
+        return self.__uwp(4)
+
+    def government_type(self):
+        return self.__uwp(5)
+
+    def law_level(self):
+        return self.__uwp(6)
+
+    def tech_level(self):
+        return self.__uwp(8)
+
+    def trade_codes(self):
+        def check(criterion):
+            field, condition = criterion
+            func = getattr(self, field)
+            return condition(func())
+
+        trade_codes = []
+        for (name, _, criteria) in TRADE_CODES:
+            if all(map(check, criteria)):
+                trade_codes.append(name)
+        return trade_codes
+
+
+def parse_world_data_from_lines(lines):
+    field_widths = None
+    skip = False
+    worlds = {}
+    for line in lines:
+        if skip:
+            skip = False
+            continue
+        if field_widths is None:
+            name = ""
+            in_padding = False
+            width = 0
+            field_widths = []
+            for c in line:
+                if c == "\n":
+                    # end of line
+                    field_widths.append((name.lower(), width))
+                elif c == " ":
+                    # field length padding
+                    width += 1
+                    in_padding = True
+                elif name and in_padding:
+                    # start of a new field
+                    field_widths.append((name.lower(), width - 1))
+                    name = c
+                    width = 1
+                    in_padding = False
+                else:
+                    # name of current field
+                    name += c
+                    width += 1
+            # skip divider line
+            skip = True
+        else:
+            row = {}
+            for (field, width) in field_widths:
+                row[field] = line[:width].strip()
+                line = line[width+1:]
+            worlds[row["hex"]] = World(row)
+    return worlds
+
+def parse_world_data_from_file(filename):
+    with open(filename, "r") as f:
+        return parse_world_data_from_lines(f.readlines())
+
+
+if len(sys.argv) == 2:
+    WORLDS = parse_world_data_from_file(sys.argv[1])
+else:
+    WORLDS = {}
+
+
+def sort_by_field(field, worlds=WORLDS, reverse=False):
+    if isinstance(worlds, dict):
+        worlds = worlds.values()
+
+    return sorted(worlds, key=lambda w: getattr(w, field)(), reverse=reverse)
+
+
+code.interact(local=locals(), exitmsg="Goodbye", banner=f"""Launching console to explore world data...
+
+{len(WORLDS)} worlds have been read into the `WORLDS` variable.
+
+Useful functions:
+- `parse_world_data_from_file`
+- `parse_world_data_from_lines`
+- `sort_by_field`
+""")
