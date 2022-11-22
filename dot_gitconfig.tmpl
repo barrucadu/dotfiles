@@ -1,7 +1,7 @@
 [user]
 	name = Michael Walker
 	email = {{ .email }}
-	signingkey = 7F5A95FD
+	signingkey = {{ .git.sign.key }}
 [push]
 	default = matching
 [alias]
@@ -31,3 +31,9 @@
 	defaultBranch = master
 [pull]
 	rebase = true
+[gpg]
+	format = {{ .git.sign.format }}
+[commit]
+	gpgsign = {{ .git.sign.force }}
+[tag]
+	gpgsign = {{ .git.sign.force }}
