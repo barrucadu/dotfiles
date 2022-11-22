@@ -4,7 +4,20 @@
 # https://travellermap.com/doc/fileformats#t5-column-delimited-format
 
 import code
+import random
 import sys
+
+UWP_FIELDS = {
+    "starport_quality": (0, True, [0, 10, 11, 12, 13, 14]),
+    "planet_size": (1, False, None),
+    "atmosphere_type": (2, False, None),
+    "hydrographics": (3, False, None),
+    "population": (4, False, None),
+    "government_type": (5, False, None),
+    "law_level": (6, False, None),
+    # 7 is the dash
+    "tech_level": (8, False, None),
+}
 
 TRADE_CODES = [
     ("Agricultural", "Ag", [
@@ -82,13 +95,41 @@ TRADE_CODES = [
 
 class World:
     def __init__(self, row):
-        self.row = row
+        self.__row = {
+            "hex": "????",
+            "name": "New World",
+            "uwp": "X000000-0",
+            "remarks": "",
+            "{ix}": "",
+            "(ex)": "",
+            "[cx]": "",
+            "n": "-",
+            "b": "-",
+            "z": "-",
+            "pbg": "000",
+            "w": "0",
+            "a": "--",
+            "stellar": ""
+        }
+        self.__row.update(row)
 
     def __getattr__(self, name):
-        if name in self.row:
-            return self.row[name]
+        if name in UWP_FIELDS:
+            return self.__uwp_get(UWP_FIELDS[name])
+        elif name in self.__row:
+            return self.__row[name]
         else:
             raise AttributeError
+
+    def __setattr__(self, name, value):
+        if name == "_World__row":
+            super().__setattr__(name, value)
+        elif name in UWP_FIELDS:
+            self.__uwp_set(UWP_FIELDS[name], value)
+        elif name in self.__row:
+            self.__row[name] = value
+        else:
+            super().__setattr__(name, value)
 
     def __str__(self):
         return f"{self.hex} {self.name} {self.uwp}"
@@ -96,49 +137,178 @@ class World:
     def __repr__(self):
         return f"'{self}'"
 
-    def __uwp(self, pos):
-        value = self.row["uwp"][pos]
+    def __uwp_get(self, field_def):
+        pos, _, _ = field_def
+        value = self.__row["uwp"][pos]
         if value == "X":
             return 0
         else:
             return int(value, 16)
 
-    def starport_quality(self):
-        return self.__uwp(0)
+    def __uwp_set(self, field_def, value):
+        pos, zero_is_x, whitelist = field_def
 
-    def planet_size(self):
-        return self.__uwp(1)
+        if whitelist is not None and value not in whitelist:
+            raise ValueError
 
-    def atmosphere_type(self):
-        return self.__uwp(2)
+        if zero_is_x and value == 0:
+            hex_value = "X"
+        else:
+            hex_value = f"{value:X}"
 
-    def hydrographics(self):
-        return self.__uwp(3)
+        self.__row["uwp"] = self.__row["uwp"][:pos] + hex_value + self.__row["uwp"][pos+1:]
 
-    def population(self):
-        return self.__uwp(4)
-
-    def government_type(self):
-        return self.__uwp(5)
-
-    def law_level(self):
-        return self.__uwp(6)
-
-    def tech_level(self):
-        return self.__uwp(8)
-
-    def trade_codes(self):
+    def trade_codes(self, short=True):
         def check(criterion):
             field, condition = criterion
-            func = getattr(self, field)
-            return condition(func())
+            value = getattr(self, field)
+            return condition(value)
 
         trade_codes = []
-        for (name, _, criteria) in TRADE_CODES:
+        for (name, abbrev, criteria) in TRADE_CODES:
             if all(map(check, criteria)):
-                trade_codes.append(name)
+                trade_codes.append(abbrev if short else name)
         return trade_codes
 
+def clamp(lo, x, hi):
+    return max(lo, min(hi, x))
+
+def roll(n=1):
+    return sum(random.randrange(1, 6) for _ in range(n))
+
+def roll_planet_size():
+    return roll(2) - 2
+
+def roll_atmosphere_type(planet_size):
+    return clamp(0, roll(2) - 7 + planet_size, 15)
+
+def roll_temperature(atmosphere_type, hot=False, cold=False):
+    """Temperature is not reflected in the UWP, but can influence hydrographics.
+    """
+
+    res = roll(2)
+    if atmosphere_type in [2, 3]:
+        res -= 2
+    elif atmosphere_type in [4, 5, 14]:
+        res -= 1
+    elif atmosphere_type in [8, 9]:
+        res += 1
+    elif atmosphere_type in [10, 13, 15]:
+        res += 2
+    elif atmosphere_type in [11, 12]:
+        res += 6
+
+    if hot:
+        res += 4
+    if cold:
+        res -= 4
+
+    return clamp(0, res, 15)
+
+def roll_hydrographics(planet_size, atmosphere_type, temperature=7):
+    if planet_size in [0, 1]:
+        return 0
+
+    res = roll(2) - 7
+    if atmosphere_type in [0, 1, 10, 11, 12]:
+        res -= 4
+
+    if temperature in [10, 11]:
+        res -= 2
+    elif temperature >= 12:
+        res -= 6
+
+    return clamp(0, res, 15)
+
+def roll_population():
+    return roll(2) - 2
+
+def roll_government_type(population):
+    return clamp(0, roll(2) - 7 + population, 12)
+
+def roll_law_level(government_type):
+    return clamp(0, roll(2) - 7, 15)
+
+def roll_starport_quality(population):
+    res = roll(2)
+    if population in [8, 9]:
+        res += 1
+    elif population >= 10:
+        res += 2
+    elif population in [3, 4]:
+        res -= 1
+    elif population <= 2:
+        res -= 2
+
+    if res <= 2:
+        return 0
+    elif res in [3, 4]:
+        return 14
+    elif res in [5, 6]:
+        return 13
+    elif res in [7, 8]:
+        return 12
+    elif res in [9, 10]:
+        return 11
+    else:
+        return 10
+
+def roll_tech_level(planet_size, atmosphere_type, hydrographics, population, government_type, starport_quality):
+    res = roll()
+
+    if starport_quality == 10:
+        res += 6
+    elif starport_quality == 11:
+        res += 4
+    elif starport_quality == 12:
+        res += 2
+    elif starport_quality == 0:
+        res -= 4
+
+    if planet_size in [0, 1]:
+        res += 2
+    elif planet_size in [2, 3, 4]:
+        res += 1
+
+    if atmosphere_type in [0, 1, 2, 3, 10, 11, 12, 13, 14, 15]:
+        res += 1
+
+    if hydrographics in [0, 9]:
+        res += 1
+    elif hydrographics == 10:
+        res += 2
+
+    if population in [1, 2, 3, 4, 5, 8]:
+        res += 1
+    elif population == 9:
+        res += 2
+    elif population == 10:
+        res += 4
+
+    if government_type in [0, 5]:
+        res += 1
+    elif government_type == 7:
+        res += 2
+    elif government_type in [13, 14]:
+        res -= 2
+
+    return clamp(0, res, 15)
+
+def roll_world(hot=False, cold=False):
+    w = World({})
+
+    w.planet_size = roll_planet_size()
+    w.atmosphere_type = roll_atmosphere_type(w.planet_size)
+    # temperature is not in the UWP
+    temperature = roll_temperature(w.atmosphere_type, hot=hot, cold=cold)
+    w.hydrographics = roll_hydrographics(w.planet_size, w.atmosphere_type, temperature=temperature)
+    w.population = roll_population()
+    w.government_type = roll_government_type(w.population)
+    w.law_level = roll_law_level(w.government_type)
+    w.starport_quality = roll_starport_quality(w.population)
+    w.tech_level = roll_tech_level(w.planet_size, w.atmosphere_type, w.hydrographics, w.population, w.government_type, w.starport_quality)
+
+    return w
 
 def parse_world_data_from_lines(lines):
     field_widths = None
@@ -196,15 +366,37 @@ def sort_by_field(field, worlds=WORLDS, reverse=False):
     if isinstance(worlds, dict):
         worlds = worlds.values()
 
-    return sorted(worlds, key=lambda w: getattr(w, field)(), reverse=reverse)
+    return sorted(worlds, key=lambda w: getattr(w, field), reverse=reverse)
+
+def filter_by_allegiance(allegiance, worlds=WORLDS):
+    if isinstance(worlds, dict):
+        worlds = worlds.values()
+
+    return filter(lambda w: w.a == allegiance, worlds)
 
 
 code.interact(local=locals(), exitmsg="Goodbye", banner=f"""Launching console to explore world data...
 
 {len(WORLDS)} worlds have been read into the `WORLDS` variable.
 
-Useful functions:
+Loading world data:
 - `parse_world_data_from_file`
 - `parse_world_data_from_lines`
+
+Generating worlds:
+- `roll`
+- `roll_planet_size`
+- `roll_atmosphere_type`
+- `roll_temperature`
+- `roll_hydrographics`
+- `roll_population`
+- `roll_government_type`
+- `roll_law_level`
+- `roll_starport_quality`
+- `roll_tech_level`
+- `roll_world`
+
+Utilities:
 - `sort_by_field`
+- `filter_by_allegiance`
 """)
