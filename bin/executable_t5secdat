@@ -7,6 +7,23 @@ import code
 import random
 import sys
 
+
+###############################################################################
+## Utilities
+###############################################################################
+
+def clamp(lo, x, hi):
+    return max(lo, min(hi, x))
+
+
+def roll(n=1):
+    return sum(random.randrange(1, 6) for _ in range(n))
+
+
+###############################################################################
+## The `World` class and related constants
+###############################################################################
+
 UWP_FIELDS = {
     "starport_quality": (0, True, [0, 10, 11, 12, 13, 14]),
     "planet_size": (1, False, None),
@@ -170,11 +187,10 @@ class World:
                 trade_codes.append(abbrev if short else name)
         return trade_codes
 
-def clamp(lo, x, hi):
-    return max(lo, min(hi, x))
 
-def roll(n=1):
-    return sum(random.randrange(1, 6) for _ in range(n))
+###############################################################################
+## World generation
+###############################################################################
 
 def roll_planet_size():
     return roll(2) - 2
@@ -310,6 +326,11 @@ def roll_world(hot=False, cold=False):
 
     return w
 
+
+###############################################################################
+## Sector data file parser
+###############################################################################
+
 def parse_world_data_from_lines(lines):
     field_widths = None
     skip = False
@@ -355,6 +376,10 @@ def parse_world_data_from_file(filename):
     with open(filename, "r") as f:
         return parse_world_data_from_lines(f.readlines())
 
+
+###############################################################################
+## Entrypoint
+###############################################################################
 
 if len(sys.argv) == 2:
     WORLDS = parse_world_data_from_file(sys.argv[1])
