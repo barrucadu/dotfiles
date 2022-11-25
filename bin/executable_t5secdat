@@ -157,7 +157,9 @@ class World:
     def __uwp_get(self, field_def):
         pos, _, _ = field_def
         value = self.__row["uwp"][pos]
-        if value == "X":
+        if value == "?":
+            return -1
+        elif value == "X":
             return 0
         else:
             return int(value, 16)
@@ -165,10 +167,12 @@ class World:
     def __uwp_set(self, field_def, value):
         pos, zero_is_x, whitelist = field_def
 
-        if whitelist is not None and value not in whitelist:
+        if whitelist is not None and value not in whitelist and value != -1:
             raise ValueError
 
-        if zero_is_x and value == 0:
+        if value == -1:
+            hex_value = "?"
+        elif zero_is_x and value == 0:
             hex_value = "X"
         else:
             hex_value = f"{value:X}"
