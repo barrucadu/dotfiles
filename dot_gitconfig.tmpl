@@ -1,7 +1,7 @@
 [user]
 	name = Michael Walker
-	email = mike@barrucadu.co.uk
-	signingkey = 7F5A95FD
+	email = {{ .email }}
+	signingkey = {{ .git.sign.key }}
 [push]
 	default = matching
 [alias]
@@ -10,7 +10,7 @@
 	cim = commit -m
 	ca = commit -a
 	cam = commit -a -m
-        cp = cherry-pick
+	cp = cherry-pick
 	p = push
 	l = log
 	a = add
@@ -31,3 +31,9 @@
 	defaultBranch = master
 [pull]
 	rebase = true
+[gpg]
+	format = {{ .git.sign.format }}
+[commit]
+	gpgsign = {{ .git.sign.force }}
+[tag]
+	gpgsign = {{ .git.sign.force }}
