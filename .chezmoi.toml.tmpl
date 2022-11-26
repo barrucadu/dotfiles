@@ -2,6 +2,6 @@
     email = "mike@barrucadu.co.uk"
     work = false
 
-    git.sign.format = "openpgp"
-    git.sign.key = "7F5A95FD"
-    git.sign.force = false
+    git.sign.format = "ssh"
+    git.sign.key = "{{ .chezmoi.homeDir }}/.ssh/id_ed25519.pub"
+    git.sign.force = true

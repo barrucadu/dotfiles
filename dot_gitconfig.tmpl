@@ -33,6 +33,10 @@
 	rebase = true
 [gpg]
 	format = {{ .git.sign.format }}
+{{ if eq .git.sign.format "ssh" -}}
+[gpg "ssh"]
+	allowedSignersFile = {{ .chezmoi.homeDir }}/.config/git/allowed_signers
+{{ end -}}
 [commit]
 	gpgsign = {{ .git.sign.force }}
 [tag]
