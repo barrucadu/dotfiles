@@ -9,5 +9,6 @@ README.markdown
 # manage fewer configs on work laptop
 {{ if .work }}
 .nixpkgs/
+.local/share/python/personal-packages/
 bin/
 {{ end }}

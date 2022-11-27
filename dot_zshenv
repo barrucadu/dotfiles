@@ -21,6 +21,11 @@ export XDG_DESKTOP_DIR="$HOME/tmp"
 export XDG_DOCUMENTS_DIR="$HOME/tmp"
 export XDG_DOWNLOAD_DIR="$HOME/tmp"
 
+# Python
+if [[ -d $HOME/.local/share/python/personal-packages/ ]]; then
+  export PYTHONPATH=$HOME/.local/share/python/personal-packages/
+fi
+
 # Miscellaneous
 export KERNEL_NAME=$(uname -s | tr '[:upper:]' '[:lower:]')
 
