@@ -51,7 +51,7 @@ class World:
             "5": "diameter ~8000km (eg, Mars), 0.45g surface gravity",
             "6": "diameter ~9600km, 0.7g surface gravity",
             "7": "diameter ~11,200km, 0.9g surface gravity",
-            "8": "diameter ~12,800km 9eg, Earth), 1g surface gravity",
+            "8": "diameter ~12,800km (eg, Earth), 1g surface gravity",
             "9": "diameter ~14,400km, 1.25g surface gravity",
             "A": "diameter ~16,000km, 1.4g surface gravity",
         }),
