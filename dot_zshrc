@@ -257,7 +257,7 @@ if has nix; then
     ptag_pop
   }
 
-  alias nixos-up='sudo nixos-rebuild switch --update-input nixpkgs'
+  alias nixos-up='sudo nixos-rebuild switch --recreate-lock-file'
   alias nixos-gc='sudo nix-collect-garbage -d && sudo nix-store --optimise'
 fi
 
