@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -eEuo pipefail
+
+if chezmoi diff | grep -q bin/dwim; then
+    chezmoi apply
+    exec dwim
+fi
+
+function git_pull_all(){
+    for gitdir in */.git; do
+        pushd "$(dirname "$gitdir")"
+        git fetch --prune --all
+        git gc --aggressive
+        popd
+    done
+}
+
+function fallback(){
+    if [[ -e Makefile ]]; then
+        make
+    elif [[ -x local-build.sh ]]; then
+        ./local-build.sh
+    elif [[ -f main.tex ]] && [[ -d ~/http/7day ]]; then
+        latexmk -xelatex main.tex && cp main.pdf ~/http/7day
+    else
+        echo "I don't know what you mean"
+        exit 1
+    fi
+}
+
+case "$(pwd)" in
+    "$HOME/projects" | "$HOME/work")
+        git_pull_all;;
+    "/etc/nixos" | "/persist/etc/nixos")
+        sudo nixos-rebuild switch;;
+    *)
+        fallback;;
+esac
