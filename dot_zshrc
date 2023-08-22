@@ -75,7 +75,6 @@ setopt null_glob
 
 # Misc
 setopt correct
-setopt interactive_comments
 
 
 ###############################################################################
