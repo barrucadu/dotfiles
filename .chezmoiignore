@@ -1,11 +1,5 @@
 README.markdown
 
-# only manage X configs on azathoth
-{{ if ne .chezmoi.hostname "azathoth" }}
-.Xresources
-.config/herbstluftwm/
-{{ end }}
-
 # manage fewer configs on work laptop
 {{ if .work }}
 .nixpkgs/
