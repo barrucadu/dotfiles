@@ -1,8 +1,0 @@
-#!/usr/bin/env zsh
-
-if tmux list-sessions | grep -v attached; then
-    session=`tmux list-sessions | grep -v attached | head -n1 | sed "s/:.*//"`
-    tmux attach -t $session
-else
-    tmux
-fi
