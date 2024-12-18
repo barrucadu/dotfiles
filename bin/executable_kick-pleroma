@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+sudo systemctl stop pleroma podman-pleroma-db
+sudo rm /var/run/pleroma/db/.s.PGSQL.5432.lock
+sudo systemctl start pleroma podman-pleroma-db
