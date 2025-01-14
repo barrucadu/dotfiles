@@ -1,0 +1,7 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p ffmpeg_7
+
+URL="$1"
+TITLE="$2"
+
+$HOME/yt-dlp/yt-dlp.sh -o "$TITLE [%(id)s].%(ext)s" "$URL"
