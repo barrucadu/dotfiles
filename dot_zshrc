@@ -200,7 +200,7 @@ function status(){
   else
     local nextm=$(date -v+1m +"%Y-%m-01")
   fi
-  hledger balance -N -H --end=$nextm --tree discretionary goal saved | sed 1d | sed 's:^            : :'
+  hledger balance -N -H --end=$nextm --tree discretionary goal saved | sed 1d
 
   echo
 }
