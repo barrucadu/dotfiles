@@ -297,6 +297,7 @@ alias d=dwim
 # Pipeline
 alias -g '.G'='| grep'
 alias -g '.S'='| sed'
+alias -g '.C'='| cut'
 alias -g '.A'='| awk'
 alias -g '.U'='| sort | uniq'
 alias -g '.L'='2>&1 | less'
