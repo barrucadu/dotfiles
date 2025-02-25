@@ -4,6 +4,15 @@
 	signingkey = {{ .git.sign.key }}
 [push]
 	default = matching
+[fetch]
+    prune = true
+    pruneTags = true
+    all = true
+[diff]
+    algorithm = histogram
+    renames = true
+[merge]
+    conflictstyle = zdiff3
 [alias]
 	st = status
 	d = diff
