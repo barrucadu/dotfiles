@@ -3,3 +3,7 @@
 rm -rf ~/.emacs.d
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
 ~/.emacs.d/bin/doom install
+
+# for some reason there are often errors after `install` which are resolved with
+# a `sync`
+~/.emacs.d/bin/doom sync
